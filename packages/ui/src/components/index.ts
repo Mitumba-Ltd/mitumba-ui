@@ -1,2 +1,2 @@
-export { MitumbaPrimaryButton, MitumbaTextField } from './foundation'
-export type { MitumbaPrimaryButtonProps, MitumbaTextFieldProps } from './foundation'
+export { MitumbaPrimaryButton, MitumbaTextField, MitumbaSelect } from './foundation'
+export type { MitumbaPrimaryButtonProps, MitumbaTextFieldProps, MitumbaSelectProps } from './foundation'
