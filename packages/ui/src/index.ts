@@ -1,2 +1,2 @@
-export { MitumbaThemeProvider } from './theme/provider'
-export { mitumbaTheme } from './theme/theme'
+export { MitumbaThemeProvider, mitumbaTheme } from './theme'
+export type { MitumbaThemeProviderProps } from './theme'
