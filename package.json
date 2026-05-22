@@ -1,0 +1,49 @@
+{
+  "name": "mitumba-ui",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "storybook": "turbo run storybook",
+    "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
+    "lint": "turbo run lint",
+    "version:patch": "changeset version && git add . && git commit -m 'chore: version packages'",
+    "version:minor": "changeset version && git add . && git commit -m 'chore: version packages'"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.2",
+    "@eslint/js": "^8.57.1",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@types/node": "^22.15.21",
+    "@types/react": "^18.3.22",
+    "@types/react-dom": "^18.3.7",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.1",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.5.3",
+    "tsup": "^8.5.0",
+    "turbo": "^2.5.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  },
+  "packageManager": "npm@11.13.0",
+  "engines": {
+    "node": "20.x",
+    "npm": ">=10"
+  }
+}
