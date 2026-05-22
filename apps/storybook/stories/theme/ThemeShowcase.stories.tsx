@@ -21,10 +21,12 @@ const colorGroups = [
   ['stiTrusted', 'stiGood', 'stiAtRisk', 'stiFlagged', 'stiSuspended'],
 ] as const
 
+const px = (value: number) => `${value}px`
+
 function ThemeShowcase() {
   return (
-    <Stack spacing={tokens.spacing.lg} sx={{ maxWidth: tokens.breakpoints.lg }}>
-      <Stack spacing={tokens.spacing.sm}>
+    <Stack sx={{ gap: px(tokens.spacing.lg), maxWidth: tokens.breakpoints.lg }}>
+      <Stack sx={{ gap: px(tokens.spacing.sm) }}>
         <Typography variant="overline" color="text.secondary">
           Mitumba design system
         </Typography>
@@ -34,15 +36,15 @@ function ThemeShowcase() {
         </Typography>
       </Stack>
 
-      <Paper sx={{ p: tokens.spacing.lg }}>
-        <Stack spacing={tokens.spacing.base}>
+      <Paper sx={{ padding: px(tokens.spacing.lg) }}>
+        <Stack sx={{ gap: px(tokens.spacing.base) }}>
           <Typography variant="h2">Colors</Typography>
           {colorGroups.map((group) => (
             <Box
               key={group.join('-')}
               sx={{
                 display: 'grid',
-                gap: tokens.spacing.sm,
+                gap: px(tokens.spacing.sm),
                 gridTemplateColumns: {
                   xs: 'repeat(2, minmax(0, 1fr))',
                   md: 'repeat(5, minmax(0, 1fr))',
@@ -50,14 +52,14 @@ function ThemeShowcase() {
               }}
             >
               {group.map((colorName) => (
-                <Box key={colorName}>
+                <Box key={colorName} sx={{ minWidth: 0 }}>
                   <Box
                     sx={{
                       bgcolor: tokens.colors[colorName],
                       border: `${tokens.spacing.xs / tokens.spacing.xs}px solid ${tokens.colors.divider}`,
-                      borderRadius: tokens.radius.md,
+                      borderRadius: px(tokens.radius.md),
                       height: tokens.spacing.xxxl,
-                      mb: tokens.spacing.xs,
+                      marginBottom: px(tokens.spacing.xs),
                     }}
                   />
                   <Typography variant="caption" color="text.secondary">
@@ -70,8 +72,8 @@ function ThemeShowcase() {
         </Stack>
       </Paper>
 
-      <Paper sx={{ p: tokens.spacing.lg }}>
-        <Stack spacing={tokens.spacing.base}>
+      <Paper sx={{ padding: px(tokens.spacing.lg) }}>
+        <Stack sx={{ gap: px(tokens.spacing.base) }}>
           <Typography variant="h2">Typography</Typography>
           <Typography variant="h1">Heading 1</Typography>
           <Typography variant="h2">Heading 2</Typography>
@@ -87,22 +89,22 @@ function ThemeShowcase() {
 
       <Card>
         <CardContent>
-          <Stack spacing={tokens.spacing.lg}>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={tokens.spacing.sm}>
+          <Stack sx={{ gap: px(tokens.spacing.lg) }}>
+            <Stack direction={{ xs: 'column', sm: 'row' }} sx={{ gap: px(tokens.spacing.sm) }}>
               <Button>Primary action</Button>
               <Button color="earth">VAZI action</Button>
               <Button variant="outlined">Outlined</Button>
               <Button variant="text">Text</Button>
             </Stack>
 
-            <Stack direction="row" spacing={tokens.spacing.sm} useFlexGap flexWrap="wrap">
+            <Stack direction="row" useFlexGap flexWrap="wrap" sx={{ gap: px(tokens.spacing.sm) }}>
               <Chip label="Trusted seller" color="primary" />
               <Chip label="VAZI Featured" color="earth" />
               <Chip label="Neutral" />
               <Chip label="Outlined" variant="outlined" />
             </Stack>
 
-            <Stack spacing={tokens.spacing.base}>
+            <Stack sx={{ gap: px(tokens.spacing.base) }}>
               <TextField label="Listing title" placeholder="Vintage denim jacket" />
               <TextField
                 label="Price"
@@ -114,7 +116,7 @@ function ThemeShowcase() {
 
             <Divider />
 
-            <Stack spacing={tokens.spacing.sm}>
+            <Stack sx={{ gap: px(tokens.spacing.sm) }}>
               <Alert severity="success">Listing saved successfully.</Alert>
               <Alert severity="warning">Connection is slow. Uploads may take longer.</Alert>
               <Alert severity="error">Payment could not be verified.</Alert>
