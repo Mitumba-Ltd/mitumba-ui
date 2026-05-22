@@ -1,4 +1,4 @@
-import type { StorybookConfig } from '@storybook/nextjs'
+import type { StorybookConfig } from '@storybook/react-vite'
 
 const config: StorybookConfig = {
   stories: ['../stories/**/*.stories.@(ts|tsx)'],
@@ -7,7 +7,7 @@ const config: StorybookConfig = {
     '@storybook/addon-a11y',
     '@storybook/addon-interactions',
   ],
-  framework: '@storybook/nextjs',
+  framework: '@storybook/react-vite',
   docs: { autodocs: 'tag' },
 }
 
