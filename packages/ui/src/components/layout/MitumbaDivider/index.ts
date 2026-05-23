@@ -1,0 +1,1 @@
+export { MitumbaDivider } from './MitumbaDivider'
