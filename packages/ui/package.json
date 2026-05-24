@@ -22,10 +22,11 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mitumba/tokens": "0.1.0",
+    "@mui/icons-material": "^7.3.11",
     "@mui/material": "^7.1.0"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts --external react,react-dom,next",
+    "build": "tsup src/index.ts --format esm,cjs --dts --external react,react-dom,next,@mui/material,@mui/icons-material",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --passWithNoTests",
     "dev": "tsup src/index.ts --format esm,cjs --dts --watch",

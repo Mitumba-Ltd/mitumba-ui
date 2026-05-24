@@ -1,10 +1,10 @@
-import type { Preview } from '@storybook/react'
+import type { Preview, StoryFn } from '@storybook/react'
 import { tokens } from '@mitumba/tokens'
 import { MitumbaThemeProvider } from '@mitumba/ui'
 
 const preview: Preview = {
   decorators: [
-    (Story) => (
+    (Story: StoryFn) => (
       <MitumbaThemeProvider>
         <Story />
       </MitumbaThemeProvider>
