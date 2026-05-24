@@ -6,10 +6,17 @@ import { MitumbaThemeProvider } from '../../../theme'
 import type { PriceTagProps } from './PriceTag.types'
 import { PriceTag } from './PriceTag'
 
-function renderTag(overrides: PriceTagProps = { priceKes: 2500, size: 'medium', color: 'default' }) {
+const defaultProps: PriceTagProps = {
+  priceKes: 2500,
+  size: 'medium',
+  color: 'default',
+}
+
+function renderTag(overrides: Partial<PriceTagProps> = {}) {
+  const props = { ...defaultProps, ...overrides }
   return render(
     <MitumbaThemeProvider>
-      <PriceTag priceKes={overrides.priceKes} size={overrides.size} color={overrides.color} strikethrough={overrides.strikethrough} />
+      <PriceTag {...props} />
     </MitumbaThemeProvider>
   )
 }

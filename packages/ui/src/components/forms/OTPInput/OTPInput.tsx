@@ -99,7 +99,7 @@ export function OTPInput({ value, onChange, onComplete, error = false, loading =
         <Box
           key={digitIds.current[digitIdx]}
           component="input"
-          ref={(el) => { inputRefs.current[digitIdx] = el }}
+          ref={(el) => { inputRefs.current[digitIdx] = el as HTMLInputElement | null }}
           type="text"
           inputMode="numeric"
           maxLength={1}

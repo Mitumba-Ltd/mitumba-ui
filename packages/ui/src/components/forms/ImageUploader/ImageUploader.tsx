@@ -44,6 +44,15 @@ export function ImageUploader({
     [onAdd]
   )
 
+  const handleDragStart = (index: number) => {
+    dragItem.current = index
+  }
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+    e.preventDefault()
+    dragOverItem.current = index
+  }
+
   const handleDragEnd = useCallback(() => {
     if (dragItem.current !== null && dragOverItem.current !== null) {
       const [draggedItem] = images.splice(dragItem.current, 1)

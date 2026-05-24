@@ -6,17 +6,15 @@ import { MitumbaThemeProvider } from '../../../theme'
 import { EscrowStatusBanner } from './EscrowStatusBanner'
 import type { EscrowStatusBannerProps } from './EscrowStatusBanner.types'
 
-type BannerOverrides = Partial<Record<string, EscrowStatusBannerProps>>
+const defaultProps: EscrowStatusBannerProps = {
+  status: 'SHIPPED',
+}
 
-function renderBanner(overrides: BannerOverrides = { status: 'SHIPPED' }) {
+function renderBanner(overrides: Partial<EscrowStatusBannerProps> = {}) {
+  const props = { ...defaultProps, ...overrides }
   return render(
     <MitumbaThemeProvider>
-      <EscrowStatusBanner
-        status={(overrides.status ?? 'SHIPPED') as EscrowStatusBannerProps['status']}
-        hoursRemaining={overrides.hoursRemaining as number | undefined}
-        onConfirmDelivery={overrides.onConfirmDelivery as (() => void) | undefined}
-        onRaiseDispute={overrides.onRaiseDispute as (() => void) | undefined}
-      />
+      <EscrowStatusBanner {...props} />
     </MitumbaThemeProvider>
   )
 }
