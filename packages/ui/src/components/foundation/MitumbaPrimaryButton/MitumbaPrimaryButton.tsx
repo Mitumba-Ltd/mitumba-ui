@@ -20,17 +20,57 @@ export function MitumbaPrimaryButton({
   variant = 'primary',
 }: MitumbaPrimaryButtonProps) {
   const isDisabled = disabled || loading
-  const muiVariant = variant === 'ghost' ? 'outlined' : 'contained'
-  const color = variant === 'earth' ? 'earth' : 'primary'
+
+  const variantStyles = {
+    primary: {
+      backgroundColor: tokens.colors.green,
+      color: tokens.colors.white,
+      '&:hover': {
+        backgroundColor: tokens.colors.greenDark,
+      },
+    },
+    earth: {
+      backgroundColor: tokens.colors.earth,
+      color: tokens.colors.white,
+      '&:hover': {
+        backgroundColor: tokens.colors.earthDark,
+      },
+    },
+    ghost: {
+      backgroundColor: 'transparent',
+      color: tokens.colors.textPrimary,
+      border: `1px solid ${tokens.colors.border}`,
+      '&:hover': {
+        backgroundColor: tokens.colors.background,
+        borderColor: tokens.colors.textDisabled,
+      },
+    },
+  }
+
+  const sizeStyles = {
+    small: {
+      height: '32px',
+      paddingInline: tokens.spacing.base,
+      fontSize: tokens.typography.fontSizes.sm,
+    },
+    medium: {
+      height: '44px',
+      paddingInline: tokens.spacing.lg,
+      fontSize: tokens.typography.fontSizes.base,
+    },
+    large: {
+      height: '56px',
+      paddingInline: tokens.spacing.xl,
+      fontSize: tokens.typography.fontSizes.md,
+    },
+  }
 
   return (
     <Button
       aria-busy={loading || undefined}
-      color={color}
       disabled={isDisabled}
       fullWidth={fullWidth}
       onClick={onClick}
-      size={size}
       startIcon={
         loading ? (
           <CircularProgress
@@ -42,21 +82,27 @@ export function MitumbaPrimaryButton({
           icon
         )
       }
-      variant={muiVariant}
+      disableElevation
       sx={{
-        justifyContent: 'center',
-        textAlign: 'center',
-        whiteSpace: 'normal',
-        wordBreak: 'break-word',
-        ...(variant === 'ghost' && {
-          bgcolor: tokens.colors.surface,
-          color: tokens.colors.green,
-          borderColor: tokens.colors.border,
-          '&:hover': {
-            bgcolor: tokens.colors.greenLight,
-            borderColor: tokens.colors.green,
-          },
-        }),
+        ...variantStyles[variant],
+        ...sizeStyles[size],
+        borderRadius: tokens.radius.md,
+        fontFamily: tokens.typography.fontFamily,
+        fontWeight: tokens.typography.fontWeights.semibold,
+        textTransform: 'none',
+        transition: 'all 200ms ease',
+        '&:active': {
+          transform: 'scale(0.98)',
+        },
+        '&.Mui-disabled': {
+          backgroundColor: tokens.colors.divider,
+          color: tokens.colors.textDisabled,
+          border: variant === 'ghost' ? `1px solid ${tokens.colors.divider}` : 'none',
+        },
+        '&:focus-visible': {
+          outline: `2px solid ${tokens.colors.greenLight}`,
+          outlineOffset: '2px',
+        },
       }}
     >
       {label}
