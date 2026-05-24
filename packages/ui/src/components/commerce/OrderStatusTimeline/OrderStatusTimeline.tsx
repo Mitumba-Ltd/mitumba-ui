@@ -89,7 +89,7 @@ export function OrderStatusTimeline({ currentStatus, events }: OrderStatusTimeli
               fontStyle: 'italic',
             }}
           >
-            "{currentNote}"
+            &quot;{currentNote}&quot;
           </Typography>
         </Box>
       )}

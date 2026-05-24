@@ -181,7 +181,7 @@ export function VAZIOutfitCard({
                 variant="earth"
                 size="small"
                 fullWidth={false}
-                onClick={(e?: any) => {
+                onClick={(e: React.MouseEvent) => {
                   if (e && e.stopPropagation) {
                     e.stopPropagation()
                   }

@@ -14,18 +14,21 @@ const defaultProps: VAZIOutfitCardProps = {
       imageUrl: '/top.jpg',
       garmentType: 'top',
       sellerName: 'Ama Fashion',
+      priceKes: 2500,
     },
     {
       listingId: '2',
       imageUrl: '/bottom.jpg',
       garmentType: 'bottom',
       sellerName: 'Kampala Threads',
+      priceKes: 3000,
     },
     {
       listingId: '3',
       imageUrl: '/shoes.jpg',
       garmentType: 'shoes',
       sellerName: 'Sneaker Hub',
+      priceKes: 1500,
     },
   ],
   totalPriceKes: 7000,
@@ -39,7 +42,15 @@ function renderOutfitCard(overrides: Partial<VAZIOutfitCardProps> = {}) {
   const props = { ...defaultProps, ...overrides }
   return render(
     <MitumbaThemeProvider>
-      <VAZIOutfitCard {...props} />
+      <VAZIOutfitCard
+        outfitName={props.outfitName}
+        items={props.items}
+        totalPriceKes={props.totalPriceKes}
+        sellersCount={props.sellersCount}
+        isMultiCity={props.isMultiCity}
+        onTap={props.onTap}
+        onBuyAll={props.onBuyAll}
+      />
     </MitumbaThemeProvider>
   )
 }

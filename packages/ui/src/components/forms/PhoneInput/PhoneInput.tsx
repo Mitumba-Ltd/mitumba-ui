@@ -10,12 +10,6 @@ const MAX_DIGITS = 9
  * Kenya-specific phone number input with +254 prefix.
  * Formats as +254 7XX XXX XXX on blur.
  */
-function getBorderColor(error: string | undefined, isFocused: boolean): string {
-  if (error) return tokens.colors.error
-  if (isFocused) return tokens.colors.green
-  return tokens.colors.border
-}
-
 export function PhoneInput({ value, onChange, error, disabled = false }: PhoneInputProps) {
   const [isFocused, setIsFocused] = useState(false)
 
@@ -44,6 +38,13 @@ export function PhoneInput({ value, onChange, error, disabled = false }: PhoneIn
 
   const displayValue = isFocused ? value : formatDisplay(value)
 
+  // Derived styles for lint compliance
+  const baseBorderColor = isFocused ? tokens.colors.green : tokens.colors.border
+  const borderColor = error ? tokens.colors.error : baseBorderColor
+  
+  const baseHoverBorderColor = isFocused ? tokens.colors.green : tokens.colors.textDisabled
+  const hoverBorderColor = error ? tokens.colors.error : baseHoverBorderColor
+
   return (
     <Box sx={{ width: '100%' }}>
       <Box
@@ -51,7 +52,7 @@ export function PhoneInput({ value, onChange, error, disabled = false }: PhoneIn
           display: 'flex',
           alignItems: 'center',
           border: '1px solid',
-          borderColor: error ? tokens.colors.error : (isFocused ? tokens.colors.green : tokens.colors.border),
+          borderColor,
           borderWidth: isFocused ? '2px' : '1px',
           borderRadius: tokens.radius.md,
           backgroundColor: tokens.colors.surface,
@@ -61,7 +62,7 @@ export function PhoneInput({ value, onChange, error, disabled = false }: PhoneIn
           transition: 'all 200ms ease',
           boxShadow: isFocused && !error ? tokens.shadows.focus : 'none',
           '&:hover': {
-            borderColor: error ? tokens.colors.error : (isFocused ? tokens.colors.green : tokens.colors.textDisabled),
+            borderColor: hoverBorderColor,
           },
           opacity: disabled ? 0.6 : 1,
         }}

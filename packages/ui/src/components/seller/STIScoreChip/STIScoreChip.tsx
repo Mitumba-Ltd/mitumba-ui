@@ -60,7 +60,7 @@ export function STIScoreChip({
             lineHeight: 1,
           }}
         >
-          {label.replace(' ★', '')}
+          {label}
         </Box>
       )}
       <Box
@@ -81,18 +81,6 @@ export function STIScoreChip({
       >
         {clampedScore}
       </Box>
-      {clampedScore >= 85 && (
-        <Box
-          component="span"
-          sx={{
-            color,
-            fontSize: compact ? 10 : 12,
-            marginLeft: '-2px',
-          }}
-        >
-          ★
-        </Box>
-      )}
     </Box>
   )
 }
