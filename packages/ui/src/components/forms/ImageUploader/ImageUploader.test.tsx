@@ -32,7 +32,7 @@ describe('ImageUploader', () => {
         <ImageUploader images={mockImages} onAdd={() => {}} onRemove={() => {}} onReorder={() => {}} />
       </MitumbaThemeProvider>
     )
-    expect(screen.getByText('Cover photo')).toBeInTheDocument()
+    expect(screen.getByText('Cover')).toBeInTheDocument()
   })
 
   it('calls onAdd when files are selected', () => {

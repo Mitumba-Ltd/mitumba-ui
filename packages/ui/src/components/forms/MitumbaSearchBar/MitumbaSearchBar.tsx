@@ -38,17 +38,18 @@ export function MitumbaSearchBar({
         sx={{
           display: 'flex',
           alignItems: 'center',
-          border: `${tokens.spacing.xs / tokens.spacing.xs}px solid ${
-            isFocused ? tokens.colors.green : tokens.colors.border
-          }`,
+          border: '1px solid',
+          borderColor: isFocused ? tokens.colors.green : tokens.colors.border,
+          borderWidth: isFocused ? '2px' : '1px',
           borderRadius: tokens.radius.lg,
           backgroundColor: tokens.colors.surface,
           paddingInline: tokens.spacing.base,
-          paddingBlock: tokens.spacing.sm,
+          paddingBlock: isFocused ? '11px' : '12px',
           gap: tokens.spacing.sm,
-          transition: 'border-color 0.2s',
+          transition: 'all 200ms ease',
+          boxShadow: isFocused ? tokens.shadows.focus : 'none',
           '&:hover': {
-            borderColor: isFocused ? tokens.colors.green : tokens.colors.border,
+            borderColor: isFocused ? tokens.colors.green : tokens.colors.textDisabled,
           },
         }}
       >
@@ -71,8 +72,10 @@ export function MitumbaSearchBar({
             fontFamily: tokens.typography.fontFamily,
             color: tokens.colors.textPrimary,
             width: '100%',
+            height: '24px',
             '&::placeholder': {
               color: tokens.colors.textDisabled,
+              opacity: 1,
             },
           }}
         />
@@ -83,18 +86,18 @@ export function MitumbaSearchBar({
             aria-label="Clear search"
             sx={{
               cursor: 'pointer',
-              color: tokens.colors.textSecondary,
+              color: tokens.colors.textDisabled,
               display: 'flex',
               alignItems: 'center',
               background: 'none',
               border: 'none',
               padding: 0,
+              transition: 'all 200ms ease',
               '&:hover': {
-                color: tokens.colors.textPrimary,
+                color: tokens.colors.error,
               },
               '&:focus-visible': {
-                outline: `${tokens.spacing.xs}px solid transparent`,
-                boxShadow: tokens.shadows.focus,
+                outline: `2px solid ${tokens.colors.greenLight}`,
                 borderRadius: tokens.radius.xs,
               },
             }}
@@ -112,11 +115,16 @@ export function MitumbaSearchBar({
             right: 0,
             mt: tokens.spacing.xs,
             backgroundColor: tokens.colors.surface,
-            border: `${tokens.spacing.xs / tokens.spacing.xs}px solid ${tokens.colors.border}`,
+            border: `1px solid ${tokens.colors.border}`,
             borderRadius: tokens.radius.md,
             boxShadow: tokens.shadows.elevated,
             zIndex: 10,
             overflow: 'hidden',
+            animation: 'fadeIn 200ms ease',
+            '@keyframes fadeIn': {
+              from: { opacity: 0, transform: 'translateY(-10px)' },
+              to: { opacity: 1, transform: 'translateY(0)' },
+            },
           }}
         >
           {suggestions.map((suggestion) => (
@@ -130,15 +138,16 @@ export function MitumbaSearchBar({
                 paddingInline: tokens.spacing.base,
                 paddingBlock: tokens.spacing.sm,
                 cursor: 'pointer',
-                transition: 'background-color 0.2s',
+                transition: 'background-color 200ms ease',
                 '&:hover': {
-                  backgroundColor: tokens.colors.greenLight,
+                  backgroundColor: tokens.colors.background,
                 },
               }}
             >
               <Typography
                 sx={{
                   fontSize: tokens.typography.fontSizes.base,
+                  fontFamily: tokens.typography.fontFamily,
                   color: tokens.colors.textPrimary,
                 }}
               >

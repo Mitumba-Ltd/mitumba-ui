@@ -87,11 +87,12 @@ export function OTPInput({ value, onChange, onComplete, error = false, loading =
         display: 'flex',
         gap: tokens.spacing.sm,
         justifyContent: 'center',
-        animation: shake ? 'shake 0.5s ease-in-out' : 'none',
+        animation: shake ? 'shake 500ms cubic-bezier(.36,.07,.19,.97) both' : 'none',
         '@keyframes shake': {
-          '0%, 100%': { transform: 'translateX(0)' },
-          '25%': { transform: 'translateX(-4px)' },
-          '75%': { transform: 'translateX(4px)' },
+          '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+          '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+          '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+          '40%, 60%': { transform: 'translate3d(4px, 0, 0)' },
         },
       }}
     >
@@ -110,21 +111,24 @@ export function OTPInput({ value, onChange, onComplete, error = false, loading =
           disabled={loading}
           aria-label={`OTP digit ${digitIdx + 1}`}
           sx={{
-            width: tokens.spacing.xxl,
-            height: tokens.spacing.xxl,
+            width: 44,
+            height: 48,
             textAlign: 'center',
-            fontSize: tokens.typography.fontSizes.lg,
+            fontSize: tokens.typography.fontSizes.xl,
             fontFamily: tokens.typography.fontFamily,
             fontWeight: tokens.typography.fontWeights.bold,
-            border: `${tokens.spacing.xs / tokens.spacing.xs}px solid ${error ? tokens.colors.error : tokens.colors.border}`,
+            border: '1px solid',
+            borderColor: error ? tokens.colors.error : tokens.colors.border,
             borderRadius: tokens.radius.md,
             backgroundColor: tokens.colors.surface,
             color: tokens.colors.textPrimary,
             outline: 'none',
-            transition: 'border-color 0.2s, box-shadow 0.2s',
+            transition: 'all 200ms ease',
             '&:focus': {
               borderColor: tokens.colors.green,
+              borderWidth: '2px',
               boxShadow: tokens.shadows.focus,
+              paddingInline: 'calc(8px - 1px)', // Adjust for border width change
             },
             '&:hover': {
               borderColor: tokens.colors.green,

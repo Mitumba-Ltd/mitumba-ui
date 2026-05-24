@@ -36,7 +36,7 @@ describe('ErrorState', () => {
         <ErrorState onRetry={() => {}} />
       </MitumbaThemeProvider>
     )
-    expect(screen.getByText('Retry')).toBeInTheDocument()
+    expect(screen.getByText('Try Again')).toBeInTheDocument()
   })
 
   it('calls onRetry when retry button is clicked', () => {
@@ -46,7 +46,7 @@ describe('ErrorState', () => {
         <ErrorState onRetry={onRetry} />
       </MitumbaThemeProvider>
     )
-    const button = screen.getByText('Retry')
+    const button = screen.getByText('Try Again')
     button.click()
     expect(onRetry).toHaveBeenCalled()
   })

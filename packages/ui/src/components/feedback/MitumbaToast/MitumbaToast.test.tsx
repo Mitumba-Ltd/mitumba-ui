@@ -56,6 +56,6 @@ describe('MitumbaToast', () => {
         <MitumbaToast message="Error!" severity="error" open onClose={() => {}} />
       </MitumbaThemeProvider>
     )
-    expect(screen.getByRole('alert')).toHaveClass('MuiAlert-standardError')
+    expect(screen.getByRole('alert')).toHaveClass('MuiAlert-filledError')
   })
 })

@@ -86,18 +86,27 @@ export function ImageUploader({
             aspectRatio: '1 / 1',
             borderRadius: tokens.radius.md,
             overflow: 'hidden',
-            border: `${tokens.spacing.xs / tokens.spacing.xs}px solid ${image.isPrimary ? tokens.colors.green : tokens.colors.border}`,
+            border: '1px solid',
+            borderColor: image.isPrimary ? tokens.colors.green : tokens.colors.border,
+            borderWidth: image.isPrimary ? '2px' : '1px',
             cursor: 'grab',
+            transition: 'all 200ms ease',
+            backgroundColor: tokens.colors.background,
+            '&:hover': {
+              borderColor: tokens.colors.green,
+              boxShadow: tokens.shadows.card,
+            },
             '&:hover .remove-btn': {
               opacity: 1,
+              transform: 'scale(1)',
             },
           }}
         >
-           {/* Next.js image handling with legacy img tag */}
-           <img
+           <Box
+              component="img"
               src={image.url}
               alt={`Upload preview ${index + 1}`}
-              style={{
+              sx={{
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
@@ -107,18 +116,22 @@ export function ImageUploader({
             <Box
               sx={{
                 position: 'absolute',
-                top: 4,
-                left: 4,
+                top: tokens.spacing.xs,
+                left: tokens.spacing.xs,
                 backgroundColor: tokens.colors.green,
                 color: tokens.colors.white,
-                fontSize: tokens.typography.fontSizes.xs,
-                fontWeight: tokens.typography.fontWeights.bold,
+                fontSize: 10,
+                fontWeight: tokens.typography.fontWeights.extrabold,
+                textTransform: 'uppercase',
+                letterSpacing: tokens.typography.letterSpacings.wide,
                 paddingInline: tokens.spacing.sm,
-                paddingBlock: tokens.spacing.xs,
-                borderRadius: tokens.radius.sm,
+                paddingBlock: '2px',
+                borderRadius: tokens.radius.xs,
+                boxShadow: tokens.shadows.card,
+                zIndex: 1,
               }}
             >
-              Cover photo
+              Cover
             </Box>
           )}
           {image.status === 'uploading' && (
@@ -126,13 +139,16 @@ export function ImageUploader({
               sx={{
                 position: 'absolute',
                 inset: 0,
-                backgroundColor: 'rgba(0,0,0,0.4)',
+                backgroundColor: 'rgba(255,255,255,0.7)',
+                backdropFilter: 'blur(2px)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: tokens.colors.white,
-                fontSize: tokens.typography.fontSizes.sm,
-                fontWeight: tokens.typography.fontWeights.medium,
+                color: tokens.colors.green,
+                fontSize: 10,
+                fontWeight: tokens.typography.fontWeights.bold,
+                textTransform: 'uppercase',
+                zIndex: 1,
               }}
             >
               Uploading...
@@ -143,13 +159,15 @@ export function ImageUploader({
               sx={{
                 position: 'absolute',
                 inset: 0,
-                backgroundColor: 'rgba(217,48,37,0.3)',
+                backgroundColor: `${tokens.colors.errorLight}CC`,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: tokens.colors.error,
-                fontSize: tokens.typography.fontSizes.sm,
-                fontWeight: tokens.typography.fontWeights.medium,
+                fontSize: 10,
+                fontWeight: tokens.typography.fontWeights.bold,
+                textTransform: 'uppercase',
+                zIndex: 1,
               }}
             >
               Error
@@ -157,28 +175,35 @@ export function ImageUploader({
           )}
           <Box
             className="remove-btn"
-            onClick={() => onRemove(image.id)}
+            onClick={(e) => {
+              e.stopPropagation()
+              onRemove(image.id)
+            }}
             sx={{
               position: 'absolute',
-              top: 4,
-              right: 4,
-              width: 28,
-              height: 28,
-              borderRadius: '50%',
-              backgroundColor: 'rgba(0,0,0,0.5)',
+              top: tokens.spacing.xs,
+              right: tokens.spacing.xs,
+              width: 24,
+              height: 24,
+              borderRadius: tokens.radius.full,
+              backgroundColor: tokens.colors.white,
               display: 'flex',
               alignItems: 'center',
-                justifyContent: 'center',
-              color: tokens.colors.white,
+              justifyContent: 'center',
+              color: tokens.colors.error,
               cursor: 'pointer',
               opacity: 0,
-              transition: 'opacity 0.2s',
+              transform: 'scale(0.8)',
+              transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
+              boxShadow: tokens.shadows.elevated,
+              zIndex: 2,
               '&:hover': {
-                backgroundColor: 'rgba(0,0,0,0.7)',
+                backgroundColor: tokens.colors.error,
+                color: tokens.colors.white,
               },
             }}
           >
-            <DeleteIcon sx={{ fontSize: 16 }} />
+            <DeleteIcon sx={{ fontSize: 14 }} />
           </Box>
         </Box>
       ))}
@@ -194,18 +219,24 @@ export function ImageUploader({
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: tokens.spacing.sm,
+            gap: tokens.spacing.xs,
             cursor: 'pointer',
-            transition: 'border-color 0.2s',
+            transition: 'all 200ms ease',
+            backgroundColor: tokens.colors.background,
             '&:hover': {
               borderColor: tokens.colors.green,
+              backgroundColor: tokens.colors.greenLight,
+              '& .add-icon': { color: tokens.colors.green },
             },
           }}
         >
-          <AddPhotoAlternateIcon sx={{ color: tokens.colors.textSecondary, fontSize: 32 }} />
+          <AddPhotoAlternateIcon className="add-icon" sx={{ color: tokens.colors.textDisabled, fontSize: 28, transition: 'color 200ms ease' }} />
           <Typography
             sx={{
-              fontSize: tokens.typography.fontSizes.sm,
+              fontSize: 10,
+              fontWeight: tokens.typography.fontWeights.bold,
+              textTransform: 'uppercase',
+              letterSpacing: tokens.typography.letterSpacings.wide,
               color: tokens.colors.textSecondary,
               textAlign: 'center',
             }}
