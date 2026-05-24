@@ -1,2 +1,6 @@
 export { STIScoreChip } from './STIScoreChip'
 export type { STIScoreChipProps } from './STIScoreChip'
+export { SellerCard } from './SellerCard'
+export type { SellerCardProps } from './SellerCard'
+export { STIBreakdownPanel } from './STIBreakdownPanel'
+export type { STIBreakdownPanelProps } from './STIBreakdownPanel'
