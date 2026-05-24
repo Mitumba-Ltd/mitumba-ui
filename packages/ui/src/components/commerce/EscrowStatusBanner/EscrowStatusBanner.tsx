@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
 import ShieldOutlinedIcon from '@mui/icons-material/ShieldOutlined'
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined'
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined'
@@ -8,6 +7,7 @@ import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined'
 import WarningAmberOutlinedIcon from '@mui/icons-material/WarningAmberOutlined'
 import { tokens } from '@mitumba/tokens'
 import type { EscrowStatusBannerProps } from './EscrowStatusBanner.types'
+import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
 
 type StatusIcon = React.ComponentType<Record<string, unknown>>
 
@@ -75,94 +75,106 @@ export function EscrowStatusBanner({
         p: tokens.spacing.base,
         borderRadius: tokens.radius.lg,
         bgcolor: config.bg,
-        border: `1px solid ${config.color}33`,
+        border: `1px solid ${config.color}40`,
+        boxShadow: tokens.shadows.card,
       }}
       role="status"
       aria-label={`Escrow status: ${config.label}`}
     >
-      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: tokens.spacing.base, mb: tokens.spacing.base }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.base }}>
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: tokens.spacing.xxl,
-            height: tokens.spacing.xxl,
-            borderRadius: tokens.radius.full,
+            width: 44,
+            height: 44,
+            borderRadius: tokens.radius.md,
             bgcolor: config.color,
             color: tokens.colors.white,
             flexShrink: 0,
+            boxShadow: tokens.shadows.card,
           }}
         >
-          <Icon fontSize="small" />
+          <Icon sx={{ fontSize: 24 }} />
         </Box>
-        <Box>
+        <Box sx={{ flex: 1 }}>
           <Typography
-            variant="body1"
             sx={{
-              fontWeight: tokens.typography.fontWeights.semibold,
-              fontSize: tokens.typography.fontSizes.md,
+              fontWeight: tokens.typography.fontWeights.bold,
+              fontSize: tokens.typography.fontSizes.base,
               color: config.color,
-              lineHeight: tokens.typography.lineHeights.tight,
+              lineHeight: 1.2,
+              fontFamily: tokens.typography.fontFamily,
             }}
           >
             {config.label}
           </Typography>
           <Typography
-            variant="body2"
             sx={{
               fontSize: tokens.typography.fontSizes.sm,
-              color: tokens.colors.textSecondary,
-              mt: tokens.spacing.xs,
+              color: tokens.colors.textPrimary,
+              mt: '2px',
+              fontFamily: tokens.typography.fontFamily,
+              opacity: 0.8,
             }}
           >
             {config.message}
           </Typography>
-          {status === 'TIMEOUT_WARNING' && hoursRemaining !== undefined && (
-            <Typography
-              variant="body2"
-              sx={{
-                fontSize: tokens.typography.fontSizes.sm,
-                fontWeight: tokens.typography.fontWeights.bold,
-                color: tokens.colors.warning,
-                mt: tokens.spacing.sm,
-              }}
-            >
-              {hoursRemaining} hour{hoursRemaining === 1 ? '' : 's'} remaining
-            </Typography>
-          )}
         </Box>
       </Box>
+
+      {status === 'TIMEOUT_WARNING' && hoursRemaining !== undefined && (
+        <Box
+          sx={{
+            mt: tokens.spacing.base,
+            p: tokens.spacing.sm,
+            borderRadius: tokens.radius.sm,
+            bgcolor: tokens.colors.white,
+            display: 'flex',
+            alignItems: 'center',
+            gap: tokens.spacing.sm,
+            border: `1px solid ${tokens.colors.warning}40`,
+          }}
+        >
+          <AccessTimeOutlinedIcon sx={{ color: tokens.colors.warning, fontSize: 18 }} />
+          <Typography
+            sx={{
+              fontSize: tokens.typography.fontSizes.sm,
+              fontWeight: tokens.typography.fontWeights.bold,
+              color: tokens.colors.warning,
+            }}
+          >
+            {hoursRemaining} hour{hoursRemaining === 1 ? '' : 's'} remaining
+          </Typography>
+        </Box>
+      )}
 
       {(onConfirmDelivery || onRaiseDispute) && (
         <Box sx={{ display: 'flex', gap: tokens.spacing.sm, mt: tokens.spacing.base }}>
           {onConfirmDelivery && (
-            <Button
-              variant="contained"
+            <MitumbaPrimaryButton
+              label="Confirm Delivery"
               onClick={onConfirmDelivery}
-              sx={{
-                flex: 1,
-                bgcolor: tokens.colors.green,
-                color: tokens.colors.white,
-                '&:hover': { bgcolor: tokens.colors.greenDark },
-              }}
-            >
-              Confirm Delivery
-            </Button>
+              size="medium"
+              variant="primary"
+            />
           )}
           {onRaiseDispute && (
-            <Button
-              variant="outlined"
+            <MitumbaPrimaryButton
+              label="Raise Dispute"
               onClick={onRaiseDispute}
+              size="medium"
+              variant="ghost"
               sx={{
-                flex: 1,
-                borderColor: tokens.colors.error,
                 color: tokens.colors.error,
-                '&:hover': { bgcolor: tokens.colors.errorLight, borderColor: tokens.colors.error },
+                borderColor: tokens.colors.error,
+                '&:hover': {
+                  bgcolor: tokens.colors.errorLight,
+                  borderColor: tokens.colors.errorDark,
+                },
               }}
-            >
-              Raise Dispute
-            </Button>
+            />
           )}
         </Box>
       )}

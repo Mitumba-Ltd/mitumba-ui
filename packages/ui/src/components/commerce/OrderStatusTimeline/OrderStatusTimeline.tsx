@@ -43,26 +43,28 @@ export function OrderStatusTimeline({ currentStatus, events }: OrderStatusTimeli
         border: `1px solid ${tokens.colors.divider}`,
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.sm, mb: tokens.spacing.lg }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.sm, mb: tokens.spacing.base }}>
         <Typography
-          variant="body1"
           sx={{
-            fontWeight: tokens.typography.fontWeights.semibold,
+            fontWeight: tokens.typography.fontWeights.bold,
             fontSize: tokens.typography.fontSizes.md,
             color: tokens.colors.textPrimary,
+            fontFamily: tokens.typography.fontFamily,
           }}
         >
-          Order Status
+          Order Tracking
         </Typography>
         <Box
           sx={{
-            px: tokens.spacing.md,
-            py: tokens.spacing.xs,
-            borderRadius: tokens.radius.full,
-            bgcolor: `${tokens.colors.green}14`,
-            color: tokens.colors.green,
-            fontSize: tokens.typography.fontSizes.sm,
-            fontWeight: tokens.typography.fontWeights.bold,
+            px: tokens.spacing.sm,
+            py: '2px',
+            borderRadius: tokens.radius.sm,
+            bgcolor: tokens.colors.greenLight,
+            color: tokens.colors.greenDark,
+            fontSize: 10,
+            fontWeight: tokens.typography.fontWeights.extrabold,
+            textTransform: 'uppercase',
+            letterSpacing: tokens.typography.letterSpacings.wide,
           }}
         >
           {ORDER_STATUS_LABELS[currentStatus]}
@@ -70,16 +72,26 @@ export function OrderStatusTimeline({ currentStatus, events }: OrderStatusTimeli
       </Box>
 
       {currentNote && (
-        <Typography
-          variant="body2"
+        <Box
           sx={{
-            color: tokens.colors.textSecondary,
-            fontSize: tokens.typography.fontSizes.sm,
+            p: tokens.spacing.sm,
+            borderRadius: tokens.radius.sm,
+            bgcolor: tokens.colors.background,
+            borderLeft: `3px solid ${tokens.colors.info}`,
             mb: tokens.spacing.lg,
           }}
         >
-          {currentNote}
-        </Typography>
+          <Typography
+            sx={{
+              color: tokens.colors.textPrimary,
+              fontSize: tokens.typography.fontSizes.sm,
+              fontFamily: tokens.typography.fontFamily,
+              fontStyle: 'italic',
+            }}
+          >
+            &quot;{currentNote}&quot;
+          </Typography>
+        </Box>
       )}
 
       <Box component="ol" sx={{ listStyle: 'none', p: 0, m: 0 }}>
@@ -98,7 +110,6 @@ export function OrderStatusTimeline({ currentStatus, events }: OrderStatusTimeli
                 alignItems: 'flex-start',
                 gap: tokens.spacing.base,
                 position: 'relative',
-                pb: index < ORDER_STATUS_ORDER.length - 1 ? tokens.spacing.md : 0,
               }}
             >
               <Box
@@ -106,51 +117,68 @@ export function OrderStatusTimeline({ currentStatus, events }: OrderStatusTimeli
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  minWidth: tokens.spacing.lg,
+                  minWidth: '24px',
                 }}
               >
-                {isCompleted ? (
-                  <CheckCircleOutlinedIcon
-                    sx={{
-                      fontSize: tokens.typography.fontSizes.lg,
-                      color: isCurrent ? tokens.colors.green : tokens.colors.textDisabled,
-                    }}
-                  />
-                ) : (
-                  <RadioButtonUncheckedOutlinedIcon
-                    sx={{
-                      fontSize: tokens.typography.fontSizes.lg,
-                      color: tokens.colors.divider,
-                    }}
-                  />
-                )}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '24px',
+                    height: '24px',
+                    zIndex: 1,
+                    backgroundColor: tokens.colors.surface,
+                  }}
+                >
+                  {isCompleted ? (
+                    <CheckCircleOutlinedIcon
+                      sx={{
+                        fontSize: 20,
+                        color: isCurrent ? tokens.colors.green : tokens.colors.textDisabled,
+                      }}
+                    />
+                  ) : (
+                    <RadioButtonUncheckedOutlinedIcon
+                      sx={{
+                        fontSize: 18,
+                        color: tokens.colors.divider,
+                      }}
+                    />
+                  )}
+                </Box>
                 {index < ORDER_STATUS_ORDER.length - 1 && (
                   <Box
                     sx={{
                       width: '2px',
                       flex: 1,
-                      minHeight: tokens.spacing.base,
+                      minHeight: tokens.spacing.lg,
                       bgcolor: index < currentIndex ? tokens.colors.green : tokens.colors.divider,
-                      mt: tokens.spacing.xs,
+                      marginBlock: '2px',
                     }}
                   />
                 )}
               </Box>
-              <Box sx={{ pt: tokens.spacing.xs }}>
+              <Box sx={{ pt: '2px', pb: tokens.spacing.lg }}>
                 <Typography
-                  variant="body2"
                   sx={{
-                    fontWeight: isCurrent ? tokens.typography.fontWeights.semibold : tokens.typography.fontWeights.medium,
-                    fontSize: tokens.typography.fontSizes.base,
+                    fontWeight: isCurrent ? tokens.typography.fontWeights.bold : tokens.typography.fontWeights.medium,
+                    fontSize: tokens.typography.fontSizes.sm,
+                    fontFamily: tokens.typography.fontFamily,
                     color: isCompleted ? tokens.colors.textPrimary : tokens.colors.textDisabled,
+                    lineHeight: 1,
                   }}
                 >
                   {ORDER_STATUS_LABELS[status]}
                 </Typography>
                 {latestEvent && (
                   <Typography
-                    variant="caption"
-                    sx={{ color: tokens.colors.textSecondary, fontSize: tokens.typography.fontSizes.sm }}
+                    sx={{ 
+                      color: tokens.colors.textSecondary, 
+                      fontSize: 10,
+                      fontFamily: tokens.typography.fontFamily,
+                      mt: '4px',
+                    }}
                   >
                     {latestEvent.timestamp}
                   </Typography>

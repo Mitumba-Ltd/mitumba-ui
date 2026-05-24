@@ -36,10 +36,26 @@ export function MitumbaTextField({
       slotProps={{
         input: {
           startAdornment: prefix ? (
-            <Box sx={{ mr: tokens.spacing.sm }}>{prefix}</Box>
+            <Box
+              sx={{
+                mr: tokens.spacing.sm,
+                display: 'flex',
+                color: tokens.colors.textSecondary,
+              }}
+            >
+              {prefix}
+            </Box>
           ) : undefined,
           endAdornment: suffix ? (
-            <Box sx={{ ml: tokens.spacing.sm }}>{suffix}</Box>
+            <Box
+              sx={{
+                ml: tokens.spacing.sm,
+                display: 'flex',
+                color: tokens.colors.textSecondary,
+              }}
+            >
+              {suffix}
+            </Box>
           ) : undefined,
         },
       }}
@@ -47,27 +63,34 @@ export function MitumbaTextField({
         '& .MuiOutlinedInput-root': {
           borderRadius: tokens.radius.md,
           backgroundColor: tokens.colors.surface,
-          paddingInline: tokens.spacing.base,
+          transition: 'all 200ms ease',
+          fontFamily: tokens.typography.fontFamily,
           '& .MuiOutlinedInput-notchedOutline': {
             borderColor: tokens.colors.border,
+            borderWidth: '1px',
+            transition: 'all 200ms ease',
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: tokens.colors.green,
+            borderColor: tokens.colors.textDisabled,
           },
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
             borderColor: tokens.colors.green,
-            borderWidth: `${tokens.spacing.xs}px`,
+            borderWidth: '2px',
           },
           '&.Mui-error .MuiOutlinedInput-notchedOutline': {
             borderColor: tokens.colors.error,
           },
           '&.Mui-disabled': {
             backgroundColor: tokens.colors.background,
-            color: tokens.colors.textDisabled,
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: tokens.colors.divider,
+            },
           },
         },
         '& .MuiInputLabel-root': {
           color: tokens.colors.textSecondary,
+          fontFamily: tokens.typography.fontFamily,
+          fontSize: tokens.typography.fontSizes.base,
           '&.Mui-focused': {
             color: tokens.colors.green,
           },
@@ -76,10 +99,23 @@ export function MitumbaTextField({
           },
         },
         '& .MuiFormHelperText-root': {
-          marginInline: tokens.spacing.sm,
+          marginLeft: 0,
+          marginRight: 0,
+          marginTop: tokens.spacing.xs,
           fontSize: tokens.typography.fontSizes.sm,
+          fontFamily: tokens.typography.fontFamily,
           '&.Mui-error': {
             color: tokens.colors.error,
+          },
+        },
+        '& .MuiInputBase-input': {
+          paddingBlock: '12px',
+          height: 'auto',
+          fontSize: tokens.typography.fontSizes.base,
+          color: tokens.colors.textPrimary,
+          '&::placeholder': {
+            color: tokens.colors.textDisabled,
+            opacity: 1,
           },
         },
       }}

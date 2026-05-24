@@ -5,27 +5,10 @@ import Typography from '@mui/material/Typography'
 import { tokens } from '@mitumba/tokens'
 import { useCallback } from 'react'
 import { ConditionBadge } from '../ConditionBadge'
+import { PriceTag } from '../../commerce/PriceTag'
+import { VAZIBadge } from '../../vazi/VAZIBadge'
+import { STIScoreChip } from '../../seller/STIScoreChip'
 import type { ListingCardProps } from './ListingCard.types'
-
-function formatPrice(priceKes: number): string {
-  return `KES ${priceKes.toLocaleString('en-KE')}`
-}
-
-function stiColor(score: number): string {
-  if (score >= 85) return tokens.colors.stiTrusted
-  if (score >= 60) return tokens.colors.stiGood
-  if (score >= 40) return tokens.colors.stiAtRisk
-  if (score >= 20) return tokens.colors.stiFlagged
-  return tokens.colors.stiSuspended
-}
-
-function stiLabel(score: number): string {
-  if (score >= 85) return 'Trusted'
-  if (score >= 60) return 'Good'
-  if (score >= 40) return 'At risk'
-  if (score >= 20) return 'Flagged'
-  return 'Suspended'
-}
 
 export function ListingCard({
   imageUrl,
@@ -61,16 +44,19 @@ export function ListingCard({
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
-        transition: 'transform 200ms ease, box-shadow 200ms ease',
+        transition: 'all 250ms cubic-bezier(0.4, 0, 0.2, 1)',
         width: '100%',
+        backgroundColor: tokens.colors.surface,
+        border: `1px solid ${tokens.colors.divider}`,
         '&:hover': onTap
           ? {
-              transform: 'translateY(-2px)',
+              transform: 'translateY(-4px)',
               boxShadow: tokens.shadows.elevated,
+              borderColor: tokens.colors.border,
             }
           : undefined,
         '&:focus-visible': {
-          outline: `${tokens.spacing.xs}px solid transparent`,
+          outline: `2px solid ${tokens.colors.greenLight}`,
           boxShadow: tokens.shadows.focus,
         },
       }}
@@ -79,10 +65,10 @@ export function ListingCard({
       <Box
         sx={{
           aspectRatio: '1 / 1',
-          borderRadius: `${tokens.radius.lg}px ${tokens.radius.lg}px 0 0`,
           overflow: 'hidden',
           position: 'relative',
           width: '100%',
+          backgroundColor: tokens.colors.background,
         }}
       >
         <Box
@@ -95,15 +81,20 @@ export function ListingCard({
             height: '100%',
             objectFit: 'cover',
             width: '100%',
+            transition: 'transform 500ms ease',
+            '.MuiCard-root:hover &': {
+              transform: 'scale(1.05)',
+            },
           }}
         />
 
         {/* Condition badge — top-left */}
         <Box
           sx={{
-            left: tokens.spacing.md,
+            left: tokens.spacing.sm,
             position: 'absolute',
-            top: tokens.spacing.md,
+            top: tokens.spacing.sm,
+            zIndex: 1,
           }}
         >
           <ConditionBadge grade={conditionGrade} />
@@ -113,24 +104,13 @@ export function ListingCard({
         {isVaziEligible && (
           <Box
             sx={{
-              backgroundColor: tokens.colors.earth,
-              borderRadius: tokens.spacing.xs,
-              color: tokens.colors.textOnEarth,
-              fontSize: tokens.typography.fontSizes.xs,
-              fontWeight: tokens.typography.fontWeights.bold,
-              lineHeight: tokens.typography.lineHeights.tight,
-              paddingInline: tokens.spacing.sm,
-              paddingBlock: tokens.spacing.xs,
               position: 'absolute',
-              right: tokens.spacing.md,
-              top: tokens.spacing.md,
-              textTransform: 'uppercase',
-              letterSpacing: tokens.typography.letterSpacings.wider,
+              right: tokens.spacing.sm,
+              top: tokens.spacing.sm,
+              zIndex: 1,
             }}
-            role="status"
-            aria-label="VAZI eligible"
           >
-            VAZI
+            <VAZIBadge size="small" />
           </Box>
         )}
       </Box>
@@ -140,27 +120,16 @@ export function ListingCard({
           display: 'flex',
           flexDirection: 'column',
           gap: tokens.spacing.xs,
-          paddingInline: tokens.spacing.base,
-          paddingBlock: tokens.spacing.sm,
+          padding: tokens.spacing.base,
+          flexGrow: 1,
           '&:last-child': {
             paddingBottom: tokens.spacing.base,
           },
         }}
       >
-        <Typography
-          sx={{
-            color: tokens.colors.info,
-            fontSize: tokens.typography.fontSizes.md,
-            fontWeight: tokens.typography.fontWeights.semibold,
-            lineHeight: tokens.typography.lineHeights.snug,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}
-          title={title}
-        >
-          {formatPrice(priceKes)}
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <PriceTag priceKes={priceKes} size="medium" color="green" />
+        </Box>
 
         <Typography
           sx={{
@@ -170,9 +139,12 @@ export function ListingCard({
             lineHeight: tokens.typography.lineHeights.snug,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            minHeight: '2.7em',
+            marginBlock: tokens.spacing.xs,
           }}
-          title={title}
         >
           {title}
         </Typography>
@@ -181,60 +153,37 @@ export function ListingCard({
           sx={{
             alignItems: 'center',
             display: 'flex',
-            gap: tokens.spacing.sm,
-            mt: tokens.spacing.xs,
+            justifyContent: 'space-between',
+            mt: 'auto',
+            pt: tokens.spacing.sm,
+            borderTop: `1px solid ${tokens.colors.divider}`,
           }}
         >
-          {/* STI chip */}
-          <Box
-            sx={{
-              alignItems: 'center',
-              backgroundColor: `${stiColor(sellerSti)}0D`,
-              border: `${tokens.spacing.xs / tokens.spacing.xs}px solid ${stiColor(sellerSti)}40`,
-              borderRadius: tokens.radius.full,
-              color: stiColor(sellerSti),
-              display: 'flex',
-              fontSize: tokens.typography.fontSizes.xs,
-              fontWeight: tokens.typography.fontWeights.semibold,
-              gap: tokens.spacing.xs,
-              lineHeight: tokens.typography.lineHeights.tight,
-              minHeight: tokens.spacing.xl,
-              paddingInline: tokens.spacing.sm,
-            }}
-            title={`STI: ${sellerSti} — ${stiLabel(sellerSti)}`}
-          >
-            {sellerSti >= 85 && <span>★</span>}
-            <span>{sellerSti}</span>
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography
+              sx={{
+                color: tokens.colors.textPrimary,
+                fontSize: tokens.typography.fontSizes.sm,
+                fontWeight: tokens.typography.fontWeights.semibold,
+                lineHeight: 1,
+              }}
+            >
+              {sellerName}
+            </Typography>
+            <Typography
+              sx={{
+                color: tokens.colors.textSecondary,
+                fontSize: 10,
+                textTransform: 'uppercase',
+                letterSpacing: tokens.typography.letterSpacings.wide,
+                mt: '2px',
+              }}
+            >
+              {city}
+            </Typography>
           </Box>
 
-          <Typography
-            sx={{
-              color: tokens.colors.textSecondary,
-              fontSize: tokens.typography.fontSizes.sm,
-              lineHeight: tokens.typography.lineHeights.normal,
-            }}
-          >
-            {city}
-          </Typography>
-        </Box>
-
-        <Box
-          sx={{
-            alignItems: 'center',
-            display: 'flex',
-            gap: tokens.spacing.sm,
-            mt: tokens.spacing.xs,
-          }}
-        >
-          <Typography
-            sx={{
-              color: tokens.colors.textSecondary,
-              fontSize: tokens.typography.fontSizes.sm,
-              lineHeight: tokens.typography.lineHeights.normal,
-            }}
-          >
-            By {sellerName}
-          </Typography>
+          <STIScoreChip score={sellerSti} compact />
         </Box>
       </CardContent>
     </Card>

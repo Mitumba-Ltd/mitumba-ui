@@ -14,15 +14,16 @@ export function StatsCard({ label, value, unit, trend, icon }: StatsCardProps) {
       sx={{
         backgroundColor: tokens.colors.surface,
         borderRadius: tokens.radius.lg,
-        padding: tokens.spacing.base,
+        padding: tokens.spacing.lg,
         boxShadow: tokens.shadows.card,
-        border: `${tokens.spacing.xs / tokens.spacing.xs}px solid ${tokens.colors.divider}`,
+        border: `1px solid ${tokens.colors.divider}`,
         display: 'flex',
         flexDirection: 'column',
-        gap: tokens.spacing.sm,
-        transition: 'box-shadow 0.2s',
+        gap: tokens.spacing.xs,
+        transition: 'all 200ms ease',
         '&:hover': {
           boxShadow: tokens.shadows.elevated,
+          borderColor: tokens.colors.border,
         },
       }}
     >
@@ -31,15 +32,17 @@ export function StatsCard({ label, value, unit, trend, icon }: StatsCardProps) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          mb: tokens.spacing.xs,
         }}
       >
         <Typography
           sx={{
-            fontSize: tokens.typography.fontSizes.sm,
+            fontSize: 10,
             color: tokens.colors.textSecondary,
-            fontWeight: tokens.typography.fontWeights.medium,
+            fontWeight: tokens.typography.fontWeights.bold,
             textTransform: 'uppercase',
             letterSpacing: tokens.typography.letterSpacings.wider,
+            fontFamily: tokens.typography.fontFamily,
           }}
         >
           {label}
@@ -47,10 +50,12 @@ export function StatsCard({ label, value, unit, trend, icon }: StatsCardProps) {
         {icon && (
           <Box
             sx={{
-              color: tokens.colors.textSecondary,
+              color: tokens.colors.textDisabled,
               display: 'flex',
               alignItems: 'center',
-              fontSize: 24,
+              backgroundColor: tokens.colors.background,
+              p: '6px',
+              borderRadius: tokens.radius.sm,
             }}
           >
             {icon}
@@ -61,15 +66,16 @@ export function StatsCard({ label, value, unit, trend, icon }: StatsCardProps) {
         sx={{
           display: 'flex',
           alignItems: 'baseline',
-          gap: tokens.spacing.xs,
+          gap: '4px',
         }}
       >
         <Typography
           sx={{
             fontSize: tokens.typography.fontSizes.xxxl,
-            fontWeight: tokens.typography.fontWeights.bold,
+            fontWeight: tokens.typography.fontWeights.extrabold,
             color: tokens.colors.textPrimary,
-            lineHeight: tokens.typography.lineHeights.tight,
+            lineHeight: 1,
+            fontFamily: tokens.typography.fontFamily,
           }}
         >
           {value}
@@ -77,9 +83,10 @@ export function StatsCard({ label, value, unit, trend, icon }: StatsCardProps) {
         {unit && (
           <Typography
             sx={{
-              fontSize: tokens.typography.fontSizes.md,
+              fontSize: tokens.typography.fontSizes.sm,
               color: tokens.colors.textSecondary,
-              fontWeight: tokens.typography.fontWeights.medium,
+              fontWeight: tokens.typography.fontWeights.bold,
+              fontFamily: tokens.typography.fontFamily,
             }}
           >
             {unit}
@@ -91,22 +98,46 @@ export function StatsCard({ label, value, unit, trend, icon }: StatsCardProps) {
           sx={{
             display: 'flex',
             alignItems: 'center',
-            gap: tokens.spacing.xs,
-            color: trend.direction === 'up' ? tokens.colors.green : tokens.colors.error,
+            gap: '4px',
+            mt: tokens.spacing.sm,
           }}
         >
-          {trend.direction === 'up' ? (
-            <TrendingUpIcon sx={{ fontSize: 16 }} />
-          ) : (
-            <TrendingDownIcon sx={{ fontSize: 16 }} />
-          )}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '2px',
+              paddingInline: tokens.spacing.sm,
+              paddingBlock: '2px',
+              borderRadius: tokens.radius.full,
+              backgroundColor: trend.direction === 'up' ? `${tokens.colors.green}14` : `${tokens.colors.error}14`,
+              color: trend.direction === 'up' ? tokens.colors.green : tokens.colors.error,
+              border: `1px solid ${trend.direction === 'up' ? tokens.colors.green : tokens.colors.error}40`,
+            }}
+          >
+            {trend.direction === 'up' ? (
+              <TrendingUpIcon sx={{ fontSize: 14 }} />
+            ) : (
+              <TrendingDownIcon sx={{ fontSize: 14 }} />
+            )}
+            <Typography
+              sx={{
+                fontSize: 10,
+                fontWeight: tokens.typography.fontWeights.extrabold,
+                lineHeight: 1,
+              }}
+            >
+              {trend.percent}%
+            </Typography>
+          </Box>
           <Typography
             sx={{
-              fontSize: tokens.typography.fontSizes.sm,
+              fontSize: 10,
+              color: tokens.colors.textDisabled,
               fontWeight: tokens.typography.fontWeights.medium,
             }}
           >
-            {trend.percent}%
+            vs last month
           </Typography>
         </Box>
       )}

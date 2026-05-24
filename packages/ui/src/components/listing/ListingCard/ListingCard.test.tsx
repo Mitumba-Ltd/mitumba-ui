@@ -32,7 +32,7 @@ describe('ListingCard', () => {
     expect(screen.getByText('KES 4,500')).toBeInTheDocument()
   })
 
-  it('shows VAZI badge when vaziEligible is true', () => {
+  it('shows VAZI Featured badge when vaziEligible is true', () => {
     render(
       <MitumbaThemeProvider>
         <ListingCard
@@ -50,7 +50,7 @@ describe('ListingCard', () => {
       </MitumbaThemeProvider>,
     )
 
-    expect(screen.getByText('VAZI')).toBeInTheDocument()
+    expect(screen.getByText(/VAZI Featured/i)).toBeInTheDocument()
   })
 
   it('hides VAZI badge when vaziEligible is false', () => {
@@ -71,7 +71,7 @@ describe('ListingCard', () => {
       </MitumbaThemeProvider>,
     )
 
-    expect(screen.queryByText('VAZI')).not.toBeInTheDocument()
+    expect(screen.queryByText(/VAZI Featured/i)).not.toBeInTheDocument()
   })
 
   it('calls onTap when clicked', () => {
@@ -118,7 +118,7 @@ describe('ListingCard', () => {
     expect(screen.getByText('KES 1,250,000')).toBeInTheDocument()
   })
 
-  it('shows STI chip with star for trusted seller', () => {
+  it('shows STI chip for seller', () => {
     render(
       <MitumbaThemeProvider>
         <ListingCard
@@ -137,9 +137,6 @@ describe('ListingCard', () => {
     )
 
     expect(screen.getByText('92')).toBeInTheDocument()
-    // Star icon is rendered alongside the score
-    const stiChip = screen.getByText('92').parentElement
-    expect(stiChip).toHaveTextContent('★')
   })
 
   it('shows seller name and city', () => {
@@ -160,7 +157,7 @@ describe('ListingCard', () => {
       </MitumbaThemeProvider>,
     )
 
-    expect(screen.getByText('By Alice Mwangi')).toBeInTheDocument()
+    expect(screen.getByText('Alice Mwangi')).toBeInTheDocument()
     expect(screen.getByText('Kisumu')).toBeInTheDocument()
   })
 

@@ -4,11 +4,10 @@ import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import { tokens } from '@mitumba/tokens'
 import { useCallback } from 'react'
+import { VAZIBadge } from '../VAZIBadge'
+import { PriceTag } from '../../commerce/PriceTag'
+import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
 import type { VAZIOutfitCardProps } from './VAZIOutfitCard.types'
-
-function formatPrice(priceKes: number): string {
-  return `KES ${priceKes.toLocaleString('en-KE')}`
-}
 
 export function VAZIOutfitCard({
   outfitName,
@@ -42,16 +41,19 @@ export function VAZIOutfitCard({
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
-        transition: 'transform 200ms ease, box-shadow 200ms ease',
+        transition: 'all 250ms cubic-bezier(0.4, 0, 0.2, 1)',
         width: '100%',
+        backgroundColor: tokens.colors.surface,
+        border: `1px solid ${tokens.colors.divider}`,
         '&:hover': onTap
           ? {
-              transform: 'translateY(-2px)',
+              transform: 'translateY(-4px)',
               boxShadow: tokens.shadows.elevated,
+              borderColor: tokens.colors.earthLight,
             }
           : undefined,
         '&:focus-visible': {
-          outline: `${tokens.spacing.xs}px solid transparent`,
+          outline: `2px solid ${tokens.colors.earthLight}`,
           boxShadow: tokens.shadows.focus,
         },
       }}
@@ -64,40 +66,21 @@ export function VAZIOutfitCard({
           gap: tokens.spacing.sm,
           paddingInline: tokens.spacing.base,
           paddingBlock: tokens.spacing.base,
+          borderBottom: `1px solid ${tokens.colors.background}`,
         }}
       >
-        <Box
-          sx={{
-            alignItems: 'center',
-            backgroundColor: tokens.colors.earth,
-            borderRadius: tokens.radius.sm,
-            color: tokens.colors.textOnEarth,
-            display: 'flex',
-            fontSize: tokens.typography.fontSizes.xs,
-            fontWeight: tokens.typography.fontWeights.bold,
-            lineHeight: tokens.typography.lineHeights.tight,
-            paddingInline: tokens.spacing.sm,
-            paddingBlock: tokens.spacing.xs,
-            textTransform: 'uppercase',
-            letterSpacing: tokens.typography.letterSpacings.wider,
-          }}
-          role="status"
-          aria-label="VAZI outfit"
-        >
-          VAZI
-        </Box>
+        <VAZIBadge size="small" />
         <Typography
           sx={{
             color: tokens.colors.textPrimary,
             flex: 1,
             fontSize: tokens.typography.fontSizes.base,
-            fontWeight: tokens.typography.fontWeights.semibold,
+            fontWeight: tokens.typography.fontWeights.bold,
             lineHeight: tokens.typography.lineHeights.snug,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
           }}
-          title={outfitName}
         >
           {outfitName}
         </Typography>
@@ -109,8 +92,8 @@ export function VAZIOutfitCard({
           display: 'flex',
           gap: tokens.spacing.sm,
           overflowX: 'auto',
-          paddingInline: tokens.spacing.base,
-          paddingBottom: tokens.spacing.base,
+          padding: tokens.spacing.base,
+          backgroundColor: tokens.colors.background,
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
           '&::-webkit-scrollbar': {
@@ -123,16 +106,17 @@ export function VAZIOutfitCard({
             key={item.listingId}
             sx={{
               flexShrink: 0,
-              width: `${(3 / 4) * 100}px`,
-              minWidth: '88px',
+              width: '88px',
             }}
           >
             <Box
               sx={{
                 aspectRatio: '3 / 4',
-                borderRadius: tokens.radius.md,
+                borderRadius: tokens.radius.sm,
                 overflow: 'hidden',
                 width: '100%',
+                backgroundColor: tokens.colors.surface,
+                border: `1px solid ${tokens.colors.divider}`,
               }}
             >
               <Box
@@ -151,15 +135,16 @@ export function VAZIOutfitCard({
             <Typography
               sx={{
                 color: tokens.colors.textSecondary,
-                fontSize: tokens.typography.fontSizes.xs,
-                fontWeight: tokens.typography.fontWeights.medium,
-                lineHeight: tokens.typography.lineHeights.tight,
+                fontSize: 10,
+                fontWeight: tokens.typography.fontWeights.semibold,
+                textTransform: 'uppercase',
+                letterSpacing: tokens.typography.letterSpacings.wide,
                 marginTop: tokens.spacing.xs,
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
+                textAlign: 'center',
               }}
-              title={item.sellerName}
             >
               {item.sellerName}
             </Typography>
@@ -172,8 +157,7 @@ export function VAZIOutfitCard({
           display: 'flex',
           flexDirection: 'column',
           gap: tokens.spacing.sm,
-          paddingInline: tokens.spacing.base,
-          paddingBlock: tokens.spacing.sm,
+          padding: tokens.spacing.base,
           '&:last-child': {
             paddingBottom: tokens.spacing.base,
           },
@@ -188,66 +172,71 @@ export function VAZIOutfitCard({
             justifyContent: 'space-between',
           }}
         >
-          <Typography
-            sx={{
-              color: tokens.colors.earth,
-              fontSize: tokens.typography.fontSizes.lg,
-              fontWeight: tokens.typography.fontWeights.bold,
-              lineHeight: tokens.typography.lineHeights.snug,
-            }}
-          >
-            {formatPrice(totalPriceKes)}
-          </Typography>
+          <PriceTag priceKes={totalPriceKes} size="large" color="earth" />
 
           {onBuyAll && (
-            <Box
-              component="button"
-              onClick={(e) => {
-                e.stopPropagation()
-                onBuyAll()
-              }}
-              sx={{
-                alignItems: 'center',
-                backgroundColor: tokens.colors.earth,
-                border: 'none',
-                borderRadius: tokens.radius.md,
-                color: tokens.colors.textOnEarth,
-                cursor: 'pointer',
-                display: 'flex',
-                fontFamily: tokens.typography.fontFamily,
-                fontSize: tokens.typography.fontSizes.sm,
-                fontWeight: tokens.typography.fontWeights.bold,
-                lineHeight: tokens.typography.lineHeights.normal,
-                minHeight: '36px',
-                paddingInline: tokens.spacing.base,
-                paddingBlock: tokens.spacing.sm,
-                transition: 'background-color 200ms ease',
-                whiteSpace: 'nowrap',
-                '&:hover': {
-                  backgroundColor: tokens.colors.earthDark,
-                },
-                '&:focus-visible': {
-                  outline: `${tokens.spacing.xs}px solid transparent`,
-                  boxShadow: tokens.shadows.focus,
-                },
-              }}
-            >
-              Buy this look
+            <Box sx={{ flexShrink: 0 }}>
+              <MitumbaPrimaryButton
+                label="Buy all"
+                variant="earth"
+                size="small"
+                fullWidth={false}
+                onClick={(e: React.MouseEvent) => {
+                  if (e && e.stopPropagation) {
+                    e.stopPropagation()
+                  }
+                  onBuyAll()
+                }}
+              />
             </Box>
           )}
         </Box>
 
         {/* Ships from N sellers badge */}
         {sellersCount > 1 && (
-          <Typography
+          <Box
             sx={{
-              color: tokens.colors.textSecondary,
-              fontSize: tokens.typography.fontSizes.sm,
-              lineHeight: tokens.typography.lineHeights.normal,
+              display: 'flex',
+              alignItems: 'center',
+              gap: tokens.spacing.xs,
+              mt: tokens.spacing.xs,
             }}
           >
-            Ships from {sellersCount} sellers{sellersCount > 1 && isMultiCity ? ' · Multi-city' : ''}
-          </Typography>
+            <Typography
+              sx={{
+                color: tokens.colors.textSecondary,
+                fontSize: tokens.typography.fontSizes.sm,
+                lineHeight: 1,
+              }}
+            >
+              Ships from {sellersCount} sellers
+            </Typography>
+            {isMultiCity && (
+              <Box
+                component="span"
+                sx={{
+                  fontSize: tokens.typography.fontSizes.xs,
+                  color: tokens.colors.textDisabled,
+                }}
+              >
+                •
+              </Box>
+            )}
+            {isMultiCity && (
+              <Typography
+                sx={{
+                  color: tokens.colors.earth,
+                  fontSize: tokens.typography.fontSizes.xs,
+                  fontWeight: tokens.typography.fontWeights.bold,
+                  textTransform: 'uppercase',
+                  letterSpacing: tokens.typography.letterSpacings.wide,
+                  lineHeight: 1,
+                }}
+              >
+                Multi-city
+              </Typography>
+            )}
+          </Box>
         )}
       </CardContent>
     </Card>
