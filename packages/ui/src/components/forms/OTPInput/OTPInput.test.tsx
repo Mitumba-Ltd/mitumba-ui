@@ -10,7 +10,13 @@ afterEach(() => {
   cleanup()
 })
 
-const OTPInputWrapper = ({ initialValue = '', onComplete }: { initialValue?: string; onComplete?: (otp: string) => void }) => {
+function OTPInputWrapper({
+  initialValue = '',
+  onComplete,
+}: {
+  initialValue?: string
+  onComplete?: (otp: string) => void
+}) {
   const [value, setValue] = useState(initialValue)
   return <OTPInput value={value} onChange={setValue} onComplete={onComplete ?? (() => {})} />
 }

@@ -21,7 +21,14 @@ function renderSellerCard(overrides: Partial<SellerCardProps> = {}) {
   return render(
     <MitumbaThemeProvider>
       <SellerCard
-        {...props}
+        sellerId={props.sellerId}
+        name={props.name}
+        avatarUrl={props.avatarUrl}
+        city={props.city}
+        stiScore={props.stiScore}
+        totalListings={props.totalListings}
+        isVaziFeatured={props.isVaziFeatured}
+        onTap={props.onTap}
       />
     </MitumbaThemeProvider>
   )

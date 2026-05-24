@@ -16,7 +16,12 @@ function renderTag(overrides: Partial<PriceTagProps> = {}) {
   const props = { ...defaultProps, ...overrides }
   return render(
     <MitumbaThemeProvider>
-      <PriceTag {...props} />
+      <PriceTag
+        priceKes={props.priceKes}
+        size={props.size}
+        color={props.color}
+        strikethrough={props.strikethrough}
+      />
     </MitumbaThemeProvider>
   )
 }

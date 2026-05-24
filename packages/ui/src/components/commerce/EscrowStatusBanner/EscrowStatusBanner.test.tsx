@@ -14,7 +14,12 @@ function renderBanner(overrides: Partial<EscrowStatusBannerProps> = {}) {
   const props = { ...defaultProps, ...overrides }
   return render(
     <MitumbaThemeProvider>
-      <EscrowStatusBanner {...props} />
+      <EscrowStatusBanner
+        status={props.status}
+        hoursRemaining={props.hoursRemaining}
+        onConfirmDelivery={props.onConfirmDelivery}
+        onRaiseDispute={props.onRaiseDispute}
+      />
     </MitumbaThemeProvider>
   )
 }
