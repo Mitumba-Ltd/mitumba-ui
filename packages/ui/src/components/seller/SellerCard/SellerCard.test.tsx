@@ -56,7 +56,7 @@ describe('SellerCard', () => {
 
   it('renders total listings', () => {
     renderSellerCard()
-    expect(screen.getByText('34 listings')).toBeInTheDocument()
+    expect(screen.getByText('34')).toBeInTheDocument()
   })
 
   it('calls onTap when clicked', () => {
@@ -68,8 +68,9 @@ describe('SellerCard', () => {
 
   it('shows VAZI badge when featured', () => {
     renderSellerCard({ isVaziFeatured: true })
-    expect(screen.getByText('VAZI')).toBeInTheDocument()
+    expect(screen.getByText(/VAZI Featured/i)).toBeInTheDocument()
   })
+
 
   it('does not show VAZI badge when not featured', () => {
     renderSellerCard({ isVaziFeatured: false })

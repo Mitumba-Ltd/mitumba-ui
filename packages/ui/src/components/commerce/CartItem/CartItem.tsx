@@ -5,61 +5,52 @@ import CloseIcon from '@mui/icons-material/Close'
 import { tokens } from '@mitumba/tokens'
 import type { CartItemProps } from './CartItem.types'
 import { PriceTag } from '../PriceTag'
+import { ConditionBadge } from '../../listing/ConditionBadge'
 
 export function CartItem({ imageUrl, title, priceKes, conditionGrade, sellerName, onRemove }: CartItemProps) {
-  const getGradeLabel = (): string => {
-    if (conditionGrade === 'A') return 'Like new'
-    if (conditionGrade === 'B') return 'Good'
-    return 'Fair'
-  }
-
-  const getGradeColor = (): string => {
-    if (conditionGrade === 'A') return tokens.colors.success
-    if (conditionGrade === 'B') return tokens.colors.info
-    return tokens.colors.warning
-  }
-
-  const gradeLabel = getGradeLabel()
-  const gradeColor = getGradeColor()
-
   return (
     <Box
       sx={{
         display: 'flex',
-        alignItems: 'flex-start',
+        alignItems: 'center',
         gap: tokens.spacing.base,
-        p: tokens.spacing.base,
+        p: tokens.spacing.sm,
         borderRadius: tokens.radius.lg,
         bgcolor: tokens.colors.surface,
         boxShadow: tokens.shadows.card,
         border: `1px solid ${tokens.colors.divider}`,
+        transition: 'all 200ms ease',
+        '&:hover': {
+          borderColor: tokens.colors.border,
+          boxShadow: tokens.shadows.elevated,
+        },
       }}
     >
       <Box
         sx={{
-          width: 80,
-          height: 80,
+          width: 64,
+          height: 64,
           borderRadius: tokens.radius.md,
           overflow: 'hidden',
           flexShrink: 0,
           bgcolor: tokens.colors.background,
-          position: 'relative',
+          border: `1px solid ${tokens.colors.divider}`,
         }}
       >
-        <img
+        <Box
+          component="img"
           src={imageUrl}
           alt={title}
-          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
       </Box>
       <Box sx={{ flex: 1, minWidth: 0 }}>
         <Typography
-          variant="body1"
           sx={{
             fontWeight: tokens.typography.fontWeights.semibold,
             fontSize: tokens.typography.fontSizes.base,
             color: tokens.colors.textPrimary,
-            lineHeight: tokens.typography.lineHeights.tight,
+            lineHeight: 1.2,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
@@ -67,25 +58,18 @@ export function CartItem({ imageUrl, title, priceKes, conditionGrade, sellerName
         >
           {title}
         </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.sm, mt: tokens.spacing.xs }}>
-          <PriceTag priceKes={priceKes} size="small" color="default" />
-          <Box
-            sx={{
-              px: tokens.spacing.sm,
-              py: tokens.spacing.xs,
-              borderRadius: tokens.radius.full,
-              bgcolor: `${gradeColor}14`,
-              color: gradeColor,
-              fontSize: tokens.typography.fontSizes.xs,
-              fontWeight: tokens.typography.fontWeights.semibold,
-            }}
-          >
-            {gradeLabel}
-          </Box>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.sm, mt: '2px' }}>
+          <PriceTag priceKes={priceKes} size="small" color="green" />
+          <ConditionBadge grade={conditionGrade} showLabel />
         </Box>
         <Typography
-          variant="caption"
-          sx={{ color: tokens.colors.textSecondary, fontSize: tokens.typography.fontSizes.sm, mt: tokens.spacing.xs }}
+          sx={{
+            color: tokens.colors.textSecondary,
+            fontSize: 10,
+            textTransform: 'uppercase',
+            letterSpacing: tokens.typography.letterSpacings.wide,
+            mt: '4px',
+          }}
         >
           Sold by {sellerName}
         </Typography>
@@ -95,14 +79,16 @@ export function CartItem({ imageUrl, title, priceKes, conditionGrade, sellerName
           onClick={onRemove}
           aria-label={`Remove ${title} from cart`}
           sx={{
-            color: tokens.colors.textSecondary,
-            '&:hover': { color: tokens.colors.error },
-            p: tokens.spacing.sm,
-            mt: tokens.spacing.xs,
+            color: tokens.colors.textDisabled,
+            '&:hover': { 
+              color: tokens.colors.error,
+              backgroundColor: tokens.colors.errorLight,
+            },
+            transition: 'all 200ms ease',
           }}
           size="small"
         >
-          <CloseIcon fontSize="small" />
+          <CloseIcon sx={{ fontSize: 18 }} />
         </IconButton>
       )}
     </Box>

@@ -2,10 +2,10 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Inventory2OutlinedIcon from '@mui/icons-material/Inventory2Outlined'
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
-import StarOutlinedIcon from '@mui/icons-material/StarOutlined'
 import { tokens } from '@mitumba/tokens'
 import { STIScoreChip } from '../STIScoreChip'
 import { MitumbaAvatar } from '../../foundation'
+import { VAZIBadge } from '../../vazi/VAZIBadge'
 import type { SellerCardProps } from './SellerCard.types'
 
 export function SellerCard({
@@ -39,15 +39,16 @@ export function SellerCard({
         boxShadow: tokens.shadows.card,
         border: `1px solid ${tokens.colors.divider}`,
         cursor: onTap ? 'pointer' : 'default',
-        transition: 'box-shadow 0.2s ease, transform 0.2s ease',
+        transition: 'all 250ms cubic-bezier(0.4, 0, 0.2, 1)',
         '&:hover': onTap
           ? {
               boxShadow: tokens.shadows.elevated,
               transform: 'translateY(-2px)',
+              borderColor: tokens.colors.border,
             }
           : undefined,
         '&:focus-visible': {
-          outline: `${tokens.spacing.xs}px solid transparent`,
+          outline: `2px solid ${tokens.colors.greenLight}`,
           boxShadow: tokens.shadows.focus,
         },
       }}
@@ -56,56 +57,49 @@ export function SellerCard({
       <Box sx={{ flex: 1, minWidth: 0 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.sm }}>
           <Typography
-            variant="body1"
             sx={{
-              fontWeight: tokens.typography.fontWeights.semibold,
-              fontSize: tokens.typography.fontSizes.md,
+              fontWeight: tokens.typography.fontWeights.bold,
+              fontSize: tokens.typography.fontSizes.base,
               color: tokens.colors.textPrimary,
-              lineHeight: tokens.typography.lineHeights.tight,
+              lineHeight: 1.2,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
+              fontFamily: tokens.typography.fontFamily,
             }}
           >
             {name}
           </Typography>
-          {isVaziFeatured && (
-            <Box
-              component="span"
-              sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: tokens.spacing.xs,
-                bgcolor: tokens.colors.earthLight,
-                color: tokens.colors.earth,
-                fontSize: tokens.typography.fontSizes.xs,
-                fontWeight: tokens.typography.fontWeights.bold,
-                px: tokens.spacing.sm,
-                py: tokens.spacing.xs,
-                borderRadius: tokens.radius.full,
-              }}
-            >
-              <StarOutlinedIcon sx={{ fontSize: 12 }} />
-              VAZI
-            </Box>
-          )}
+          {isVaziFeatured && <VAZIBadge size="small" />}
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.sm, mt: tokens.spacing.xs }}>
           <STIScoreChip score={stiScore} compact />
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.xs }}>
+          
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px', opacity: 0.7 }}>
             <Inventory2OutlinedIcon sx={{ fontSize: 14, color: tokens.colors.textSecondary }} />
             <Typography
-              variant="caption"
-              sx={{ color: tokens.colors.textSecondary, fontSize: tokens.typography.fontSizes.sm }}
+              sx={{ 
+                color: tokens.colors.textSecondary, 
+                fontSize: 10,
+                fontWeight: tokens.typography.fontWeights.semibold,
+                textTransform: 'uppercase',
+                letterSpacing: tokens.typography.letterSpacings.wide,
+              }}
             >
-              {totalListings} listings
+              {totalListings}
             </Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: tokens.spacing.xs }}>
+
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: '4px', opacity: 0.7 }}>
             <LocationOnOutlinedIcon sx={{ fontSize: 14, color: tokens.colors.textSecondary }} />
             <Typography
-              variant="caption"
-              sx={{ color: tokens.colors.textSecondary, fontSize: tokens.typography.fontSizes.sm }}
+              sx={{ 
+                color: tokens.colors.textSecondary, 
+                fontSize: 10,
+                fontWeight: tokens.typography.fontWeights.semibold,
+                textTransform: 'uppercase',
+                letterSpacing: tokens.typography.letterSpacings.wide,
+              }}
             >
               {city}
             </Typography>
