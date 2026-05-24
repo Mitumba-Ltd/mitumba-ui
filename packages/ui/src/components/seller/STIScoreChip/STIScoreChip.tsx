@@ -37,13 +37,14 @@ export function STIScoreChip({
       sx={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: tokens.spacing.sm,
+        gap: tokens.spacing.xs,
+        height: compact ? '24px' : '32px',
         px: compact ? tokens.spacing.sm : tokens.spacing.md,
-        py: compact ? tokens.spacing.xs : tokens.spacing.sm,
         borderRadius: tokens.radius.full,
         backgroundColor: `${color}14`,
-        border: `1px solid ${color}33`,
+        border: `1px solid ${color}40`,
         width: 'fit-content',
+        transition: 'all 200ms ease',
       }}
       aria-label={`STI Score: ${clampedScore}, ${label}`}
     >
@@ -52,29 +53,46 @@ export function STIScoreChip({
           component="span"
           sx={{
             color,
-            fontSize: tokens.typography.fontSizes.sm,
-            fontWeight: tokens.typography.fontWeights.medium,
-            lineHeight: tokens.typography.lineHeights.tight,
+            fontSize: compact ? 10 : tokens.typography.fontSizes.xs,
+            fontWeight: tokens.typography.fontWeights.bold,
+            textTransform: 'uppercase',
+            letterSpacing: tokens.typography.letterSpacings.wide,
+            lineHeight: 1,
           }}
         >
-          {label}
+          {label.replace(' ★', '')}
         </Box>
       )}
       <Box
         component="span"
         sx={{
           color,
-          fontSize: compact
-            ? tokens.typography.fontSizes.sm
-            : tokens.typography.fontSizes.base,
-          fontWeight: tokens.typography.fontWeights.bold,
-          lineHeight: tokens.typography.lineHeights.tight,
-          minWidth: tokens.spacing.lg,
+          fontSize: compact ? tokens.typography.fontSizes.xs : tokens.typography.fontSizes.sm,
+          fontWeight: tokens.typography.fontWeights.extrabold,
+          lineHeight: 1,
+          minWidth: '1.2em',
           textAlign: 'center',
+          ...(shouldShowLabel && {
+            borderLeft: `1px solid ${color}40`,
+            paddingLeft: tokens.spacing.xs,
+            marginLeft: '2px',
+          }),
         }}
       >
         {clampedScore}
       </Box>
+      {clampedScore >= 85 && (
+        <Box
+          component="span"
+          sx={{
+            color,
+            fontSize: compact ? 10 : 12,
+            marginLeft: '-2px',
+          }}
+        >
+          ★
+        </Box>
+      )}
     </Box>
   )
 }

@@ -32,43 +32,44 @@ export function ConditionBadge({ grade, showLabel = false }: ConditionBadgeProps
       sx={{
         alignItems: 'center',
         backgroundColor: config.bgColor,
-        borderRadius: tokens.spacing.xs,
+        borderRadius: tokens.radius.sm,
         color: config.color,
-        display: 'flex',
+        display: 'inline-flex',
         fontSize: tokens.typography.fontSizes.xs,
         fontWeight: tokens.typography.fontWeights.bold,
         gap: tokens.spacing.xs,
-        justifyContent: 'center',
-        lineHeight: tokens.typography.lineHeights.tight,
-        minHeight: tokens.spacing.lg,
+        height: '24px',
         paddingInline: tokens.spacing.sm,
-        paddingBlock: tokens.spacing.xs,
-        width: 'fit-content',
+        transition: 'all 200ms ease',
+        boxShadow: tokens.shadows.card,
       }}
       role="status"
       aria-label={`Condition: ${config.label}`}
     >
-      <Typography
+      <Box
         component="span"
         sx={{
           fontSize: tokens.typography.fontSizes.xs,
-          fontWeight: tokens.typography.fontWeights.bold,
-          lineHeight: tokens.typography.lineHeights.tight,
+          fontWeight: tokens.typography.fontWeights.extrabold,
+          lineHeight: 1,
         }}
       >
         {grade}
-      </Typography>
+      </Box>
       {showLabel && (
-        <Typography
+        <Box
           component="span"
           sx={{
             fontSize: tokens.typography.fontSizes.xs,
-            fontWeight: tokens.typography.fontWeights.medium,
-            lineHeight: tokens.typography.lineHeights.tight,
+            fontWeight: tokens.typography.fontWeights.semibold,
+            lineHeight: 1,
+            borderLeft: `1px solid ${config.color}40`,
+            paddingLeft: tokens.spacing.xs,
+            marginLeft: '2px',
           }}
         >
           {config.label}
-        </Typography>
+        </Box>
       )}
     </Box>
   )

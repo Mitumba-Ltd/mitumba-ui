@@ -13,36 +13,29 @@ export function VAZIBadge({ size = 'medium' }: VAZIBadgeProps) {
         borderRadius: tokens.radius.sm,
         color: tokens.colors.textOnEarth,
         display: 'inline-flex',
-        fontSize: isSmall
-          ? tokens.typography.fontSizes.xs
-          : tokens.typography.fontSizes.sm,
-        fontWeight: tokens.typography.fontWeights.bold,
-        gap: isSmall ? '2px' : '4px',
-        letterSpacing: isSmall
-          ? tokens.typography.letterSpacings.wider
-          : tokens.typography.letterSpacings.normal,
-        lineHeight: tokens.typography.lineHeights.tight,
-        minHeight: isSmall ? 20 : 28,
+        fontSize: isSmall ? 10 : 12,
+        fontWeight: tokens.typography.fontWeights.extrabold,
+        gap: isSmall ? '4px' : '6px',
+        height: isSmall ? '20px' : '28px',
         paddingInline: isSmall ? tokens.spacing.sm : tokens.spacing.base,
-        paddingBlock: isSmall ? '2px' : tokens.spacing.xs,
         textTransform: 'uppercase',
+        letterSpacing: tokens.typography.letterSpacings.wider,
         whiteSpace: 'nowrap',
+        boxShadow: tokens.shadows.card,
+        transition: 'all 200ms ease',
       }}
       role="status"
       aria-label="VAZI Featured"
     >
       <svg
-        width={isSmall ? 10 : 14}
-        height={isSmall ? 10 : 14}
+        width={isSmall ? 12 : 14}
+        height={isSmall ? 12 : 14}
         viewBox="0 0 24 24"
-        fill="none"
+        fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden="true"
       >
-        <path
-          d="M12 2L14.5 9H22L16 13.5L18.5 21L12 17L5.5 21L8 13.5L2 9H9.5L12 2Z"
-          fill="currentColor"
-        />
+        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
       </svg>
       VAZI Featured
     </Box>
