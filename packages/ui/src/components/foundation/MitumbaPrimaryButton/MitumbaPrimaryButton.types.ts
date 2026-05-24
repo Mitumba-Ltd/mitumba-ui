@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react'
+import type { SxProps, Theme } from '@mui/material/styles'
 
 export interface MitumbaPrimaryButtonProps {
   /** Button text label. */
   label: string
   /** Called when the button is clicked. */
-  onClick?: () => void
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
   /** Shows a spinner and prevents clicks while work is in progress. */
   loading?: boolean
   /** Prevents user interaction. */
@@ -17,4 +18,6 @@ export interface MitumbaPrimaryButtonProps {
   size?: 'small' | 'medium' | 'large'
   /** Visual treatment. Defaults to primary. */
   variant?: 'primary' | 'earth' | 'ghost'
+  /** Optional style overrides using MUI sx prop. */
+  sx?: SxProps<Theme>
 }

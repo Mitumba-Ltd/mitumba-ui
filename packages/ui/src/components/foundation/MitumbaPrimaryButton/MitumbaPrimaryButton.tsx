@@ -3,10 +3,10 @@ import CircularProgress from '@mui/material/CircularProgress'
 import { tokens } from '@mitumba/tokens'
 import type { MitumbaPrimaryButtonProps } from './MitumbaPrimaryButton.types'
 
-const spinnerSizeByButtonSize: Record<NonNullable<MitumbaPrimaryButtonProps['size']>, number> = {
-  small: tokens.spacing.base,
-  medium: tokens.spacing.lg,
-  large: tokens.spacing.lg,
+const spinnerSizeByButtonSize = {
+  small: 16,
+  medium: 20,
+  large: 24,
 }
 
 export function MitumbaPrimaryButton({
@@ -18,6 +18,7 @@ export function MitumbaPrimaryButton({
   fullWidth = true,
   size = 'medium',
   variant = 'primary',
+  sx,
 }: MitumbaPrimaryButtonProps) {
   const isDisabled = disabled || loading
 
@@ -83,27 +84,30 @@ export function MitumbaPrimaryButton({
         )
       }
       disableElevation
-      sx={{
-        ...variantStyles[variant],
-        ...sizeStyles[size],
-        borderRadius: tokens.radius.md,
-        fontFamily: tokens.typography.fontFamily,
-        fontWeight: tokens.typography.fontWeights.semibold,
-        textTransform: 'none',
-        transition: 'all 200ms ease',
-        '&:active': {
-          transform: 'scale(0.98)',
+      sx={[
+        {
+          ...variantStyles[variant],
+          ...sizeStyles[size],
+          borderRadius: tokens.radius.md,
+          fontFamily: tokens.typography.fontFamily,
+          fontWeight: tokens.typography.fontWeights.semibold,
+          textTransform: 'none',
+          transition: 'all 200ms ease',
+          '&:active': {
+            transform: 'scale(0.98)',
+          },
+          '&.Mui-disabled': {
+            backgroundColor: tokens.colors.divider,
+            color: tokens.colors.textDisabled,
+            border: variant === 'ghost' ? `1px solid ${tokens.colors.divider}` : 'none',
+          },
+          '&:focus-visible': {
+            outline: `2px solid ${tokens.colors.greenLight}`,
+            outlineOffset: '2px',
+          },
         },
-        '&.Mui-disabled': {
-          backgroundColor: tokens.colors.divider,
-          color: tokens.colors.textDisabled,
-          border: variant === 'ghost' ? `1px solid ${tokens.colors.divider}` : 'none',
-        },
-        '&:focus-visible': {
-          outline: `2px solid ${tokens.colors.greenLight}`,
-          outlineOffset: '2px',
-        },
-      }}
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
     >
       {label}
     </Button>
