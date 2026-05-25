@@ -32,6 +32,7 @@ export function MitumbaAvatar({
   name,
   imageUrl,
   size = 'md',
+  badge,
   status,
   actionIcon,
   notificationCount,
@@ -247,8 +248,8 @@ export function MitumbaAvatar({
           </Box>
         )}
 
-        {/* Requirement 4: Presence Indicator */}
-        {status && !actionIcon && (
+        {/* Presence Indicator */}
+        {status && !actionIcon && !badge && (
           <Box
             sx={{
               position: 'absolute',
@@ -267,8 +268,8 @@ export function MitumbaAvatar({
           />
         )}
 
-        {/* Requirement 2: Action To Call */}
-        {actionIcon && (
+        {/* Requirement 2: Action To Call or Legacy Badge */}
+        {(actionIcon || badge) && (
           <Box
             sx={{
               position: 'absolute',
@@ -276,8 +277,8 @@ export function MitumbaAvatar({
               right: -2,
               width: dimension * 0.4,
               height: dimension * 0.4,
-              minWidth: 24,
-              minHeight: 24,
+              minWidth: 20,
+              minHeight: 20,
               bgcolor: tokens.colors.surface,
               borderRadius: tokens.radius.full,
               color: tokens.colors.textPrimary,
@@ -296,7 +297,7 @@ export function MitumbaAvatar({
               },
             }}
           >
-            {React.cloneElement(actionIcon as React.ReactElement, { sx: { fontSize: dimension * 0.2 } })}
+            {actionIcon || badge}
           </Box>
         )}
       </Box>
