@@ -1,11 +1,14 @@
+import React from 'react'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
+import Box from '@mui/material/Box'
+import type { Theme } from '@mui/material/styles'
 import { tokens } from '@mitumba/tokens'
-import { Box } from '@mui/material'
 import type { MitumbaPrimaryButtonProps } from './MitumbaPrimaryButton.types'
 
 /**
- * Premium primary button with tactile transitions and sane proportions.
+ * Premium "Living" Button primitive with tactile interaction and precision scaling.
+ * Fulfills the 32/42/52 height standard and incorporates benchmark spring physics.
  */
 export function MitumbaPrimaryButton({
   label,
@@ -13,42 +16,97 @@ export function MitumbaPrimaryButton({
   loading = false,
   disabled = false,
   icon,
+  iconPosition = 'left',
   fullWidth = false,
   size = 'medium',
   variant = 'primary',
   sx,
 }: MitumbaPrimaryButtonProps) {
   const isDisabled = disabled || loading
-  const muiVariant = variant === 'ghost' ? 'outlined' : 'contained'
-  const color = variant === 'earth' ? 'secondary' : 'primary'
+  const isIconOnly = !label && !!icon
+
+  // Scale Mapping (Fulfilling Benchmark)
+  const sizeConfig = {
+    small: { height: 32, px: 4, fontSize: tokens.typography.fontSizes.sm },
+    medium: { height: 42, px: 6, fontSize: tokens.typography.fontSizes.base },
+    large: { height: 52, px: 8, fontSize: tokens.typography.fontSizes.md },
+  }
+
+  const currentSize = sizeConfig[size]
+
+  // Variant Mapping
+  const muiVariantMap: Record<string, 'contained' | 'outlined' | 'text'> = {
+    primary: 'contained',
+    secondary: 'contained',
+    earth: 'contained',
+    success: 'contained',
+    error: 'contained',
+    outline: 'outlined',
+    ghost: 'text',
+  }
+
+  const muiColorMap: Record<string, 'primary' | 'secondary' | 'success' | 'error' | 'inherit'> = {
+    primary: 'primary',
+    secondary: 'secondary',
+    earth: 'secondary',
+    success: 'success',
+    error: 'error',
+    outline: 'primary',
+    ghost: 'inherit',
+  }
 
   return (
     <Button
-      aria-busy={loading || undefined}
-      color={color}
+      variant={muiVariantMap[variant]}
+      color={muiColorMap[variant]}
       disabled={isDisabled}
       fullWidth={fullWidth}
       onClick={onClick}
-      size={size}
-      variant={muiVariant}
-      sx={sx}
+      aria-busy={loading || undefined}
+      disableElevation
+      sx={[
+        {
+          height: currentSize.height,
+          minWidth: isIconOnly ? currentSize.height : 'auto',
+          paddingInline: isIconOnly ? 0 : (theme: Theme) => theme.spacing(currentSize.px),
+          borderRadius: tokens.radius.md,
+          fontSize: currentSize.fontSize,
+          fontWeight: 600,
+          fontFamily: tokens.typography.fontFamily,
+          textTransform: 'none',
+          position: 'relative',
+          overflow: 'hidden',
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)', // Inherited from benchmark
+          
+          '&:hover': {
+            transform: 'translateY(-2px) scale(1.02)',
+          },
+          '&:active': {
+            transform: 'translateY(0) scale(0.98)',
+          },
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
     >
-      {/* Content wrapper for perfect centering and transition effects */}
+      {/* Centered Content Wrapper */}
       <Box
         sx={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          gap: tokens.spacing.sm,
           opacity: loading ? 0 : 1,
           transform: loading ? 'scale(0.9)' : 'scale(1)',
           transition: 'all 0.2s ease',
-          gap: tokens.spacing.sm,
+          width: '100%',
+          flexDirection: iconPosition === 'left' ? 'row' : 'row-reverse',
         }}
       >
-        {!loading && icon}
+        {icon}
         {label}
       </Box>
 
+      {/* Absolute Loading Overlay */}
       {loading && (
         <Box
           sx={{
@@ -57,12 +115,13 @@ export function MitumbaPrimaryButton({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            color: 'inherit',
           }}
         >
-          <CircularProgress 
-            size={size === 'small' ? 16 : 20} 
-            color="inherit" 
-            aria-label={`${label} loading`}
+          <CircularProgress
+            size={currentSize.height * 0.4}
+            color="inherit"
+            aria-label={`${label || 'Button'} loading`}
           />
         </Box>
       )}
