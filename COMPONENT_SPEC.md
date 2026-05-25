@@ -19,6 +19,7 @@ Phase 9 — Commerce components
 Phase 10 — Form components
 Phase 11 — Feedback components
 Phase 12 — Data display components
+Phase 13 — Selection components
 ```
 
 ---
@@ -760,6 +761,53 @@ interface ActivityEvent {
 
 ---
 
+## Phase 13 — Selection components
+
+### 13.1 `MitumbaCheckbox`
+
+Props:
+- `checked: boolean`
+- `onChange: (checked: boolean) => void`
+- `label?: string`
+- `disabled?: boolean`
+- `indeterminate?: boolean`
+
+### 13.2 `MitumbaRadio`
+
+Props:
+- `selected: boolean`
+- `value: any`
+- `label?: string`
+- `onChange: (value: any) => void`
+- `disabled?: boolean`
+
+### 13.3 `MitumbaSwitch`
+
+Props:
+- `on: boolean`
+- `onChange: (on: boolean) => void`
+- `label?: string`
+- `disabled?: boolean`
+
+### 13.4 `MitumbaSlider`
+
+Props:
+- `value: number | number[]`
+- `onChange: (value: number | number[]) => void`
+- `min?: number`
+- `max?: number`
+- `range?: boolean`
+
+### 13.5 `MitumbaDatePicker`
+
+Props:
+- `value: Date | null`
+- `onChange: (date: Date | null) => void`
+- `label?: string`
+- `hint?: string`
+
+---
+
 ## Component count summary
 
 | Phase | Components | Count |
@@ -776,4 +824,5 @@ interface ActivityEvent {
 | Forms | PhoneInput, OTPInput, ImageUploader, SearchBar | 4 |
 | Feedback | EmptyState, ErrorState, OfflineBanner, Toast, Modal, Skeleton | 6 |
 | Data display | StatsCard, ActivityFeed | 2 |
-| **Total** | | **50** |
+| Selection | Checkbox, Radio, Switch, Slider, DatePicker | 5 |
+| **Total** | | **55** |
