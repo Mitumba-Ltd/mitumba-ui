@@ -140,6 +140,34 @@ export const AdornmentShowcase: Story = {
   render: () => <AdornmentShowcaseComponent />
 }
 
+export const PillGeometry: Story = {
+  render: () => (
+    <Stack spacing={4} sx={{ width: 400 }}>
+      <MitumbaTextField 
+        label="Pill Input" 
+        rounding="pill"
+        hint="Search items..."
+        value="" 
+        onChange={() => {}} 
+        prefix={<SearchIcon />}
+      />
+      <MitumbaTextField 
+        label="Pill with Button" 
+        rounding="pill"
+        hint="Enter email..."
+        value="" 
+        onChange={() => {}} 
+        endButton={
+          <MitumbaPrimaryButton 
+            label="Subscribe" 
+            size="medium" 
+          />
+        }
+      />
+    </Stack>
+  ),
+}
+
 export const TextArea: Story = {
   args: {
     label: 'Description',

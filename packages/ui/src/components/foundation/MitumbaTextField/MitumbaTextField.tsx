@@ -24,6 +24,7 @@ export function MitumbaTextField({
   helperText,
   error,
   size = 'medium',
+  rounding = 'rounded',
   status,
   prefix,
   suffix,
@@ -46,7 +47,13 @@ export function MitumbaTextField({
     large: { height: 52, fontSize: tokens.typography.fontSizes.md, iconSize: 24 },
   }
 
+  const radiusMap = {
+    pill: tokens.radius.full,
+    rounded: tokens.radius.md,
+  }
+
   const currentSize = sizeConfig[size]
+  const borderRadius = radiusMap[rounding]
 
   // Status Color & Icon Mapping
   const statusConfig = {
@@ -102,7 +109,7 @@ export function MitumbaTextField({
     {
       '& .MuiOutlinedInput-root': {
         height: multiline ? 'auto' : currentSize.height,
-        borderRadius: `${tokens.radius.md}px`,
+        borderRadius: `${borderRadius}px`,
         bgcolor: tokens.colors.surface,
         fontSize: currentSize.fontSize,
         fontWeight: 600,
@@ -167,6 +174,7 @@ export function MitumbaTextField({
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
             fontFamily: tokens.typography.fontFamily,
+            ml: rounding === 'pill' ? 2 : 1,
           }}
         >
           {label}
@@ -189,7 +197,7 @@ export function MitumbaTextField({
             input: {
               readOnly,
               startAdornment: prefix && (
-                <InputAdornment position="start" sx={{ color: tokens.colors.textSecondary }}>
+                <InputAdornment position="start" sx={{ color: tokens.colors.textSecondary, ml: rounding === 'pill' ? 1 : 0 }}>
                   {React.isValidElement(prefix) ? React.cloneElement(prefix as React.ReactElement, { sx: { fontSize: currentSize.iconSize } }) : prefix}
                 </InputAdornment>
               ),
@@ -212,6 +220,7 @@ export function MitumbaTextField({
                 borderLeft: 'none !important',
                 // If the input has a 2px focused border, we might need a small overlap or adjustment
                 ml: '-1px', 
+                borderRadius: rounding === 'pill' ? `0 ${tokens.radius.full}px ${tokens.radius.full}px 0` : `0 ${tokens.radius.md}px ${tokens.radius.md}px 0`,
               }
             }}
           >
@@ -225,7 +234,7 @@ export function MitumbaTextField({
           variant="caption"
           sx={{
             mt: 0.5,
-            ml: 1,
+            ml: rounding === 'pill' ? 2 : 1,
             display: 'block',
             fontWeight: 600,
             color: currentStatus ? statusConfig[currentStatus].color : tokens.colors.textSecondary,

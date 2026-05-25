@@ -3,6 +3,7 @@ import type { SxProps, Theme } from '@mui/material/styles'
 
 export type TextFieldSize = 'small' | 'medium' | 'large'
 export type TextFieldStatus = 'success' | 'warning' | 'error'
+export type TextFieldRounding = 'pill' | 'rounded'
 
 export interface MitumbaTextFieldProps {
   /** Optional label text displayed above the field. */
@@ -20,6 +21,8 @@ export interface MitumbaTextFieldProps {
   
   /** Scale standard matching buttons/select. Defaults to 'medium'. */
   size?: TextFieldSize
+  /** Corner geometry. Defaults to 'rounded'. */
+  rounding?: TextFieldRounding
   /** Validation status treatment. */
   status?: TextFieldStatus
   
