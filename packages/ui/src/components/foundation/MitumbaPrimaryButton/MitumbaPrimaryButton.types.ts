@@ -12,7 +12,7 @@ export interface MitumbaPrimaryButtonProps {
   disabled?: boolean
   /** Optional leading icon shown before the label. */
   icon?: ReactNode
-  /** Whether the button spans the full available width. Defaults to true. */
+  /** Whether the button spans the full available width. Defaults to false. */
   fullWidth?: boolean
   /** Button size. Defaults to medium. */
   size?: 'small' | 'medium' | 'large'
@@ -21,3 +21,4 @@ export interface MitumbaPrimaryButtonProps {
   /** Optional style overrides using MUI sx prop. */
   sx?: SxProps<Theme>
 }
+

@@ -4,6 +4,10 @@ import TextField from '@mui/material/TextField'
 import { tokens } from '@mitumba/tokens'
 import type { MitumbaTextFieldProps } from './MitumbaTextField.types'
 
+/**
+ * Highly refined text input with token-driven sizing and professional focus states.
+ * Styling is centrally managed by the MUI Theme Engine.
+ */
 export function MitumbaTextField({
   label,
   hint,
@@ -40,7 +44,9 @@ export function MitumbaTextField({
               sx={{
                 mr: tokens.spacing.sm,
                 display: 'flex',
+                alignItems: 'center',
                 color: tokens.colors.textSecondary,
+                opacity: 0.8,
               }}
             >
               {prefix}
@@ -51,7 +57,9 @@ export function MitumbaTextField({
               sx={{
                 ml: tokens.spacing.sm,
                 display: 'flex',
+                alignItems: 'center',
                 color: tokens.colors.textSecondary,
+                opacity: 0.8,
               }}
             >
               {suffix}
@@ -60,64 +68,7 @@ export function MitumbaTextField({
         },
       }}
       sx={{
-        '& .MuiOutlinedInput-root': {
-          borderRadius: tokens.radius.md,
-          backgroundColor: tokens.colors.surface,
-          transition: 'all 200ms ease',
-          fontFamily: tokens.typography.fontFamily,
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: tokens.colors.border,
-            borderWidth: '1px',
-            transition: 'all 200ms ease',
-          },
-          '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: tokens.colors.textDisabled,
-          },
-          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: tokens.colors.green,
-            borderWidth: '2px',
-          },
-          '&.Mui-error .MuiOutlinedInput-notchedOutline': {
-            borderColor: tokens.colors.error,
-          },
-          '&.Mui-disabled': {
-            backgroundColor: tokens.colors.background,
-            '& .MuiOutlinedInput-notchedOutline': {
-              borderColor: tokens.colors.divider,
-            },
-          },
-        },
-        '& .MuiInputLabel-root': {
-          color: tokens.colors.textSecondary,
-          fontFamily: tokens.typography.fontFamily,
-          fontSize: tokens.typography.fontSizes.base,
-          '&.Mui-focused': {
-            color: tokens.colors.green,
-          },
-          '&.Mui-error': {
-            color: tokens.colors.error,
-          },
-        },
-        '& .MuiFormHelperText-root': {
-          marginLeft: 0,
-          marginRight: 0,
-          marginTop: tokens.spacing.xs,
-          fontSize: tokens.typography.fontSizes.sm,
-          fontFamily: tokens.typography.fontFamily,
-          '&.Mui-error': {
-            color: tokens.colors.error,
-          },
-        },
-        '& .MuiInputBase-input': {
-          paddingBlock: '12px',
-          height: 'auto',
-          fontSize: tokens.typography.fontSizes.base,
-          color: tokens.colors.textPrimary,
-          '&::placeholder': {
-            color: tokens.colors.textDisabled,
-            opacity: 1,
-          },
-        },
+        width: '100%',
       }}
     />
   )

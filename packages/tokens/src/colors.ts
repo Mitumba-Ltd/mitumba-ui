@@ -1,22 +1,30 @@
 export const colors = {
+  // Brand
   green: '#3D9A52',
   greenLight: '#EAF5EC',
   greenDark: '#2C7A3E',
   earth: '#A06235',
   earthLight: '#F5EDE5',
   earthDark: '#7D4A24',
+
+  // Neutrals
   white: '#FFFFFF',
   background: '#F7F7F5',
   surface: '#FFFFFF',
   divider: '#EAEAE7',
   border: '#D9D9D5',
+
+  // Text
   textPrimary: '#1A1A18',
   textSecondary: '#6B6B65',
   textDisabled: '#ADADA8',
   textOnGreen: '#FFFFFF',
   textOnEarth: '#FFFFFF',
+
+  // Semantic
   success: '#3D9A52',
   successLight: '#EAF5EC',
+  successDark: '#2C7A3E',
   error: '#D93025',
   errorLight: '#FCECEB',
   errorDark: '#A52714',
@@ -25,6 +33,9 @@ export const colors = {
   warningDark: '#D35400',
   info: '#2E86C1',
   infoLight: '#E8F4FD',
+  infoDark: '#1B4F72',
+
+  // STI Score
   stiTrusted: '#3D9A52',
   stiGood: '#2E86C1',
   stiAtRisk: '#E67E22',

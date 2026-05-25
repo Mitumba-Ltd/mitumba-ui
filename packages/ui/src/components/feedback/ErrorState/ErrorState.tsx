@@ -21,7 +21,7 @@ export function ErrorState({
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        padding: tokens.spacing.xxxl,
+        padding: tokens.spacing.huge,
         gap: tokens.spacing.base,
         backgroundColor: tokens.colors.errorLight,
         borderRadius: tokens.radius.lg,
