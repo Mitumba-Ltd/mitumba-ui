@@ -89,14 +89,16 @@ export const StatusShowcase: Story = {
 }
 
 function AdornmentShowcaseComponent() {
+  const [pass, setPass] = useState('password123')
   return (
     <Stack spacing={4} sx={{ width: 400 }}>
       <MitumbaTextField 
-        label="Left Side Icon" 
+        label="Password Toggle (Auto)" 
+        type="password"
         prefix={<LockIcon />}
         hint="Password"
-        value="" 
-        onChange={() => {}} 
+        value={pass} 
+        onChange={setPass} 
       />
       <MitumbaTextField 
         label="Right Side Icon" 
@@ -106,7 +108,7 @@ function AdornmentShowcaseComponent() {
         onChange={() => {}} 
       />
       <MitumbaTextField 
-        label="Integrated Button" 
+        label="Integrated Search (Benchmark)" 
         hint="Search items..."
         value="" 
         onChange={() => {}} 
@@ -114,12 +116,11 @@ function AdornmentShowcaseComponent() {
           <MitumbaPrimaryButton 
             icon={<SearchIcon />} 
             size="medium" 
-            sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
           />
         }
       />
       <MitumbaTextField 
-        label="Button & Icon" 
+        label="Seamless Submit (Benchmark)" 
         prefix={<MailIcon />}
         hint="Email address"
         value="" 
@@ -128,7 +129,6 @@ function AdornmentShowcaseComponent() {
           <MitumbaPrimaryButton 
             label="Submit" 
             size="medium" 
-            sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
           />
         }
       />
