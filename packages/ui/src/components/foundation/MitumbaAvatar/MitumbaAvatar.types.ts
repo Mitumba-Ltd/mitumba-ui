@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 
 export type AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+export type AvatarOverlap = 'tight' | 'standard' | 'relaxed'
 
 export interface MitumbaAvatarProps {
   /** Display name for initials fallback and meta text. Isaac Stanley -> IS. */
@@ -26,11 +27,11 @@ export interface MitumbaAvatarProps {
   /** Supporting text for side-alignment metadata. */
   subtitle?: string
   
-  /** Requirement 7: Trigger the "new event" spinning border animation. */
+  /** Requirement 7: Trigger the "new event" spinning border animation (dots-to-solid). */
   hasNewEvent?: boolean
   /** Requirement 8: Value 0-100 for concentric progress stroke (e.g. profile completeness). */
   progress?: number
-  /** Requirement 9: Show selected state with tick icon and high-contrast stroke. */
+  /** Requirement 9: Show selected state with tick icon at bottom-right. */
   selected?: boolean
   
   /** Requirement 10: internal prop for stacked styling. */
@@ -53,6 +54,8 @@ export interface MitumbaAvatarGroupProps {
   total?: number
   /** Size for all avatars in the group. */
   size?: AvatarSize
+  /** How much the avatars should overlap. Defaults to 'relaxed' (least overlap). */
+  overlap?: AvatarOverlap
   /** Requirement 11: Adds a CTA '+' button at the end of the stack. */
   onAdd?: () => void
 }

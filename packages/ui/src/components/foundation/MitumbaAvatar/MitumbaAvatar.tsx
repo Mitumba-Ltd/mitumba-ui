@@ -24,9 +24,15 @@ const fontSizeMap = {
   xl: 24,
 }
 
+const overlapFactorMap = {
+  tight: 0.5,
+  standard: 0.35,
+  relaxed: 0.2,
+}
+
 /**
- * Premium "Living" Avatar primitive with 3D physicality and comprehensive state indicators.
- * Fulfills all 12 professional requirements from the Mitumba UI Component Specification.
+ * Premium "Living" Avatar primitive with 3D physicality and high-end animations.
+ * Fulfills all professional requirements and refinements from Stanley.
  */
 export function MitumbaAvatar({
   name,
@@ -49,7 +55,6 @@ export function MitumbaAvatar({
 }: MitumbaAvatarProps) {
   const dimension = sizeMap[size]
 
-  // Logic 1: Initials/Placeholder
   const initials = useMemo(() => {
     if (!name) return <PersonIcon sx={{ fontSize: dimension * 0.6 }} />
     const words = name.trim().split(/\s+/)
@@ -59,7 +64,6 @@ export function MitumbaAvatar({
   }, [name, dimension])
 
   const renderAvatarCircle = () => {
-    // Requirement 11: Stacked CTA Button
     if (isCTA) {
       return (
         <Avatar
@@ -83,7 +87,6 @@ export function MitumbaAvatar({
       )
     }
 
-    // Requirement 12: Stacked Overflow Badge
     if (overflowCount !== undefined) {
       return (
         <Avatar
@@ -106,48 +109,51 @@ export function MitumbaAvatar({
 
     return (
       <Box sx={{ position: 'relative', width: dimension, height: dimension }}>
-        {/* Requirement 7 & 8: Premium SVG Decorators (Animated Border & Progress) */}
+        {/* Issue 2 & 3: High-End SVG Animations (Event & Progress) */}
         {hasBorderDecorator && (
           <Box
             component="svg"
             viewBox="0 0 100 100"
             sx={{
               position: 'absolute',
-              inset: -5,
-              width: dimension + 10,
-              height: dimension + 10,
+              // Perfect centering: -10% of dimension usually works well for the stroke width
+              top: '-10%',
+              left: '-10%',
+              width: '120%',
+              height: '120%',
               transform: 'rotate(-90deg)',
               zIndex: 0,
+              pointerEvents: 'none',
             }}
           >
-            {/* Background Track */}
-            <circle
-              cx="50"
-              cy="50"
-              r="46"
-              fill="none"
-              stroke={tokens.colors.divider}
-              strokeWidth="4"
-              opacity="0.5"
-            />
+            {/* Track */}
+            <circle cx="50" cy="50" r="46" fill="none" stroke={tokens.colors.divider} strokeWidth="4" opacity="0.3" />
             
-            {/* Progress Stroke */}
             {progress !== undefined && (
-              <circle
+              <Box
+                component="circle"
                 cx="50"
                 cy="50"
                 r="46"
                 fill="none"
                 stroke={tokens.colors.green}
                 strokeWidth="4"
-                strokeDasharray="289" // 2 * PI * r
-                strokeDashoffset={289 - (289 * progress) / 100}
+                strokeDasharray="289"
                 strokeLinecap="round"
-                style={{ transition: 'stroke-dashoffset 1s ease-in-out' }}
+                sx={{
+                  transition: 'stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1)',
+                  strokeDashoffset: 289 - (289 * progress) / 100,
+                  // Anime effect: dots moving to point then solidifying
+                  animation: 'anime-progress 2s ease-out forwards',
+                  '@keyframes anime-progress': {
+                    '0%': { strokeDasharray: '1 10' },
+                    '50%': { strokeDasharray: '10 5' },
+                    '100%': { strokeDasharray: '289 0' },
+                  },
+                }}
               />
             )}
 
-            {/* Event Animation (Spinning dots-to-solid) */}
             {hasNewEvent && (
               <Box
                 component="circle"
@@ -157,14 +163,16 @@ export function MitumbaAvatar({
                 fill="none"
                 stroke={tokens.colors.green}
                 strokeWidth="4"
-                strokeDasharray="10 15"
+                strokeDasharray="289"
                 sx={{
-                  animation: 'dash-to-solid 2s ease-in-out forwards, spin 4s linear infinite',
-                  '@keyframes dash-to-solid': {
-                    '100%': { strokeDasharray: '289 0' },
-                  },
-                  '@keyframes spin': {
+                  animation: 'event-spin 3s linear infinite, event-dash 2s ease-in-out forwards',
+                  '@keyframes event-spin': {
                     '100%': { transformOrigin: 'center', transform: 'rotate(360deg)' },
+                  },
+                  '@keyframes event-dash': {
+                    '0%': { strokeDasharray: '5 20' },
+                    '50%': { strokeDasharray: '50 10' },
+                    '100%': { strokeDasharray: '289 0' },
                   },
                 }}
               />
@@ -184,7 +192,7 @@ export function MitumbaAvatar({
             bgcolor: imageUrl ? 'transparent' : tokens.colors.green,
             color: tokens.colors.textOnGreen,
             border: selected 
-              ? `3px solid ${tokens.colors.green}` 
+              ? `2px solid ${tokens.colors.green}` 
               : `1px solid ${tokens.colors.divider}`,
             boxShadow: tokens.shadows.card,
             transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
@@ -196,33 +204,31 @@ export function MitumbaAvatar({
           {!imageUrl && initials}
         </Avatar>
 
-        {/* Requirement 9: Selected State Tick */}
+        {/* Issue 4: Relocated & Polished Selected State Tick */}
         {selected && (
           <Box
             sx={{
               position: 'absolute',
-              top: -4,
-              left: -4,
-              width: dimension * 0.4,
-              height: dimension * 0.4,
-              minWidth: 16,
-              minHeight: 16,
+              bottom: -2,
+              right: -2,
+              width: Math.max(16, dimension * 0.35),
+              height: Math.max(16, dimension * 0.35),
               bgcolor: tokens.colors.green,
               borderRadius: tokens.radius.full,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               color: tokens.colors.white,
-              boxShadow: tokens.shadows.card,
-              zIndex: 2,
-              transform: 'translateZ(20px)',
+              boxShadow: tokens.shadows.deep,
+              border: `2px solid ${tokens.colors.surface}`,
+              zIndex: 3,
+              transform: 'translateZ(25px)',
             }}
           >
-            <CheckIcon sx={{ fontSize: dimension * 0.25 }} />
+            <CheckIcon sx={{ fontSize: '70%' }} />
           </Box>
         )}
 
-        {/* Requirement 3: Notification Labels */}
         {notificationCount !== undefined && (
           <Box
             sx={{
@@ -249,8 +255,7 @@ export function MitumbaAvatar({
           </Box>
         )}
 
-        {/* Presence Indicator */}
-        {status && !actionIcon && !badge && (
+        {status && !actionIcon && !selected && (
           <Box
             sx={{
               position: 'absolute',
@@ -269,8 +274,39 @@ export function MitumbaAvatar({
           />
         )}
 
-        {/* Requirement 2: Action To Call or Legacy Badge */}
-        {(actionIcon || badge) && (
+        {actionIcon && !selected && (
+          <Box
+            sx={{
+              position: 'absolute',
+              bottom: -2,
+              right: -2,
+              width: dimension * 0.4,
+              height: dimension * 0.4,
+              minWidth: 24,
+              minHeight: 24,
+              bgcolor: tokens.colors.surface,
+              borderRadius: tokens.radius.full,
+              color: tokens.colors.textPrimary,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: `1px solid ${tokens.colors.divider}`,
+              boxShadow: tokens.shadows.card,
+              zIndex: 2,
+              transform: 'translateZ(20px)',
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                bgcolor: tokens.colors.background,
+                color: tokens.colors.green,
+                transform: 'translateZ(25px) scale(1.1)',
+              },
+            }}
+          >
+            {React.cloneElement(actionIcon as React.ReactElement, { sx: { fontSize: dimension * 0.2 } })}
+          </Box>
+        )}
+
+        {badge && !selected && !actionIcon && !status && (
           <Box
             sx={{
               position: 'absolute',
@@ -290,15 +326,9 @@ export function MitumbaAvatar({
               boxShadow: tokens.shadows.card,
               zIndex: 2,
               transform: 'translateZ(20px)',
-              transition: 'all 0.2s ease',
-              '&:hover': {
-                bgcolor: tokens.colors.background,
-                color: tokens.colors.green,
-                transform: 'translateZ(25px) scale(1.1)',
-              },
             }}
           >
-            {actionIcon || badge}
+            {badge}
           </Box>
         )}
       </Box>
@@ -312,7 +342,8 @@ export function MitumbaAvatar({
         display: 'inline-flex',
         flexDirection: textAlignment === 'bottom' ? 'column' : 'row',
         alignItems: 'center',
-        gap: tokens.spacing.base,
+        // Issue 1: Tightened spatial rhythm
+        gap: tokens.spacing.xs, 
         cursor: onClick ? 'pointer' : 'default',
         perspective: '1000px',
         '&:hover .avatar-main': {
@@ -334,12 +365,14 @@ export function MitumbaAvatar({
         {renderAvatarCircle()}
       </Box>
 
-      {/* Requirement 5, 6, 8: Meta Text */}
       {(name || subtitle || progress !== undefined) && textAlignment && (
         <Box
           sx={{
             textAlign: textAlignment === 'bottom' ? 'center' : 'left',
-            minWidth: textAlignment === 'side' ? 140 : 'auto',
+            minWidth: textAlignment === 'side' ? 120 : 'auto',
+            // Additional tightening for side text
+            ml: textAlignment === 'side' ? tokens.spacing.xxs : 0,
+            mt: textAlignment === 'bottom' ? tokens.spacing.xxs : 0,
           }}
         >
           {name && (
@@ -348,7 +381,7 @@ export function MitumbaAvatar({
                 fontWeight: tokens.typography.fontWeights.bold,
                 fontSize: tokens.typography.fontSizes.base,
                 color: tokens.colors.textPrimary,
-                lineHeight: 1.2,
+                lineHeight: 1.1, // Tighter line height
                 fontFamily: tokens.typography.fontFamily,
               }}
             >
@@ -361,7 +394,7 @@ export function MitumbaAvatar({
                 fontSize: tokens.typography.fontSizes.sm,
                 color: status === 'online' && textAlignment === 'side' ? tokens.colors.success : tokens.colors.textSecondary,
                 fontWeight: status === 'online' ? 'bold' : 'normal',
-                mt: '2px',
+                mt: '1px', // Tighter vertical gap
                 fontFamily: tokens.typography.fontFamily,
               }}
             >
@@ -375,19 +408,23 @@ export function MitumbaAvatar({
 }
 
 /**
- * Requirement 10-12: Avatar Group / Stack
+ * Issue 5 & 6: Fixed Stacking, CTA layering, and Overlap Variants
  */
 export function MitumbaAvatarGroup({
   children,
   max = 5,
   total,
   size = 'md',
+  overlap = 'relaxed', // Small overlap by default as requested
   onAdd,
 }: MitumbaAvatarGroupProps) {
   const childrenArray = React.Children.toArray(children)
   const showCount = Math.min(childrenArray.length, max)
   const totalCount = total || childrenArray.length
   const overflow = totalCount - showCount
+  
+  const dimension = sizeMap[size]
+  const overlapValue = -(dimension * overlapFactorMap[overlap])
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -397,8 +434,8 @@ export function MitumbaAvatarGroup({
           <Box
             key={key}
             sx={{
-              marginLeft: index === 0 ? 0 : -(sizeMap[size] * 0.3),
-              zIndex: totalCount - index,
+              marginLeft: index === 0 ? 0 : overlapValue,
+              zIndex: index, // Reverse z-index so first is on bottom, last on top
             }}
           >
             {React.cloneElement(child as React.ReactElement, { size, isStacked: true })}
@@ -407,13 +444,13 @@ export function MitumbaAvatarGroup({
       })}
 
       {overflow > 0 && (
-        <Box sx={{ marginLeft: -(sizeMap[size] * 0.3), zIndex: 0 }}>
+        <Box sx={{ marginLeft: overlapValue, zIndex: showCount }}>
           <MitumbaAvatar size={size} overflowCount={overflow} isStacked />
         </Box>
       )}
 
       {onAdd && (
-        <Box sx={{ marginLeft: tokens.spacing.sm, zIndex: 0 }}>
+        <Box sx={{ marginLeft: overlapValue, zIndex: showCount + 1 }}>
           <MitumbaAvatar size={size} isCTA onClick={onAdd} />
         </Box>
       )}
