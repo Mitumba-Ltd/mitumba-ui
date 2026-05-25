@@ -1,9 +1,12 @@
 import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
-import { MitumbaAvatar } from './MitumbaAvatar'
+import { MitumbaAvatar, MitumbaAvatarGroup } from './MitumbaAvatar'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
+import CameraAltIcon from '@mui/icons-material/CameraAlt'
+import AddIcon from '@mui/icons-material/Add'
+import EditIcon from '@mui/icons-material/Edit'
 
 const meta: Meta<typeof MitumbaAvatar> = {
   title: 'Foundation/MitumbaAvatar',
@@ -18,84 +21,131 @@ export default meta
 
 type Story = StoryObj<typeof MitumbaAvatar>
 
-export const Default: Story = {
-  args: {
-    name: 'Alice Mwangi',
-    size: 'md',
-  },
-}
-
-export const WithImage: Story = {
-  args: {
-    name: 'John Doe',
-    imageUrl: 'https://i.pravatar.cc/150?u=12',
-    size: 'md',
-  },
-}
-
-export const Sizes: Story = {
+export const BasicTypes: Story = {
   render: () => (
-    <Stack direction="row" spacing={4} alignItems="center">
-      <Stack spacing={1} alignItems="center">
-        <MitumbaAvatar name="X Small" size="xs" />
-        <Typography variant="caption">XS (24px)</Typography>
-      </Stack>
-      <Stack spacing={1} alignItems="center">
-        <MitumbaAvatar name="Small" size="sm" />
-        <Typography variant="caption">SM (32px)</Typography>
-      </Stack>
-      <Stack spacing={1} alignItems="center">
-        <MitumbaAvatar name="Medium" size="md" />
-        <Typography variant="caption">MD (44px)</Typography>
-      </Stack>
-      <Stack spacing={1} alignItems="center">
-        <MitumbaAvatar name="Large" size="lg" />
-        <Typography variant="caption">LG (64px)</Typography>
+    <Stack spacing={4} alignItems="center">
+      <Stack direction="row" spacing={4} alignItems="center">
+        <Box sx={{ textAlign: 'center' }}>
+          <MitumbaAvatar name="" />
+          <Typography variant="caption" display="block">Blank</Typography>
+        </Box>
+        <Box sx={{ textAlign: 'center' }}>
+          <MitumbaAvatar name="Isaac Stanley" />
+          <Typography variant="caption" display="block">Initials</Typography>
+        </Box>
+        <Box sx={{ textAlign: 'center' }}>
+          <MitumbaAvatar name="Alice" imageUrl="https://i.pravatar.cc/150?u=12" />
+          <Typography variant="caption" display="block">Image</Typography>
+        </Box>
       </Stack>
     </Stack>
   ),
 }
 
-export const WithBadge: Story = {
+export const ActionToCall: Story = {
+  render: () => (
+    <Stack direction="row" spacing={4}>
+      <MitumbaAvatar name="Camera" actionIcon={<CameraAltIcon sx={{ fontSize: 14 }} />} size="lg" />
+      <MitumbaAvatar name="Add" actionIcon={<AddIcon sx={{ fontSize: 14 }} />} size="lg" />
+      <MitumbaAvatar name="Edit" actionIcon={<EditIcon sx={{ fontSize: 14 }} />} size="lg" />
+    </Stack>
+  ),
+}
+
+export const Notifications: Story = {
+  render: () => (
+    <Stack direction="row" spacing={4}>
+      <MitumbaAvatar name="N1" notificationCount={1} size="lg" />
+      <MitumbaAvatar name="N2" notificationCount={3} notificationColor="#FF9800" size="lg" />
+      <MitumbaAvatar name="N3" notificationCount="9+" size="lg" />
+    </Stack>
+  ),
+}
+
+export const Presence: Story = {
+  render: () => (
+    <Stack direction="row" spacing={4}>
+      <MitumbaAvatar name="Online" status="online" size="lg" />
+      <MitumbaAvatar name="Offline" status="offline" size="lg" />
+    </Stack>
+  ),
+}
+
+export const TextAlignment: Story = {
+  render: () => (
+    <Stack spacing={6}>
+      <Box>
+        <Typography variant="subtitle2" gutterBottom>Side Alignment</Typography>
+        <MitumbaAvatar 
+          name="Isaac Stanley" 
+          subtitle="Online" 
+          status="online" 
+          textAlignment="side" 
+          imageUrl="https://i.pravatar.cc/150?u=1"
+        />
+      </Box>
+      <Box>
+        <Typography variant="subtitle2" gutterBottom>Bottom Alignment</Typography>
+        <MitumbaAvatar 
+          name="Isaac Stanley" 
+          textAlignment="bottom" 
+          imageUrl="https://i.pravatar.cc/150?u=2"
+        />
+      </Box>
+    </Stack>
+  ),
+}
+
+export const EventsAndProgress: Story = {
+  render: () => (
+    <Stack direction="row" spacing={6}>
+      <Box sx={{ textAlign: 'center' }}>
+        <MitumbaAvatar name="Event" hasNewEvent size="lg" />
+        <Typography variant="caption" display="block" sx={{ mt: 2 }}>New Event (Spin)</Typography>
+      </Box>
+      <Box sx={{ textAlign: 'center' }}>
+        <MitumbaAvatar 
+          name="Isaac" 
+          progress={90} 
+          textAlignment="bottom" 
+          size="lg" 
+          imageUrl="https://i.pravatar.cc/150?u=4"
+        />
+        <Typography variant="caption" display="block" sx={{ mt: 1 }}>90% Complete</Typography>
+      </Box>
+    </Stack>
+  ),
+}
+
+export const SelectedState: Story = {
+  args: {
+    name: 'Selected User',
+    selected: true,
+    size: 'lg',
+    imageUrl: 'https://i.pravatar.cc/150?u=5',
+  },
+}
+
+export const Stacking: Story = {
   render: () => (
     <Stack spacing={4}>
       <Box>
-        <Typography variant="subtitle2" sx={{ mb: 2 }}>Physical Badge Tilt (Hover me)</Typography>
-        <MitumbaAvatar
-          name="Premium Seller"
-          imageUrl="https://i.pravatar.cc/150?u=1"
-          size="lg"
-          badge="★"
-        />
+        <Typography variant="subtitle2" gutterBottom>Simple Stack</Typography>
+        <MitumbaAvatarGroup>
+          <MitumbaAvatar name="A" imageUrl="https://i.pravatar.cc/150?u=11" />
+          <MitumbaAvatar name="B" imageUrl="https://i.pravatar.cc/150?u=12" />
+          <MitumbaAvatar name="C" imageUrl="https://i.pravatar.cc/150?u=13" />
+        </MitumbaAvatarGroup>
       </Box>
       
-      <Stack direction="row" spacing={3}>
-        <MitumbaAvatar
-          name="Verified User"
-          size="md"
-          badge="✔"
-        />
-        <MitumbaAvatar
-          name="Top Rated"
-          size="sm"
-          badge="TOP"
-        />
-      </Stack>
+      <Box>
+        <Typography variant="subtitle2" gutterBottom>With CTA & Overflow</Typography>
+        <MitumbaAvatarGroup max={3} total={10} onAdd={() => alert('Add clicked')}>
+          <MitumbaAvatar name="A" imageUrl="https://i.pravatar.cc/150?u=21" />
+          <MitumbaAvatar name="B" imageUrl="https://i.pravatar.cc/150?u=22" />
+          <MitumbaAvatar name="C" imageUrl="https://i.pravatar.cc/150?u=23" />
+        </MitumbaAvatarGroup>
+      </Box>
     </Stack>
-  ),
-}
-
-export const Interaction: Story = {
-  render: () => (
-    <Box sx={{ textAlign: 'center' }}>
-      <Typography variant="body2" sx={{ mb: 3, fontStyle: 'italic', opacity: 0.7 }}>
-        Demonstrating the 3D perspective spring transition and active state scaling.
-      </Typography>
-      <MitumbaAvatar
-        name="Lead Engineer"
-        imageUrl="https://i.pravatar.cc/150?u=8"
-        size="lg"
-      />
-    </Box>
   ),
 }
