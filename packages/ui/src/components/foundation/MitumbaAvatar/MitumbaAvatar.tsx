@@ -14,87 +14,102 @@ export function MitumbaAvatar({
     xs: 24,
     sm: 32,
     md: 44,
-    lg: 56,
+    lg: 64,
   }
 
   const fontSizeMap = {
     xs: 10,
     sm: tokens.typography.fontSizes.xs,
     md: tokens.typography.fontSizes.base,
-    lg: tokens.typography.fontSizes.md,
+    lg: tokens.typography.fontSizes.lg,
   }
 
   const dimension = sizeMap[size]
   const words = name.trim().split(/\s+/)
-  let initials: string
+  let initials = '??'
 
-  if (words.length === 0 || !words[0]) {
-    initials = '??'
-  } else if (words.length === 1) {
+  if (words.length === 1 && words[0]) {
     initials = words[0].slice(0, 2).toUpperCase()
-  } else {
+  } else if (words.length >= 2) {
     initials = (words[0][0] || '') + (words[1][0] || '')
     initials = initials.toUpperCase()
   }
 
-  const avatar = (
-    <Avatar
-      alt={name}
-      src={imageUrl}
+  return (
+    <Box
       sx={{
+        position: 'relative',
         width: dimension,
         height: dimension,
-        fontSize: fontSizeMap[size],
-        fontFamily: tokens.typography.fontFamily,
-        fontWeight: tokens.typography.fontWeights.bold,
-        bgcolor: imageUrl ? 'transparent' : tokens.colors.green,
-        color: tokens.colors.textOnGreen,
-        border: imageUrl ? `1px solid ${tokens.colors.divider}` : 'none',
-        '&:focus-visible': {
-          outline: `2px solid ${tokens.colors.greenLight}`,
-          outlineOffset: '2px',
+        perspective: '1000px', // Standard 3D perspective
+        '&:hover .avatar-content': {
+          transform: 'rotateY(15deg) rotateX(-5deg) scale(1.1)',
+          boxShadow: tokens.shadows.deep,
+          filter: 'brightness(1.05)',
+        },
+        '&:active .avatar-content': {
+          transform: 'scale(1.02)',
         },
       }}
     >
-      {!imageUrl && initials}
-    </Avatar>
-  )
+      <Box
+        className="avatar-content"
+        sx={{
+          width: '100%',
+          height: '100%',
+          transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)', // Premium spring
+          transformStyle: 'preserve-3d',
+          position: 'relative',
+          borderRadius: tokens.radius.full,
+          cursor: 'pointer',
+        }}
+      >
+        <Avatar
+          alt={name}
+          src={imageUrl}
+          sx={{
+            width: '100%',
+            height: '100%',
+            fontSize: fontSizeMap[size],
+            fontFamily: tokens.typography.fontFamily,
+            fontWeight: tokens.typography.fontWeights.extrabold,
+            bgcolor: imageUrl ? 'transparent' : tokens.colors.green,
+            color: tokens.colors.textOnGreen,
+            border: `1px solid ${tokens.colors.divider}`,
+            boxShadow: tokens.shadows.card,
+          }}
+        >
+          {initials}
+        </Avatar>
 
-  if (badge !== undefined) {
-    const badgeSize = Math.max(dimension / 2.5, 16)
-    
-    return (
-      <Badge
-        overlap="circular"
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-        badgeContent={
+        {badge !== undefined && (
           <Box
             sx={{
-              alignItems: 'center',
+              position: 'absolute',
+              bottom: -2,
+              right: -2,
+              minWidth: dimension / 2.5,
+              height: dimension / 2.5,
               backgroundColor: tokens.colors.earth,
               borderRadius: tokens.radius.full,
               color: tokens.colors.textOnEarth,
               display: 'flex',
-              fontSize: badgeSize < 14 ? 8 : 10,
-              fontWeight: tokens.typography.fontWeights.bold,
-              height: badgeSize,
+              alignItems: 'center',
               justifyContent: 'center',
-              minWidth: badgeSize,
-              paddingInline: tokens.spacing.xs,
+              fontSize: dimension < 40 ? 8 : 10,
+              fontWeight: tokens.typography.fontWeights.extrabold,
               border: `2px solid ${tokens.colors.surface}`,
               boxShadow: tokens.shadows.card,
+              transform: 'translateZ(10px)', // Lift badge in 3D space
+              paddingInline: '4px',
             }}
           >
             {badge}
           </Box>
-        }
-      >
-        {avatar}
-      </Badge>
-    )
-  }
-
-  return avatar
+        )}
+      </Box>
+    </Box>
+  )
 }
 
 export default MitumbaAvatar
