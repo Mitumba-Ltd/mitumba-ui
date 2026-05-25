@@ -99,19 +99,18 @@ export const mitumbaTheme: Theme = createTheme({
   },
 
   shape: {
-    borderRadius: tokens.radius.md, // Default 8px
+    borderRadius: tokens.radius.md, // 8px default
   },
 
-  // Logically mapped shadow scale (Benchmark alignment)
   shadows: [
     'none',
-    tokens.shadows.card, // 1: Card
-    tokens.shadows.elevated, // 2: Elevated
-    tokens.shadows.deep, // 3: Deep
-    tokens.shadows.bottomSheet, // 4: BottomSheet
-    tokens.shadows.focus, // 5: Focus
-    tokens.shadows.green, // 6: Brand Green
-    tokens.shadows.earth, // 7: Brand Earth
+    tokens.shadows.card, // 1
+    tokens.shadows.elevated, // 2
+    tokens.shadows.deep, // 3
+    tokens.shadows.bottomSheet, // 4
+    tokens.shadows.focus, // 5
+    tokens.shadows.green, // 6
+    tokens.shadows.earth, // 7
     'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none',
   ],
 
@@ -178,12 +177,10 @@ export const mitumbaTheme: Theme = createTheme({
     MuiButton: {
       defaultProps: {
         disableElevation: true,
-        variant: 'contained',
       },
       styleOverrides: {
-        root: ({ theme }) => ({
-          borderRadius: `${tokens.radius.md}px`, // 8px for tactile but refined buttons
-          padding: theme.spacing(2.5, 6), // 10px 24px (Tight Proportions)
+        root: {
+          borderRadius: `${tokens.radius.md}px`,
           transition: transitions.standard,
           fontWeight: 600,
           '&:hover': {
@@ -195,8 +192,9 @@ export const mitumbaTheme: Theme = createTheme({
           '&.Mui-disabled': {
             backgroundColor: tokens.colors.divider,
             color: tokens.colors.textDisabled,
+            borderColor: tokens.colors.divider,
           },
-        }),
+        },
         containedPrimary: {
           backgroundColor: tokens.colors.green,
           '&:hover': {
@@ -213,25 +211,28 @@ export const mitumbaTheme: Theme = createTheme({
         },
         outlinedPrimary: {
           borderWidth: '2px !important',
+          borderColor: tokens.colors.border,
+          color: tokens.colors.textPrimary,
           '&:hover': {
-            backgroundColor: `${tokens.colors.green}0A`,
+            backgroundColor: tokens.colors.background,
+            borderColor: tokens.colors.green,
+            color: tokens.colors.green,
           },
         },
-        sizeSmall: ({ theme }) => ({
-          padding: theme.spacing(1.5, 4), // 6px 16px
-          fontSize: `${tokens.typography.fontSizes.sm}px`,
-        }),
-        sizeLarge: ({ theme }) => ({
-          padding: theme.spacing(3, 8), // 12px 32px
-          fontSize: `${tokens.typography.fontSizes.md}px`,
-        }),
+        textPrimary: {
+          color: tokens.colors.textSecondary,
+          '&:hover': {
+            backgroundColor: tokens.colors.background,
+            color: tokens.colors.textPrimary,
+          },
+        },
       },
     },
 
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: `${tokens.radius.xl}px`, // 16px for premium, soft containers
+          borderRadius: `${tokens.radius.xl}px`,
           backgroundColor: tokens.colors.surface,
           boxShadow: tokens.shadows.card,
           transition: transitions.standard,
@@ -254,23 +255,13 @@ export const mitumbaTheme: Theme = createTheme({
         elevation1: {
           boxShadow: tokens.shadows.card,
         },
-        elevation8: {
-          boxShadow: tokens.shadows.bottomSheet,
-        },
-      },
-    },
-
-    MuiTextField: {
-      defaultProps: {
-        variant: 'outlined',
-        fullWidth: false,
       },
     },
 
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          borderRadius: `${tokens.radius.md}px`, // 8px for standard form elements
+          borderRadius: `${tokens.radius.md}px`,
           backgroundColor: tokens.colors.surface,
           transition: transitions.standard,
           '& .MuiOutlinedInput-notchedOutline': {
@@ -279,7 +270,7 @@ export const mitumbaTheme: Theme = createTheme({
             transition: transitions.standard,
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: tokens.colors.green,
+            borderColor: tokens.colors.textDisabled,
           },
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
             borderColor: tokens.colors.green,
@@ -292,35 +283,6 @@ export const mitumbaTheme: Theme = createTheme({
             boxShadow: tokens.shadows.focus,
           },
         },
-        input: ({ theme }) => ({
-          paddingBlock: theme.spacing(3), // 12px
-          paddingInline: theme.spacing(4), // 16px
-          height: '24px',
-        }),
-      },
-    },
-
-    MuiInputLabel: {
-      styleOverrides: {
-        root: {
-          color: tokens.colors.textSecondary,
-          '&.Mui-focused': {
-            color: tokens.colors.green,
-          },
-          '&.Mui-error': {
-            color: tokens.colors.error,
-          },
-        },
-      },
-    },
-
-    MuiFormHelperText: {
-      styleOverrides: {
-        root: {
-          marginLeft: '0px',
-          marginTop: `${tokens.spacing.xs}px`,
-          fontSize: `${tokens.typography.fontSizes.sm}px`,
-        },
       },
     },
 
@@ -330,56 +292,12 @@ export const mitumbaTheme: Theme = createTheme({
           transition: transitions.spring,
           cursor: 'pointer',
           '&:hover': {
-            transform: 'perspective(500px) rotateY(15deg) rotateX(-5deg) scale(1.1)',
+            transform: 'perspective(1000px) rotateY(15deg) rotateX(-5deg) scale(1.1)',
             boxShadow: tokens.shadows.elevated,
           },
           '&:active': {
-            transform: 'perspective(500px) rotateY(0deg) rotateX(0deg) scale(1.05)',
+            transform: 'perspective(1000px) rotateY(0deg) rotateX(0deg) scale(1.05)',
           },
-        },
-      },
-    },
-
-    MuiChip: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          borderRadius: `${tokens.radius.full}px`,
-          height: theme.spacing(8), // 32px
-          paddingInline: theme.spacing(1),
-          fontWeight: 600,
-          transition: transitions.standard,
-          '&:hover': {
-            transform: 'translateY(-1px)',
-            boxShadow: tokens.shadows.card,
-          },
-        }),
-        sizeSmall: ({ theme }) => ({
-          height: theme.spacing(6), // 24px
-        }),
-      },
-    },
-
-    MuiAppBar: {
-      defaultProps: {
-        elevation: 0,
-      },
-      styleOverrides: {
-        root: {
-          backgroundColor: tokens.colors.surface,
-          color: tokens.colors.textPrimary,
-          borderBottom: '1px solid',
-          borderColor: tokens.colors.divider,
-        },
-      },
-    },
-
-    MuiBottomNavigation: {
-      styleOverrides: {
-        root: {
-          backgroundColor: tokens.colors.surface,
-          borderTop: '1px solid',
-          borderColor: tokens.colors.divider,
-          boxShadow: tokens.shadows.bottomSheet,
         },
       },
     },
@@ -387,7 +305,7 @@ export const mitumbaTheme: Theme = createTheme({
     MuiDialog: {
       styleOverrides: {
         paper: {
-          borderRadius: `${tokens.radius.xxxl}px`, // 32px for large authoritative containers
+          borderRadius: `${tokens.radius.xxxl}px`,
           boxShadow: tokens.shadows.bottomSheet,
           backgroundImage: 'none',
         },
@@ -399,31 +317,6 @@ export const mitumbaTheme: Theme = createTheme({
         root: {
           borderRadius: `${tokens.radius.lg}px`,
           alignItems: 'center',
-        },
-        standardSuccess: {
-          backgroundColor: tokens.colors.successLight,
-          color: tokens.colors.greenDark,
-        },
-        standardError: {
-          backgroundColor: tokens.colors.errorLight,
-          color: tokens.colors.errorDark,
-        },
-        standardWarning: {
-          backgroundColor: tokens.colors.warningLight,
-          color: tokens.colors.warningDark,
-        },
-        standardInfo: {
-          backgroundColor: tokens.colors.infoLight,
-          color: tokens.colors.infoDark,
-        },
-      },
-    },
-
-    MuiSkeleton: {
-      styleOverrides: {
-        root: {
-          backgroundColor: tokens.colors.divider,
-          borderRadius: `${tokens.radius.md}px`, // 8px matches standard element radius
         },
       },
     },
