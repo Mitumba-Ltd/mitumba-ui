@@ -24,12 +24,8 @@ declare module '@mui/material/Chip' {
   }
 }
 
-const focusVisibleStyles = {
-  outline: `${tokens.spacing.xs / tokens.spacing.xs}px solid transparent`,
-  boxShadow: tokens.shadows.focus,
-} as const
-
 export const mitumbaTheme: Theme = createTheme({
+  spacing: (factor: number) => `${factor * 4}px`,
   breakpoints: {
     values: tokens.breakpoints,
   },
@@ -128,65 +124,65 @@ export const mitumbaTheme: Theme = createTheme({
     fontWeightMedium: tokens.typography.fontWeights.medium,
     fontWeightBold: tokens.typography.fontWeights.bold,
     h1: {
-      fontSize: tokens.typography.fontSizes.display,
+      fontSize: `${tokens.typography.fontSizes.display}px`,
       fontWeight: tokens.typography.fontWeights.extrabold,
       lineHeight: tokens.typography.lineHeights.tight,
       letterSpacing: tokens.typography.letterSpacings.normal,
     },
     h2: {
-      fontSize: tokens.typography.fontSizes.xxxl,
+      fontSize: `${tokens.typography.fontSizes.xxxl}px`,
       fontWeight: tokens.typography.fontWeights.bold,
       lineHeight: tokens.typography.lineHeights.snug,
       letterSpacing: tokens.typography.letterSpacings.normal,
     },
     h3: {
-      fontSize: tokens.typography.fontSizes.xxl,
+      fontSize: `${tokens.typography.fontSizes.xxl}px`,
       fontWeight: tokens.typography.fontWeights.bold,
       lineHeight: tokens.typography.lineHeights.snug,
       letterSpacing: tokens.typography.letterSpacings.normal,
     },
     h4: {
-      fontSize: tokens.typography.fontSizes.xl,
+      fontSize: `${tokens.typography.fontSizes.xl}px`,
       fontWeight: tokens.typography.fontWeights.bold,
       lineHeight: tokens.typography.lineHeights.snug,
       letterSpacing: tokens.typography.letterSpacings.normal,
     },
     h5: {
-      fontSize: tokens.typography.fontSizes.lg,
+      fontSize: `${tokens.typography.fontSizes.lg}px`,
       fontWeight: tokens.typography.fontWeights.semibold,
       lineHeight: tokens.typography.lineHeights.snug,
       letterSpacing: tokens.typography.letterSpacings.normal,
     },
     h6: {
-      fontSize: tokens.typography.fontSizes.md,
+      fontSize: `${tokens.typography.fontSizes.md}px`,
       fontWeight: tokens.typography.fontWeights.semibold,
       lineHeight: tokens.typography.lineHeights.snug,
       letterSpacing: tokens.typography.letterSpacings.normal,
     },
     body1: {
-      fontSize: tokens.typography.fontSizes.md,
+      fontSize: `${tokens.typography.fontSizes.md}px`,
       lineHeight: tokens.typography.lineHeights.normal,
       letterSpacing: tokens.typography.letterSpacings.normal,
     },
     body2: {
-      fontSize: tokens.typography.fontSizes.base,
+      fontSize: `${tokens.typography.fontSizes.base}px`,
       lineHeight: tokens.typography.lineHeights.normal,
       letterSpacing: tokens.typography.letterSpacings.normal,
     },
     button: {
-      fontSize: tokens.typography.fontSizes.base,
+      fontSize: `${tokens.typography.fontSizes.base}px`,
       fontWeight: tokens.typography.fontWeights.bold,
       lineHeight: tokens.typography.lineHeights.snug,
       letterSpacing: tokens.typography.letterSpacings.normal,
       textTransform: 'none',
     },
     caption: {
-      fontSize: tokens.typography.fontSizes.sm,
+      fontSize: `${tokens.typography.fontSizes.sm}px`,
       lineHeight: tokens.typography.lineHeights.normal,
       letterSpacing: tokens.typography.letterSpacings.normal,
     },
     overline: {
-      fontSize: tokens.typography.fontSizes.xs,
+      fontSize: `${tokens.typography.fontSizes.xs}px`,
       fontWeight: tokens.typography.fontWeights.bold,
       lineHeight: tokens.typography.lineHeights.normal,
       letterSpacing: tokens.typography.letterSpacings.wider,
@@ -217,27 +213,27 @@ export const mitumbaTheme: Theme = createTheme({
       },
       styleOverrides: {
         root: {
-          borderRadius: tokens.radius.lg,
-          minHeight: tokens.spacing.xxl,
-          paddingInline: tokens.spacing.lg,
-          paddingBlock: tokens.spacing.md,
+          borderRadius: `${tokens.radius.lg}px`,
+          minHeight: '44px',
+          paddingInline: `${tokens.spacing.lg}px`,
+          textTransform: 'none',
           boxShadow: 'none',
           '&:hover': {
             boxShadow: tokens.shadows.card,
           },
-          '&.Mui-focusVisible': focusVisibleStyles,
+          '&.Mui-focusVisible': {
+            boxShadow: tokens.shadows.focus,
+          },
         },
         sizeSmall: {
-          minHeight: tokens.spacing.xl,
-          paddingInline: tokens.spacing.base,
-          paddingBlock: tokens.spacing.sm,
-          fontSize: tokens.typography.fontSizes.sm,
+          minHeight: '32px',
+          paddingInline: `${tokens.spacing.base}px`,
+          fontSize: `${tokens.typography.fontSizes.sm}px`,
         },
         sizeLarge: {
-          minHeight: tokens.spacing.xxxl,
-          paddingInline: tokens.spacing.xl,
-          paddingBlock: tokens.spacing.base,
-          fontSize: tokens.typography.fontSizes.md,
+          minHeight: '56px',
+          paddingInline: `${tokens.spacing.xl}px`,
+          fontSize: `${tokens.typography.fontSizes.md}px`,
         },
         outlined: {
           borderColor: tokens.colors.border,
@@ -251,17 +247,17 @@ export const mitumbaTheme: Theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: tokens.radius.lg,
+          borderRadius: `${tokens.radius.lg}px`,
           backgroundColor: tokens.colors.surface,
           boxShadow: tokens.shadows.card,
-          border: `${tokens.spacing.xs / tokens.spacing.xs}px solid ${tokens.colors.divider}`,
+          border: `1px solid ${tokens.colors.divider}`,
         },
       },
     },
     MuiPaper: {
       styleOverrides: {
         rounded: {
-          borderRadius: tokens.radius.lg,
+          borderRadius: `${tokens.radius.lg}px`,
         },
         elevation1: {
           boxShadow: tokens.shadows.card,
@@ -279,26 +275,29 @@ export const mitumbaTheme: Theme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          borderRadius: tokens.radius.md,
+          borderRadius: `${tokens.radius.md}px`,
           backgroundColor: tokens.colors.surface,
           '& .MuiOutlinedInput-notchedOutline': {
             borderColor: tokens.colors.border,
+            borderWidth: '1px',
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: tokens.colors.green,
           },
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
             borderColor: tokens.colors.green,
-            borderWidth: tokens.spacing.xs / tokens.spacing.xs,
+            borderWidth: '2px',
           },
           '&.Mui-error .MuiOutlinedInput-notchedOutline': {
             borderColor: tokens.colors.error,
           },
-          '&.Mui-focused': focusVisibleStyles,
+          '&.Mui-focused': {
+            boxShadow: tokens.shadows.focus,
+          },
         },
         input: {
-          paddingBlock: tokens.spacing.md,
-          paddingInline: tokens.spacing.base,
+          paddingBlock: '12px',
+          paddingInline: `${tokens.spacing.base}px`,
         },
       },
     },
@@ -318,17 +317,20 @@ export const mitumbaTheme: Theme = createTheme({
     MuiFormHelperText: {
       styleOverrides: {
         root: {
-          marginInline: tokens.spacing.sm,
-          fontSize: tokens.typography.fontSizes.sm,
+          marginLeft: '0px',
+          marginTop: `${tokens.spacing.xs}px`,
+          fontSize: `${tokens.typography.fontSizes.sm}px`,
         },
       },
     },
     MuiChip: {
       styleOverrides: {
         root: {
-          borderRadius: tokens.radius.full,
+          borderRadius: `${tokens.radius.full}px`,
           fontWeight: tokens.typography.fontWeights.semibold,
-          '&.Mui-focusVisible': focusVisibleStyles,
+          '&.Mui-focusVisible': {
+            boxShadow: tokens.shadows.focus,
+          },
         },
         colorDefault: {
           backgroundColor: tokens.colors.background,
@@ -340,9 +342,9 @@ export const mitumbaTheme: Theme = createTheme({
     MuiBottomNavigation: {
       styleOverrides: {
         root: {
-          minHeight: tokens.spacing.xxxl,
+          minHeight: '64px',
           backgroundColor: tokens.colors.surface,
-          borderTop: `${tokens.spacing.xs / tokens.spacing.xs}px solid ${tokens.colors.divider}`,
+          borderTop: `1px solid ${tokens.colors.divider}`,
           boxShadow: tokens.shadows.bottomSheet,
         },
       },
@@ -354,7 +356,9 @@ export const mitumbaTheme: Theme = createTheme({
           '&.Mui-selected': {
             color: tokens.colors.green,
           },
-          '&.Mui-focusVisible': focusVisibleStyles,
+          '&.Mui-focusVisible': {
+            boxShadow: tokens.shadows.focus,
+          },
         },
       },
     },
@@ -367,14 +371,14 @@ export const mitumbaTheme: Theme = createTheme({
         root: {
           backgroundColor: tokens.colors.surface,
           color: tokens.colors.textPrimary,
-          borderBottom: `${tokens.spacing.xs / tokens.spacing.xs}px solid ${tokens.colors.divider}`,
+          borderBottom: `1px solid ${tokens.colors.divider}`,
         },
       },
     },
     MuiDialog: {
       styleOverrides: {
         paper: {
-          borderRadius: tokens.radius.xl,
+          borderRadius: `${tokens.radius.xl}px`,
           boxShadow: tokens.shadows.bottomSheet,
         },
       },
@@ -382,7 +386,7 @@ export const mitumbaTheme: Theme = createTheme({
     MuiSnackbarContent: {
       styleOverrides: {
         root: {
-          borderRadius: tokens.radius.lg,
+          borderRadius: `${tokens.radius.lg}px`,
           boxShadow: tokens.shadows.elevated,
           fontWeight: tokens.typography.fontWeights.semibold,
         },
@@ -391,7 +395,7 @@ export const mitumbaTheme: Theme = createTheme({
     MuiAlert: {
       styleOverrides: {
         root: {
-          borderRadius: tokens.radius.lg,
+          borderRadius: `${tokens.radius.lg}px`,
           alignItems: 'center',
         },
         standardSuccess: {
@@ -416,7 +420,7 @@ export const mitumbaTheme: Theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: tokens.colors.divider,
-          borderRadius: tokens.radius.md,
+          borderRadius: `${tokens.radius.md}px`,
         },
       },
     },
