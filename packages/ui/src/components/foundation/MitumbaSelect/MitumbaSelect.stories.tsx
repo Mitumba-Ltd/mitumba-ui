@@ -28,10 +28,30 @@ const languageOptions = [
 ]
 
 const memberOptions = [
-  { value: '1', label: 'Robert Johnson', subtitle: 'Admin', icon: <MitumbaAvatar name="Robert Johnson" size="xs" /> },
-  { value: '2', label: 'Emily Davis', subtitle: 'Editor', icon: <MitumbaAvatar name="Emily Davis" size="xs" /> },
-  { value: '3', label: 'Michael Thompson', subtitle: 'Viewer', icon: <MitumbaAvatar name="Michael Thompson" size="xs" /> },
+  { value: '1', label: 'Robert Johnson', subtitle: 'Admin', icon: <MitumbaAvatar name="Robert Johnson" size="xs" />, group: 'Admins' },
+  { value: '2', label: 'Emily Davis', subtitle: 'Editor', icon: <MitumbaAvatar name="Emily Davis" size="xs" />, group: 'Editors' },
+  { value: '3', label: 'Michael Thompson', subtitle: 'Viewer', icon: <MitumbaAvatar name="Michael Thompson" size="xs" />, group: 'Viewers' },
+  { value: '4', label: 'Olivia Martinez', subtitle: 'Viewer', icon: <MitumbaAvatar name="Olivia Martinez" size="xs" />, group: 'Viewers' },
 ]
+
+function GroupedShowcaseComponent() {
+  const [val, setVal] = useState<string | number | (string | number)[]>('')
+  return (
+    <Box sx={{ width: 400 }}>
+       <Typography variant="subtitle2" gutterBottom>Grouped Options (Benchmark Parity)</Typography>
+       <MitumbaSelect 
+         placeholder="Select member by role..." 
+         value={val} 
+         onChange={setVal} 
+         options={memberOptions} 
+       />
+    </Box>
+  )
+}
+
+export const GroupedOptions: Story = {
+  render: () => <GroupedShowcaseComponent />
+}
 
 function ScaleShowcaseComponent() {
   const [val, setVal] = useState<string | number | (string | number)[]>('en')

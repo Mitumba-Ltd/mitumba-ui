@@ -4,6 +4,7 @@ import Select from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
+import ListSubheader from '@mui/material/ListSubheader'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -56,6 +57,9 @@ export function MitumbaSelect({
 
   const currentSize = sizeConfig[size]
   const borderRadius = radiusMap[rounding]
+  
+  // Fix: Dropdown list should have standard radius to prevent clipping items
+  const menuBorderRadius = tokens.radius.md
 
   // Filter options if search is enabled
   const filteredOptions = useMemo(() => {
@@ -120,11 +124,12 @@ export function MitumbaSelect({
           PaperProps: {
             sx: {
               mt: 1,
-              borderRadius: `${borderRadius}px`,
+              borderRadius: `${menuBorderRadius}px`,
               boxShadow: tokens.shadows.deep,
               border: `1px solid ${tokens.colors.divider}`,
               bgcolor: inverted ? tokens.colors.textPrimary : tokens.colors.surface,
               color: inverted ? tokens.colors.white : tokens.colors.textPrimary,
+              overflow: 'hidden', // Ensure no overflow from subheaders
               '& .MuiMenuItem-root': {
                 py: 1.5,
                 px: 2,
@@ -203,7 +208,7 @@ export function MitumbaSelect({
                     <SearchIcon sx={{ fontSize: 18, color: tokens.colors.textDisabled }} />
                   </InputAdornment>
                 ),
-                sx: { borderRadius: `${borderRadius / 2}px`, bgcolor: 'rgba(0,0,0,0.03)' }
+                sx: { borderRadius: `${menuBorderRadius / 2}px`, bgcolor: 'rgba(0,0,0,0.03)' }
               }}
             />
           </Box>
@@ -215,38 +220,74 @@ export function MitumbaSelect({
           </MenuItem>
         )}
 
-        {filteredOptions.map((option) => (
-          <MenuItem 
-            key={option.value} 
-            value={option.value}
-            disabled={option.disabled}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', gap: 2 }}>
-              {multiple && <Checkbox checked={Array.isArray(value) && value.includes(option.value)} size="small" sx={{ p: 0 }} />}
-              
-              {option.icon && (
-                <Box sx={{ display: 'flex', color: tokens.colors.textSecondary }}>
-                  {React.cloneElement(option.icon as React.ReactElement, { sx: { fontSize: 20 } })}
+        {(() => {
+          let lastGroup = ''
+          const elements: React.ReactNode[] = []
+
+          filteredOptions.forEach((option) => {
+            if (option.group && option.group !== lastGroup) {
+              elements.push(
+                <ListSubheader
+                  key={`group-${option.group}`}
+                  sx={{
+                    bgcolor: 'transparent',
+                    color: tokens.colors.textSecondary,
+                    fontWeight: 800,
+                    fontSize: 10,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                    lineHeight: '32px',
+                    fontFamily: tokens.typography.fontFamily,
+                  }}
+                >
+                  {option.group}
+                </ListSubheader>
+              )
+              lastGroup = option.group
+            }
+
+            elements.push(
+              <MenuItem
+                key={option.value}
+                value={option.value}
+                disabled={option.disabled}
+              >
+                <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', gap: 2 }}>
+                  {multiple && (
+                    <Checkbox
+                      checked={Array.isArray(value) && value.includes(option.value)}
+                      size="small"
+                      sx={{ p: 0 }}
+                    />
+                  )}
+
+                  {option.icon && (
+                    <Box sx={{ display: 'flex', color: tokens.colors.textSecondary }}>
+                      {React.cloneElement(option.icon as React.ReactElement, { sx: { fontSize: 20 } })}
+                    </Box>
+                  )}
+
+                  <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                    <Typography variant="body2" sx={{ fontWeight: 'inherit', color: 'inherit' }}>
+                      {option.label}
+                    </Typography>
+                    {option.subtitle && (
+                      <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 400 }}>
+                        {option.subtitle}
+                      </Typography>
+                    )}
+                  </Box>
+
+                  {!multiple && value === option.value && (
+                    <CheckIcon sx={{ fontSize: 18, color: tokens.colors.green }} />
+                  )}
                 </Box>
-              )}
+              </MenuItem>
+            )
+          })
 
-              <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                <Typography variant="body2" sx={{ fontWeight: 'inherit', color: 'inherit' }}>
-                  {option.label}
-                </Typography>
-                {option.subtitle && (
-                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 400 }}>
-                    {option.subtitle}
-                  </Typography>
-                )}
-              </Box>
-
-              {!multiple && value === option.value && (
-                <CheckIcon sx={{ fontSize: 18, color: tokens.colors.green }} />
-              )}
-            </Box>
-          </MenuItem>
-        ))}
+          return elements
+        })()}
       </Select>
       {error && <FormHelperText sx={{ ml: 1, fontWeight: 600 }}>{error}</FormHelperText>}
     </FormControl>
