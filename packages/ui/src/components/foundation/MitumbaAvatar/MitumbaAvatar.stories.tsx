@@ -1,12 +1,12 @@
 import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
-import { MitumbaAvatar, MitumbaAvatarGroup } from './MitumbaAvatar'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import CameraAltIcon from '@mui/icons-material/CameraAlt'
 import AddIcon from '@mui/icons-material/Add'
 import EditIcon from '@mui/icons-material/Edit'
+import { MitumbaAvatar, MitumbaAvatarGroup } from './MitumbaAvatar'
 
 const meta: Meta<typeof MitumbaAvatar> = {
   title: 'Foundation/MitumbaAvatar',

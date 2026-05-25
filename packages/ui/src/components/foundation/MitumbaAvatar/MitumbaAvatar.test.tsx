@@ -9,7 +9,25 @@ import type { MitumbaAvatarProps } from './MitumbaAvatar.types'
 function renderAvatar(props: MitumbaAvatarProps) {
   return render(
     <MitumbaThemeProvider>
-      <MitumbaAvatar {...props} />
+      <MitumbaAvatar
+        name={props.name}
+        imageUrl={props.imageUrl}
+        size={props.size}
+        badge={props.badge}
+        status={props.status}
+        actionIcon={props.actionIcon}
+        notificationCount={props.notificationCount}
+        notificationColor={props.notificationColor}
+        subtitle={props.subtitle}
+        textAlignment={props.textAlignment}
+        hasNewEvent={props.hasNewEvent}
+        progress={props.progress}
+        selected={props.selected}
+        isStacked={props.isStacked}
+        isCTA={props.isCTA}
+        overflowCount={props.overflowCount}
+        onClick={props.onClick}
+      />
     </MitumbaThemeProvider>,
   )
 }

@@ -149,7 +149,8 @@ export function MitumbaAvatar({
 
             {/* Event Animation (Spinning dots-to-solid) */}
             {hasNewEvent && (
-              <circle
+              <Box
+                component="circle"
                 cx="50"
                 cy="50"
                 r="46"
@@ -390,17 +391,20 @@ export function MitumbaAvatarGroup({
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-      {childrenArray.slice(0, showCount).map((child, index) => (
-        <Box
-          key={index}
-          sx={{
-            marginLeft: index === 0 ? 0 : -(sizeMap[size] * 0.3),
-            zIndex: totalCount - index,
-          }}
-        >
-          {React.cloneElement(child as React.ReactElement, { size, isStacked: true })}
-        </Box>
-      ))}
+      {childrenArray.slice(0, showCount).map((child, index) => {
+        const key = (child as React.ReactElement).props?.name || `avatar-${index}`
+        return (
+          <Box
+            key={key}
+            sx={{
+              marginLeft: index === 0 ? 0 : -(sizeMap[size] * 0.3),
+              zIndex: totalCount - index,
+            }}
+          >
+            {React.cloneElement(child as React.ReactElement, { size, isStacked: true })}
+          </Box>
+        )
+      })}
 
       {overflow > 0 && (
         <Box sx={{ marginLeft: -(sizeMap[size] * 0.3), zIndex: 0 }}>

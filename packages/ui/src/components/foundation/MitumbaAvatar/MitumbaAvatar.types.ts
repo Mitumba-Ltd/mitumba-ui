@@ -9,6 +9,8 @@ export interface MitumbaAvatarProps {
   imageUrl?: string
   /** Size of the avatar. xs(24), sm(32), md(44), lg(64), xl(80). Defaults to 'md'. */
   size?: AvatarSize
+  /** Optional element rendered as a badge on the bottom-right corner. */
+  badge?: ReactNode
   
   /** Requirement 4: Presence status dot (bottom-right). */
   status?: 'online' | 'offline'
