@@ -108,7 +108,7 @@ export function MitumbaAvatar({
     const hasBorderDecorator = hasNewEvent || progress !== undefined
 
     return (
-      <Box sx={{ position: 'relative', width: dimension, height: dimension }}>
+      <Box sx={{ position: 'relative', width: dimension, height: dimension, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {/* Issue 2 & 3: High-End SVG Animations (Event & Progress) */}
         {hasBorderDecorator && (
           <Box
@@ -116,39 +116,40 @@ export function MitumbaAvatar({
             viewBox="0 0 100 100"
             sx={{
               position: 'absolute',
-              // Perfect centering: -10% of dimension usually works well for the stroke width
-              top: '-10%',
-              left: '-10%',
-              width: '120%',
-              height: '120%',
-              transform: 'rotate(-90deg)',
+              // Absolute mathematical centering via translate
+              width: dimension + 12,
+              height: dimension + 12,
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%) rotate(-90deg)',
               zIndex: 0,
               pointerEvents: 'none',
+              overflow: 'visible',
             }}
           >
             {/* Track */}
-            <circle cx="50" cy="50" r="46" fill="none" stroke={tokens.colors.divider} strokeWidth="4" opacity="0.3" />
+            <circle cx="50" cy="50" r="44" fill="none" stroke={tokens.colors.divider} strokeWidth="2" opacity="0.2" />
             
             {progress !== undefined && (
               <Box
                 component="circle"
                 cx="50"
                 cy="50"
-                r="46"
+                r="44"
                 fill="none"
                 stroke={tokens.colors.green}
-                strokeWidth="4"
-                strokeDasharray="289"
+                strokeWidth="3"
+                strokeDasharray="276" // 2 * PI * 44
                 strokeLinecap="round"
                 sx={{
-                  transition: 'stroke-dashoffset 1s cubic-bezier(0.4, 0, 0.2, 1)',
-                  strokeDashoffset: 289 - (289 * progress) / 100,
-                  // Anime effect: dots moving to point then solidifying
-                  animation: 'anime-progress 2s ease-out forwards',
+                  transition: 'stroke-dashoffset 1.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                  strokeDashoffset: 276 - (276 * progress) / 100,
+                  transformOrigin: 'center',
+                  animation: 'anime-progress 2.5s ease-out forwards',
                   '@keyframes anime-progress': {
-                    '0%': { strokeDasharray: '1 10' },
-                    '50%': { strokeDasharray: '10 5' },
-                    '100%': { strokeDasharray: '289 0' },
+                    '0%': { strokeDasharray: '2 15' },
+                    '60%': { strokeDasharray: '15 10' },
+                    '100%': { strokeDasharray: '276' }, // Segment length controlled by dashoffset
                   },
                 }}
               />
@@ -159,20 +160,22 @@ export function MitumbaAvatar({
                 component="circle"
                 cx="50"
                 cy="50"
-                r="46"
+                r="44"
                 fill="none"
                 stroke={tokens.colors.green}
-                strokeWidth="4"
-                strokeDasharray="289"
+                strokeWidth="3"
+                strokeLinecap="round"
                 sx={{
-                  animation: 'event-spin 3s linear infinite, event-dash 2s ease-in-out forwards',
+                  transformOrigin: 'center',
+                  animation: 'event-spin 3s linear infinite, event-solidify 2s ease-in-out forwards',
                   '@keyframes event-spin': {
-                    '100%': { transformOrigin: 'center', transform: 'rotate(360deg)' },
+                    '0%': { transform: 'rotate(0deg)' },
+                    '100%': { transform: 'rotate(360deg)' },
                   },
-                  '@keyframes event-dash': {
-                    '0%': { strokeDasharray: '5 20' },
-                    '50%': { strokeDasharray: '50 10' },
-                    '100%': { strokeDasharray: '289 0' },
+                  '@keyframes event-solidify': {
+                    '0%': { strokeDasharray: '5 25' },
+                    '70%': { strokeDasharray: '60 10' },
+                    '100%': { strokeDasharray: '276' },
                   },
                 }}
               />
@@ -196,6 +199,7 @@ export function MitumbaAvatar({
               : `1px solid ${tokens.colors.divider}`,
             boxShadow: tokens.shadows.card,
             transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+            zIndex: 1,
             ...(isStacked && {
               border: `2px solid ${tokens.colors.surface}`,
             }),
@@ -342,8 +346,7 @@ export function MitumbaAvatar({
         display: 'inline-flex',
         flexDirection: textAlignment === 'bottom' ? 'column' : 'row',
         alignItems: 'center',
-        // Issue 1: Tightened spatial rhythm
-        gap: tokens.spacing.xs, 
+        gap: tokens.spacing.xxs, 
         cursor: onClick ? 'pointer' : 'default',
         perspective: '1000px',
         '&:hover .avatar-main': {
@@ -358,6 +361,12 @@ export function MitumbaAvatar({
       <Box
         className="avatar-main"
         sx={{
+          position: 'relative',
+          width: dimension,
+          height: dimension,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
           transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
           transformStyle: 'preserve-3d',
         }}
@@ -369,10 +378,10 @@ export function MitumbaAvatar({
         <Box
           sx={{
             textAlign: textAlignment === 'bottom' ? 'center' : 'left',
-            minWidth: textAlignment === 'side' ? 120 : 'auto',
-            // Additional tightening for side text
-            ml: textAlignment === 'side' ? tokens.spacing.xxs : 0,
-            mt: textAlignment === 'bottom' ? tokens.spacing.xxs : 0,
+            // Tightened vertical/horizontal gap
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
           }}
         >
           {name && (
@@ -381,8 +390,9 @@ export function MitumbaAvatar({
                 fontWeight: tokens.typography.fontWeights.bold,
                 fontSize: tokens.typography.fontSizes.base,
                 color: tokens.colors.textPrimary,
-                lineHeight: 1.1, // Tighter line height
+                lineHeight: 1.1,
                 fontFamily: tokens.typography.fontFamily,
+                whiteSpace: 'nowrap',
               }}
             >
               {name}
@@ -394,8 +404,9 @@ export function MitumbaAvatar({
                 fontSize: tokens.typography.fontSizes.sm,
                 color: status === 'online' && textAlignment === 'side' ? tokens.colors.success : tokens.colors.textSecondary,
                 fontWeight: status === 'online' ? 'bold' : 'normal',
-                mt: '1px', // Tighter vertical gap
+                mt: '1px',
                 fontFamily: tokens.typography.fontFamily,
+                whiteSpace: 'nowrap',
               }}
             >
               {progress !== undefined && textAlignment === 'bottom' ? `${progress}% complete` : subtitle}
