@@ -1,111 +1,254 @@
-import { useId } from 'react'
-import Box from '@mui/material/Box'
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
+import React, { useMemo, useState } from 'react'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import FormHelperText from '@mui/material/FormHelperText'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import InputAdornment from '@mui/material/InputAdornment'
+import TextField from '@mui/material/TextField'
+import Checkbox from '@mui/material/Checkbox'
+import CheckIcon from '@mui/icons-material/Check'
+import SearchIcon from '@mui/icons-material/Search'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { tokens } from '@mitumba/tokens'
 import type { MitumbaSelectProps } from './MitumbaSelect.types'
 
+/**
+ * Premium "Living" Select primitive with precision scaling and rich menu metadata.
+ * Fulfills the 32/42/52 height standard and incorporates benchmark menu physics.
+ */
 export function MitumbaSelect({
-  label,
-  options,
   value,
+  name,
+  label,
+  placeholder,
+  options,
   onChange,
+  size = 'medium',
+  rounding = 'rounded',
+  multiple = false,
+  loading = false,
   error,
   disabled = false,
+  showSearch = false,
+  inverted = false,
+  startIcon,
+  displayValue,
+  sx,
 }: MitumbaSelectProps) {
-  const labelId = useId()
+  const [searchTerm, setSearchIcon] = useState('')
+  const labelId = useMemo(() => `select-label-${label?.replace(/\s+/g, '-').toLowerCase() || Math.random().toString(36).substr(2, 9)}`, [label])
+
+  // Scale Mapping (Fulfilling Button standard)
+  const sizeConfig = {
+    small: { height: 32, fontSize: tokens.typography.fontSizes.sm, iconSize: 16 },
+    medium: { height: 42, fontSize: tokens.typography.fontSizes.base, iconSize: 20 },
+    large: { height: 52, fontSize: tokens.typography.fontSizes.md, iconSize: 24 },
+  }
+
+  const radiusMap = {
+    pill: tokens.radius.full,
+    rounded: tokens.radius.md,
+    square: tokens.radius.xs,
+  }
+
+  const currentSize = sizeConfig[size]
+  const borderRadius = radiusMap[rounding]
+
+  // Filter options if search is enabled
+  const filteredOptions = useMemo(() => {
+    if (!showSearch || !searchTerm) return options
+    return options.filter((opt) => 
+      opt.label.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      opt.subtitle?.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  }, [options, searchTerm, showSearch])
 
   return (
-    <FormControl fullWidth error={Boolean(error)} disabled={disabled}>
-      <InputLabel
-        id={labelId}
-        sx={{
-          color: tokens.colors.textSecondary,
-          fontFamily: tokens.typography.fontFamily,
-          fontSize: tokens.typography.fontSizes.base,
-          '&.Mui-focused': {
-            color: tokens.colors.green,
-          },
-          '&.Mui-error': {
-            color: tokens.colors.error,
-          },
-        }}
-      >
-        {label}
-      </InputLabel>
+    <FormControl fullWidth error={!!error} disabled={disabled || loading}>
+      {label && (
+        <InputLabel
+          id={labelId}
+          shrink
+          sx={{
+            position: 'relative',
+            transform: 'none',
+            mb: 0.5,
+            ml: rounding === 'pill' ? 2 : 1,
+            fontSize: tokens.typography.fontSizes.xs,
+            fontWeight: 700,
+            color: error ? `${tokens.colors.error} !important` : `${tokens.colors.textSecondary} !important`,
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+            fontFamily: tokens.typography.fontFamily,
+          }}
+        >
+          {label}
+        </InputLabel>
+      )}
+
       <Select
-        label={label}
         labelId={labelId}
+        id={name}
+        name={name}
+        multiple={multiple}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
-        sx={{
-          borderRadius: tokens.radius.md,
-          backgroundColor: tokens.colors.surface,
-          transition: 'all 200ms ease',
-          fontFamily: tokens.typography.fontFamily,
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: tokens.colors.border,
-            borderWidth: '1px',
-            transition: 'all 200ms ease',
-          },
-          '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: tokens.colors.textDisabled,
-          },
-          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: tokens.colors.green,
-            borderWidth: '2px',
-          },
-          '&.Mui-error .MuiOutlinedInput-notchedOutline': {
-            borderColor: tokens.colors.error,
-          },
-          '& .MuiSelect-select': {
-            paddingInline: tokens.spacing.base,
-            paddingBlock: '12px',
-            fontSize: tokens.typography.fontSizes.base,
-            color: tokens.colors.textPrimary,
-          },
+        onChange={(e) => onChange(e.target.value as string | number | (string | number)[])}
+        displayEmpty
+        IconComponent={KeyboardArrowDownIcon}
+        renderValue={(selected) => {
+          if (displayValue) return displayValue
+          if (selected === '' || (Array.isArray(selected) && selected.length === 0)) {
+            return <Typography sx={{ color: tokens.colors.textDisabled, fontSize: 'inherit' }}>{placeholder || 'Select option'}</Typography>
+          }
+          
+          if (multiple && Array.isArray(selected)) {
+            return `Selected ${selected.length} items`
+          }
+
+          const selectedOpt = options.find((opt) => opt.value === selected)
+          return (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              {selectedOpt?.icon}
+              {selectedOpt?.label || selected}
+            </Box>
+          )
         }}
-      >
-        {options.map((option) => (
-          <MenuItem
-            key={option.value}
-            value={option.value}
-            sx={{
-              fontFamily: tokens.typography.fontFamily,
-              fontSize: tokens.typography.fontSizes.base,
-              '&:hover': {
-                backgroundColor: tokens.colors.greenLight,
-              },
-              '&.Mui-selected': {
-                backgroundColor: tokens.colors.greenLight,
-                color: tokens.colors.green,
-                fontWeight: tokens.typography.fontWeights.semibold,
+        MenuProps={{
+          PaperProps: {
+            sx: {
+              mt: 1,
+              borderRadius: `${borderRadius}px`,
+              boxShadow: tokens.shadows.deep,
+              border: `1px solid ${tokens.colors.divider}`,
+              bgcolor: inverted ? tokens.colors.textPrimary : tokens.colors.surface,
+              color: inverted ? tokens.colors.white : tokens.colors.textPrimary,
+              '& .MuiMenuItem-root': {
+                py: 1.5,
+                px: 2,
+                transition: 'all 0.2s ease',
                 '&:hover': {
-                  backgroundColor: tokens.colors.greenLight,
+                  bgcolor: inverted ? 'rgba(255,255,255,0.1)' : tokens.colors.background,
+                },
+                '&.Mui-selected': {
+                  bgcolor: inverted ? 'rgba(255,255,255,0.15)' : `${tokens.colors.green}15`,
+                  color: inverted ? tokens.colors.white : tokens.colors.green,
+                  fontWeight: 700,
+                  '&:hover': {
+                    bgcolor: inverted ? 'rgba(255,255,255,0.2)' : `${tokens.colors.green}25`,
+                  },
                 },
               },
-            }}
+            },
+          },
+        }}
+        sx={[
+          {
+            height: currentSize.height,
+            borderRadius: `${borderRadius}px`,
+            bgcolor: tokens.colors.surface,
+            fontFamily: tokens.typography.fontFamily,
+            fontSize: currentSize.fontSize,
+            fontWeight: 600,
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: tokens.colors.divider,
+              borderWidth: '1px',
+              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            },
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: tokens.colors.textDisabled,
+            },
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderColor: tokens.colors.green,
+              borderWidth: '2px',
+            },
+            '& .MuiSelect-select': {
+              display: 'flex',
+              alignItems: 'center',
+              pl: startIcon ? 0 : 2,
+            },
+            '& .MuiSelect-icon': {
+              color: tokens.colors.textSecondary,
+              right: 12,
+              transition: 'transform 0.3s ease',
+            },
+            '&.Mui-focused .MuiSelect-icon': {
+              transform: 'rotate(180deg)',
+              color: tokens.colors.green,
+            },
+          },
+          ...(Array.isArray(sx) ? sx : [sx]),
+        ]}
+        startAdornment={startIcon && (
+          <InputAdornment position="start" sx={{ ml: 1.5, color: tokens.colors.textSecondary }}>
+            {React.cloneElement(startIcon as React.ReactElement, { sx: { fontSize: currentSize.iconSize } })}
+          </InputAdornment>
+        )}
+      >
+        {showSearch && (
+          <Box sx={{ px: 2, py: 1, position: 'sticky', top: 0, bgcolor: 'inherit', zIndex: 1 }}>
+            <TextField
+              size="small"
+              fullWidth
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchIcon(e.target.value)}
+              onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.stopPropagation()}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon sx={{ fontSize: 18, color: tokens.colors.textDisabled }} />
+                  </InputAdornment>
+                ),
+                sx: { borderRadius: `${borderRadius / 2}px`, bgcolor: 'rgba(0,0,0,0.03)' }
+              }}
+            />
+          </Box>
+        )}
+
+        {filteredOptions.length === 0 && (
+          <MenuItem disabled>
+            <Typography variant="body2" color="text.secondary">No options found</Typography>
+          </MenuItem>
+        )}
+
+        {filteredOptions.map((option) => (
+          <MenuItem 
+            key={option.value} 
+            value={option.value}
+            disabled={option.disabled}
           >
-            {option.label}
+            <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', gap: 2 }}>
+              {multiple && <Checkbox checked={Array.isArray(value) && value.includes(option.value)} size="small" sx={{ p: 0 }} />}
+              
+              {option.icon && (
+                <Box sx={{ display: 'flex', color: tokens.colors.textSecondary }}>
+                  {React.cloneElement(option.icon as React.ReactElement, { sx: { fontSize: 20 } })}
+                </Box>
+              )}
+
+              <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                <Typography variant="body2" sx={{ fontWeight: 'inherit', color: 'inherit' }}>
+                  {option.label}
+                </Typography>
+                {option.subtitle && (
+                  <Typography variant="caption" sx={{ color: 'text.secondary', fontWeight: 400 }}>
+                    {option.subtitle}
+                  </Typography>
+                )}
+              </Box>
+
+              {!multiple && value === option.value && (
+                <CheckIcon sx={{ fontSize: 18, color: tokens.colors.green }} />
+              )}
+            </Box>
           </MenuItem>
         ))}
       </Select>
-      {error && (
-        <Box
-          component="p"
-          sx={{
-            color: tokens.colors.error,
-            fontSize: tokens.typography.fontSizes.sm,
-            fontFamily: tokens.typography.fontFamily,
-            marginTop: tokens.spacing.xs,
-            marginInline: 0,
-          }}
-        >
-          {error}
-        </Box>
-      )}
+      {error && <FormHelperText sx={{ ml: 1, fontWeight: 600 }}>{error}</FormHelperText>}
     </FormControl>
   )
 }
