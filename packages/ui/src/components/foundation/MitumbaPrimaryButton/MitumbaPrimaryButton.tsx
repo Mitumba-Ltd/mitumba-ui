@@ -1,13 +1,8 @@
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import { tokens } from '@mitumba/tokens'
+import { Box } from '@mui/material'
 import type { MitumbaPrimaryButtonProps } from './MitumbaPrimaryButton.types'
-
-const spinnerSizeByButtonSize: Record<NonNullable<MitumbaPrimaryButtonProps['size']>, number> = {
-  small: tokens.spacing.base,
-  medium: tokens.spacing.lg,
-  large: tokens.spacing.lg,
-}
 
 export function MitumbaPrimaryButton({
   label,
@@ -15,13 +10,14 @@ export function MitumbaPrimaryButton({
   loading = false,
   disabled = false,
   icon,
-  fullWidth = true,
+  fullWidth = false, // Removed disastrous default
   size = 'medium',
   variant = 'primary',
+  sx,
 }: MitumbaPrimaryButtonProps) {
   const isDisabled = disabled || loading
   const muiVariant = variant === 'ghost' ? 'outlined' : 'contained'
-  const color = variant === 'earth' ? 'earth' : 'primary'
+  const color = variant === 'earth' ? 'secondary' : 'primary'
 
   return (
     <Button
@@ -31,35 +27,42 @@ export function MitumbaPrimaryButton({
       fullWidth={fullWidth}
       onClick={onClick}
       size={size}
-      startIcon={
-        loading ? (
-          <CircularProgress
-            aria-label={`${label} loading`}
-            color="inherit"
-            size={spinnerSizeByButtonSize[size]}
-          />
-        ) : (
-          icon
-        )
-      }
       variant={muiVariant}
-      sx={{
-        justifyContent: 'center',
-        textAlign: 'center',
-        whiteSpace: 'normal',
-        wordBreak: 'break-word',
-        ...(variant === 'ghost' && {
-          bgcolor: tokens.colors.surface,
-          color: tokens.colors.green,
-          borderColor: tokens.colors.border,
-          '&:hover': {
-            bgcolor: tokens.colors.greenLight,
-            borderColor: tokens.colors.green,
-          },
-        }),
-      }}
+      sx={sx}
     >
-      {label}
+      {/* Content wrapper for perfect centering and transition effects */}
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: loading ? 0 : 1,
+          transform: loading ? 'scale(0.9)' : 'scale(1)',
+          transition: 'all 0.2s ease',
+          gap: tokens.spacing.sm,
+        }}
+      >
+        {!loading && icon}
+        {label}
+      </Box>
+
+      {loading && (
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <CircularProgress 
+            size={size === 'small' ? 16 : 20} 
+            color="inherit" 
+            aria-label={`${label} loading`}
+          />
+        </Box>
+      )}
     </Button>
   )
 }

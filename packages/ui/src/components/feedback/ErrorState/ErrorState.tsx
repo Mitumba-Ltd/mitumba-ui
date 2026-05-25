@@ -72,7 +72,7 @@ export function ErrorState({
             alignItems: 'center',
             gap: tokens.spacing.sm,
             '&:hover': {
-              backgroundColor: tokens.colors.errorDark,
+              backgroundColor: tokens.colors.error,
             },
           }}
         >

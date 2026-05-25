@@ -24,15 +24,20 @@ declare module '@mui/material/Chip' {
   }
 }
 
-const focusVisibleStyles = {
-  outline: `${tokens.spacing.xs / tokens.spacing.xs}px solid transparent`,
-  boxShadow: tokens.shadows.focus,
+// Professional Transitions (Benchmark: StaNLink UI)
+const transitions = {
+  standard: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+  spring: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
 } as const
 
 export const mitumbaTheme: Theme = createTheme({
+  // Spacing factor 4px (Mandate)
+  spacing: (factor: number) => `${factor * 4}px`,
+
   breakpoints: {
     values: tokens.breakpoints,
   },
+
   palette: {
     mode: 'light',
     primary: {
@@ -56,25 +61,25 @@ export const mitumbaTheme: Theme = createTheme({
     success: {
       main: tokens.colors.success,
       light: tokens.colors.successLight,
-      dark: tokens.colors.greenDark,
+      dark: tokens.colors.successDark,
       contrastText: tokens.colors.textOnGreen,
     },
     error: {
       main: tokens.colors.error,
       light: tokens.colors.errorLight,
-      dark: tokens.colors.error,
+      dark: tokens.colors.errorDark,
       contrastText: tokens.colors.white,
     },
     warning: {
       main: tokens.colors.warning,
       light: tokens.colors.warningLight,
-      dark: tokens.colors.warning,
+      dark: tokens.colors.warningDark,
       contrastText: tokens.colors.textPrimary,
     },
     info: {
       main: tokens.colors.info,
       light: tokens.colors.infoLight,
-      dark: tokens.colors.info,
+      dark: tokens.colors.infoDark,
       contrastText: tokens.colors.white,
     },
     background: {
@@ -92,107 +97,59 @@ export const mitumbaTheme: Theme = createTheme({
       white: tokens.colors.white,
     },
   },
+
   shape: {
     borderRadius: tokens.radius.md,
   },
+
+  // Logically mapped shadow scale (Benchmark alignment)
   shadows: [
     'none',
-    tokens.shadows.card,
-    tokens.shadows.card,
-    tokens.shadows.elevated,
-    tokens.shadows.elevated,
-    tokens.shadows.elevated,
-    tokens.shadows.elevated,
-    tokens.shadows.elevated,
-    tokens.shadows.elevated,
-    tokens.shadows.elevated,
-    tokens.shadows.elevated,
-    tokens.shadows.elevated,
-    tokens.shadows.elevated,
-    tokens.shadows.elevated,
-    tokens.shadows.elevated,
-    tokens.shadows.elevated,
-    tokens.shadows.bottomSheet,
-    tokens.shadows.bottomSheet,
-    tokens.shadows.bottomSheet,
-    tokens.shadows.bottomSheet,
-    tokens.shadows.bottomSheet,
-    tokens.shadows.bottomSheet,
-    tokens.shadows.bottomSheet,
-    tokens.shadows.bottomSheet,
-    tokens.shadows.bottomSheet,
+    tokens.shadows.card, // 1: Card
+    tokens.shadows.elevated, // 2: Elevated
+    tokens.shadows.deep, // 3: Deep
+    tokens.shadows.bottomSheet, // 4: BottomSheet
+    tokens.shadows.focus, // 5: Focus
+    tokens.shadows.green, // 6: Brand Green
+    tokens.shadows.earth, // 7: Brand Earth
+    'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none', 'none',
   ],
+
   typography: {
     fontFamily: tokens.typography.fontFamily,
     fontWeightRegular: tokens.typography.fontWeights.regular,
     fontWeightMedium: tokens.typography.fontWeights.medium,
     fontWeightBold: tokens.typography.fontWeights.bold,
     h1: {
-      fontSize: tokens.typography.fontSizes.display,
+      fontSize: `${tokens.typography.fontSizes.display}px`,
       fontWeight: tokens.typography.fontWeights.extrabold,
-      lineHeight: tokens.typography.lineHeights.tight,
-      letterSpacing: tokens.typography.letterSpacings.normal,
+      lineHeight: 1.1,
     },
     h2: {
-      fontSize: tokens.typography.fontSizes.xxxl,
+      fontSize: `${tokens.typography.fontSizes.xxxl}px`,
       fontWeight: tokens.typography.fontWeights.bold,
-      lineHeight: tokens.typography.lineHeights.snug,
-      letterSpacing: tokens.typography.letterSpacings.normal,
+      lineHeight: 1.2,
     },
     h3: {
-      fontSize: tokens.typography.fontSizes.xxl,
+      fontSize: `${tokens.typography.fontSizes.xxl}px`,
       fontWeight: tokens.typography.fontWeights.bold,
-      lineHeight: tokens.typography.lineHeights.snug,
-      letterSpacing: tokens.typography.letterSpacings.normal,
-    },
-    h4: {
-      fontSize: tokens.typography.fontSizes.xl,
-      fontWeight: tokens.typography.fontWeights.bold,
-      lineHeight: tokens.typography.lineHeights.snug,
-      letterSpacing: tokens.typography.letterSpacings.normal,
-    },
-    h5: {
-      fontSize: tokens.typography.fontSizes.lg,
-      fontWeight: tokens.typography.fontWeights.semibold,
-      lineHeight: tokens.typography.lineHeights.snug,
-      letterSpacing: tokens.typography.letterSpacings.normal,
-    },
-    h6: {
-      fontSize: tokens.typography.fontSizes.md,
-      fontWeight: tokens.typography.fontWeights.semibold,
-      lineHeight: tokens.typography.lineHeights.snug,
-      letterSpacing: tokens.typography.letterSpacings.normal,
+      lineHeight: 1.2,
     },
     body1: {
-      fontSize: tokens.typography.fontSizes.md,
-      lineHeight: tokens.typography.lineHeights.normal,
-      letterSpacing: tokens.typography.letterSpacings.normal,
+      fontSize: `${tokens.typography.fontSizes.md}px`,
+      lineHeight: 1.5,
     },
     body2: {
-      fontSize: tokens.typography.fontSizes.base,
-      lineHeight: tokens.typography.lineHeights.normal,
-      letterSpacing: tokens.typography.letterSpacings.normal,
+      fontSize: `${tokens.typography.fontSizes.base}px`,
+      lineHeight: 1.5,
     },
     button: {
-      fontSize: tokens.typography.fontSizes.base,
-      fontWeight: tokens.typography.fontWeights.bold,
-      lineHeight: tokens.typography.lineHeights.snug,
-      letterSpacing: tokens.typography.letterSpacings.normal,
+      fontSize: `${tokens.typography.fontSizes.base}px`,
+      fontWeight: 600,
       textTransform: 'none',
     },
-    caption: {
-      fontSize: tokens.typography.fontSizes.sm,
-      lineHeight: tokens.typography.lineHeights.normal,
-      letterSpacing: tokens.typography.letterSpacings.normal,
-    },
-    overline: {
-      fontSize: tokens.typography.fontSizes.xs,
-      fontWeight: tokens.typography.fontWeights.bold,
-      lineHeight: tokens.typography.lineHeights.normal,
-      letterSpacing: tokens.typography.letterSpacings.wider,
-      textTransform: 'uppercase',
-    },
   },
+
   components: {
     MuiCssBaseline: {
       styleOverrides: {
@@ -200,223 +157,179 @@ export const mitumbaTheme: Theme = createTheme({
           backgroundColor: tokens.colors.background,
           color: tokens.colors.textPrimary,
           fontFamily: tokens.typography.fontFamily,
+          WebkitFontSmoothing: 'antialiased',
+          MozOsxFontSmoothing: 'grayscale',
         },
         '*, *::before, *::after': {
           boxSizing: 'border-box',
         },
-        '::selection': {
-          backgroundColor: tokens.colors.greenLight,
-          color: tokens.colors.textPrimary,
-        },
       },
     },
+
     MuiButton: {
       defaultProps: {
         disableElevation: true,
         variant: 'contained',
       },
       styleOverrides: {
-        root: {
-          borderRadius: tokens.radius.lg,
-          minHeight: tokens.spacing.xxl,
-          paddingInline: tokens.spacing.lg,
-          paddingBlock: tokens.spacing.md,
-          boxShadow: 'none',
+        root: ({ theme }) => ({
+          borderRadius: `${tokens.radius.md}px`,
+          padding: theme.spacing(2.5, 6), // 10px 24px (Tight Proportions)
+          transition: transitions.standard,
+          fontWeight: 600,
           '&:hover': {
-            boxShadow: tokens.shadows.card,
+            transform: 'translateY(-2px) scale(1.02)',
           },
-          '&.Mui-focusVisible': focusVisibleStyles,
-        },
-        sizeSmall: {
-          minHeight: tokens.spacing.xl,
-          paddingInline: tokens.spacing.base,
-          paddingBlock: tokens.spacing.sm,
-          fontSize: tokens.typography.fontSizes.sm,
-        },
-        sizeLarge: {
-          minHeight: tokens.spacing.xxxl,
-          paddingInline: tokens.spacing.xl,
-          paddingBlock: tokens.spacing.base,
-          fontSize: tokens.typography.fontSizes.md,
-        },
-        outlined: {
-          borderColor: tokens.colors.border,
+          '&:active': {
+            transform: 'translateY(0) scale(0.98)',
+          },
+          '&.Mui-disabled': {
+            backgroundColor: tokens.colors.divider,
+            color: tokens.colors.textDisabled,
+          },
+        }),
+        containedPrimary: {
+          backgroundColor: tokens.colors.green,
           '&:hover': {
-            borderColor: tokens.colors.green,
-            backgroundColor: tokens.colors.greenLight,
+            backgroundColor: tokens.colors.greenDark,
+            boxShadow: tokens.shadows.green,
           },
         },
+        containedSecondary: {
+          backgroundColor: tokens.colors.earth,
+          '&:hover': {
+            backgroundColor: tokens.colors.earthDark,
+            boxShadow: tokens.shadows.earth,
+          },
+        },
+        outlinedPrimary: {
+          borderWidth: '2px !important',
+          '&:hover': {
+            backgroundColor: `${tokens.colors.green}0A`,
+          },
+        },
+        sizeSmall: ({ theme }) => ({
+          padding: theme.spacing(1.5, 4), // 6px 16px
+          fontSize: `${tokens.typography.fontSizes.sm}px`,
+        }),
+        sizeLarge: ({ theme }) => ({
+          padding: theme.spacing(3, 8), // 12px 32px
+          fontSize: `${tokens.typography.fontSizes.md}px`,
+        }),
       },
     },
+
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: tokens.radius.lg,
+          borderRadius: `${tokens.radius.lg}px`,
           backgroundColor: tokens.colors.surface,
           boxShadow: tokens.shadows.card,
-          border: `${tokens.spacing.xs / tokens.spacing.xs}px solid ${tokens.colors.divider}`,
+          transition: transitions.standard,
+          border: '1px solid',
+          borderColor: tokens.colors.divider,
+          '&:hover': {
+            transform: 'translateY(-4px)',
+            boxShadow: tokens.shadows.elevated,
+            borderColor: tokens.colors.border,
+          },
         },
       },
     },
-    MuiPaper: {
-      styleOverrides: {
-        rounded: {
-          borderRadius: tokens.radius.lg,
-        },
-        elevation1: {
-          boxShadow: tokens.shadows.card,
-        },
-        elevation8: {
-          boxShadow: tokens.shadows.bottomSheet,
-        },
-      },
-    },
+
     MuiTextField: {
       defaultProps: {
         variant: 'outlined',
+        fullWidth: false, // Remove disastrous default
       },
     },
+
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          borderRadius: tokens.radius.md,
+          borderRadius: `${tokens.radius.md}px`,
           backgroundColor: tokens.colors.surface,
+          transition: transitions.standard,
           '& .MuiOutlinedInput-notchedOutline': {
             borderColor: tokens.colors.border,
+            borderWidth: '1px',
+            transition: transitions.standard,
           },
           '&:hover .MuiOutlinedInput-notchedOutline': {
             borderColor: tokens.colors.green,
           },
           '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
             borderColor: tokens.colors.green,
-            borderWidth: tokens.spacing.xs / tokens.spacing.xs,
+            borderWidth: '2px',
           },
-          '&.Mui-error .MuiOutlinedInput-notchedOutline': {
-            borderColor: tokens.colors.error,
-          },
-          '&.Mui-focused': focusVisibleStyles,
-        },
-        input: {
-          paddingBlock: tokens.spacing.md,
-          paddingInline: tokens.spacing.base,
-        },
-      },
-    },
-    MuiInputLabel: {
-      styleOverrides: {
-        root: {
-          color: tokens.colors.textSecondary,
           '&.Mui-focused': {
-            color: tokens.colors.green,
-          },
-          '&.Mui-error': {
-            color: tokens.colors.error,
+            boxShadow: tokens.shadows.focus,
           },
         },
+        input: ({ theme }) => ({
+          paddingBlock: theme.spacing(3), // 12px
+          paddingInline: theme.spacing(4), // 16px
+          height: '24px', // Standard height
+        }),
       },
     },
-    MuiFormHelperText: {
+
+    MuiAvatar: {
       styleOverrides: {
         root: {
-          marginInline: tokens.spacing.sm,
-          fontSize: tokens.typography.fontSizes.sm,
+          transition: transitions.spring,
+          cursor: 'pointer',
+          '&:hover': {
+            transform: 'perspective(500px) rotateY(15deg) rotateX(-5deg) scale(1.1)',
+            boxShadow: tokens.shadows.elevated,
+          },
+          '&:active': {
+            transform: 'perspective(500px) rotateY(0deg) rotateX(0deg) scale(1.05)',
+          },
         },
       },
     },
+
     MuiChip: {
       styleOverrides: {
-        root: {
-          borderRadius: tokens.radius.full,
-          fontWeight: tokens.typography.fontWeights.semibold,
-          '&.Mui-focusVisible': focusVisibleStyles,
-        },
-        colorDefault: {
-          backgroundColor: tokens.colors.background,
-          color: tokens.colors.textSecondary,
-          borderColor: tokens.colors.border,
-        },
-      },
-    },
-    MuiBottomNavigation: {
-      styleOverrides: {
-        root: {
-          minHeight: tokens.spacing.xxxl,
-          backgroundColor: tokens.colors.surface,
-          borderTop: `${tokens.spacing.xs / tokens.spacing.xs}px solid ${tokens.colors.divider}`,
-          boxShadow: tokens.shadows.bottomSheet,
-        },
-      },
-    },
-    MuiBottomNavigationAction: {
-      styleOverrides: {
-        root: {
-          color: tokens.colors.textSecondary,
-          '&.Mui-selected': {
-            color: tokens.colors.green,
+        root: ({ theme }) => ({
+          borderRadius: `${tokens.radius.full}px`,
+          height: theme.spacing(8), // 32px
+          paddingInline: theme.spacing(1),
+          fontWeight: 600,
+          transition: transitions.standard,
+          '&:hover': {
+            transform: 'translateY(-1px)',
+            boxShadow: tokens.shadows.card,
           },
-          '&.Mui-focusVisible': focusVisibleStyles,
-        },
+        }),
+        sizeSmall: ({ theme }) => ({
+          height: theme.spacing(6), // 24px
+        }),
       },
     },
+
     MuiAppBar: {
       defaultProps: {
         elevation: 0,
-        color: 'inherit',
       },
       styleOverrides: {
         root: {
           backgroundColor: tokens.colors.surface,
           color: tokens.colors.textPrimary,
-          borderBottom: `${tokens.spacing.xs / tokens.spacing.xs}px solid ${tokens.colors.divider}`,
+          borderBottom: '1px solid',
+          borderColor: tokens.colors.divider,
         },
       },
     },
-    MuiDialog: {
+
+    MuiBottomNavigation: {
       styleOverrides: {
-        paper: {
-          borderRadius: tokens.radius.xl,
+        root: {
+          backgroundColor: tokens.colors.surface,
+          borderTop: '1px solid',
+          borderColor: tokens.colors.divider,
           boxShadow: tokens.shadows.bottomSheet,
-        },
-      },
-    },
-    MuiSnackbarContent: {
-      styleOverrides: {
-        root: {
-          borderRadius: tokens.radius.lg,
-          boxShadow: tokens.shadows.elevated,
-          fontWeight: tokens.typography.fontWeights.semibold,
-        },
-      },
-    },
-    MuiAlert: {
-      styleOverrides: {
-        root: {
-          borderRadius: tokens.radius.lg,
-          alignItems: 'center',
-        },
-        standardSuccess: {
-          backgroundColor: tokens.colors.successLight,
-          color: tokens.colors.greenDark,
-        },
-        standardError: {
-          backgroundColor: tokens.colors.errorLight,
-          color: tokens.colors.error,
-        },
-        standardWarning: {
-          backgroundColor: tokens.colors.warningLight,
-          color: tokens.colors.warning,
-        },
-        standardInfo: {
-          backgroundColor: tokens.colors.infoLight,
-          color: tokens.colors.info,
-        },
-      },
-    },
-    MuiSkeleton: {
-      styleOverrides: {
-        root: {
-          backgroundColor: tokens.colors.divider,
-          borderRadius: tokens.radius.md,
         },
       },
     },

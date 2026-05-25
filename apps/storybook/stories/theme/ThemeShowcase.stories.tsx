@@ -1,149 +1,109 @@
-import Alert from '@mui/material/Alert'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import Chip from '@mui/material/Chip'
-import Divider from '@mui/material/Divider'
-import Paper from '@mui/material/Paper'
-import Stack from '@mui/material/Stack'
-import TextField from '@mui/material/TextField'
-import Typography from '@mui/material/Typography'
-import { tokens } from '@mitumba/tokens'
+import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import Avatar from '@mui/material/Avatar'
+import Stack from '@mui/material/Stack'
+import Card from '@mui/material/Card'
+import { tokens } from '@mitumba/tokens'
+import { MitumbaPrimaryButton, MitumbaTextField } from '@mitumba/ui'
 
-const colorGroups = [
-  ['green', 'greenLight', 'greenDark'],
-  ['earth', 'earthLight', 'earthDark'],
-  ['background', 'surface', 'divider', 'border'],
-  ['textPrimary', 'textSecondary', 'textDisabled'],
-  ['success', 'error', 'warning', 'info'],
-  ['stiTrusted', 'stiGood', 'stiAtRisk', 'stiFlagged', 'stiSuspended'],
-] as const
-
-const px = (value: number) => `${value}px`
-
-function ThemeShowcase() {
-  return (
-    <Stack sx={{ gap: px(tokens.spacing.lg), maxWidth: tokens.breakpoints.lg }}>
-      <Stack sx={{ gap: px(tokens.spacing.sm) }}>
-        <Typography variant="overline" color="text.secondary">
-          Mitumba design system
-        </Typography>
-        <Typography variant="h1">Theme showcase</Typography>
-        <Typography variant="body1" color="text.secondary">
-          Core brand colors, type scale, and MUI component defaults powered by @mitumba/tokens.
-        </Typography>
-      </Stack>
-
-      <Paper sx={{ padding: px(tokens.spacing.lg) }}>
-        <Stack sx={{ gap: px(tokens.spacing.base) }}>
-          <Typography variant="h2">Colors</Typography>
-          {colorGroups.map((group) => (
-            <Box
-              key={group.join('-')}
-              sx={{
-                display: 'grid',
-                gap: px(tokens.spacing.sm),
-                gridTemplateColumns: {
-                  xs: 'repeat(2, minmax(0, 1fr))',
-                  md: 'repeat(5, minmax(0, 1fr))',
-                },
-              }}
-            >
-              {group.map((colorName) => (
-                <Box key={colorName} sx={{ minWidth: 0 }}>
-                  <Box
-                    sx={{
-                      bgcolor: tokens.colors[colorName],
-                      border: `${tokens.spacing.xs / tokens.spacing.xs}px solid ${tokens.colors.divider}`,
-                      borderRadius: px(tokens.radius.md),
-                      height: tokens.spacing.xxxl,
-                      marginBottom: px(tokens.spacing.xs),
-                    }}
-                  />
-                  <Typography variant="caption" color="text.secondary">
-                    {colorName}
-                  </Typography>
-                </Box>
-              ))}
-            </Box>
-          ))}
-        </Stack>
-      </Paper>
-
-      <Paper sx={{ padding: px(tokens.spacing.lg) }}>
-        <Stack sx={{ gap: px(tokens.spacing.base) }}>
-          <Typography variant="h2">Typography</Typography>
-          <Typography variant="h1">Heading 1</Typography>
-          <Typography variant="h2">Heading 2</Typography>
-          <Typography variant="h3">Heading 3</Typography>
-          <Typography variant="body1">
-            Body 1 supports dense marketplace surfaces while staying legible on small Android screens.
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Body 2 is used for supporting metadata, seller context, and helper copy.
-          </Typography>
-        </Stack>
-      </Paper>
-
-      <Card>
-        <CardContent>
-          <Stack sx={{ gap: px(tokens.spacing.lg) }}>
-            <Stack direction={{ xs: 'column', sm: 'row' }} sx={{ gap: px(tokens.spacing.sm) }}>
-              <Button>Primary action</Button>
-              <Button color="earth">VAZI action</Button>
-              <Button variant="outlined">Outlined</Button>
-              <Button variant="text">Text</Button>
-            </Stack>
-
-            <Stack direction="row" useFlexGap flexWrap="wrap" sx={{ gap: px(tokens.spacing.sm) }}>
-              <Chip label="Trusted seller" color="primary" />
-              <Chip label="VAZI Featured" color="earth" />
-              <Chip label="Neutral" />
-              <Chip label="Outlined" variant="outlined" />
-            </Stack>
-
-            <Stack sx={{ gap: px(tokens.spacing.base) }}>
-              <TextField label="Listing title" placeholder="Vintage denim jacket" />
-              <TextField
-                label="Price"
-                value="KES 2,500"
-                helperText="Prices are always shown in Kenyan Shillings."
-              />
-              <TextField label="Error state" value="" error helperText="Enter a valid listing title." />
-            </Stack>
-
-            <Divider />
-
-            <Stack sx={{ gap: px(tokens.spacing.sm) }}>
-              <Alert severity="success">Listing saved successfully.</Alert>
-              <Alert severity="warning">Connection is slow. Uploads may take longer.</Alert>
-              <Alert severity="error">Payment could not be verified.</Alert>
-            </Stack>
-          </Stack>
-        </CardContent>
-      </Card>
-    </Stack>
-  )
-}
-
-const meta: Meta<typeof ThemeShowcase> = {
+const meta: Meta = {
   title: 'Theme/ThemeShowcase',
-  component: ThemeShowcase,
   parameters: {
-    layout: 'padded',
+    layout: 'fullscreen',
   },
 }
 
 export default meta
+type Story = StoryObj
 
-type Story = StoryObj<typeof ThemeShowcase>
+export const Default: Story = {
+  render: () => (
+    <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', gap: 6, maxWidth: 1000, mx: 'auto' }}>
+      {/* Header */}
+      <Box sx={{ borderBottom: `2px solid ${tokens.colors.green}`, pb: 2, mb: 4 }}>
+        <Typography variant="h2" color="primary">Mitumba UI: Vision-Led Redesign</Typography>
+        <Typography variant="body1" color="text.secondary">100% Token-Driven | Benchmark: StaNLink UI | Professional Sizing</Typography>
+      </Box>
 
-export const Default: Story = {}
+      {/* Spacing & Proportions */}
+      <Box component="section">
+        <Typography variant="h4" sx={{ mb: 3 }}>Spatial Baseline (4px Factor)</Typography>
+        <Stack spacing={2} sx={{ p: 3, bgcolor: tokens.colors.background, borderRadius: 2 }}>
+           <Typography variant="body2" sx={{ mb: 1, fontStyle: 'italic' }}>Demonstrating tight, granular spacing from the expanded token set.</Typography>
+          {['xxs', 'xs', 'sm', 'md', 'base', 'lg'].map((name) => (
+            <Stack key={name} direction="row" alignItems="center" spacing={2}>
+              <Box sx={{ width: tokens.spacing[name as keyof typeof tokens.spacing], height: 20, backgroundColor: tokens.colors.green, borderRadius: '2px' }} />
+              <Typography variant="caption" sx={{ fontWeight: 'bold', minWidth: 60 }}>{name}</Typography>
+              <Typography variant="caption" color="text.secondary">{tokens.spacing[name as keyof typeof tokens.spacing]}px</Typography>
+            </Stack>
+          ))}
+        </Stack>
+      </Box>
 
-export const Mobile: Story = {
-  parameters: {
-    viewport: { defaultViewport: 'mobile' },
-  },
+      {/* Buttons */}
+      <Box component="section">
+        <Typography variant="h4" sx={{ mb: 3 }}>Premium Buttons (Tactile & Sane)</Typography>
+        <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 3 }}>
+          <Card variant="outlined" sx={{ p: 3 }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>Variants</Typography>
+            <Stack direction="row" gap={2} flexWrap="wrap">
+              <MitumbaPrimaryButton label="Primary" variant="primary" />
+              <MitumbaPrimaryButton label="Earth" variant="earth" />
+              <MitumbaPrimaryButton label="Ghost" variant="ghost" />
+            </Stack>
+          </Card>
+          <Card variant="outlined" sx={{ p: 3 }}>
+            <Typography variant="h6" sx={{ mb: 2 }}>Sizes & States</Typography>
+            <Stack direction="row" gap={2} alignItems="center" flexWrap="wrap">
+              <MitumbaPrimaryButton label="Small" size="small" />
+              <MitumbaPrimaryButton label="Large" size="large" />
+              <MitumbaPrimaryButton label="Loading" loading />
+            </Stack>
+          </Card>
+        </Box>
+        <Typography variant="caption" sx={{ mt: 1, display: 'block', fontStyle: 'italic', opacity: 0.7 }}>
+          Note: fullWidth is now false by default. Content is perfectly centered with 10px 24px padding.
+        </Typography>
+      </Box>
+
+      {/* Form Elements */}
+      <Box component="section">
+        <Typography variant="h4" sx={{ mb: 3 }}>Professional Inputs</Typography>
+        <Stack spacing={3}>
+           <MitumbaTextField label="Standard" hint="Enter text..." value="" onChange={() => {}} />
+           <MitumbaTextField label="Error State" hint="Invalid data" error="This field is required" value="Bad data" onChange={() => {}} />
+           <MitumbaTextField label="Disabled" hint="Cannot edit" disabled value="Locked content" onChange={() => {}} />
+        </Stack>
+        <Typography variant="caption" sx={{ mt: 1, display: 'block', fontStyle: 'italic', opacity: 0.7 }}>
+          Redesigned with 12px padding and clean 2px green focus strokes.
+        </Typography>
+      </Box>
+
+      {/* Interactive Depth */}
+      <Box component="section">
+        <Typography variant="h4" sx={{ mb: 3 }}>Interactive Depth & Physicality</Typography>
+        <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4 }}>
+          <Stack spacing={2}>
+            <Typography variant="h6">Living Avatars</Typography>
+            <Stack direction="row" spacing={3}>
+              <Avatar sx={{ width: 56, height: 56, bgcolor: tokens.colors.green }}>JD</Avatar>
+              <Avatar src="https://i.pravatar.cc/150?u=12" sx={{ width: 56, height: 56 }} />
+            </Stack>
+            <Typography variant="caption" sx={{ fontStyle: 'italic' }}>Hover for 3D tilt and spring scale.</Typography>
+          </Stack>
+          <Stack spacing={2}>
+            <Typography variant="h6">Professional Surfaces</Typography>
+            <Card sx={{ p: 2 }}>
+              <Typography variant="body2">Shadow Index 1 (Standard)</Typography>
+            </Card>
+            <Card sx={{ p: 2, boxShadow: 2 }}>
+              <Typography variant="body2">Shadow Index 2 (Elevated)</Typography>
+            </Card>
+          </Stack>
+        </Box>
+      </Box>
+    </Box>
+  ),
 }

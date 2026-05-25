@@ -4,6 +4,9 @@ import TextField from '@mui/material/TextField'
 import { tokens } from '@mitumba/tokens'
 import type { MitumbaTextFieldProps } from './MitumbaTextField.types'
 
+/**
+ * Highly refined text input with token-driven sizing and professional focus states.
+ */
 export function MitumbaTextField({
   label,
   hint,
@@ -36,52 +39,36 @@ export function MitumbaTextField({
       slotProps={{
         input: {
           startAdornment: prefix ? (
-            <Box sx={{ mr: tokens.spacing.sm }}>{prefix}</Box>
+            <Box
+              sx={{
+                mr: tokens.spacing.sm,
+                display: 'flex',
+                alignItems: 'center',
+                color: tokens.colors.textSecondary,
+                opacity: 0.8,
+              }}
+            >
+              {prefix}
+            </Box>
           ) : undefined,
           endAdornment: suffix ? (
-            <Box sx={{ ml: tokens.spacing.sm }}>{suffix}</Box>
+            <Box
+              sx={{
+                ml: tokens.spacing.sm,
+                display: 'flex',
+                alignItems: 'center',
+                color: tokens.colors.textSecondary,
+                opacity: 0.8,
+              }}
+            >
+              {suffix}
+            </Box>
           ) : undefined,
         },
       }}
       sx={{
-        '& .MuiOutlinedInput-root': {
-          borderRadius: tokens.radius.md,
-          backgroundColor: tokens.colors.surface,
-          paddingInline: tokens.spacing.base,
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: tokens.colors.border,
-          },
-          '&:hover .MuiOutlinedInput-notchedOutline': {
-            borderColor: tokens.colors.green,
-          },
-          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-            borderColor: tokens.colors.green,
-            borderWidth: `${tokens.spacing.xs}px`,
-          },
-          '&.Mui-error .MuiOutlinedInput-notchedOutline': {
-            borderColor: tokens.colors.error,
-          },
-          '&.Mui-disabled': {
-            backgroundColor: tokens.colors.background,
-            color: tokens.colors.textDisabled,
-          },
-        },
-        '& .MuiInputLabel-root': {
-          color: tokens.colors.textSecondary,
-          '&.Mui-focused': {
-            color: tokens.colors.green,
-          },
-          '&.Mui-error': {
-            color: tokens.colors.error,
-          },
-        },
-        '& .MuiFormHelperText-root': {
-          marginInline: tokens.spacing.sm,
-          fontSize: tokens.typography.fontSizes.sm,
-          '&.Mui-error': {
-            color: tokens.colors.error,
-          },
-        },
+        // All core styles (borders, padding, radius) are now controlled by the Theme Engine
+        width: '100%',
       }}
     />
   )

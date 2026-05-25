@@ -27,7 +27,7 @@ describe('MitumbaSkeleton', () => {
       </MitumbaThemeProvider>
     )
     const skeleton = screen.getByLabelText('Loading...')
-    expect(skeleton).toHaveStyle({ borderRadius: '4px' })
+    expect(skeleton).toHaveStyle({ borderRadius: '2px' })
   })
 
   it('renders rounded variant', () => {
@@ -37,7 +37,7 @@ describe('MitumbaSkeleton', () => {
       </MitumbaThemeProvider>
     )
     const skeleton = screen.getByLabelText('Loading...')
-    expect(skeleton).toHaveStyle({ borderRadius: '12px' })
+    expect(skeleton).toHaveStyle({ borderRadius: '8px' })
   })
 
   it('renders circular variant', () => {
