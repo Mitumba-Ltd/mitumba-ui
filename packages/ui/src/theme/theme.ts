@@ -33,11 +33,11 @@ const transitions = {
 export const mitumbaTheme: Theme = createTheme({
   // Spacing factor 4px (Mandate)
   spacing: (factor: number) => `${factor * 4}px`,
-  
+
   breakpoints: {
     values: tokens.breakpoints,
   },
-  
+
   palette: {
     mode: 'light',
     primary: {
@@ -61,7 +61,7 @@ export const mitumbaTheme: Theme = createTheme({
     success: {
       main: tokens.colors.success,
       light: tokens.colors.successLight,
-      dark: tokens.colors.greenDark,
+      dark: tokens.colors.successDark,
       contrastText: tokens.colors.textOnGreen,
     },
     error: {
@@ -99,7 +99,7 @@ export const mitumbaTheme: Theme = createTheme({
   },
 
   shape: {
-    borderRadius: tokens.radius.md,
+    borderRadius: tokens.radius.md, // Default 8px
   },
 
   // Logically mapped shadow scale (Benchmark alignment)
@@ -182,7 +182,7 @@ export const mitumbaTheme: Theme = createTheme({
       },
       styleOverrides: {
         root: ({ theme }) => ({
-          borderRadius: `${tokens.radius.md}px`,
+          borderRadius: `${tokens.radius.md}px`, // 8px for tactile but refined buttons
           padding: theme.spacing(2.5, 6), // 10px 24px (Tight Proportions)
           transition: transitions.standard,
           fontWeight: 600,
@@ -231,7 +231,7 @@ export const mitumbaTheme: Theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: `${tokens.radius.lg}px`,
+          borderRadius: `${tokens.radius.xl}px`, // 16px for premium, soft containers
           backgroundColor: tokens.colors.surface,
           boxShadow: tokens.shadows.card,
           transition: transitions.standard,
@@ -246,6 +246,20 @@ export const mitumbaTheme: Theme = createTheme({
       },
     },
 
+    MuiPaper: {
+      styleOverrides: {
+        rounded: {
+          borderRadius: `${tokens.radius.xl}px`,
+        },
+        elevation1: {
+          boxShadow: tokens.shadows.card,
+        },
+        elevation8: {
+          boxShadow: tokens.shadows.bottomSheet,
+        },
+      },
+    },
+
     MuiTextField: {
       defaultProps: {
         variant: 'outlined',
@@ -256,7 +270,7 @@ export const mitumbaTheme: Theme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: {
-          borderRadius: `${tokens.radius.md}px`,
+          borderRadius: `${tokens.radius.md}px`, // 8px for standard form elements
           backgroundColor: tokens.colors.surface,
           transition: transitions.standard,
           '& .MuiOutlinedInput-notchedOutline': {
@@ -370,6 +384,16 @@ export const mitumbaTheme: Theme = createTheme({
       },
     },
 
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          borderRadius: `${tokens.radius.xxxl}px`, // 32px for large authoritative containers
+          boxShadow: tokens.shadows.bottomSheet,
+          backgroundImage: 'none',
+        },
+      },
+    },
+
     MuiAlert: {
       styleOverrides: {
         root: {
@@ -399,7 +423,7 @@ export const mitumbaTheme: Theme = createTheme({
       styleOverrides: {
         root: {
           backgroundColor: tokens.colors.divider,
-          borderRadius: `${tokens.radius.md}px`,
+          borderRadius: `${tokens.radius.md}px`, // 8px matches standard element radius
         },
       },
     },

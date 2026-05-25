@@ -3,7 +3,7 @@ import { tokens } from '@mitumba/tokens'
 import type { MitumbaSkeletonProps } from './MitumbaSkeleton.types'
 
 const variantStyles = {
-  rectangular: { borderRadius: `${tokens.radius.xs}px` },
+  rectangular: { borderRadius: `${tokens.radius.xxs}px` },
   rounded: { borderRadius: `${tokens.radius.md}px` },
   circular: { borderRadius: '50%' },
 }
