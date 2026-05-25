@@ -3,6 +3,7 @@ import Typography from '@mui/material/Typography'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { tokens } from '@mitumba/tokens'
 import type { ErrorStateProps } from './ErrorState.types'
+import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
 
 /**
  * Error state component for displaying errors with an optional retry action.
@@ -20,24 +21,36 @@ export function ErrorState({
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        padding: tokens.spacing.xl,
+        padding: tokens.spacing.huge,
         gap: tokens.spacing.base,
+        backgroundColor: tokens.colors.errorLight,
+        borderRadius: tokens.radius.lg,
+        border: `1px solid ${tokens.colors.error}40`,
+        width: '100%',
+        boxSizing: 'border-box',
       }}
     >
       <Box
         sx={{
-          color: tokens.colors.error,
-          fontSize: 48,
+          color: tokens.colors.white,
+          backgroundColor: tokens.colors.error,
+          fontSize: 32,
           display: 'flex',
+          mb: tokens.spacing.sm,
+          p: tokens.spacing.base,
+          borderRadius: tokens.radius.full,
+          boxShadow: tokens.shadows.card,
         }}
       >
-        <RefreshIcon sx={{ fontSize: 48 }} />
+        <RefreshIcon sx={{ fontSize: 32 }} />
       </Box>
       <Typography
         sx={{
           fontSize: tokens.typography.fontSizes.xl,
           fontWeight: tokens.typography.fontWeights.bold,
-          color: tokens.colors.textPrimary,
+          color: tokens.colors.error,
+          fontFamily: tokens.typography.fontFamily,
+          lineHeight: 1.2,
         }}
       >
         {title}
@@ -45,39 +58,30 @@ export function ErrorState({
       <Typography
         sx={{
           fontSize: tokens.typography.fontSizes.base,
-          color: tokens.colors.textSecondary,
-          maxWidth: 300,
+          color: tokens.colors.textPrimary,
+          fontFamily: tokens.typography.fontFamily,
+          maxWidth: 320,
+          marginInline: 'auto',
+          opacity: 0.8,
         }}
       >
         {subtitle}
       </Typography>
       {onRetry && (
-        <Box
-          component="button"
-          onClick={onRetry}
-          sx={{
-            marginTop: tokens.spacing.base,
-            paddingInline: tokens.spacing.lg,
-            paddingBlock: tokens.spacing.md,
-            borderRadius: tokens.radius.lg,
-            backgroundColor: tokens.colors.error,
-            color: tokens.colors.white,
-            fontSize: tokens.typography.fontSizes.base,
-            fontWeight: tokens.typography.fontWeights.bold,
-            fontFamily: tokens.typography.fontFamily,
-            border: 'none',
-            cursor: 'pointer',
-            transition: 'background-color 0.2s',
-            display: 'flex',
-            alignItems: 'center',
-            gap: tokens.spacing.sm,
-            '&:hover': {
+        <Box sx={{ mt: tokens.spacing.lg, width: { xs: '100%', sm: 'auto' } }}>
+          <MitumbaPrimaryButton
+            label="Try Again"
+            onClick={onRetry}
+            variant="primary"
+            size="medium"
+            fullWidth={false}
+            sx={{
               backgroundColor: tokens.colors.error,
-            },
-          }}
-        >
-          <RefreshIcon sx={{ fontSize: 18 }} />
-          Retry
+              '&:hover': {
+                backgroundColor: tokens.colors.errorDark,
+              },
+            }}
+          />
         </Box>
       )}
     </Box>

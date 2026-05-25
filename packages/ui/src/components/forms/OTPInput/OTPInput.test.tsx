@@ -99,7 +99,7 @@ describe('OTPInput', () => {
     // The animation is on the flex container (parent of the inputs)
     const inputs = screen.getAllByRole('textbox')
     const animatedContainer = inputs[0].parentElement
-    expect(animatedContainer).toHaveStyle('animation: shake 0.5s ease-in-out')
+    expect(animatedContainer).toHaveStyle('animation: shake 500ms cubic-bezier(.36,.07,.19,.97) both')
   })
 
   it('disables inputs when loading', () => {

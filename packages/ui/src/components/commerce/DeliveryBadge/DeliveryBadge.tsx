@@ -10,7 +10,7 @@ export function DeliveryBadge({ type, estimatedDays, feeKes }: DeliveryBadgeProp
 
   const LabelIcon = isSameCity ? DeliveryDiningOutlinedIcon : DirectionsBusOutlinedIcon
   const label = isSameCity ? 'Delivery today' : (estimatedDays ?? '3–5 business days')
-  const color = isSameCity ? tokens.colors.success : tokens.colors.info
+  const baseColor = isSameCity ? tokens.colors.success : tokens.colors.info
 
   let feeDisplay: string | null = null
   if (feeKes !== undefined && feeKes > 0) {
@@ -22,39 +22,40 @@ export function DeliveryBadge({ type, estimatedDays, feeKes }: DeliveryBadgeProp
       sx={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: tokens.spacing.sm,
+        gap: tokens.spacing.xs,
+        height: '28px',
         px: tokens.spacing.md,
-        py: tokens.spacing.sm,
         borderRadius: tokens.radius.full,
-        bgcolor: `${color}14`,
-        border: `1px solid ${color}33`,
+        bgcolor: `${baseColor}14`,
+        border: `1px solid ${baseColor}40`,
         width: 'fit-content',
+        transition: 'all 200ms ease',
       }}
-      aria-label={`${label}${feeDisplay}`}
+      aria-label={`${label}${feeDisplay || ''}`}
     >
       <LabelIcon
         sx={{
-          fontSize: tokens.typography.fontSizes.md,
-          color,
+          fontSize: 16,
+          color: baseColor,
         }}
       />
       <Typography
-        variant="body2"
         sx={{
-          fontSize: tokens.typography.fontSizes.sm,
-          fontWeight: tokens.typography.fontWeights.medium,
-          color,
+          fontSize: tokens.typography.fontSizes.xs,
+          fontWeight: tokens.typography.fontWeights.bold,
+          color: baseColor,
+          lineHeight: 1,
         }}
       >
         {label}
       </Typography>
       {feeDisplay && (
         <Typography
-          variant="body2"
           sx={{
-            fontSize: tokens.typography.fontSizes.sm,
+            fontSize: tokens.typography.fontSizes.xs,
             fontWeight: tokens.typography.fontWeights.medium,
             color: tokens.colors.textSecondary,
+            lineHeight: 1,
           }}
         >
           {feeDisplay}

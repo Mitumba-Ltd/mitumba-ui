@@ -6,6 +6,7 @@ import type { MitumbaTextFieldProps } from './MitumbaTextField.types'
 
 /**
  * Highly refined text input with token-driven sizing and professional focus states.
+ * Styling is centrally managed by the MUI Theme Engine.
  */
 export function MitumbaTextField({
   label,
@@ -67,7 +68,6 @@ export function MitumbaTextField({
         },
       }}
       sx={{
-        // All core styles (borders, padding, radius) are now controlled by the Theme Engine
         width: '100%',
       }}
     />

@@ -23,24 +23,23 @@ const typeColors: Record<string, string> = {
 export function ActivityFeed({ events, loading = false, emptyMessage = 'No recent activity' }: ActivityFeedProps) {
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing.base }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: tokens.spacing.sm }}>
         {Array.from({ length: 4 }, (_, i) => (
           <Box key={`skeleton-${i}`} sx={{
               display: 'flex',
               gap: tokens.spacing.base,
               padding: tokens.spacing.base,
-              borderRadius: tokens.radius.md,
+              borderRadius: tokens.radius.lg,
               backgroundColor: tokens.colors.surface,
-              boxShadow: tokens.shadows.card,
-              border: `${tokens.spacing.xs / tokens.spacing.xs}px solid ${tokens.colors.divider}`,
+              border: `1px solid ${tokens.colors.divider}`,
             }}
           >
             <Box
               sx={{
                 width: 40,
                 height: 40,
-                borderRadius: '50%',
-                backgroundColor: tokens.colors.divider,
+                borderRadius: tokens.radius.full,
+                backgroundColor: tokens.colors.background,
                 animation: 'pulse 1.5s ease-in-out infinite',
                 '@keyframes pulse': {
                   '0%, 100%': { opacity: 1 },
@@ -48,9 +47,9 @@ export function ActivityFeed({ events, loading = false, emptyMessage = 'No recen
                 },
               }}
             />
-            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: tokens.spacing.xs }}>
-              <Box sx={{ width: '60%', height: 16, backgroundColor: tokens.colors.divider, borderRadius: tokens.radius.sm, animation: 'pulse 1.5s ease-in-out infinite' }} />
-              <Box sx={{ width: '40%', height: 14, backgroundColor: tokens.colors.divider, borderRadius: tokens.radius.sm, animation: 'pulse 1.5s ease-in-out infinite' }} />
+            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: tokens.spacing.xs, justifyContent: 'center' }}>
+              <Box sx={{ width: '60%', height: 14, backgroundColor: tokens.colors.background, borderRadius: tokens.radius.xs, animation: 'pulse 1.5s ease-in-out infinite' }} />
+              <Box sx={{ width: '30%', height: 10, backgroundColor: tokens.colors.background, borderRadius: tokens.radius.xs, animation: 'pulse 1.5s ease-in-out infinite' }} />
             </Box>
           </Box>
         ))}
@@ -63,15 +62,26 @@ export function ActivityFeed({ events, loading = false, emptyMessage = 'No recen
       <Box
         sx={{
           display: 'flex',
+          flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: tokens.spacing.xl,
-          color: tokens.colors.textSecondary,
-          fontSize: tokens.typography.fontSizes.base,
+          paddingBlock: tokens.spacing.xxxl,
+          color: tokens.colors.textDisabled,
           textAlign: 'center',
+          backgroundColor: tokens.colors.background,
+          borderRadius: tokens.radius.lg,
+          border: `1px dashed ${tokens.colors.border}`,
         }}
       >
-        {emptyMessage}
+        <Typography
+          sx={{
+            fontSize: tokens.typography.fontSizes.base,
+            fontWeight: tokens.typography.fontWeights.medium,
+            fontFamily: tokens.typography.fontFamily,
+          }}
+        >
+          {emptyMessage}
+        </Typography>
       </Box>
     )
   }
@@ -85,13 +95,15 @@ export function ActivityFeed({ events, loading = false, emptyMessage = 'No recen
             display: 'flex',
             gap: tokens.spacing.base,
             padding: tokens.spacing.base,
-            borderRadius: tokens.radius.md,
+            borderRadius: tokens.radius.lg,
             backgroundColor: tokens.colors.surface,
             boxShadow: tokens.shadows.card,
-            border: `${tokens.spacing.xs / tokens.spacing.xs}px solid ${tokens.colors.divider}`,
-            transition: 'box-shadow 0.2s',
+            border: `1px solid ${tokens.colors.divider}`,
+            transition: 'all 200ms ease',
             '&:hover': {
               boxShadow: tokens.shadows.elevated,
+              borderColor: tokens.colors.border,
+              transform: 'translateY(-1px)',
             },
           }}
         >
@@ -99,31 +111,49 @@ export function ActivityFeed({ events, loading = false, emptyMessage = 'No recen
             sx={{
               width: 40,
               height: 40,
-              borderRadius: '50%',
-              backgroundColor: event.color || typeColors[event.type],
-              color: tokens.colors.white,
+              borderRadius: tokens.radius.full,
+              backgroundColor: `${(event.color || typeColors[event.type])}14`,
+              color: event.color || typeColors[event.type],
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontSize: 20,
               flexShrink: 0,
+              border: `1px solid ${(event.color || typeColors[event.type])}40`,
             }}
           >
             {event.icon || defaultIcons[event.type]}
           </Box>
           <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Typography
-              sx={{
-                fontSize: tokens.typography.fontSizes.base,
-                fontWeight: tokens.typography.fontWeights.semibold,
-                color: tokens.colors.textPrimary,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {event.title}
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <Typography
+                sx={{
+                  fontSize: tokens.typography.fontSizes.base,
+                  fontWeight: tokens.typography.fontWeights.bold,
+                  color: tokens.colors.textPrimary,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  fontFamily: tokens.typography.fontFamily,
+                  lineHeight: 1.2,
+                }}
+              >
+                {event.title}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: 10,
+                  color: tokens.colors.textDisabled,
+                  fontWeight: tokens.typography.fontWeights.bold,
+                  textTransform: 'uppercase',
+                  letterSpacing: tokens.typography.letterSpacings.wide,
+                  ml: tokens.spacing.sm,
+                  flexShrink: 0,
+                }}
+              >
+                {event.timestamp}
+              </Typography>
+            </Box>
             {event.subtitle && (
               <Typography
                 sx={{
@@ -132,20 +162,13 @@ export function ActivityFeed({ events, loading = false, emptyMessage = 'No recen
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
+                  fontFamily: tokens.typography.fontFamily,
+                  mt: '2px',
                 }}
               >
                 {event.subtitle}
               </Typography>
             )}
-            <Typography
-              sx={{
-                fontSize: tokens.typography.fontSizes.xs,
-                color: tokens.colors.textDisabled,
-                marginTop: tokens.spacing.xs,
-              }}
-            >
-              {event.timestamp}
-            </Typography>
           </Box>
         </Box>
       ))}

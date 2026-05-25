@@ -17,7 +17,7 @@ export function SectionHeader({
         display: 'flex',
         gap: tokens.spacing.base,
         justifyContent: 'space-between',
-        mb: tokens.spacing.base,
+        mb: tokens.spacing.lg,
       }}
     >
       <Box sx={{ flex: 1 }}>
@@ -25,9 +25,10 @@ export function SectionHeader({
           component="h2"
           sx={{
             color: tokens.colors.textPrimary,
-            fontSize: tokens.typography.fontSizes.xl,
-            fontWeight: tokens.typography.fontWeights.bold,
-            lineHeight: tokens.typography.lineHeights.snug,
+            fontSize: tokens.typography.fontSizes.xxl,
+            fontWeight: tokens.typography.fontWeights.extrabold,
+            lineHeight: 1.1,
+            fontFamily: tokens.typography.fontFamily,
           }}
         >
           {title}
@@ -37,7 +38,9 @@ export function SectionHeader({
             sx={{
               color: tokens.colors.textSecondary,
               fontSize: tokens.typography.fontSizes.base,
-              mt: tokens.spacing.xs,
+              mt: '4px',
+              fontFamily: tokens.typography.fontFamily,
+              maxWidth: 480,
             }}
           >
             {subtitle}
@@ -45,13 +48,15 @@ export function SectionHeader({
         )}
       </Box>
       {actionLabel && (
-        <MitumbaPrimaryButton
-          fullWidth={false}
-          label={actionLabel}
-          onClick={onAction}
-          size="small"
-          variant="primary"
-        />
+        <Box sx={{ flexShrink: 0, mt: '2px' }}>
+          <MitumbaPrimaryButton
+            fullWidth={false}
+            label={actionLabel}
+            onClick={onAction}
+            size="small"
+            variant="ghost"
+          />
+        </Box>
       )}
     </Box>
   )

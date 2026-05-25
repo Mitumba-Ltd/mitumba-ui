@@ -4,13 +4,16 @@ import { tokens } from '@mitumba/tokens'
 import { Box } from '@mui/material'
 import type { MitumbaPrimaryButtonProps } from './MitumbaPrimaryButton.types'
 
+/**
+ * Premium primary button with tactile transitions and sane proportions.
+ */
 export function MitumbaPrimaryButton({
   label,
   onClick,
   loading = false,
   disabled = false,
   icon,
-  fullWidth = false, // Removed disastrous default
+  fullWidth = false,
   size = 'medium',
   variant = 'primary',
   sx,

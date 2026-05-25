@@ -11,31 +11,30 @@ export function MitumbaAvatar({
   badge,
 }: MitumbaAvatarProps) {
   const sizeMap = {
-    xs: tokens.spacing.xl,
-    sm: tokens.spacing.xxl,
-    md: tokens.spacing.xxxl,
-    lg: 64,
+    xs: 24,
+    sm: 32,
+    md: 44,
+    lg: 56,
   }
 
   const fontSizeMap = {
-    xs: tokens.typography.fontSizes.sm,
-    sm: tokens.typography.fontSizes.base,
-    md: tokens.typography.fontSizes.lg,
-    lg: tokens.typography.fontSizes.xxl,
+    xs: 10,
+    sm: tokens.typography.fontSizes.xs,
+    md: tokens.typography.fontSizes.base,
+    lg: tokens.typography.fontSizes.md,
   }
 
   const dimension = sizeMap[size]
-  const words = name.split(' ')
+  const words = name.trim().split(/\s+/)
   let initials: string
 
-  if (words.length === 1) {
-    initials = words[0]!.slice(0, 2).toUpperCase()
+  if (words.length === 0 || !words[0]) {
+    initials = '??'
+  } else if (words.length === 1) {
+    initials = words[0].slice(0, 2).toUpperCase()
   } else {
-    initials = words
-      .slice(0, 2)
-      .map((word) => word[0])
-      .join('')
-      .toUpperCase()
+    initials = (words[0][0] || '') + (words[1][0] || '')
+    initials = initials.toUpperCase()
   }
 
   const avatar = (
@@ -46,21 +45,24 @@ export function MitumbaAvatar({
         width: dimension,
         height: dimension,
         fontSize: fontSizeMap[size],
+        fontFamily: tokens.typography.fontFamily,
         fontWeight: tokens.typography.fontWeights.bold,
-        bgcolor: imageUrl ? undefined : tokens.colors.green,
+        bgcolor: imageUrl ? 'transparent' : tokens.colors.green,
         color: tokens.colors.textOnGreen,
+        border: imageUrl ? `1px solid ${tokens.colors.divider}` : 'none',
         '&:focus-visible': {
-          outline: `${tokens.spacing.xs}px solid transparent`,
-          boxShadow: tokens.shadows.focus,
+          outline: `2px solid ${tokens.colors.greenLight}`,
+          outlineOffset: '2px',
         },
       }}
-      tabIndex={-1}
     >
       {!imageUrl && initials}
     </Avatar>
   )
 
-  if (badge) {
+  if (badge !== undefined) {
+    const badgeSize = Math.max(dimension / 2.5, 16)
+    
     return (
       <Badge
         overlap="circular"
@@ -73,12 +75,14 @@ export function MitumbaAvatar({
               borderRadius: tokens.radius.full,
               color: tokens.colors.textOnEarth,
               display: 'flex',
-              fontSize: tokens.typography.fontSizes.xs,
+              fontSize: badgeSize < 14 ? 8 : 10,
               fontWeight: tokens.typography.fontWeights.bold,
-              height: `${Math.max(dimension / 3, 16)}px`,
+              height: badgeSize,
               justifyContent: 'center',
-              minWidth: `${Math.max(dimension / 3, 16)}px`,
+              minWidth: badgeSize,
               paddingInline: tokens.spacing.xs,
+              border: `2px solid ${tokens.colors.surface}`,
+              boxShadow: tokens.shadows.card,
             }}
           >
             {badge}

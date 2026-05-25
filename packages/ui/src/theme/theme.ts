@@ -33,11 +33,11 @@ const transitions = {
 export const mitumbaTheme: Theme = createTheme({
   // Spacing factor 4px (Mandate)
   spacing: (factor: number) => `${factor * 4}px`,
-
+  
   breakpoints: {
     values: tokens.breakpoints,
   },
-
+  
   palette: {
     mode: 'light',
     primary: {
@@ -61,7 +61,7 @@ export const mitumbaTheme: Theme = createTheme({
     success: {
       main: tokens.colors.success,
       light: tokens.colors.successLight,
-      dark: tokens.colors.successDark,
+      dark: tokens.colors.greenDark,
       contrastText: tokens.colors.textOnGreen,
     },
     error: {
@@ -135,6 +135,11 @@ export const mitumbaTheme: Theme = createTheme({
       fontWeight: tokens.typography.fontWeights.bold,
       lineHeight: 1.2,
     },
+    h4: {
+      fontSize: `${tokens.typography.fontSizes.xl}px`,
+      fontWeight: tokens.typography.fontWeights.bold,
+      lineHeight: 1.2,
+    },
     body1: {
       fontSize: `${tokens.typography.fontSizes.md}px`,
       lineHeight: 1.5,
@@ -147,6 +152,10 @@ export const mitumbaTheme: Theme = createTheme({
       fontSize: `${tokens.typography.fontSizes.base}px`,
       fontWeight: 600,
       textTransform: 'none',
+    },
+    caption: {
+      fontSize: `${tokens.typography.fontSizes.sm}px`,
+      lineHeight: 1.5,
     },
   },
 
@@ -240,7 +249,7 @@ export const mitumbaTheme: Theme = createTheme({
     MuiTextField: {
       defaultProps: {
         variant: 'outlined',
-        fullWidth: false, // Remove disastrous default
+        fullWidth: false,
       },
     },
 
@@ -262,6 +271,9 @@ export const mitumbaTheme: Theme = createTheme({
             borderColor: tokens.colors.green,
             borderWidth: '2px',
           },
+          '&.Mui-error .MuiOutlinedInput-notchedOutline': {
+            borderColor: tokens.colors.error,
+          },
           '&.Mui-focused': {
             boxShadow: tokens.shadows.focus,
           },
@@ -269,8 +281,32 @@ export const mitumbaTheme: Theme = createTheme({
         input: ({ theme }) => ({
           paddingBlock: theme.spacing(3), // 12px
           paddingInline: theme.spacing(4), // 16px
-          height: '24px', // Standard height
+          height: '24px',
         }),
+      },
+    },
+
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: tokens.colors.textSecondary,
+          '&.Mui-focused': {
+            color: tokens.colors.green,
+          },
+          '&.Mui-error': {
+            color: tokens.colors.error,
+          },
+        },
+      },
+    },
+
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          marginLeft: '0px',
+          marginTop: `${tokens.spacing.xs}px`,
+          fontSize: `${tokens.typography.fontSizes.sm}px`,
+        },
       },
     },
 
@@ -330,6 +366,40 @@ export const mitumbaTheme: Theme = createTheme({
           borderTop: '1px solid',
           borderColor: tokens.colors.divider,
           boxShadow: tokens.shadows.bottomSheet,
+        },
+      },
+    },
+
+    MuiAlert: {
+      styleOverrides: {
+        root: {
+          borderRadius: `${tokens.radius.lg}px`,
+          alignItems: 'center',
+        },
+        standardSuccess: {
+          backgroundColor: tokens.colors.successLight,
+          color: tokens.colors.greenDark,
+        },
+        standardError: {
+          backgroundColor: tokens.colors.errorLight,
+          color: tokens.colors.errorDark,
+        },
+        standardWarning: {
+          backgroundColor: tokens.colors.warningLight,
+          color: tokens.colors.warningDark,
+        },
+        standardInfo: {
+          backgroundColor: tokens.colors.infoLight,
+          color: tokens.colors.infoDark,
+        },
+      },
+    },
+
+    MuiSkeleton: {
+      styleOverrides: {
+        root: {
+          backgroundColor: tokens.colors.divider,
+          borderRadius: `${tokens.radius.md}px`,
         },
       },
     },

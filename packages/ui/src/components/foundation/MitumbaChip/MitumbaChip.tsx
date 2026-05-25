@@ -10,80 +10,92 @@ export function MitumbaChip({
   onClick,
   size = 'medium',
 }: MitumbaChipProps) {
-  const getColor = (): 'default' | 'primary' | 'secondary' => {
-    switch (color) {
-      case 'green':
-        return 'primary'
-      case 'earth':
-        return 'secondary'
-      case 'neutral':
-      default:
-        return 'default'
-    }
+  const isClickable = Boolean(onClick)
+
+  const colorConfig = {
+    green: {
+      main: tokens.colors.green,
+      light: tokens.colors.greenLight,
+      dark: tokens.colors.greenDark,
+      text: tokens.colors.textOnGreen,
+    },
+    earth: {
+      main: tokens.colors.earth,
+      light: tokens.colors.earthLight,
+      dark: tokens.colors.earthDark,
+      text: tokens.colors.textOnEarth,
+    },
+    neutral: {
+      main: tokens.colors.border,
+      light: tokens.colors.background,
+      dark: tokens.colors.divider,
+      text: tokens.colors.textSecondary,
+    },
   }
 
+  const activeColor = colorConfig[color]
+
   const getSx = () => {
-    const baseSx = {
+    const isFilled = variant === 'filled'
+    
+    return {
       borderRadius: tokens.radius.full,
       fontWeight: tokens.typography.fontWeights.semibold,
-      fontSize:
-        size === 'small'
-          ? tokens.typography.fontSizes.sm
-          : tokens.typography.fontSizes.base,
-      height:
-        size === 'small'
-          ? tokens.spacing.xl
-          : tokens.spacing.xxl,
-      px: tokens.spacing.md,
-      cursor: onClick ? 'pointer' : 'default',
-      '&:focus-visible': {
-        outline: `${tokens.spacing.xs}px solid transparent`,
-        boxShadow: tokens.shadows.focus,
-      },
-    }
-
-    if (color === 'neutral') {
-      return {
-        ...baseSx,
-        bgcolor:
-          variant === 'outlined' ? 'transparent' : tokens.colors.background,
+      fontFamily: tokens.typography.fontFamily,
+      fontSize: size === 'small' ? tokens.typography.fontSizes.xs : tokens.typography.fontSizes.sm,
+      height: size === 'small' ? '24px' : '32px',
+      transition: 'all 200ms ease',
+      cursor: isClickable ? 'pointer' : 'default',
+      border: variant === 'outlined' ? `1px solid ${activeColor.main}` : 'none',
+      backgroundColor: isFilled ? activeColor.main : 'transparent',
+      color: isFilled ? activeColor.text : activeColor.main,
+      
+      ...(color === 'neutral' && {
+        backgroundColor: isFilled ? tokens.colors.background : 'transparent',
         color: tokens.colors.textSecondary,
         borderColor: tokens.colors.border,
-        '&:hover': onClick
-          ? {
-              bgcolor:
-                variant === 'outlined'
-                  ? tokens.colors.background
-                  : tokens.colors.divider,
-            }
-          : undefined,
-      }
-    }
+      }),
 
-    return baseSx
+      '& .MuiChip-label': {
+        paddingInline: tokens.spacing.sm,
+      },
+
+      '& .MuiChip-deleteIcon': {
+        color: isFilled ? activeColor.text : activeColor.main,
+        fontSize: size === 'small' ? 14 : 18,
+        opacity: 0.7,
+        '&:hover': {
+          opacity: 1,
+          color: isFilled ? activeColor.text : activeColor.main,
+        },
+      },
+
+      ...(isClickable && {
+        '&:hover': {
+          backgroundColor: isFilled ? activeColor.dark : activeColor.light,
+          transform: 'translateY(-1px)',
+        },
+        '&:active': {
+          transform: 'translateY(0)',
+        },
+      }),
+
+      '&:focus-visible': {
+        outline: `2px solid ${tokens.colors.greenLight}`,
+        outlineOffset: '1px',
+      },
+    }
   }
 
   return (
     <Chip
       label={label}
-      color={getColor()}
       variant={variant}
       size={size}
       onDelete={onDelete}
       onClick={onClick}
       sx={getSx()}
-      tabIndex={onClick ? 0 : -1}
-      role={onClick ? 'button' : undefined}
-      onKeyDown={
-        onClick
-          ? (e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault()
-                onClick()
-              }
-            }
-          : undefined
-      }
+      tabIndex={isClickable ? 0 : -1}
     />
   )
 }

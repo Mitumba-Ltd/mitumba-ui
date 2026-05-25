@@ -47,6 +47,6 @@ describe('OrderStatusTimeline', () => {
         { status: 'SHIPPED', timestamp: '2024-01-03', note: 'Out for delivery' },
       ],
     })
-    expect(screen.getByText('Out for delivery')).toBeInTheDocument()
+    expect(screen.getByText(/"Out for delivery"/i)).toBeInTheDocument()
   })
 })
