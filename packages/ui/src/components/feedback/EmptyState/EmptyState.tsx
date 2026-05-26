@@ -87,8 +87,8 @@ export function EmptyState({
         textAlign: 'center',
         width: '100%',
         boxSizing: 'border-box',
-        padding: isCompact ? tokens.spacing.lg : tokens.spacing.xxxl,
-        gap: isCompact ? tokens.spacing.sm : tokens.spacing.xs, // Dense spatial rhythm
+        padding: isCompact || isElevated ? tokens.spacing.xl : tokens.spacing.xxxl,
+        gap: isCompact ? tokens.spacing.sm : tokens.spacing.base,
         backgroundColor: isElevated ? tokens.colors.surface : tokens.colors.background,
         borderRadius: tokens.radius.xl,
         border: isElevated ? 'none' : `1px dashed ${tokens.colors.divider}`,
@@ -105,8 +105,8 @@ export function EmptyState({
           color: tokens.colors.textPrimary,
           fontFamily: tokens.typography.fontFamily,
           lineHeight: 1.1,
-          maxWidth: 400,
-          mt: isCompact ? 0 : 2,
+          width: '100%',
+          mt: isCompact ? 0 : 1,
         }}
       >
         {title}
@@ -117,9 +117,10 @@ export function EmptyState({
           fontSize: isCompact ? tokens.typography.fontSizes.xs : tokens.typography.fontSizes.base,
           color: tokens.colors.textSecondary,
           fontFamily: tokens.typography.fontFamily,
-          maxWidth: isCompact ? 240 : 360,
+          width: '100%',
           marginInline: 'auto',
           lineHeight: 1.4,
+          mt: isCompact ? 0 : 1,
         }}
       >
         {subtitle}
