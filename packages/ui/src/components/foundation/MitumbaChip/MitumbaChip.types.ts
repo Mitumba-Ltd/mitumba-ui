@@ -1,9 +1,9 @@
+import type { ReactNode } from 'react'
 import type { SxProps, Theme } from '@mui/material/styles'
 
-export type ChipVariant = 'solid' | 'outline' | 'shaded' | 'dashed'
-export type ChipRounding = 'pill' | 'rounded' | 'square'
-export type ChipElevation = 'flat' | 'tiny' | 'elevated'
-export type ChipSize = 'small' | 'medium'
+export type ChipVariant = 'solid' | 'outline' | 'soft' | 'ghost'
+export type ChipRounding = 'rounded' | 'pill' | 'square'
+export type ChipStatus = 'default' | 'active' | 'incomplete' | 'danger' | 'success' | 'common' | 'special'
 
 export interface MitumbaChipProps {
   /** Text label displayed inside the chip. */
@@ -17,24 +17,24 @@ export interface MitumbaChipProps {
   /** Prevents user interaction. */
   disabled?: boolean
   
-  /** Leading icon or avatar. */
-  icon?: React.ReactElement
-  /** Custom avatar element (overrides icon if provided). */
+  /** Leading icon or dot. */
+  icon?: ReactNode
+  /** Custom avatar element. */
   avatar?: React.ReactElement
   /** Numeric or text badge appended to the end. */
   badge?: string | number
   
-  /** Visual treatment. Defaults to 'solid'. */
+  /** Visual treatment. Defaults to 'outline' as per new benchmark. */
   variant?: ChipVariant
-  /** Corner geometry. Defaults to 'pill'. */
+  /** Category archetype for auto-styling. */
+  status?: ChipStatus
+  /** Corner geometry. Defaults to 'rounded' (8px). */
   rounding?: ChipRounding
-  /** Visual depth. Defaults to 'flat'. */
-  elevation?: ChipElevation
-  /** Overall scale. Defaults to 'medium'. */
-  size?: ChipSize
-  /** Color theme. Defaults to 'primary'. */
-  color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'info' | 'earth'
+  /** Size standard. */
+  size?: 'small' | 'medium'
+  /** Base color theme. */
+  color?: 'primary' | 'secondary' | 'success' | 'error' | 'warning' | 'info' | 'earth' | 'purple' | 'blue'
   
-  /** Optional style overrides using MUI sx prop. */
+  /** Optional style overrides. */
   sx?: SxProps<Theme>
 }

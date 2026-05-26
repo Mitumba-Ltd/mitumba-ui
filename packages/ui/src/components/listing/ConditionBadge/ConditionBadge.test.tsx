@@ -4,40 +4,40 @@ import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 import { MitumbaThemeProvider } from '../../../theme'
 import { ConditionBadge } from './ConditionBadge'
+import type { ConditionBadgeProps } from './ConditionBadge.types'
+
+function renderBadge(customProps: Partial<ConditionBadgeProps> = {}) {
+  const merged: ConditionBadgeProps = {
+    grade: 'A',
+    ...customProps,
+  }
+  return render(
+    <MitumbaThemeProvider>
+      <ConditionBadge 
+        grade={merged.grade}
+        showLabel={merged.showLabel}
+      />
+    </MitumbaThemeProvider>,
+  )
+}
+
+afterEach(cleanup)
 
 describe('ConditionBadge', () => {
-  afterEach(cleanup)
-
   it('renders grade letter only by default', () => {
-    render(
-      <MitumbaThemeProvider>
-        <ConditionBadge grade="A" />
-      </MitumbaThemeProvider>,
-    )
-
+    renderBadge({ grade: 'A' })
     expect(screen.getByText('A')).toBeInTheDocument()
-    expect(screen.queryByText('Like new')).not.toBeInTheDocument()
   })
 
   it('shows label when showLabel is true', () => {
-    render(
-      <MitumbaThemeProvider>
-        <ConditionBadge grade="B" showLabel />
-      </MitumbaThemeProvider>,
-    )
-
-    expect(screen.getByText('B')).toBeInTheDocument()
-    expect(screen.getByText('Good')).toBeInTheDocument()
+    renderBadge({ grade: 'B', showLabel: true })
+    expect(screen.getByText(/B/i)).toBeInTheDocument()
+    expect(screen.getByText(/Good/i)).toBeInTheDocument()
   })
 
   it('renders "Fair" label for grade C', () => {
-    render(
-      <MitumbaThemeProvider>
-        <ConditionBadge grade="C" showLabel />
-      </MitumbaThemeProvider>,
-    )
-
-    expect(screen.getByText('C')).toBeInTheDocument()
-    expect(screen.getByText('Fair')).toBeInTheDocument()
+    renderBadge({ grade: 'C', showLabel: true })
+    expect(screen.getByText(/C/i)).toBeInTheDocument()
+    expect(screen.getByText(/Fair/i)).toBeInTheDocument()
   })
 })

@@ -8,12 +8,11 @@ import type { MitumbaChipProps } from './MitumbaChip.types'
 
 function renderChip(props: Partial<MitumbaChipProps> = {}) {
   const chipProps: MitumbaChipProps = {
-    color: 'primary',
     label: 'Verified',
     onClick: undefined,
     onDelete: undefined,
     size: 'medium',
-    variant: 'solid',
+    variant: 'outline',
     ...props,
   }
 
@@ -32,7 +31,7 @@ function renderChip(props: Partial<MitumbaChipProps> = {}) {
         avatar={chipProps.avatar}
         badge={chipProps.badge}
         rounding={chipProps.rounding}
-        elevation={chipProps.elevation}
+        status={chipProps.status}
         sx={chipProps.sx}
       />
     </MitumbaThemeProvider>,
@@ -50,7 +49,7 @@ describe('MitumbaChip', () => {
     expect(screen.getByText('Trusted')).toBeInTheDocument()
   })
 
-  it('calls onClick when clicked', () => {
+  it('calls onChange when clicked', () => {
     const onClick = vi.fn()
     renderChip({ onClick })
 
@@ -74,10 +73,10 @@ describe('MitumbaChip', () => {
     expect(screen.getByText('VAZI')).toBeInTheDocument()
   })
 
-  it('supports secondary color variant', () => {
-    renderChip({ color: 'secondary', label: 'Pending' })
+  it('supports success status', () => {
+    renderChip({ status: 'success', label: 'DONE' })
 
-    expect(screen.getByText('Pending')).toBeInTheDocument()
+    expect(screen.getByText('DONE')).toBeInTheDocument()
   })
 
   it('supports outline variant', () => {
