@@ -5,39 +5,51 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { MitumbaThemeProvider } from '../../../theme'
 import { SectionHeader } from './SectionHeader'
 
+afterEach(() => {
+  cleanup()
+})
+
 describe('SectionHeader', () => {
-  afterEach(cleanup)
-
-  it('renders title', () => {
+  it('renders title and subtitle', () => {
     render(
       <MitumbaThemeProvider>
-        <SectionHeader title="New Arrivals" />
+        <SectionHeader title="Testing" subtitle="Descriptive text" />
       </MitumbaThemeProvider>,
     )
 
-    expect(screen.getByText('New Arrivals')).toBeInTheDocument()
+    expect(screen.getByText('Testing')).toBeInTheDocument()
+    expect(screen.getByText('Descriptive text')).toBeInTheDocument()
   })
 
-  it('renders subtitle when provided', () => {
+  it('renders overline text when provided', () => {
     render(
       <MitumbaThemeProvider>
-        <SectionHeader title="Shoes" subtitle="Browse latest styles" />
+        <SectionHeader title="Testing" overline="Small overline" />
       </MitumbaThemeProvider>,
     )
 
-    expect(screen.getByText('Browse latest styles')).toBeInTheDocument()
+    expect(screen.getByText('Small overline')).toBeInTheDocument()
   })
 
-  it('calls onAction when action button is clicked', () => {
+  it('calls onAction when legacy action button is clicked', () => {
     const onAction = vi.fn()
     render(
       <MitumbaThemeProvider>
-        <SectionHeader title="Collections" actionLabel="See all" onAction={onAction} />
+        <SectionHeader title="Testing" actionLabel="Click me" onAction={onAction} />
       </MitumbaThemeProvider>,
     )
 
-    fireEvent.click(screen.getByRole('button', { name: 'See all' }))
-
+    fireEvent.click(screen.getByRole('button', { name: /Click me/i }))
     expect(onAction).toHaveBeenCalledTimes(1)
+  })
+
+  it('renders custom action node', () => {
+    render(
+      <MitumbaThemeProvider>
+        <SectionHeader title="Testing" action={<div data-testid="custom-action">Action</div>} />
+      </MitumbaThemeProvider>,
+    )
+
+    expect(screen.getByTestId('custom-action')).toBeInTheDocument()
   })
 })
