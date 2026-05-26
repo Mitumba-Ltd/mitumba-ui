@@ -22,7 +22,19 @@ export default meta
 
 function FeedbackShowcaseComponent() {
   const [toastOpen, setToastOpen] = useState(false)
+  const [toastType, setToastType] = useState<{
+    showIcon?: boolean,
+    showLinear?: boolean,
+    hasAction?: boolean,
+    severity: 'success' | 'error' | 'warning' | 'info'
+  }>({ severity: 'success' })
+  
   const [modalOpen, setModalOpen] = useState(false)
+
+  const triggerToast = (config: typeof toastType) => {
+    setToastType(config)
+    setToastOpen(true)
+  }
 
   return (
     <Stack spacing={8} sx={{ width: 600, py: 4 }}>
@@ -45,12 +57,28 @@ function FeedbackShowcaseComponent() {
         />
       </Box>
 
-      {/* Interactive elements */}
+      {/* Interaction Triggers */}
       <Box>
-        <Typography variant="subtitle2" gutterBottom>2. Interaction Triggers</Typography>
-        <Stack direction="row" spacing={2}>
-          <MitumbaPrimaryButton label="Trigger Toast" onClick={() => setToastOpen(true)} />
-          <MitumbaPrimaryButton label="Open Modal" variant="earth" onClick={() => setModalOpen(true)} />
+        <Typography variant="subtitle2" gutterBottom>2. Benchmark Toast Variants</Typography>
+        <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap', gap: 2 }}>
+          <MitumbaPrimaryButton 
+            label="Simple Success" 
+            onClick={() => triggerToast({ severity: 'success' })} 
+          />
+          <MitumbaPrimaryButton 
+            label="Icon Progress (Variant 2)" 
+            variant="error"
+            onClick={() => triggerToast({ severity: 'error', showIcon: true })} 
+          />
+          <MitumbaPrimaryButton 
+            label="Linear Progress (Variant 4)" 
+            variant="earth"
+            onClick={() => triggerToast({ severity: 'success', showLinear: true })} 
+          />
+          <MitumbaPrimaryButton 
+            label="Pill Action (Variant 5)" 
+            onClick={() => triggerToast({ severity: 'info', hasAction: true, showIcon: true })} 
+          />
         </Stack>
       </Box>
 
@@ -72,9 +100,13 @@ function FeedbackShowcaseComponent() {
       <MitumbaToast 
         open={toastOpen} 
         onClose={() => setToastOpen(false)} 
-        message="Item successfully added to your cart!" 
-        severity="success"
-        action={<Button size="small">Undo</Button>}
+        message={
+          toastType.showIcon ? "This is a high-fidelity animated toast message." : "This is a clean & simple message."
+        } 
+        severity={toastType.severity}
+        showIconProgress={toastType.showIcon}
+        showLinearProgress={toastType.showLinear}
+        action={toastType.hasAction ? <Button size="small">Action</Button> : undefined}
       />
 
       {/* Modal component (Controlled) */}

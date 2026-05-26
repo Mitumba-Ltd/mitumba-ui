@@ -18,8 +18,12 @@ The primary mechanism for handling null data states. Based on the benchmark, it 
 Refined for high-end tactile feedback.
 *   **Physics:** Slide-in and fade transitions with brand-standard easing.
 *   **Status Tints:** Uses brand semantic colors (`success`, `error`, `warning`, `info`).
+*   **Progress Visualization (Benchmark):**
+    *   **Icon Ring:** Circular progress spinner surrounding the leading status icon.
+    *   **Linear Bar:** High-fidelity timer progress bar at the bottom edge.
+*   **Action Layouts:** Supports pill-shaped text buttons or standard icons for interactive recovery (e.g., "Undo", "Retry").
 *   **Geometry:** Rounded corners (8px) and deep shadows (index 3).
-*   **Layout:** Leading status icon + Message text + Optional "Undo" or "Action" text button.
+*   **Layout:** Leading status icon + Message text + Optional "Action" + Close icon.
 
 ## 3. MitumbaModal (Dialog)
 A high-depth container for critical interactions.

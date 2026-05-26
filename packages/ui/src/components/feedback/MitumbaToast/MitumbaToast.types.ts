@@ -17,4 +17,8 @@ export interface MitumbaToastProps {
   duration?: number
   /** Optional action element (e.g., Undo button). */
   action?: ReactNode
+  /** Whether to show a circular progress ring around the status icon. */
+  showIconProgress?: boolean
+  /** Whether to show a linear progress bar at the bottom. */
+  showLinearProgress?: boolean
 }
