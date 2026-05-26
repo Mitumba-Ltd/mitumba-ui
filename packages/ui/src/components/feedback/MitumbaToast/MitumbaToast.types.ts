@@ -1,4 +1,5 @@
 import type { AlertColor } from '@mui/material/Alert'
+import type { ReactNode } from 'react'
 
 /**
  * Props for the MitumbaToast component.
@@ -14,4 +15,6 @@ export interface MitumbaToastProps {
   onClose: () => void
   /** Duration in milliseconds before auto-close. Default: 4000. */
   duration?: number
+  /** Optional action element (e.g., Undo button). */
+  action?: ReactNode
 }
