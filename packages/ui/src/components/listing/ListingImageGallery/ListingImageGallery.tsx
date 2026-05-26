@@ -5,7 +5,8 @@ import type { ListingImageGalleryProps } from './ListingImageGallery.types'
 
 /**
  * Premium Listing Image Gallery.
- * Fulfills high-end marketplace standards with tactile transitions and precision geometry.
+ * Engineered for absolute geometric harmony and high-fidelity transitions.
+ * Reigned in for professional visual sanity (Very Serious standard).
  */
 export function ListingImageGallery({ images, title }: ListingImageGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0)
@@ -43,12 +44,13 @@ export function ListingImageGallery({ images, title }: ListingImageGalleryProps)
           alignItems: 'center',
           aspectRatio: '1 / 1',
           backgroundColor: tokens.colors.background,
-          borderRadius: tokens.radius.lg,
+          borderRadius: `${tokens.radius.lg}px`,
           color: tokens.colors.textSecondary,
           display: 'flex',
           fontSize: tokens.typography.fontSizes.base,
           justifyContent: 'center',
           width: '100%',
+          border: `1px dashed ${tokens.colors.divider}`,
         }}
       >
         No images available
@@ -69,12 +71,15 @@ export function ListingImageGallery({ images, title }: ListingImageGalleryProps)
       <Box
         sx={{
           aspectRatio: '1 / 1',
-          borderRadius: tokens.radius.lg,
+          borderRadius: `${tokens.radius.lg}px`,
           overflow: 'hidden',
           position: 'relative',
           width: '100%',
           backgroundColor: tokens.colors.background,
-          boxShadow: tokens.shadows.card,
+          boxShadow: `
+            0 2px 4px 0 rgba(0, 0, 0, 0.05),
+            0 8px 16px -4px rgba(0, 0, 0, 0.1)
+          `,
         }}
       >
         <Box
@@ -96,9 +101,9 @@ export function ListingImageGallery({ images, title }: ListingImageGalleryProps)
         <Box
           sx={{
             display: 'flex',
-            gap: tokens.spacing.sm,
+            gap: 1.5,
             overflowX: 'auto',
-            paddingBlock: tokens.spacing.xs,
+            paddingBlock: 0.5,
             '&::-webkit-scrollbar': { display: 'none' },
             msOverflowStyle: 'none',
             scrollbarWidth: 'none',
@@ -118,18 +123,22 @@ export function ListingImageGallery({ images, title }: ListingImageGalleryProps)
               tabIndex={0}
               sx={{
                 border: index === activeIndex ? `2px solid ${tokens.colors.green}` : `2px solid transparent`,
-                borderRadius: tokens.radius.md,
+                borderRadius: `${tokens.radius.md}px`,
                 cursor: 'pointer',
                 flexShrink: 0,
-                height: 64,
+                height: 56,
                 overflow: 'hidden',
                 opacity: index === activeIndex ? 1 : 0.6,
                 transform: index === activeIndex ? 'scale(1.05)' : 'scale(1)',
                 transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                width: 64,
+                width: 56,
                 '&:hover': {
                   opacity: 1,
                   transform: 'translateY(-2px)',
+                },
+                '&:focus-visible': {
+                  outline: 'none',
+                  boxShadow: tokens.shadows.focus,
                 },
               }}
               aria-label={`View image ${index + 1} of ${images.length}`}
