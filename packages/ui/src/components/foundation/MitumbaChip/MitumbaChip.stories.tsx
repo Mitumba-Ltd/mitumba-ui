@@ -2,9 +2,8 @@ import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import StarIcon from '@mui/icons-material/Star'
+import Box from '@mui/material/Box'
 import { MitumbaChip } from './MitumbaChip'
-import { MitumbaAvatar } from '../MitumbaAvatar/MitumbaAvatar'
 
 const meta: Meta<typeof MitumbaChip> = {
   title: 'Foundation/MitumbaChip',
@@ -19,82 +18,64 @@ export default meta
 
 type Story = StoryObj<typeof MitumbaChip>
 
-export const GeometryVariants: Story = {
+export const BenchmarkSystem: Story = {
   render: () => (
-    <Stack spacing={4}>
-      <Typography variant="h6">Rounding & Geometry</Typography>
-      <Stack direction="row" spacing={2}>
-        <MitumbaChip label="Pill (Default)" rounding="pill" onClick={() => {}} />
-        <MitumbaChip label="Rounded" rounding="rounded" onClick={() => {}} />
-        <MitumbaChip label="Square" rounding="square" onClick={() => {}} />
-      </Stack>
-    </Stack>
-  ),
-}
-
-export const ContentPermutations: Story = {
-  render: () => (
-    <Stack spacing={4}>
-      <Typography variant="h6">Content Compositions</Typography>
-      <Stack direction="row" spacing={2} alignItems="center">
-        <MitumbaChip label="With Icon" icon={<StarIcon />} onClick={() => {}} />
-        <MitumbaChip 
-          label="Isaac Stanley" 
-          avatar={<MitumbaAvatar name="Isaac Stanley" size="xs" />} 
-          onDelete={() => {}} 
-        />
-        <MitumbaChip label="With Badge" badge={4} onClick={() => {}} />
-        <MitumbaChip label="Delete Only" onDelete={() => {}} />
-      </Stack>
-    </Stack>
-  ),
-}
-
-export const VisualVariants: Story = {
-  render: () => (
-    <Stack spacing={4}>
-      <Typography variant="h6">Variants & Colors</Typography>
-      <Stack direction="row" spacing={2}>
-        <MitumbaChip label="Solid" variant="solid" onClick={() => {}} />
-        <MitumbaChip label="Outline" variant="outline" onClick={() => {}} />
-        <MitumbaChip label="Shaded" variant="shaded" color="success" onClick={() => {}} />
-        <MitumbaChip label="Dashed" variant="dashed" onClick={() => {}} />
-      </Stack>
-      <Stack direction="row" spacing={2}>
-        <MitumbaChip label="Selected" selected onClick={() => {}} />
-        <MitumbaChip label="Disabled" disabled onClick={() => {}} />
-      </Stack>
-    </Stack>
-  ),
-}
-
-export const ElevationShowcase: Story = {
-  render: () => (
-    <Stack spacing={4}>
-      <Typography variant="h6">Elevation States</Typography>
-      <Stack direction="row" spacing={4} sx={{ p: 4, bgcolor: '#f5f5f5', borderRadius: 4 }}>
-        <Stack spacing={1} alignItems="center">
-          <MitumbaChip label="Flat" elevation="flat" onClick={() => {}} />
-          <Typography variant="caption">Flat</Typography>
+    <Stack spacing={8} sx={{ py: 4 }}>
+      {/* STATUS SECTION */}
+      <Box>
+        <Typography variant="caption" sx={{ fontWeight: 800, mb: 4, display: 'block', color: 'text.disabled' }}>↓ STATUS (BENCHMARK)</Typography>
+        <Stack direction="row" spacing={6} alignItems="flex-start">
+          <Stack spacing={2}>
+             <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.disabled' }}>Active</Typography>
+             <MitumbaChip label="OPEN" status="active" variant="outline" />
+             <MitumbaChip label="RUNNING" status="active" variant="outline" />
+          </Stack>
+          <Stack spacing={2}>
+             <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.disabled' }}>Incomplete</Typography>
+             <MitumbaChip label="PENDING" status="incomplete" />
+             <MitumbaChip label="SCHEDULED" status="incomplete" />
+          </Stack>
+          <Stack spacing={2}>
+             <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.disabled' }}>Danger</Typography>
+             <MitumbaChip label="DELETED" status="danger" />
+             <MitumbaChip label="ERROR" status="danger" />
+          </Stack>
+          <Stack spacing={2}>
+             <Typography variant="caption" sx={{ fontWeight: 700, color: 'text.disabled' }}>Success</Typography>
+             <MitumbaChip label="CLOSED" status="success" />
+             <MitumbaChip label="DONE" status="success" />
+          </Stack>
         </Stack>
-        <Stack spacing={1} alignItems="center">
-          <MitumbaChip label="Tiny Shadow" elevation="tiny" onClick={() => {}} />
-          <Typography variant="caption">Tiny</Typography>
+      </Box>
+
+      {/* SPECIAL SECTION */}
+      <Box>
+        <Typography variant="caption" sx={{ fontWeight: 800, mb: 4, display: 'block', color: 'text.disabled' }}>↓ SPECIAL (BENCHMARK)</Typography>
+        <Stack direction="row" spacing={4}>
+           <MitumbaChip label="ALPHA" status="special" color="purple" variant="solid" />
+           <MitumbaChip label="BETA" status="special" color="error" variant="solid" />
+           <MitumbaChip label="EARLY ACCESS" status="special" color="info" variant="solid" />
         </Stack>
-        <Stack spacing={1} alignItems="center">
-          <MitumbaChip label="Elevated" elevation="elevated" onClick={() => {}} />
-          <Typography variant="caption">Elevated</Typography>
+      </Box>
+
+      {/* NON-ACTIONABLE SECTION */}
+      <Box>
+        <Typography variant="caption" sx={{ fontWeight: 800, mb: 4, display: 'block', color: 'text.disabled' }}>↓ NON-ACTIONABLE</Typography>
+        <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap', gap: 1 }}>
+           {['ADS', 'BOT', 'CATALOG', 'DYNAMIC', 'LIVE', 'PINNED'].map(l => (
+             <MitumbaChip key={l} label={l} status="common" />
+           ))}
         </Stack>
-      </Stack>
+      </Box>
     </Stack>
   ),
 }
 
-export const Sizes: Story = {
+export const Interactive: Story = {
   render: () => (
-    <Stack direction="row" spacing={2} alignItems="center">
-      <MitumbaChip label="Small Chip" size="small" onClick={() => {}} />
-      <MitumbaChip label="Medium Chip" size="medium" onClick={() => {}} />
+    <Stack direction="row" spacing={2}>
+      <MitumbaChip label="Click Me" onClick={() => {}} />
+      <MitumbaChip label="Removable" onDelete={() => {}} />
     </Stack>
   ),
 }

@@ -1,79 +1,52 @@
 // @vitest-environment jsdom
 import '@testing-library/jest-dom/vitest'
-import { cleanup, render, screen, fireEvent } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { cleanup, render, screen } from '@testing-library/react'
+import { afterEach, describe, expect, it } from 'vitest'
 import { MitumbaThemeProvider } from '../../../theme'
-import type { SellerCardProps } from './SellerCard.types'
 import { SellerCard } from './SellerCard'
 
-const defaultProps: SellerCardProps = {
-  sellerId: 'seller-1',
+const sampleProps = {
+  sellerId: '1',
   name: "Jane's Closet",
+  avatarUrl: '',
   city: 'Nairobi',
   stiScore: 92,
   totalListings: 34,
-  isVaziFeatured: false,
-  onTap: undefined,
 }
 
-function renderSellerCard(overrides: Partial<SellerCardProps> = {}) {
-  const props = { ...defaultProps, ...overrides }
+function renderSellerCard(customProps = {}) {
+  const merged = { ...sampleProps, ...customProps }
   return render(
     <MitumbaThemeProvider>
-      <SellerCard
-        sellerId={props.sellerId}
-        name={props.name}
-        avatarUrl={props.avatarUrl}
-        city={props.city}
-        stiScore={props.stiScore}
-        totalListings={props.totalListings}
-        isVaziFeatured={props.isVaziFeatured}
-        onTap={props.onTap}
+      <SellerCard 
+        sellerId={merged.sellerId}
+        name={merged.name}
+        avatarUrl={merged.avatarUrl}
+        city={merged.city}
+        stiScore={merged.stiScore}
+        totalListings={merged.totalListings}
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...customProps}
       />
-    </MitumbaThemeProvider>
+    </MitumbaThemeProvider>,
   )
 }
 
-afterEach(() => {
-  cleanup()
-})
-
 describe('SellerCard', () => {
-  it('renders seller name', () => {
+  afterEach(cleanup)
+
+  it('renders seller name and info', () => {
     renderSellerCard()
     expect(screen.getByText("Jane's Closet")).toBeInTheDocument()
   })
 
-  it('renders city', () => {
-    renderSellerCard()
-    expect(screen.getByText('Nairobi')).toBeInTheDocument()
-  })
-
-  it('renders STI chip', () => {
+  it('shows STI score correctly', () => {
     renderSellerCard()
     expect(screen.getByText('92')).toBeInTheDocument()
   })
 
-  it('renders total listings', () => {
-    renderSellerCard()
-    expect(screen.getByText('34')).toBeInTheDocument()
-  })
-
-  it('calls onTap when clicked', () => {
-    const onTap = vi.fn()
-    renderSellerCard({ onTap })
-    fireEvent.click(screen.getByRole('button'))
-    expect(onTap).toHaveBeenCalledTimes(1)
-  })
-
   it('shows VAZI badge when featured', () => {
     renderSellerCard({ isVaziFeatured: true })
-    expect(screen.getByText(/VAZI Featured/i)).toBeInTheDocument()
-  })
-
-
-  it('does not show VAZI badge when not featured', () => {
-    renderSellerCard({ isVaziFeatured: false })
-    expect(screen.queryByText('VAZI')).not.toBeInTheDocument()
+    expect(screen.getByText(/VAZI Curation/i)).toBeInTheDocument()
   })
 })

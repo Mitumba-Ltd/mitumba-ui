@@ -6,18 +6,16 @@ import { MitumbaThemeProvider } from '../../../theme'
 import { VAZIBadge } from './VAZIBadge'
 
 describe('VAZIBadge', () => {
-  afterEach(() => {
-    cleanup()
-  })
+  afterEach(cleanup)
 
-  it('renders VAZI Featured text', () => {
+  it('renders correctly', () => {
     render(
       <MitumbaThemeProvider>
-        <VAZIBadge size="medium" />
+        <VAZIBadge />
       </MitumbaThemeProvider>,
     )
 
-    expect(screen.getByText('VAZI Featured')).toBeInTheDocument()
+    expect(screen.getByText(/VAZI Curation/i)).toBeInTheDocument()
   })
 
   it('renders with small size', () => {
@@ -27,16 +25,16 @@ describe('VAZIBadge', () => {
       </MitumbaThemeProvider>,
     )
 
-    expect(screen.getByText('VAZI Featured')).toBeInTheDocument()
+    expect(screen.getByText(/VAZI Curation/i)).toBeInTheDocument()
   })
 
-  it('has the correct aria label', () => {
+  it('has the correct role', () => {
     render(
       <MitumbaThemeProvider>
-        <VAZIBadge size="medium" />
+        <VAZIBadge />
       </MitumbaThemeProvider>,
     )
 
-    expect(screen.getByLabelText('VAZI Featured')).toBeInTheDocument()
+    expect(screen.getByRole('status')).toBeInTheDocument()
   })
 })
