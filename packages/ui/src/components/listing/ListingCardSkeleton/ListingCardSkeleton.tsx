@@ -1,91 +1,63 @@
+import React from 'react'
 import Box from '@mui/material/Box'
-import Skeleton from '@mui/material/Skeleton'
 import { tokens } from '@mitumba/tokens'
+import { MitumbaSkeleton } from '../../feedback/MitumbaSkeleton'
 
+/**
+ * Premium Listing Card Skeleton.
+ * Perfectly mirrors the ListingCard geometry and spatial density.
+ */
 export function ListingCardSkeleton() {
   return (
     <Box
       sx={{
-        borderRadius: tokens.radius.lg,
-        boxShadow: tokens.shadows.card,
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
         width: '100%',
+        backgroundColor: tokens.colors.surface,
+        borderRadius: `${tokens.radius.lg}px`, // 16px (Serious Standard)
+        overflow: 'hidden',
+        boxShadow: `
+          0 2px 4px 0 rgba(0, 0, 0, 0.05),
+          0 8px 16px -4px rgba(0, 0, 0, 0.1)
+        `,
       }}
     >
       {/* Image skeleton */}
-      <Skeleton
-        aria-label="Loading listing image"
-        variant="rectangular"
-        sx={{
-          aspectRatio: '1 / 1',
-          borderRadius: `${tokens.radius.lg}px ${tokens.radius.lg}px 0 0`,
-          width: '100%',
-        }}
-      />
+      <Box sx={{ position: 'relative', width: '100%', pt: '100%' }}>
+        <MitumbaSkeleton 
+          variant="rectangular" 
+          sx={{ position: 'absolute', inset: 0, height: '100%', width: '100%' }} 
+        />
+      </Box>
 
       {/* Content skeleton */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: tokens.spacing.xs,
-          paddingInline: tokens.spacing.base,
-          paddingBlock: tokens.spacing.base,
-        }}
-      >
-        <Skeleton
-          aria-label="Loading price"
-          variant="text"
-          sx={{
-            fontSize: tokens.typography.fontSizes.md,
-            width: '40%',
-          }}
+      <Box sx={{ p: 2.5 }}>
+        <MitumbaSkeleton 
+          variant="rectangular" 
+          width="80%" 
+          height={20} 
+          sx={{ mb: 1, borderRadius: 1 }} 
         />
-        <Skeleton
-          aria-label="Loading title"
-          variant="text"
-          sx={{
-            fontSize: tokens.typography.fontSizes.base,
-            width: '80%',
-          }}
+        <MitumbaSkeleton 
+          variant="rectangular" 
+          width="40%" 
+          height={12} 
+          sx={{ mb: 3, borderRadius: 1 }} 
         />
-        <Box
-          sx={{
-            alignItems: 'center',
-            display: 'flex',
-            gap: tokens.spacing.sm,
-            mt: tokens.spacing.xs,
-          }}
-        >
-          <Skeleton
-            aria-label="Loading STI score"
-            variant="rounded"
-            sx={{
-              borderRadius: tokens.radius.full,
-              height: tokens.spacing.xl,
-              width: 56,
-            }}
+
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <MitumbaSkeleton 
+            variant="rounded" 
+            width={100} 
+            height={32} 
+            sx={{ borderRadius: 100 }} 
           />
-          <Skeleton
-            aria-label="Loading city"
-            variant="text"
-            sx={{
-              fontSize: tokens.typography.fontSizes.sm,
-              width: '30%',
-            }}
+          <MitumbaSkeleton 
+            variant="rounded" 
+            width={80} 
+            height={32} 
+            sx={{ borderRadius: 100 }} 
           />
         </Box>
-        <Skeleton
-          aria-label="Loading seller name"
-          variant="text"
-          sx={{
-            fontSize: tokens.typography.fontSizes.sm,
-            mt: tokens.spacing.xs,
-            width: '50%',
-          }}
-        />
       </Box>
     </Box>
   )
