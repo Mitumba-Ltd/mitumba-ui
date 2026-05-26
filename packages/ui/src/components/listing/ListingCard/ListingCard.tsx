@@ -1,192 +1,253 @@
+import React, { useState } from 'react'
 import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
+import Stack from '@mui/material/Stack'
+import IconButton from '@mui/material/IconButton'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'
 import { tokens } from '@mitumba/tokens'
-import { useCallback } from 'react'
-import { ConditionBadge } from '../ConditionBadge'
-import { PriceTag } from '../../commerce/PriceTag'
-import { VAZIBadge } from '../../vazi/VAZIBadge'
-import { STIScoreChip } from '../../seller/STIScoreChip'
+import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
 import type { ListingCardProps } from './ListingCard.types'
 
+/**
+ * Premium "Pinterest-Level" Listing Card primitive.
+ * Fulfills high-fidelity standards with image carousels and tactile action areas.
+ */
 export function ListingCard({
-  imageUrl,
+  images,
   title,
-  priceKes,
-  sellerName,
-  sellerSti,
-  city,
-  conditionGrade,
-  isVaziEligible = false,
-  onTap,
+  price,
+  originalPrice,
+  brand,
+  size,
+  badge,
+  brandLogoUrl,
+  onClick,
+  onBuyClick,
+  isLiked = false,
+  onLikeClick,
+  sx,
 }: ListingCardProps) {
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault()
-        onTap?.()
-      }
-    },
-    [onTap],
-  )
+  const [activeImage, setActiveImage] = useState(0)
+
+  const handleBuy = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onBuyClick?.(e)
+  }
+
+  const handleLike = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    onLikeClick?.(e)
+  }
 
   return (
-    <Card
-      onClick={onTap}
-      onKeyDown={handleKeyDown}
-      role="button"
-      tabIndex={onTap ? 0 : -1}
-      sx={{
-        borderRadius: tokens.radius.lg,
-        boxShadow: tokens.shadows.card,
-        cursor: onTap ? 'pointer' : 'default',
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-        transition: 'all 250ms cubic-bezier(0.4, 0, 0.2, 1)',
-        width: '100%',
-        backgroundColor: tokens.colors.surface,
-        border: `1px solid ${tokens.colors.divider}`,
-        '&:hover': onTap
-          ? {
-              transform: 'translateY(-4px)',
-              boxShadow: tokens.shadows.elevated,
-              borderColor: tokens.colors.border,
-            }
-          : undefined,
-        '&:focus-visible': {
-          outline: `2px solid ${tokens.colors.greenLight}`,
-          boxShadow: tokens.shadows.focus,
-        },
-      }}
-    >
-      {/* Image container */}
-      <Box
-        sx={{
-          aspectRatio: '1 / 1',
-          overflow: 'hidden',
-          position: 'relative',
+    <Box
+      onClick={onClick}
+      sx={[
+        {
           width: '100%',
-          backgroundColor: tokens.colors.background,
-        }}
-      >
+          backgroundColor: tokens.colors.surface,
+          borderRadius: tokens.radius.xl,
+          overflow: 'hidden',
+          boxShadow: tokens.shadows.card,
+          transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+          cursor: 'pointer',
+          border: `1px solid ${tokens.colors.divider}`,
+          
+          '&:hover': {
+            transform: 'translateY(-8px)',
+            boxShadow: tokens.shadows.deep,
+          }
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+    >
+      {/* Image Container */}
+      <Box sx={{ position: 'relative', width: '100%', pt: '100%', backgroundColor: tokens.colors.background }}>
         <Box
           component="img"
-          src={imageUrl}
+          src={images[activeImage]}
           alt={title}
-          loading="lazy"
           sx={{
-            display: 'block',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
             height: '100%',
             objectFit: 'cover',
-            width: '100%',
-            transition: 'transform 500ms ease',
-            '.MuiCard-root:hover &': {
-              transform: 'scale(1.05)',
-            },
+            transition: 'opacity 0.5s ease',
           }}
         />
 
-        {/* Condition badge — top-left */}
-        <Box
-          sx={{
-            left: tokens.spacing.sm,
-            position: 'absolute',
-            top: tokens.spacing.sm,
-            zIndex: 1,
-          }}
-        >
-          <ConditionBadge grade={conditionGrade} />
-        </Box>
-
-        {/* VAZI badge — top-right */}
-        {isVaziEligible && (
+        {/* Badge Overlay */}
+        {badge && (
           <Box
             sx={{
               position: 'absolute',
-              right: tokens.spacing.sm,
-              top: tokens.spacing.sm,
+              top: 16,
+              left: 16,
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              px: 1.5,
+              py: 0.5,
+              borderRadius: tokens.radius.full,
+              fontSize: 10,
+              fontWeight: 800,
+              color: tokens.colors.textPrimary,
+              fontFamily: tokens.typography.fontFamily,
+              textTransform: 'uppercase',
+              boxShadow: tokens.shadows.card,
+            }}
+          >
+            {badge}
+          </Box>
+        )}
+
+        {/* Brand Logo Overlay */}
+        {brandLogoUrl && (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 16,
+              right: 16,
+              width: 32,
+              height: 32,
+              backgroundColor: tokens.colors.white,
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: tokens.shadows.card,
+              p: 0.5,
+              '& img': { width: '100%', height: '100%', objectFit: 'contain' }
+            }}
+          >
+            <img src={brandLogoUrl} alt="brand" />
+          </Box>
+        )}
+
+        {/* Like Button */}
+        <IconButton
+          onClick={handleLike}
+          sx={{
+            position: 'absolute',
+            bottom: 16,
+            right: 16,
+            backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            boxShadow: tokens.shadows.card,
+            color: isLiked ? tokens.colors.error : tokens.colors.textSecondary,
+            '&:hover': { backgroundColor: tokens.colors.white, transform: 'scale(1.1)' }
+          }}
+        >
+          {isLiked ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" />}
+        </IconButton>
+
+        {/* Carousel Dots */}
+        {images.length > 1 && (
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{
+              position: 'absolute',
+              bottom: 16,
+              left: '50%',
+              transform: 'translateX(-50%)',
               zIndex: 1,
             }}
           >
-            <VAZIBadge size="small" />
-          </Box>
+            {images.map((img, i) => (
+              <Box
+                key={img} // Use image URL as key to satisfy ESLint
+                onClick={(e) => { e.stopPropagation(); setActiveImage(i); }}
+                sx={{
+                  width: activeImage === i ? 16 : 6,
+                  height: 6,
+                  borderRadius: tokens.radius.full,
+                  backgroundColor: tokens.colors.white,
+                  opacity: activeImage === i ? 1 : 0.6,
+                  transition: 'all 0.3s ease',
+                  cursor: 'pointer',
+                }}
+              />
+            ))}
+          </Stack>
         )}
       </Box>
 
-      <CardContent
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: tokens.spacing.xs,
-          padding: tokens.spacing.base,
-          flexGrow: 1,
-          '&:last-child': {
-            paddingBottom: tokens.spacing.base,
-          },
-        }}
-      >
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-          <PriceTag priceKes={priceKes} size="medium" color="green" />
-        </Box>
-
+      {/* Content Section */}
+      <Box sx={{ p: 3 }}>
         <Typography
           sx={{
+            fontSize: tokens.typography.fontSizes.lg,
+            fontWeight: 900,
             color: tokens.colors.textPrimary,
-            fontSize: tokens.typography.fontSizes.base,
-            fontWeight: tokens.typography.fontWeights.medium,
-            lineHeight: tokens.typography.lineHeights.snug,
+            fontFamily: tokens.typography.fontFamily,
+            lineHeight: 1.1,
+            mb: 0.5,
+            whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            minHeight: '2.7em',
-            marginBlock: tokens.spacing.xs,
           }}
         >
           {title}
         </Typography>
 
-        <Box
-          sx={{
-            alignItems: 'center',
-            display: 'flex',
-            justifyContent: 'space-between',
-            mt: 'auto',
-            pt: tokens.spacing.sm,
-            borderTop: `1px solid ${tokens.colors.divider}`,
-          }}
-        >
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-            <Typography
-              sx={{
-                color: tokens.colors.textPrimary,
-                fontSize: tokens.typography.fontSizes.sm,
-                fontWeight: tokens.typography.fontWeights.semibold,
-                lineHeight: 1,
-              }}
-            >
-              {sellerName}
-            </Typography>
-            <Typography
-              sx={{
-                color: tokens.colors.textSecondary,
-                fontSize: 10,
-                textTransform: 'uppercase',
-                letterSpacing: tokens.typography.letterSpacings.wide,
-                mt: '2px',
-              }}
-            >
-              {city}
-            </Typography>
+        {(brand || size) && (
+          <Typography
+            sx={{
+              fontSize: tokens.typography.fontSizes.xs,
+              color: tokens.colors.textSecondary,
+              fontFamily: tokens.typography.fontFamily,
+              fontWeight: 600,
+              mb: 1.5,
+            }}
+          >
+            {brand}{brand && size ? ' • ' : ''}{size}
+          </Typography>
+        )}
+
+        {/* Action Row */}
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mt: 2 }}>
+          <Box
+            sx={{
+              backgroundColor: tokens.colors.background,
+              px: 2,
+              py: 0.8,
+              borderRadius: tokens.radius.full,
+              fontSize: tokens.typography.fontSizes.base,
+              fontWeight: 800,
+              color: tokens.colors.textPrimary,
+              fontFamily: tokens.typography.fontFamily,
+            }}
+          >
+            KES {price.toLocaleString()}
+            {originalPrice && (
+              <Typography
+                component="span"
+                sx={{
+                  ml: 1,
+                  fontSize: 10,
+                  color: tokens.colors.textDisabled,
+                  textDecoration: 'line-through',
+                }}
+              >
+                KES {originalPrice.toLocaleString()}
+              </Typography>
+            )}
           </Box>
 
-          <STIScoreChip score={sellerSti} compact />
-        </Box>
-      </CardContent>
-    </Card>
+          <MitumbaPrimaryButton
+            label="Buy Now"
+            variant="primary"
+            size="small"
+            onClick={handleBuy}
+            icon={<ArrowOutwardIcon />}
+            iconPosition="right"
+            sx={{ borderRadius: tokens.radius.full, px: 3 }}
+          />
+        </Stack>
+      </Box>
+    </Box>
   )
 }
 

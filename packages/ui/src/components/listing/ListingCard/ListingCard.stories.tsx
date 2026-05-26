@@ -1,75 +1,77 @@
+import React from 'react'
 import type { Meta, StoryObj } from '@storybook/react'
+import Box from '@mui/material/Box'
 import { ListingCard } from './ListingCard'
+import { ListingGrid } from '../ListingGrid/ListingGrid'
 
 const meta: Meta<typeof ListingCard> = {
   title: 'Listing/ListingCard',
   component: ListingCard,
-  parameters: { layout: 'padded' },
+  parameters: {
+    layout: 'centered',
+  },
   tags: ['autodocs'],
 }
 
 export default meta
+
 type Story = StoryObj<typeof ListingCard>
 
-const baseArgs = {
-  listingId: 'demo-1',
-  imageUrl:
-    'https://images.unsplash.com/photo-1520256862855-398mb796c819?auto=format&fit=crop&w=800&q=80',
-  title: 'Vintage Leather Jacket — Nairobi',
-  priceKes: 3500,
-  sellerName: 'Wanjiku Thiongo',
-  sellerSti: 94,
-  city: 'Nairobi',
-  conditionGrade: 'A' as const,
-  isVaziEligible: true,
-  onTap: () => {},
+const sampleImages = [
+  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=800&q=80',
+]
+
+export const PremiumListing: Story = {
+  args: {
+    images: sampleImages,
+    title: 'Nike Airforce1 Premium',
+    brand: 'Own the Airforce',
+    size: 'UK 9 / US 10',
+    price: 11500,
+    originalPrice: 15000,
+    badge: 'Best Seller',
+    brandLogoUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg',
+  },
 }
 
-export const Default: Story = {
-  args: baseArgs,
-}
-
-export const ConditionA: Story = {
-  args: { ...baseArgs, conditionGrade: 'A', isVaziEligible: true },
-}
-
-export const ConditionB: Story = {
-  args: { ...baseArgs, conditionGrade: 'B', isVaziEligible: false },
-}
-
-export const ConditionC: Story = {
-  args: { ...baseArgs, conditionGrade: 'C', isVaziEligible: false },
-}
-
-export const STITrusted: Story = {
-  args: { ...baseArgs, sellerSti: 94 },
-}
-
-export const STIGood: Story = {
-  args: { ...baseArgs, sellerSti: 72 },
-}
-
-export const STIAtRisk: Story = {
-  args: { ...baseArgs, sellerSti: 45 },
-}
-
-export const STIFlagged: Story = {
-  args: { ...baseArgs, sellerSti: 30 },
-}
-
-export const STISuspended: Story = {
-  args: { ...baseArgs, sellerSti: 12 },
-}
-
-export const NonVazi: Story = {
-  args: { ...baseArgs, isVaziEligible: false },
-}
-
-export const Loading: Story = {
-  args: { ...baseArgs },
-}
-
-export const Mobile: Story = {
-  args: baseArgs,
-  parameters: { viewport: { defaultViewport: 'mobile' } },
+export const GridShowcase: Story = {
+  render: () => (
+    <Box sx={{ width: 1200, p: 4, bgcolor: '#f5f5f5' }}>
+      <ListingGrid>
+        <ListingCard 
+          images={[sampleImages[0]]} 
+          title="Vintage Denim Jacket" 
+          price={4500} 
+          brand="Levis" 
+          size="Medium" 
+          badge="New"
+        />
+        <ListingCard 
+          images={[sampleImages[1]]} 
+          title="Classic Leather Boots" 
+          price={8200} 
+          brand="Clarks" 
+          size="UK 8" 
+          isLiked
+        />
+        <ListingCard 
+          images={[sampleImages[2]]} 
+          title="Sporty Mesh Sneakers" 
+          price={5500} 
+          originalPrice={7000}
+          brand="Adidas" 
+          size="UK 10" 
+        />
+        <ListingCard 
+          images={[sampleImages[0]]} 
+          title="Retro Graphic Tee" 
+          price={1200} 
+          brand="Thrift" 
+          size="Large" 
+        />
+      </ListingGrid>
+    </Box>
+  )
 }
