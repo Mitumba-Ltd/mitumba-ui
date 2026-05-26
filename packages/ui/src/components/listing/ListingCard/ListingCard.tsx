@@ -12,7 +12,8 @@ import type { ListingCardProps } from './ListingCard.types'
 
 /**
  * Premium "Pinterest-Level" Listing Card primitive.
- * Fulfills high-fidelity standards with image carousels and tactile action areas.
+ * Engineered for absolute geometric harmony and high-fidelity action states.
+ * Reigned in for professional visual sanity (Very Serious standard).
  */
 export function ListingCard({
   images,
@@ -48,15 +49,19 @@ export function ListingCard({
         {
           width: '100%',
           backgroundColor: tokens.colors.surface,
-          borderRadius: tokens.radius.xl,
+          borderRadius: `${tokens.radius.lg}px`, // Standardized to 16px (Serious)
           overflow: 'hidden',
-          boxShadow: tokens.shadows.card,
+          // High-end layered shadow, no clunky borders
+          boxShadow: `
+            0 2px 4px 0 rgba(0, 0, 0, 0.05),
+            0 8px 16px -4px rgba(0, 0, 0, 0.1)
+          `,
           transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
           cursor: 'pointer',
-          border: `1px solid ${tokens.colors.divider}`,
+          position: 'relative',
           
           '&:hover': {
-            transform: 'translateY(-8px)',
+            transform: 'translateY(-6px)',
             boxShadow: tokens.shadows.deep,
           }
         },
@@ -76,7 +81,7 @@ export function ListingCard({
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            transition: 'opacity 0.5s ease',
+            transition: 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         />
 
@@ -85,9 +90,10 @@ export function ListingCard({
           <Box
             sx={{
               position: 'absolute',
-              top: 16,
-              left: 16,
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              top: 12,
+              left: 12,
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(4px)',
               px: 1.5,
               py: 0.5,
               borderRadius: tokens.radius.full,
@@ -97,6 +103,7 @@ export function ListingCard({
               fontFamily: tokens.typography.fontFamily,
               textTransform: 'uppercase',
               boxShadow: tokens.shadows.card,
+              zIndex: 2,
             }}
           >
             {badge}
@@ -108,8 +115,8 @@ export function ListingCard({
           <Box
             sx={{
               position: 'absolute',
-              top: 16,
-              right: 16,
+              top: 12,
+              right: 12,
               width: 32,
               height: 32,
               backgroundColor: tokens.colors.white,
@@ -119,6 +126,7 @@ export function ListingCard({
               justifyContent: 'center',
               boxShadow: tokens.shadows.card,
               p: 0.5,
+              zIndex: 2,
               '& img': { width: '100%', height: '100%', objectFit: 'contain' }
             }}
           >
@@ -131,42 +139,45 @@ export function ListingCard({
           onClick={handleLike}
           sx={{
             position: 'absolute',
-            bottom: 16,
-            right: 16,
+            bottom: 12,
+            right: 12,
             backgroundColor: 'rgba(255, 255, 255, 0.9)',
+            backdropFilter: 'blur(4px)',
             boxShadow: tokens.shadows.card,
             color: isLiked ? tokens.colors.error : tokens.colors.textSecondary,
+            zIndex: 2,
             '&:hover': { backgroundColor: tokens.colors.white, transform: 'scale(1.1)' }
           }}
         >
-          {isLiked ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" />}
+          {isLiked ? <FavoriteIcon sx={{ fontSize: 18 }} /> : <FavoriteBorderIcon sx={{ fontSize: 18 }} />}
         </IconButton>
 
-        {/* Carousel Dots */}
+        {/* Carousel Dots (Anime Style) */}
         {images.length > 1 && (
           <Stack
             direction="row"
-            spacing={1}
+            spacing={0.8}
             sx={{
               position: 'absolute',
-              bottom: 16,
+              bottom: 12,
               left: '50%',
               transform: 'translateX(-50%)',
-              zIndex: 1,
+              zIndex: 2,
             }}
           >
             {images.map((img, i) => (
               <Box
-                key={img} // Use image URL as key to satisfy ESLint
+                key={img}
                 onClick={(e) => { e.stopPropagation(); setActiveImage(i); }}
                 sx={{
-                  width: activeImage === i ? 16 : 6,
+                  width: activeImage === i ? 12 : 6,
                   height: 6,
                   borderRadius: tokens.radius.full,
                   backgroundColor: tokens.colors.white,
-                  opacity: activeImage === i ? 1 : 0.6,
-                  transition: 'all 0.3s ease',
+                  opacity: activeImage === i ? 1 : 0.5,
+                  transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
                   cursor: 'pointer',
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
                 }}
               />
             ))}
@@ -175,14 +186,14 @@ export function ListingCard({
       </Box>
 
       {/* Content Section */}
-      <Box sx={{ p: 3 }}>
+      <Box sx={{ p: 2.5 }}> {/* Optimized padding */}
         <Typography
           sx={{
-            fontSize: tokens.typography.fontSizes.lg,
-            fontWeight: 900,
+            fontSize: tokens.typography.fontSizes.base,
+            fontWeight: 800,
             color: tokens.colors.textPrimary,
             fontFamily: tokens.typography.fontFamily,
-            lineHeight: 1.1,
+            lineHeight: 1.2,
             mb: 0.5,
             whiteSpace: 'nowrap',
             overflow: 'hidden',
@@ -199,7 +210,7 @@ export function ListingCard({
               color: tokens.colors.textSecondary,
               fontFamily: tokens.typography.fontFamily,
               fontWeight: 600,
-              mb: 1.5,
+              mb: 2,
             }}
           >
             {brand}{brand && size ? ' • ' : ''}{size}
@@ -207,31 +218,36 @@ export function ListingCard({
         )}
 
         {/* Action Row */}
-        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mt: 2 }}>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2}>
           <Box
             sx={{
               backgroundColor: tokens.colors.background,
-              px: 2,
+              px: 1.5,
               py: 0.8,
               borderRadius: tokens.radius.full,
               fontSize: tokens.typography.fontSizes.base,
               fontWeight: 800,
               color: tokens.colors.textPrimary,
               fontFamily: tokens.typography.fontFamily,
+              display: 'flex',
+              alignItems: 'baseline',
+              gap: 0.5,
             }}
           >
-            KES {price.toLocaleString()}
+            <Typography component="span" sx={{ fontSize: 10, fontWeight: 900 }}>KES</Typography>
+            {price.toLocaleString()}
             {originalPrice && (
               <Typography
                 component="span"
                 sx={{
-                  ml: 1,
+                  ml: 0.5,
                   fontSize: 10,
                   color: tokens.colors.textDisabled,
                   textDecoration: 'line-through',
+                  fontWeight: 600,
                 }}
               >
-                KES {originalPrice.toLocaleString()}
+                {originalPrice.toLocaleString()}
               </Typography>
             )}
           </Box>
@@ -241,9 +257,15 @@ export function ListingCard({
             variant="primary"
             size="small"
             onClick={handleBuy}
-            icon={<ArrowOutwardIcon />}
+            icon={<ArrowOutwardIcon sx={{ fontSize: 16 }} />}
             iconPosition="right"
-            sx={{ borderRadius: tokens.radius.full, px: 3 }}
+            sx={{ 
+              borderRadius: tokens.radius.full, 
+              px: 2.5,
+              height: 32, // Forced small height for density
+              fontSize: 11,
+              fontWeight: 900,
+            }}
           />
         </Stack>
       </Box>

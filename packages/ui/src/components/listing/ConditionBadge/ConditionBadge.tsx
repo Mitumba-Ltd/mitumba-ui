@@ -1,3 +1,4 @@
+import React from 'react'
 import Box from '@mui/material/Box'
 import { tokens } from '@mitumba/tokens'
 import type { ConditionBadgeProps } from './ConditionBadge.types'
@@ -7,7 +8,7 @@ const GRADE_MAP: Record<
   { color: string; label: string; bgColor: string }
 > = {
   A: {
-    color: tokens.colors.textOnGreen,
+    color: tokens.colors.white,
     bgColor: tokens.colors.green,
     label: 'Like new',
   },
@@ -23,6 +24,10 @@ const GRADE_MAP: Record<
   },
 }
 
+/**
+ * Premium Listing Condition Badge.
+ * Reigned in to professional pill geometry with high-contrast typography.
+ */
 export function ConditionBadge({ grade, showLabel = false }: ConditionBadgeProps) {
   const config = GRADE_MAP[grade]
 
@@ -31,16 +36,19 @@ export function ConditionBadge({ grade, showLabel = false }: ConditionBadgeProps
       sx={{
         alignItems: 'center',
         backgroundColor: config.bgColor,
-        borderRadius: tokens.radius.sm,
+        borderRadius: tokens.radius.full, // Modern Pill
         color: config.color,
         display: 'inline-flex',
-        fontSize: tokens.typography.fontSizes.xs,
-        fontWeight: tokens.typography.fontWeights.bold,
-        gap: tokens.spacing.xs,
-        height: '24px',
+        fontSize: 10,
+        fontWeight: 800,
+        gap: 0.5,
+        height: '20px', // Dense height
         paddingInline: tokens.spacing.sm,
-        transition: 'all 200ms ease',
+        transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
         boxShadow: tokens.shadows.card,
+        fontFamily: tokens.typography.fontFamily,
+        textTransform: 'uppercase',
+        letterSpacing: '0.02em',
       }}
       role="status"
       aria-label={`Condition: ${config.label}`}
@@ -48,8 +56,7 @@ export function ConditionBadge({ grade, showLabel = false }: ConditionBadgeProps
       <Box
         component="span"
         sx={{
-          fontSize: tokens.typography.fontSizes.xs,
-          fontWeight: tokens.typography.fontWeights.extrabold,
+          fontWeight: 900,
           lineHeight: 1,
         }}
       >
@@ -59,12 +66,11 @@ export function ConditionBadge({ grade, showLabel = false }: ConditionBadgeProps
         <Box
           component="span"
           sx={{
-            fontSize: tokens.typography.fontSizes.xs,
-            fontWeight: tokens.typography.fontWeights.semibold,
+            fontWeight: 700,
             lineHeight: 1,
-            borderLeft: `1px solid ${config.color}40`,
-            paddingLeft: tokens.spacing.xs,
-            marginLeft: '2px',
+            borderLeft: `1px solid rgba(255, 255, 255, 0.3)`,
+            paddingLeft: 0.8,
+            marginLeft: 0.5,
           }}
         >
           {config.label}

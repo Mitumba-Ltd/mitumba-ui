@@ -5,20 +5,21 @@ import type { MitumbaGlassProps } from './MitumbaGlass.types'
 
 /**
  * Premium "Extraordinary" Glass primitive.
- * Fulfills high-end backdrop filter standards with tactile visual depth.
+ * Engineered for high-end optical depth with benchmarked blur and light-leak effects.
+ * Reigned in for professional visual sanity while maintaining "out of this world" aesthetics.
  */
 export function MitumbaGlass({
   children,
-  blur = 20,
-  opacity = 0.4,
-  rounding = 'rounded',
+  blur = 24,
+  opacity = 0.5,
+  rounding = 'large',
   border = true,
   sx,
 }: MitumbaGlassProps) {
   const radiusMap = {
-    rounded: tokens.radius.md,
-    large: tokens.radius.lg,
-    huge: tokens.radius.xl,
+    rounded: tokens.radius.md, // 8px
+    large: tokens.radius.lg,   // 16px
+    huge: tokens.radius.xl,    // 24px
     full: tokens.radius.full,
   }
 
@@ -29,25 +30,37 @@ export function MitumbaGlass({
           position: 'relative',
           overflow: 'hidden',
           backgroundColor: `rgba(255, 255, 255, ${opacity})`,
-          backdropFilter: `blur(${blur}px)`,
-          WebkitBackdropFilter: `blur(${blur}px)`,
+          backdropFilter: `blur(${blur}px) saturate(180%)`,
+          WebkitBackdropFilter: `blur(${blur}px) saturate(180%)`,
           borderRadius: `${radiusMap[rounding]}px`,
-          border: border ? '1px solid rgba(255, 255, 255, 0.3)' : 'none',
-          boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
+          
+          // High-end glass border: Ultra-thin, white, low-opacity
+          border: border ? '1px solid rgba(255, 255, 255, 0.4)' : 'none',
+          
+          // Multi-layered shadow for realistic floating depth
+          boxShadow: `
+            0 4px 12px 0 rgba(0, 0, 0, 0.05),
+            0 12px 32px 0 rgba(31, 38, 135, 0.1)
+          `,
+          
           transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
           
+          // Subtle light leak / shine effect
           '&::before': {
             content: '""',
             position: 'absolute',
             inset: 0,
-            zIndex: -1,
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.05))',
+            zIndex: 0,
+            background: 'linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 40%, rgba(255,255,255,0) 60%, rgba(255,255,255,0.1) 100%)',
+            pointerEvents: 'none',
           }
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
-      {children}
+      <Box sx={{ position: 'relative', zIndex: 1 }}>
+        {children}
+      </Box>
     </Box>
   )
 }

@@ -1,8 +1,12 @@
+import React, { useState, useCallback, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import { tokens } from '@mitumba/tokens'
-import { useState, useCallback, useEffect } from 'react'
 import type { ListingImageGalleryProps } from './ListingImageGallery.types'
 
+/**
+ * Premium Listing Image Gallery.
+ * Fulfills high-end marketplace standards with tactile transitions and precision geometry.
+ */
 export function ListingImageGallery({ images, title }: ListingImageGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0)
 
@@ -69,6 +73,8 @@ export function ListingImageGallery({ images, title }: ListingImageGalleryProps)
           overflow: 'hidden',
           position: 'relative',
           width: '100%',
+          backgroundColor: tokens.colors.background,
+          boxShadow: tokens.shadows.card,
         }}
       >
         <Box
@@ -80,11 +86,12 @@ export function ListingImageGallery({ images, title }: ListingImageGalleryProps)
             height: '100%',
             objectFit: 'cover',
             width: '100%',
+            transition: 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
           }}
         />
       </Box>
 
-      {/* Thumbnails — only shown when there are multiple images */}
+      {/* Thumbnails */}
       {images.length > 1 && (
         <Box
           sx={{
@@ -92,6 +99,9 @@ export function ListingImageGallery({ images, title }: ListingImageGalleryProps)
             gap: tokens.spacing.sm,
             overflowX: 'auto',
             paddingBlock: tokens.spacing.xs,
+            '&::-webkit-scrollbar': { display: 'none' },
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none',
           }}
         >
           {images.map((img, index) => (
@@ -107,24 +117,19 @@ export function ListingImageGallery({ images, title }: ListingImageGalleryProps)
               role="button"
               tabIndex={0}
               sx={{
-                border:
-                  index === activeIndex
-                    ? `${tokens.spacing.xs / tokens.spacing.xs}px solid ${tokens.colors.green}`
-                    : `${tokens.spacing.xs / tokens.spacing.xs}px solid transparent`,
+                border: index === activeIndex ? `2px solid ${tokens.colors.green}` : `2px solid transparent`,
                 borderRadius: tokens.radius.md,
                 cursor: 'pointer',
                 flexShrink: 0,
                 height: 64,
                 overflow: 'hidden',
-                opacity: index === activeIndex ? 1 : 0.7,
-                transition: 'all 200ms ease',
+                opacity: index === activeIndex ? 1 : 0.6,
+                transform: index === activeIndex ? 'scale(1.05)' : 'scale(1)',
+                transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
                 width: 64,
                 '&:hover': {
                   opacity: 1,
-                },
-                '&:focus-visible': {
-                  outline: `${tokens.spacing.xs}px solid transparent`,
-                  boxShadow: tokens.shadows.focus,
+                  transform: 'translateY(-2px)',
                 },
               }}
               aria-label={`View image ${index + 1} of ${images.length}`}
