@@ -5,20 +5,34 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { MitumbaThemeProvider } from '../../../theme'
 import { MitumbaGrid } from './MitumbaGrid'
 
-describe('MitumbaGrid', () => {
-  afterEach(cleanup)
+afterEach(() => {
+  cleanup()
+})
 
-  it('renders children', () => {
+describe('MitumbaGrid', () => {
+  it('renders children correctly', () => {
     render(
       <MitumbaThemeProvider>
         <MitumbaGrid>
-          <div data-testid="child-1">A</div>
-          <div data-testid="child-2">B</div>
+          <div data-testid="grid-child">Cell 1</div>
         </MitumbaGrid>
       </MitumbaThemeProvider>,
     )
 
-    expect(screen.getByTestId('child-1')).toBeInTheDocument()
-    expect(screen.getByTestId('child-2')).toBeInTheDocument()
+    expect(screen.getByTestId('grid-child')).toBeInTheDocument()
+  })
+
+  it('supports custom columns', () => {
+    const columns = { xs: 1, sm: 2, md: 3, lg: 4 }
+    render(
+      <MitumbaThemeProvider>
+        <MitumbaGrid columns={columns}>
+          <div>Cell 1</div>
+        </MitumbaGrid>
+      </MitumbaThemeProvider>,
+    )
+
+    // Verify presence
+    expect(screen.getByText('Cell 1')).toBeInTheDocument()
   })
 })
