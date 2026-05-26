@@ -11,35 +11,40 @@ describe('TopNav', () => {
   it('renders logo', () => {
     render(
       <MitumbaThemeProvider>
-        <TopNav />,
+        <TopNav />
       </MitumbaThemeProvider>,
     )
 
-    expect(screen.getByText('Mitumba')).toBeInTheDocument()
+    expect(screen.getByText(/MITUMBA/i)).toBeInTheDocument()
   })
 
   it('calls onLogoClick when logo is clicked', () => {
     const onLogoClick = vi.fn()
     render(
       <MitumbaThemeProvider>
-        <TopNav onLogoClick={onLogoClick} />,
+        <TopNav onLogoClick={onLogoClick} />
       </MitumbaThemeProvider>,
     )
 
-    fireEvent.click(screen.getByText('Mitumba'))
+    fireEvent.click(screen.getByText(/MITUMBA/i))
 
     expect(onLogoClick).toHaveBeenCalledTimes(1)
   })
 
   it('shows search input and calls onSearchChange', () => {
     const onSearchChange = vi.fn()
+    const onSearchSubmit = vi.fn()
     render(
       <MitumbaThemeProvider>
-        <TopNav searchValue="shoes" onSearchChange={onSearchChange} />,
+        <TopNav 
+          searchValue="shoes" 
+          onSearchChange={onSearchChange} 
+          onSearchSubmit={onSearchSubmit}
+        />
       </MitumbaThemeProvider>,
     )
 
-    const input = screen.getByPlaceholderText('Search...')
+    const input = screen.getByPlaceholderText(/Search listings.../i)
     fireEvent.change(input, { target: { value: 'nike' } })
 
     expect(onSearchChange).toHaveBeenCalledWith('nike')
@@ -48,7 +53,7 @@ describe('TopNav', () => {
   it('shows cart count', () => {
     render(
       <MitumbaThemeProvider>
-        <TopNav cartCount={3} onCartClick={vi.fn()} />,
+        <TopNav cartCount={3} onCartClick={vi.fn()} />
       </MitumbaThemeProvider>,
     )
 
