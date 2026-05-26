@@ -1,21 +1,34 @@
+import React from 'react'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Link from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
 import { tokens } from '@mitumba/tokens'
 import type { MitumbaBreadcrumbProps } from './MitumbaBreadcrumb.types'
 
+/**
+ * Premium "Living" Breadcrumb primitive.
+ * Fulfills high-end hierarchy standards with systematic dividers and tactile hover states.
+ */
 export function MitumbaBreadcrumb({ items }: MitumbaBreadcrumbProps) {
   return (
     <Breadcrumbs
-      separator="›"
+      separator={
+        <Typography 
+          sx={{ 
+            color: tokens.colors.divider, 
+            mx: 0.5, 
+            fontWeight: 400, 
+            fontSize: 16,
+            fontFamily: tokens.typography.fontFamily 
+          }}
+        >
+          /
+        </Typography>
+      }
       sx={{
-        '& .MuiBreadcrumbs-separator': {
-          color: tokens.colors.textSecondary,
-          fontWeight: tokens.typography.fontWeights.bold,
-          mx: tokens.spacing.sm,
+        '& .MuiBreadcrumbs-ol': {
+          flexWrap: 'nowrap',
         },
-        color: tokens.colors.textSecondary,
-        fontSize: tokens.typography.fontSizes.sm,
       }}
     >
       {items.map((item, index) => {
@@ -28,7 +41,9 @@ export function MitumbaBreadcrumb({ items }: MitumbaBreadcrumbProps) {
               sx={{
                 color: tokens.colors.textPrimary,
                 fontSize: tokens.typography.fontSizes.sm,
-                fontWeight: tokens.typography.fontWeights.semibold,
+                fontWeight: 800,
+                fontFamily: tokens.typography.fontFamily,
+                whiteSpace: 'nowrap',
               }}
             >
               {item.label}
@@ -36,24 +51,26 @@ export function MitumbaBreadcrumb({ items }: MitumbaBreadcrumbProps) {
           )
         }
 
-        return item.href ? (
+        return (
           <Link
             key={item.label}
-            color="inherit"
-            href={item.href}
+            href={item.href || '#'}
             sx={{
-              '&:hover': {
-                color: tokens.colors.green,
-              },
               color: tokens.colors.textSecondary,
               fontSize: tokens.typography.fontSizes.sm,
+              fontWeight: 600,
+              fontFamily: tokens.typography.fontFamily,
               textDecoration: 'none',
+              transition: 'all 0.2s ease',
+              whiteSpace: 'nowrap',
+              '&:hover': {
+                color: tokens.colors.green,
+                transform: 'translateY(-1px)',
+              },
             }}
           >
             {item.label}
           </Link>
-        ) : (
-          <span key={item.label}>{item.label}</span>
         )
       })}
     </Breadcrumbs>
