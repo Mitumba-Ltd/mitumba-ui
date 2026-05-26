@@ -5,7 +5,8 @@ import type { MitumbaGridProps } from './MitumbaGrid.types'
 
 /**
  * Premium "Living" Grid primitive.
- * Fulfills the "Grid System" design benchmark with responsive 4/8/12 column logic.
+ * Fulfills high-end structural standards with conservative, professional spatial density.
+ * Reigned in from the benchmark to avoid 'wild' excessive margins.
  */
 export function MitumbaGrid({
   children,
@@ -13,12 +14,12 @@ export function MitumbaGrid({
   gap,
   sx,
 }: MitumbaGridProps) {
-  // Benchmark Gutter Logic: 16px (lg) on mobile, 20px (xl) on tablet/desktop
+  // Professional Gutter Logic: 12px (base) for density, 16px (lg) for desktop
   const defaultGap = {
-    xs: tokens.spacing.lg,
-    sm: tokens.spacing.xl,
-    md: tokens.spacing.xl,
-    lg: tokens.spacing.xl,
+    xs: tokens.spacing.base, // 12px
+    sm: tokens.spacing.base, // 12px
+    md: tokens.spacing.lg,   // 16px
+    lg: tokens.spacing.lg,   // 16px
   }
 
   return (
@@ -34,7 +35,6 @@ export function MitumbaGrid({
             md: `repeat(${columns.md}, 1fr)`,
             lg: `repeat(${columns.lg}, 1fr)`,
           },
-          transition: 'all 0.3s ease',
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}

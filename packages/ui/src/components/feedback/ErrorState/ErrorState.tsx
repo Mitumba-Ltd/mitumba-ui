@@ -13,7 +13,8 @@ import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
 
 /**
  * Premium "Personality-Led" Error State primitive.
- * Engineered for urgent recovery and world-class visual depth.
+ * Engineered for urgent recovery and professional visual sanity.
+ * Reigned in from 'wild' geometries to a 'Very Serious' standard.
  */
 export function ErrorState({
   title = 'Something went wrong',
@@ -51,8 +52,8 @@ export function ErrorState({
           justifyContent: 'center',
           mb: isCompact ? 0 : tokens.spacing.md,
           position: 'relative',
-          width: isCompact ? 48 : 120,
-          height: isCompact ? 48 : 120,
+          width: isCompact ? 48 : 80, // Reigned in from 120
+          height: isCompact ? 48 : 80, // Reigned in from 120
         }}
       >
         {/* Decorative Error Blob */}
@@ -63,13 +64,9 @@ export function ErrorState({
               width: '100%',
               height: '100%',
               backgroundColor: `${activeConfig.color}15`,
-              borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%', // Asymmetric blob
-              animation: 'blob-morph 8s ease-in-out infinite',
+              borderRadius: '50%', // Reigned in from asymmetric morph
+              opacity: 0.6,
               zIndex: 0,
-              '@keyframes blob-morph': {
-                '0%, 100%': { borderRadius: '30% 70% 70% 30% / 30% 30% 70% 70%' },
-                '50%': { borderRadius: '70% 30% 30% 70% / 70% 70% 30% 30%' },
-              }
             }}
           />
         )}
@@ -83,8 +80,7 @@ export function ErrorState({
             borderRadius: tokens.radius.full,
             boxShadow: tokens.shadows.card,
             p: isCompact ? 1 : tokens.spacing.lg,
-            transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-            '& svg': { fontSize: isCompact ? 24 : 48 }
+            '& svg': { fontSize: isCompact ? 24 : 40 } // Reigned in
           }}
         >
           {displayIllustration}
@@ -103,23 +99,16 @@ export function ErrorState({
         textAlign: 'center',
         width: '100%',
         boxSizing: 'border-box',
-        padding: isCompact ? tokens.spacing.xl : tokens.spacing.xxxl,
-        gap: isCompact ? tokens.spacing.sm : tokens.spacing.base,
+        padding: isCompact || isElevated ? tokens.spacing.xl : tokens.spacing.xxxl,
+        gap: isCompact ? tokens.spacing.xs : tokens.spacing.sm, // Professional density
         backgroundColor: isElevated ? tokens.colors.surface : `${activeConfig.color}05`,
-        borderRadius: tokens.radius.xl,
+        borderRadius: tokens.radius.lg, // Reigned in from XL
         border: isElevated ? 'none' : `1px solid ${activeConfig.color}20`,
         boxShadow: isElevated ? tokens.shadows.deep : 'none',
-        perspective: '1000px',
-        '&:hover .error-content': {
-          transform: 'rotateY(10deg) rotateX(-2deg) scale(1.02)',
-        }
       }}
     >
       <Box 
-        className="error-content"
         sx={{ 
-          transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-          transformStyle: 'preserve-3d',
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
@@ -130,12 +119,12 @@ export function ErrorState({
 
         <Typography
           sx={{
-            fontSize: isCompact ? tokens.typography.fontSizes.md : tokens.typography.fontSizes.xl,
+            fontSize: isCompact ? tokens.typography.fontSizes.base : tokens.typography.fontSizes.lg, // Reigned in
             fontWeight: 800,
             color: activeConfig.color,
             fontFamily: tokens.typography.fontFamily,
             lineHeight: 1.1,
-            mt: isCompact ? 0 : 2,
+            mt: isCompact ? 0 : 1.5,
           }}
         >
           {title}
@@ -146,10 +135,10 @@ export function ErrorState({
             fontSize: isCompact ? tokens.typography.fontSizes.xs : tokens.typography.fontSizes.base,
             color: tokens.colors.textSecondary,
             fontFamily: tokens.typography.fontFamily,
-            maxWidth: isCompact ? 240 : 400,
+            maxWidth: 400,
             marginInline: 'auto',
             lineHeight: 1.4,
-            mt: 1,
+            mt: 0.5,
           }}
         >
           {subtitle}
