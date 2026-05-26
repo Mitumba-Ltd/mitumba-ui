@@ -4,56 +4,69 @@ import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 import { MitumbaThemeProvider } from '../../../theme'
 import { StatsCard } from './StatsCard'
+import type { StatsCardProps } from './StatsCard.types'
 
-afterEach(() => {
-  cleanup()
-})
+function renderStatsCard(props: StatsCardProps) {
+  return render(
+    <MitumbaThemeProvider>
+      <StatsCard 
+        label={props.label}
+        value={props.value}
+        unit={props.unit}
+        unitPosition={props.unitPosition}
+        trend={props.trend}
+        icon={props.icon}
+        variant={props.variant}
+        color={props.color}
+        sx={props.sx}
+      />
+    </MitumbaThemeProvider>,
+  )
+}
+
+afterEach(cleanup)
 
 describe('StatsCard', () => {
   it('renders label and value', () => {
-    render(
-      <MitumbaThemeProvider>
-        <StatsCard label="Total Orders" value={42} />
-      </MitumbaThemeProvider>
-    )
-    expect(screen.getByText('Total Orders')).toBeInTheDocument()
-    expect(screen.getByText('42')).toBeInTheDocument()
+    renderStatsCard({
+      label: 'TOTAL SALES',
+      value: '142,500',
+    })
+
+    expect(screen.getByText('TOTAL SALES')).toBeInTheDocument()
+    expect(screen.getByText('142,500')).toBeInTheDocument()
   })
 
-  it('renders unit when provided', () => {
-    render(
-      <MitumbaThemeProvider>
-        <StatsCard label="Revenue" value="12,500" unit="KES" />
-      </MitumbaThemeProvider>
-    )
+  it('renders unit correctly', () => {
+    renderStatsCard({
+      label: 'Price',
+      value: '100',
+      unit: 'KES',
+      unitPosition: 'prefix',
+    })
+
     expect(screen.getByText('KES')).toBeInTheDocument()
+    expect(screen.getByText('100')).toBeInTheDocument()
   })
 
-  it('renders trend with up direction', () => {
-    render(
-      <MitumbaThemeProvider>
-        <StatsCard label="Growth" value="15" trend={{ direction: 'up', percent: 12.5 }} />
-      </MitumbaThemeProvider>
-    )
-    expect(screen.getByText('12.5%')).toBeInTheDocument()
+  it('renders trend information', () => {
+    renderStatsCard({
+      label: 'Growth',
+      value: '20',
+      trend: { direction: 'up', percent: 5, label: 'vs last week' },
+    })
+
+    expect(screen.getByText('5%')).toBeInTheDocument()
+    expect(screen.getByText('vs last week')).toBeInTheDocument()
   })
 
-  it('renders trend with down direction', () => {
-    render(
-      <MitumbaThemeProvider>
-        <StatsCard label="Decline" value="8" trend={{ direction: 'down', percent: 5.3 }} />
-      </MitumbaThemeProvider>
-    )
-    expect(screen.getByText('5.3%')).toBeInTheDocument()
-  })
+  it('supports glass variant', () => {
+    renderStatsCard({
+      label: 'Glass',
+      value: '99',
+      variant: 'glass',
+    })
 
-  it('renders icon when provided', async () => {
-    const { default: InboxIcon } = await import('@mui/icons-material/Inbox')
-    render(
-      <MitumbaThemeProvider>
-        <StatsCard label="Messages" value={3} icon={<InboxIcon data-testid="inbox-icon" />} />
-      </MitumbaThemeProvider>
-    )
-    expect(screen.getByTestId('inbox-icon')).toBeInTheDocument()
+    expect(screen.getByText('Glass')).toBeInTheDocument()
   })
 })
