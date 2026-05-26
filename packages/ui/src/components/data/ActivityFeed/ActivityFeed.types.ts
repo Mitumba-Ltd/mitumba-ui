@@ -1,4 +1,8 @@
 import type { ReactNode } from 'react'
+import type { SxProps, Theme } from '@mui/material/styles'
+
+export type ActivityType = 'order' | 'sti_change' | 'payout' | 'review' | 'system'
+export type ActivityFeedVariant = 'standard' | 'glass' | 'elevated'
 
 /**
  * Represents a single activity event in the feed.
@@ -6,17 +10,17 @@ import type { ReactNode } from 'react'
 export interface ActivityEvent {
   /** Unique identifier for the event. */
   id: string
-  /** Type of activity event. */
-  type: 'order' | 'sti_change' | 'payout' | 'review'
-  /** Title of the event. */
+  /** Type of activity event for auto-styling. */
+  type: ActivityType
+  /** Primary title of the event. */
   title: string
-  /** Optional subtitle or description. */
+  /** Optional descriptive text. */
   subtitle?: string
-  /** Timestamp of the event. */
+  /** Relative or absolute timestamp. */
   timestamp: string
-  /** Optional icon to display. */
+  /** Optional icon override. */
   icon?: ReactNode
-  /** Optional color override. */
+  /** Optional color theme. */
   color?: string
 }
 
@@ -28,6 +32,12 @@ export interface ActivityFeedProps {
   events: ActivityEvent[]
   /** Whether the feed is in a loading state. */
   loading?: boolean
-  /** Message to display when there are no events. */
+  /** Message to display when there are no events. Uses EmptyState internally. */
   emptyMessage?: string
+  /** Visual treatment for individual items. Defaults to 'standard'. */
+  variant?: ActivityFeedVariant
+  /** Whether to show connecting timeline lines. Defaults to true. */
+  showTimeline?: boolean
+  /** Optional style overrides. */
+  sx?: SxProps<Theme>
 }
