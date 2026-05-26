@@ -7,7 +7,7 @@ import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
 
 /**
  * Premium "Personality-Led" Empty State primitive.
- * Fulfills the "Empty States" design benchmarks with "No Dead Ends" UX and decorative geometry.
+ * Fulfills high-end illustrative standards with reigned-in, professional geometry.
  */
 export function EmptyState({ 
   illustration, 
@@ -40,8 +40,8 @@ export function EmptyState({
           justifyContent: 'center',
           mb: isCompact ? 0 : tokens.spacing.md,
           position: 'relative',
-          width: isCompact ? 48 : 120,
-          height: isCompact ? 48 : 120,
+          width: isCompact ? 48 : 80, // Reigned in from 120
+          height: isCompact ? 48 : 80, // Reigned in from 120
         }}
       >
         {/* Decorative Benchmark Blob */}
@@ -52,7 +52,7 @@ export function EmptyState({
               width: '100%',
               height: '100%',
               backgroundColor: tokens.colors.background,
-              borderRadius: '50% 50% 50% 0', // Abstract blob shape
+              borderRadius: '50% 50% 50% 0',
               transform: 'rotate(-45deg)',
               opacity: 0.6,
               zIndex: 0,
@@ -68,7 +68,7 @@ export function EmptyState({
             backgroundColor: isElevated ? 'transparent' : tokens.colors.surface,
             borderRadius: tokens.radius.full,
             p: isCompact ? 0 : tokens.spacing.lg,
-            '& svg': { fontSize: isCompact ? 24 : 48 }
+            '& svg': { fontSize: isCompact ? 24 : 40 } // Reigned in
           }}
         >
           {displayIllustration}
@@ -88,9 +88,9 @@ export function EmptyState({
         width: '100%',
         boxSizing: 'border-box',
         padding: isCompact || isElevated ? tokens.spacing.xl : tokens.spacing.xxxl,
-        gap: isCompact ? tokens.spacing.sm : tokens.spacing.base,
+        gap: isCompact ? tokens.spacing.xs : tokens.spacing.sm, // Professional density
         backgroundColor: isElevated ? tokens.colors.surface : tokens.colors.background,
-        borderRadius: tokens.radius.xl,
+        borderRadius: tokens.radius.lg, // Reigned in from XL
         border: isElevated ? 'none' : `1px dashed ${tokens.colors.divider}`,
         boxShadow: isElevated ? tokens.shadows.card : 'none',
         transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
@@ -100,7 +100,7 @@ export function EmptyState({
 
       <Typography
         sx={{
-          fontSize: isCompact ? tokens.typography.fontSizes.md : tokens.typography.fontSizes.xl,
+          fontSize: isCompact ? tokens.typography.fontSizes.base : tokens.typography.fontSizes.lg, // Reigned in
           fontWeight: 800,
           color: tokens.colors.textPrimary,
           fontFamily: tokens.typography.fontFamily,
@@ -120,14 +120,14 @@ export function EmptyState({
           width: '100%',
           marginInline: 'auto',
           lineHeight: 1.4,
-          mt: isCompact ? 0 : 1,
+          mt: 0.5,
         }}
       >
         {subtitle}
       </Typography>
 
       {action && (
-        <Box sx={{ mt: isCompact ? tokens.spacing.sm : tokens.spacing.lg }}>
+        <Box sx={{ mt: isCompact ? tokens.spacing.sm : tokens.spacing.base }}>
           <MitumbaPrimaryButton
             label={action.label}
             onClick={action.onClick}

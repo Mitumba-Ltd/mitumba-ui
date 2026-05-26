@@ -10,7 +10,8 @@ import type { MitumbaModalProps } from './MitumbaModal.types'
 
 /**
  * Premium "High-Depth" Modal primitive.
- * Fulfills professional standards with 32px rounding and scale-fade entry.
+ * Fulfills professional standards with conservative, high-fidelity geometry.
+ * Reigned in from 'wild' large radii to a 'Very Serious' standard.
  */
 export function MitumbaModal({ 
   open, 
@@ -33,9 +34,9 @@ export function MitumbaModal({
       }}
       PaperProps={{
         sx: {
-          borderRadius: `${tokens.radius.xxxl}px`,
+          borderRadius: `${tokens.radius.lg}px`, // Reigned in from XXXL
           boxShadow: tokens.shadows.deep,
-          margin: tokens.spacing.base,
+          margin: tokens.spacing.lg,
           backgroundColor: tokens.colors.surface,
           backgroundImage: 'none',
           overflow: 'hidden',
@@ -48,10 +49,10 @@ export function MitumbaModal({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          px: 4,
-          pt: 4,
-          pb: 2,
-          fontSize: tokens.typography.fontSizes.xl,
+          px: 3,
+          pt: 3,
+          pb: 1.5,
+          fontSize: tokens.typography.fontSizes.lg,
           fontWeight: 800,
           color: tokens.colors.textPrimary,
           fontFamily: tokens.typography.fontFamily,
@@ -74,14 +75,14 @@ export function MitumbaModal({
           }}
           aria-label="Close modal"
         >
-          <CloseIcon sx={{ fontSize: 24 }} />
+          <CloseIcon sx={{ fontSize: 20 }} />
         </IconButton>
       </DialogTitle>
 
       <DialogContent
         sx={{
-          px: 4,
-          pb: actions ? 2 : 4,
+          px: 3,
+          pb: actions ? 1.5 : 3,
           color: tokens.colors.textSecondary,
           fontSize: tokens.typography.fontSizes.base,
           fontFamily: tokens.typography.fontFamily,
@@ -94,13 +95,13 @@ export function MitumbaModal({
       {actions && (
         <DialogActions
           sx={{
-            px: 4,
-            pb: 4,
-            pt: 2,
-            gap: 2,
+            px: 3,
+            pb: 3,
+            pt: 1.5,
+            gap: 1.5,
             justifyContent: 'flex-end',
             '& .MuiButton-root': {
-               minWidth: 100,
+               minWidth: 80,
             }
           }}
         >
