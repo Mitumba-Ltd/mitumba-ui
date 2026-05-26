@@ -1,22 +1,33 @@
+import type { SxProps, Theme } from '@mui/material/styles'
+
 export interface ListingCardProps {
-  /** Unique identifier for the listing. */
-  listingId: string
-  /** URL of the listing's primary image. Used as `src` on the card's image. */
-  imageUrl: string
-  /** Title of the listing. Displayed below the image. */
+  /** Array of image URLs for the carousel. */
+  images: string[]
+  /** Product title. */
   title: string
-  /** Price in Kenyan Shillings. Displayed as "KES X,XXX" with comma separator. */
-  priceKes: number
-  /** Display name of the seller. */
-  sellerName: string
-  /** Seller Trust Index (STI) score — 0 to 100. */
-  sellerSti: number
-  /** City where the item is located. */
-  city: string
-  /** Condition grade of the item. Controls the ConditionBadge color and label. */
-  conditionGrade: 'A' | 'B' | 'C'
-  /** Whether this listing is eligible for VAZI styling. Shows a VAZI badge overlay when true. */
-  isVaziEligible?: boolean
-  /** Called when the user taps or clicks the card. */
-  onTap?: () => void
+  /** Current price. */
+  price: number
+  /** Original price for discount display. */
+  originalPrice?: number
+  /** Brand or seller name. */
+  brand?: string
+  /** Product size metadata. */
+  size?: string
+  /** Floating badge text (e.g., "Best Seller"). */
+  badge?: string
+  /** URL for the brand logo overlay. */
+  brandLogoUrl?: string
+  
+  /** Called when the card is clicked. */
+  onClick?: () => void
+  /** Called when the "Buy Now" button is clicked. */
+  onBuyClick?: (e: React.MouseEvent) => void
+  
+  /** Whether the user has liked this item. */
+  isLiked?: boolean
+  /** Called when the heart icon is clicked. */
+  onLikeClick?: (e: React.MouseEvent) => void
+  
+  /** Optional style overrides. */
+  sx?: SxProps<Theme>
 }

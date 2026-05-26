@@ -8,6 +8,8 @@ export interface ListingGridProps {
   columns?: { xs: number; sm: number; md: number; lg: number }
   /** Gap between grid cells. Defaults to 16. */
   gap?: number | string | object
+  /** Whether the grid is in a loading state. */
+  isLoading?: boolean
   /** Optional style overrides. */
   sx?: SxProps<Theme>
 }
