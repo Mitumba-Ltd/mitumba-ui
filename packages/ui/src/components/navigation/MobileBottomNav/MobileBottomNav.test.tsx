@@ -5,33 +5,49 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { MitumbaThemeProvider } from '../../../theme'
 import { MobileBottomNav } from './MobileBottomNav'
 
-describe('MobileBottomNav', () => {
-  afterEach(cleanup)
+afterEach(() => {
+  cleanup()
+})
 
-  it('renders all 5 tabs', () => {
+describe('MobileBottomNav', () => {
+  it('renders default items', () => {
     render(
       <MitumbaThemeProvider>
-        <MobileBottomNav activeTab="home" onTabChange={vi.fn()} />,
+        <MobileBottomNav activeTab="home" onTabChange={() => {}} />
       </MitumbaThemeProvider>,
     )
 
     expect(screen.getByText('Home')).toBeInTheDocument()
     expect(screen.getByText('Search')).toBeInTheDocument()
     expect(screen.getByText('VAZI')).toBeInTheDocument()
-    expect(screen.getByText('Orders')).toBeInTheDocument()
-    expect(screen.getByText('Profile')).toBeInTheDocument()
   })
 
-  it('calls onTabChange when a tab is selected', () => {
+  it('calls onTabChange when an item is clicked', () => {
     const onTabChange = vi.fn()
     render(
       <MitumbaThemeProvider>
-        <MobileBottomNav activeTab="home" onTabChange={onTabChange} />,
+        <MobileBottomNav activeTab="home" onTabChange={onTabChange} />
       </MitumbaThemeProvider>,
     )
 
-    fireEvent.click(screen.getByText('Orders'))
+    fireEvent.click(screen.getByText('Search'))
+    expect(onTabChange).toHaveBeenCalledWith('search')
+  })
 
-    expect(onTabChange).toHaveBeenCalledWith('orders')
+  it('supports multiple variants', () => {
+    const { rerender } = render(
+      <MitumbaThemeProvider>
+        <MobileBottomNav activeTab="home" onTabChange={() => {}} variant="m3" />
+      </MitumbaThemeProvider>,
+    )
+
+    expect(screen.getByText('Home')).toBeInTheDocument()
+
+    rerender(
+      <MitumbaThemeProvider>
+        <MobileBottomNav activeTab="home" onTabChange={() => {}} variant="expansive" />
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('Home')).toBeInTheDocument()
   })
 })

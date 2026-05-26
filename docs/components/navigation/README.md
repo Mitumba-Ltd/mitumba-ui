@@ -13,9 +13,14 @@ The primary application header bar. Fulfills the "20 Customizable Styles" benchm
 *   **Behaviors:** Supports `Sticky`, `Fixed`, and `Transparent` (scroll-aware) states.
 
 ## 2. MobileBottomNav
-Sticky bottom navigation designed for thumb-ready mobile access.
-*   **Standard:** Home, Search, VAZI, Orders, Profile.
-*   **Visual:** Active state indicator with brand green and smooth icon transitions.
+Sticky bottom navigation designed for thumb-ready mobile access. Fulfills the "Navbar Design Ideas" benchmark with 6 high-fidelity variants.
+*   **Variants (Benchmark):**
+    *   **M3 (Pill Icon):** Google Material 3 style with pill background behind the icon.
+    *   **Expansive:** Large solid block background for active tab.
+    *   **Indicator Line:** Clean underline beneath the active label.
+    *   **Soft Pill:** Full rounded pill encompassing icon and label.
+    *   **Standalone:** Floating pill button within the navigation row.
+*   **Visual:** Active state indicator with brand colors and smooth icon-to-solid transitions.
 
 ## 3. MitumbaTabs
 For switching between related views on the same page.
