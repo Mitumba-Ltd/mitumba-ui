@@ -14,9 +14,9 @@ describe('MitumbaSkeleton', () => {
     render(
       <MitumbaThemeProvider>
         <MitumbaSkeleton width={100} height={20} />
-      </MitumbaThemeProvider>
+      </MitumbaThemeProvider>,
     )
-    const skeleton = screen.getByLabelText('Loading...')
+    const skeleton = screen.getByLabelText('Loading content...')
     expect(skeleton).toHaveStyle({ width: '100px', height: '20px' })
   })
 
@@ -24,9 +24,9 @@ describe('MitumbaSkeleton', () => {
     render(
       <MitumbaThemeProvider>
         <MitumbaSkeleton width={100} height={20} variant="rectangular" />
-      </MitumbaThemeProvider>
+      </MitumbaThemeProvider>,
     )
-    const skeleton = screen.getByLabelText('Loading...')
+    const skeleton = screen.getByLabelText('Loading content...')
     expect(skeleton).toHaveStyle('border-radius: 2px')
   })
 
@@ -34,9 +34,9 @@ describe('MitumbaSkeleton', () => {
     render(
       <MitumbaThemeProvider>
         <MitumbaSkeleton width={100} height={20} variant="rounded" />
-      </MitumbaThemeProvider>
+      </MitumbaThemeProvider>,
     )
-    const skeleton = screen.getByLabelText('Loading...')
+    const skeleton = screen.getByLabelText('Loading content...')
     expect(skeleton).toHaveStyle('border-radius: 8px')
   })
 
@@ -44,9 +44,9 @@ describe('MitumbaSkeleton', () => {
     render(
       <MitumbaThemeProvider>
         <MitumbaSkeleton width={100} height={100} variant="circular" />
-      </MitumbaThemeProvider>
+      </MitumbaThemeProvider>,
     )
-    const skeleton = screen.getByLabelText('Loading...')
+    const skeleton = screen.getByLabelText('Loading content...')
     expect(skeleton).toHaveStyle({ borderRadius: '50%' })
   })
 
@@ -54,9 +54,9 @@ describe('MitumbaSkeleton', () => {
     render(
       <MitumbaThemeProvider>
         <MitumbaSkeleton width={100} height={20} borderRadius={8} />
-      </MitumbaThemeProvider>
+      </MitumbaThemeProvider>,
     )
-    const skeleton = screen.getByLabelText('Loading...')
+    const skeleton = screen.getByLabelText('Loading content...')
     expect(skeleton).toHaveStyle({ borderRadius: '8px' })
   })
 })
