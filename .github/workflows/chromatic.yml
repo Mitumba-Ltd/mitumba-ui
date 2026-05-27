@@ -28,4 +28,3 @@ jobs:
           buildScriptName: build
           exitOnceUploaded: true
           exitZeroOnChanges: true
- # Using the build script we just added to apps/storybook
