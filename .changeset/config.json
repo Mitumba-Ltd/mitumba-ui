@@ -2,10 +2,14 @@
   "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
   "changelog": "@changesets/cli/changelog",
   "commit": false,
-  "fixed": [],
-  "linked": [],
+  "fixed": [
+    ["@mitumba/tokens", "@mitumba/ui"]
+  ],
+  "linked": [
+    ["@mitumba/tokens", "@mitumba/ui"]
+  ],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": []
+  "ignore": ["@mitumba/storybook"]
 }

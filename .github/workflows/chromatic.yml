@@ -25,4 +25,7 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           workingDir: .
           storybookBuildDir: apps/storybook/storybook-static
-          buildScriptName: build # Using the build script we just added to apps/storybook
+          buildScriptName: build
+          exitOnceUploaded: true
+          exitZeroOnChanges: true
+ # Using the build script we just added to apps/storybook
