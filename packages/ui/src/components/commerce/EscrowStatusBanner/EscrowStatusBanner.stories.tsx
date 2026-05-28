@@ -7,6 +7,9 @@ const meta: Meta<typeof EscrowStatusBanner> = {
   parameters: {
     layout: 'padded',
   },
+  args: {
+    amountKes: 4500,
+  },
   tags: ['autodocs'],
 }
 
@@ -46,5 +49,6 @@ export const Released: Story = {
 export const Refunded: Story = {
   args: {
     status: 'REFUNDED',
+    amountKes: 2500,
   },
 }
