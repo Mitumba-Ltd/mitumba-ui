@@ -1,5 +1,19 @@
 # @mitumba/ui
 
+## 0.1.4
+
+### Patch Changes
+
+- Extraordinary Lead Engineer overhaul of the VAZI (AI Stylist) suite.
+  - Redesigned VAZIOutfitCard with high-depth collage architecture and tactile physics.
+  - Overhauled VAZIBadge with glassmorphism and AI-inspired animations.
+  - Engineered systematic grid logic for VAZIFeedSection and Recommendation panels.
+  - Fixed Chromatic CI build path and NPM publish settings.
+- Updated dependencies
+  - @mitumba/tokens@0.1.4
+
+## 0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

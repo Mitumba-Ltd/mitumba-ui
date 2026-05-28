@@ -12,6 +12,8 @@ export interface MitumbaGlassProps {
   rounding?: 'rounded' | 'large' | 'huge' | 'full'
   /** Optional border visibility. Defaults to true. */
   border?: boolean
+  /** ARIA role for accessibility. */
+  role?: string
   /** Optional style overrides. */
   sx?: SxProps<Theme>
 }

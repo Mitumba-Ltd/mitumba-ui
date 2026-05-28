@@ -15,7 +15,8 @@ describe('VAZIBadge', () => {
       </MitumbaThemeProvider>,
     )
 
-    expect(screen.getByText(/VAZI Curation/i)).toBeInTheDocument()
+    // The badge text was refined to "VAZI" for the extraordinary overhaul
+    expect(screen.getByText(/VAZI/i)).toBeInTheDocument()
   })
 
   it('renders with small size', () => {
@@ -25,7 +26,7 @@ describe('VAZIBadge', () => {
       </MitumbaThemeProvider>,
     )
 
-    expect(screen.getByText(/VAZI Curation/i)).toBeInTheDocument()
+    expect(screen.getByText(/VAZI/i)).toBeInTheDocument()
   })
 
   it('has the correct role', () => {

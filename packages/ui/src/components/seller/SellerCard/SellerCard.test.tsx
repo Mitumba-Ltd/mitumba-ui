@@ -47,6 +47,7 @@ describe('SellerCard', () => {
 
   it('shows VAZI badge when featured', () => {
     renderSellerCard({ isVaziFeatured: true })
-    expect(screen.getByText(/VAZI Curation/i)).toBeInTheDocument()
+    // VAZI label text refined to "VAZI"
+    expect(screen.getByText(/VAZI/i)).toBeInTheDocument()
   })
 })
