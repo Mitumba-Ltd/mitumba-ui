@@ -1,5 +1,14 @@
 # @mitumba/tokens
 
+## 0.1.2
+
+### Patch Changes
+
+- Premium Lead Engineer overhaul of the Banner & Notification suite.
+  - Engineered MitumbaBanner high-fidelity primitive with status-aware top borders.
+  - Refactored OfflineBanner with automated connection detection logic.
+  - Redefined EscrowStatusBanner for absolute marketplace benchmark parity.
+
 ## 0.1.1
 
 ### Patch Changes
