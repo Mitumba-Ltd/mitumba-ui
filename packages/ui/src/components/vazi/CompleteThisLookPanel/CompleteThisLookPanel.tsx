@@ -1,89 +1,82 @@
+import React from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import Stack from '@mui/material/Stack'
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
 import { tokens } from '@mitumba/tokens'
+import { MitumbaGrid } from '../../layout/MitumbaGrid'
 import { VAZIOutfitCard } from '../VAZIOutfitCard'
 import { VAZIOutfitCardSkeleton } from '../VAZIOutfitCardSkeleton'
 import type { CompleteThisLookPanelProps } from './CompleteThisLookPanel.types'
 
+/**
+ * Extraordinary "Pinterest-Level" Complete This Look Panel.
+ * Engineered for high-fidelity recommendation display with systematic grid logic.
+ */
 export function CompleteThisLookPanel({ outfits, loading = false }: CompleteThisLookPanelProps) {
   if (!loading && outfits.length === 0) {
     return null
   }
-
-  const renderOutfitCards = () =>
-    outfits.map((outfit) => (
-      <Box
-        key={outfit.outfitName}
-        sx={{
-          flexShrink: 0,
-          width: { xs: '82%', md: '100%' },
-          maxWidth: { xs: '340px', md: 'none' },
-        }}
-      >
-        <VAZIOutfitCard
-          outfitName={outfit.outfitName}
-          items={outfit.items}
-          totalPriceKes={outfit.totalPriceKes}
-          sellersCount={outfit.sellersCount}
-          isMultiCity={outfit.isMultiCity}
-          onTap={outfit.onTap}
-          onBuyAll={outfit.onBuyAll}
-        />
-      </Box>
-    ))
-
-  const renderSkeletons = () =>
-    ['skel-0', 'skel-1', 'skel-2'].map((skelKey) => (
-      <Box
-        key={skelKey}
-        sx={{
-          flexShrink: 0,
-          width: { xs: '82%', md: '100%' },
-          maxWidth: { xs: '340px', md: 'none' },
-        }}
-      >
-        <VAZIOutfitCardSkeleton />
-      </Box>
-    ))
 
   return (
     <Box
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        gap: tokens.spacing.base,
+        gap: 3,
         width: '100%',
       }}
     >
-      <Typography
-        component="h2"
-        sx={{
-          color: tokens.colors.textPrimary,
-          fontSize: tokens.typography.fontSizes.xl,
-          fontWeight: tokens.typography.fontWeights.bold,
-          lineHeight: tokens.typography.lineHeights.snug,
-          margin: 0,
-        }}
-      >
-        Complete this look
-      </Typography>
+      <Stack spacing={1} sx={{ paddingInline: { xs: 2, md: 0 } }}>
+        <Stack direction="row" spacing={1} alignItems="center">
+          <AutoAwesomeIcon sx={{ fontSize: 16, color: tokens.colors.earth }} />
+          <Typography
+            sx={{
+              fontSize: 11,
+              fontWeight: 900,
+              color: tokens.colors.earth,
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+            }}
+          >
+            AI Recommendations
+          </Typography>
+        </Stack>
+        <Typography
+          component="h2"
+          sx={{
+            color: tokens.colors.textPrimary,
+            fontFamily: tokens.typography.fontFamily,
+            fontSize: tokens.typography.fontSizes.xl,
+            fontWeight: 900,
+            lineHeight: 1,
+            margin: 0,
+          }}
+        >
+          Complete this look
+        </Typography>
+      </Stack>
 
-      <Box
-        sx={{
-          display: { xs: 'flex', md: 'grid' },
-          gridTemplateColumns: { md: 'repeat(3, 1fr)' },
-          gap: tokens.spacing.base,
-          overflowX: { xs: 'auto', md: 'visible' },
-          paddingBottom: { xs: tokens.spacing.sm, md: 0 },
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-          '&::-webkit-scrollbar': {
-            display: 'none',
-          },
-        }}
-      >
-        {loading ? renderSkeletons() : renderOutfitCards()}
-      </Box>
+      <MitumbaGrid columns={{ xs: 1, sm: 2, md: 3, lg: 3 }} gap={3}>
+        {loading ? (
+          Array.from({ length: 3 }).map((_, i) => (
+            <VAZIOutfitCardSkeleton key={`vazi-skel-${i + 1}`} />
+          ))
+        ) : (
+          outfits.map((outfit) => (
+            <VAZIOutfitCard
+              key={outfit.outfitName}
+              outfitName={outfit.outfitName}
+              items={outfit.items}
+              totalPriceKes={outfit.totalPriceKes}
+              sellersCount={outfit.sellersCount}
+              isMultiCity={outfit.isMultiCity}
+              onTap={outfit.onTap}
+              onBuyAll={outfit.onBuyAll}
+            />
+          ))
+        )}
+      </MitumbaGrid>
     </Box>
   )
 }

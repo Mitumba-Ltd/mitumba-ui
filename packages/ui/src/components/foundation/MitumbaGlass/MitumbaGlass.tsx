@@ -14,6 +14,7 @@ export function MitumbaGlass({
   opacity = 0.5,
   rounding = 'large',
   border = true,
+  role,
   sx,
 }: MitumbaGlassProps) {
   const radiusMap = {
@@ -25,6 +26,7 @@ export function MitumbaGlass({
 
   return (
     <Box
+      role={role}
       sx={[
         {
           position: 'relative',

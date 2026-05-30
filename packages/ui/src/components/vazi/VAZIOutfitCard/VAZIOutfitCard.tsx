@@ -1,14 +1,19 @@
+import React, { useCallback } from 'react'
 import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
+import Stack from '@mui/material/Stack'
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'
+import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import { tokens } from '@mitumba/tokens'
-import { useCallback } from 'react'
-import { VAZIBadge } from '../VAZIBadge'
-import { PriceTag } from '../../commerce/PriceTag'
+import { MitumbaGlass } from '../../foundation/MitumbaGlass'
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
+import { VAZIBadge } from '../VAZIBadge'
 import type { VAZIOutfitCardProps } from './VAZIOutfitCard.types'
 
+/**
+ * Extraordinary "Pinterest-Level" VAZI Outfit Card.
+ * Engineered with high-depth collage architecture and tactile spring physics.
+ */
 export function VAZIOutfitCard({
   outfitName,
   items,
@@ -29,217 +34,206 @@ export function VAZIOutfitCard({
   )
 
   return (
-    <Card
+    <Box
       onClick={onTap}
       onKeyDown={handleKeyDown}
       role="button"
       tabIndex={onTap ? 0 : -1}
       sx={{
-        borderRadius: tokens.radius.lg,
-        boxShadow: tokens.shadows.card,
-        cursor: onTap ? 'pointer' : 'default',
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-        transition: 'all 250ms cubic-bezier(0.4, 0, 0.2, 1)',
         width: '100%',
+        position: 'relative',
+        cursor: onTap ? 'pointer' : 'default',
+        borderRadius: `${tokens.radius.lg}px`,
+        overflow: 'hidden',
         backgroundColor: tokens.colors.surface,
-        border: `1px solid ${tokens.colors.divider}`,
-        '&:hover': onTap
-          ? {
-              transform: 'translateY(-4px)',
-              boxShadow: tokens.shadows.elevated,
-              borderColor: tokens.colors.earthLight,
-            }
-          : undefined,
-        '&:focus-visible': {
-          outline: `2px solid ${tokens.colors.earthLight}`,
-          boxShadow: tokens.shadows.focus,
+        boxShadow: `
+          0 4px 12px 0 rgba(0, 0, 0, 0.05),
+          0 12px 32px 0 rgba(31, 38, 135, 0.1)
+        `,
+        transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+        '&:hover': {
+          transform: 'translateY(-8px) scale(1.01)',
+          boxShadow: tokens.shadows.deep,
+          '& .collage-image-2': { transform: 'rotate(4deg) translate(8px, -4px)' },
+          '& .collage-image-3': { transform: 'rotate(-4deg) translate(-8px, -4px)' },
         },
       }}
     >
-      {/* Header: VAZI label + outfit name */}
+      {/* VAZI Floating Header */}
       <Box
         sx={{
-          alignItems: 'center',
-          display: 'flex',
-          gap: tokens.spacing.sm,
-          paddingInline: tokens.spacing.base,
-          paddingBlock: tokens.spacing.base,
-          borderBottom: `1px solid ${tokens.colors.background}`,
+          position: 'absolute',
+          top: 12,
+          left: 12,
+          zIndex: 10,
         }}
       >
         <VAZIBadge size="small" />
+      </Box>
+
+      {/* Collage Section (Extraordinary Architecture) */}
+      <Box
+        sx={{
+          position: 'relative',
+          width: '100%',
+          height: 280,
+          backgroundColor: tokens.colors.background,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          overflow: 'hidden',
+          p: 3,
+        }}
+      >
+        {/* Background Light Leak */}
+        <Box
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            background: 'radial-gradient(circle at center, rgba(160, 98, 53, 0.05) 0%, rgba(255,255,255,0) 70%)',
+            pointerEvents: 'none',
+          }}
+        />
+
+        {/* The Stack */}
+        <Box sx={{ position: 'relative', width: 140, height: 180 }}>
+          {items.slice(0, 3).map((item, index) => {
+            const isMain = index === 0
+            
+            let rotation = 0
+            if (index === 1) rotation = -4
+            if (index === 2) rotation = 4
+
+            let leftOffset = 0
+            if (index === 1) leftOffset = -12
+            if (index === 2) leftOffset = 12
+
+            return (
+              <Box
+                key={item.listingId}
+                className={`collage-image-${index + 1}`}
+                sx={{
+                  position: 'absolute',
+                  top: isMain ? 0 : 4,
+                  left: isMain ? 0 : leftOffset,
+                  width: '100%',
+                  height: '100%',
+                  borderRadius: `${tokens.radius.md}px`,
+                  overflow: 'hidden',
+                  zIndex: 3 - index,
+                  boxShadow: tokens.shadows.card,
+                  border: `2px solid ${tokens.colors.white}`,
+                  transform: `rotate(${rotation}deg)`,
+                  transition: 'all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                  backgroundColor: tokens.colors.surface,
+                }}
+              >
+                <Box
+                  component="img"
+                  src={item.imageUrl}
+                  alt={item.garmentType}
+                  sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </Box>
+            )
+          })}
+        </Box>
+
+        {/* Counter Overlay (if > 3 items) */}
+        {items.length > 3 && (
+          <MitumbaGlass
+            rounding="full"
+            opacity={0.8}
+            blur={12}
+            sx={{
+              position: 'absolute',
+              bottom: 20,
+              right: 20,
+              px: 1.5,
+              py: 0.5,
+              zIndex: 5,
+            }}
+          >
+            <Typography sx={{ fontSize: 10, fontWeight: 900, color: tokens.colors.earth }}>
+              +{items.length - 3} MORE
+            </Typography>
+          </MitumbaGlass>
+        )}
+      </Box>
+
+      {/* Content Section */}
+      <Box sx={{ p: 2.5 }}>
         <Typography
           sx={{
+            fontSize: tokens.typography.fontSizes.lg,
+            fontWeight: 900,
             color: tokens.colors.textPrimary,
-            flex: 1,
-            fontSize: tokens.typography.fontSizes.base,
-            fontWeight: tokens.typography.fontWeights.bold,
-            lineHeight: tokens.typography.lineHeights.snug,
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
+            fontFamily: tokens.typography.fontFamily,
+            lineHeight: 1.1,
+            mb: 1,
+            letterSpacing: '-0.01em',
           }}
         >
           {outfitName}
         </Typography>
-      </Box>
 
-      {/* Horizontal scroll of item images (3:4 aspect ratio each) */}
-      <Box
-        sx={{
-          display: 'flex',
-          gap: tokens.spacing.sm,
-          overflowX: 'auto',
-          padding: tokens.spacing.base,
-          backgroundColor: tokens.colors.background,
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-          '&::-webkit-scrollbar': {
-            display: 'none',
-          },
-        }}
-      >
-        {items.map((item) => (
-          <Box
-            key={item.listingId}
+        <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2.5 }}>
+          <Typography
             sx={{
-              flexShrink: 0,
-              width: '88px',
+              fontSize: 11,
+              fontWeight: 700,
+              color: tokens.colors.textSecondary,
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
             }}
           >
-            <Box
-              sx={{
-                aspectRatio: '3 / 4',
-                borderRadius: tokens.radius.sm,
-                overflow: 'hidden',
-                width: '100%',
-                backgroundColor: tokens.colors.surface,
-                border: `1px solid ${tokens.colors.divider}`,
-              }}
-            >
-              <Box
-                component="img"
-                src={item.imageUrl}
-                alt={`${item.garmentType} — ${item.sellerName}`}
-                loading="lazy"
-                sx={{
-                  display: 'block',
-                  height: '100%',
-                  objectFit: 'cover',
-                  width: '100%',
-                }}
-              />
-            </Box>
-            <Typography
-              sx={{
-                color: tokens.colors.textSecondary,
-                fontSize: 10,
-                fontWeight: tokens.typography.fontWeights.semibold,
-                textTransform: 'uppercase',
-                letterSpacing: tokens.typography.letterSpacings.wide,
-                marginTop: tokens.spacing.xs,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-                textAlign: 'center',
-              }}
-            >
-              {item.sellerName}
-            </Typography>
-          </Box>
-        ))}
-      </Box>
+            {sellersCount} Sellers
+          </Typography>
+          {isMultiCity && (
+            <>
+              <Box sx={{ width: 4, height: 4, borderRadius: '50%', bgcolor: tokens.colors.divider }} />
+              <Stack direction="row" spacing={0.5} alignItems="center">
+                <LocalShippingIcon sx={{ fontSize: 14, color: tokens.colors.earth }} />
+                <Typography
+                  sx={{
+                    fontSize: 10,
+                    fontWeight: 800,
+                    color: tokens.colors.earth,
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  Multi-City
+                </Typography>
+              </Stack>
+            </>
+          )}
+        </Stack>
 
-      <CardContent
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: tokens.spacing.sm,
-          padding: tokens.spacing.base,
-          '&:last-child': {
-            paddingBottom: tokens.spacing.base,
-          },
-        }}
-      >
-        {/* Total price + Buy button row */}
-        <Box
-          sx={{
-            alignItems: 'center',
-            display: 'flex',
-            gap: tokens.spacing.sm,
-            justifyContent: 'space-between',
-          }}
-        >
-          <PriceTag priceKes={totalPriceKes} size="large" color="earth" />
+        {/* Footer Action Row */}
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Box>
+             <Typography sx={{ fontSize: 10, fontWeight: 800, color: tokens.colors.textDisabled, textTransform: 'uppercase', mb: 0.2 }}>
+               Total Look
+             </Typography>
+             <Typography sx={{ fontSize: tokens.typography.fontSizes.xl, fontWeight: 900, color: tokens.colors.textPrimary, fontFamily: tokens.typography.fontFamily }}>
+               KES {totalPriceKes.toLocaleString()}
+             </Typography>
+          </Box>
 
           {onBuyAll && (
-            <Box sx={{ flexShrink: 0 }}>
-              <MitumbaPrimaryButton
-                label="Buy all"
-                variant="earth"
-                size="small"
-                fullWidth={false}
-                onClick={(e: React.MouseEvent) => {
-                  if (e && e.stopPropagation) {
-                    e.stopPropagation()
-                  }
-                  onBuyAll()
-                }}
-              />
-            </Box>
+            <MitumbaPrimaryButton
+              label="Buy entire look"
+              variant="earth"
+              size="small"
+              icon={<AutoAwesomeIcon sx={{ fontSize: 16 }} />}
+              iconPosition="right"
+              onClick={(e) => { e.stopPropagation(); onBuyAll(); }}
+              sx={{ borderRadius: tokens.radius.full, height: 36, px: 3 }}
+            />
           )}
-        </Box>
-
-        {/* Ships from N sellers badge */}
-        {sellersCount > 1 && (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: tokens.spacing.xs,
-              mt: tokens.spacing.xs,
-            }}
-          >
-            <Typography
-              sx={{
-                color: tokens.colors.textSecondary,
-                fontSize: tokens.typography.fontSizes.sm,
-                lineHeight: 1,
-              }}
-            >
-              Ships from {sellersCount} sellers
-            </Typography>
-            {isMultiCity && (
-              <Box
-                component="span"
-                sx={{
-                  fontSize: tokens.typography.fontSizes.xs,
-                  color: tokens.colors.textDisabled,
-                }}
-              >
-                •
-              </Box>
-            )}
-            {isMultiCity && (
-              <Typography
-                sx={{
-                  color: tokens.colors.earth,
-                  fontSize: tokens.typography.fontSizes.xs,
-                  fontWeight: tokens.typography.fontWeights.bold,
-                  textTransform: 'uppercase',
-                  letterSpacing: tokens.typography.letterSpacings.wide,
-                  lineHeight: 1,
-                }}
-              >
-                Multi-city
-              </Typography>
-            )}
-          </Box>
-        )}
-      </CardContent>
-    </Card>
+        </Stack>
+      </Box>
+    </Box>
   )
 }
 
