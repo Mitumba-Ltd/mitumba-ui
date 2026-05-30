@@ -12,6 +12,12 @@
 
 ## 0.1.3
 
+### Patch Changes
+
+- Fix Chromatic CI build path and script resolution for monorepo compatibility.
+  - Switched to direct npm workspace build for Storybook to ensure artifact isolation.
+  - Updated GitHub workflow to target the specific build-storybook task.
+
 ## 0.1.2
 
 ### Patch Changes

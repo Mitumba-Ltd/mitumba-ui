@@ -11,13 +11,15 @@ import type { EscrowStatusBannerProps } from './EscrowStatusBanner.types'
  * Premium Escrow Status Banner.
  * Redefined using the high-fidelity 'Passive Alert' primitive for absolute benchmark consistency.
  */
-export function EscrowStatusBanner({ status, amountKes, hoursRemaining, sx }: EscrowStatusBannerProps) {
+export function EscrowStatusBanner({ status, amountKes = 0, hoursRemaining, sx }: EscrowStatusBannerProps) {
+  const formattedAmount = (amountKes || 0).toLocaleString()
+  
   const config = {
     FUNDED: {
       severity: 'info' as const,
       icon: <SecurityIcon />,
       title: 'Payment in Escrow',
-      message: `KES ${amountKes.toLocaleString()} is securely held. We'll release it once you confirm delivery.`,
+      message: `KES ${formattedAmount} is securely held. We'll release it once you confirm delivery.`,
     },
     SHIPPED: {
       severity: 'info' as const,
@@ -41,7 +43,7 @@ export function EscrowStatusBanner({ status, amountKes, hoursRemaining, sx }: Es
       severity: 'error' as const,
       icon: <ErrorOutlineIcon />,
       title: 'Payment Refunded',
-      message: `The escrow has been cancelled and KES ${amountKes.toLocaleString()} has been returned to your wallet.`,
+      message: `The escrow has been cancelled and KES ${formattedAmount} has been returned to your wallet.`,
     },
   }
 
