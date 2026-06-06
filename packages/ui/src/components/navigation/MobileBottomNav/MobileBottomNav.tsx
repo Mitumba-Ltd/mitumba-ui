@@ -111,12 +111,12 @@ export function MobileBottomNav({
               '&::after': {
                 content: '""',
                 position: 'absolute',
-                bottom: -12,
+                top: 0,
                 left: '25%',
                 width: isActive ? '50%' : 0,
                 height: 3,
                 backgroundColor: tokens.colors.green,
-                borderRadius: '3px 3px 0 0',
+                borderRadius: '0 0 3px 3px',
                 transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
               }
             }
