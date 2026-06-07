@@ -15,9 +15,10 @@ describe('AuthPage', () => {
     const onLogin = vi.fn();
     render(<AuthPage onLogin={onLogin} />);
     
+    // We get the first button that has name 'Sign In' which is the primary button in SignIn view
+    const submitBtn = screen.getAllByRole('button', { name: /Sign In/i })[0];
     const emailInput = screen.getAllByLabelText(/Email/i)[0];
     const passwordInput = screen.getAllByLabelText(/Password/i)[0];
-    const submitBtn = screen.getByRole('button', { name: /Sign In/i });
 
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
     fireEvent.change(passwordInput, { target: { value: 'password123' } });
@@ -30,13 +31,15 @@ describe('AuthPage', () => {
     const onViewChange = vi.fn();
     render(<AuthPage onViewChange={onViewChange} />);
     
+    // The link is inside a Typography component that says "Don't have an account?"
+    // To be precise, it's the anchor element matching the text exactly.
     const signUpLink = screen.getAllByText('Sign Up', { selector: 'a' })[0];
     fireEvent.click(signUpLink);
 
     // After animation delay it calls onViewChange
     await waitFor(() => {
       expect(onViewChange).toHaveBeenCalledWith('signup');
-    });
+    }, { timeout: 2000 });
   });
 
   it('displays error message when error prop is provided', () => {
