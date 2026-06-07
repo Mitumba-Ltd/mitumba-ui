@@ -419,3 +419,4 @@ If you are a Claude Code agent (Track G) reading this:
 8. **No hardcoded values anywhere** — tokens only
 9. **Do not create new tokens** — if a token is missing, note it in your PR under "Questions for review"
 10. **Do not install new dependencies** without noting them in the PR — the bundle size of this package matters
+11. **Changesets & Release Workflow** — When your PR requires a version bump, you **must** create a `.changeset/*.md` file in that same PR. **After** your PR merges, there is no automated bot: you must checkout `main`, create a `chore/release-vX` branch, run `npm run version` (which consumes the changesets and updates `package.json` & `CHANGELOG.md`), commit those changes, and open a final Release PR. The GitHub Action only publishes when tags are pushed!
