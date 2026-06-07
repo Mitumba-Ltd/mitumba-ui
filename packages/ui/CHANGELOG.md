@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.1.5
+
+### Patch Changes
+
+- e9ff7d4: fix(MobileBottomNav): correct indicator variant positioning to render inside visible bounds
+
 ## 0.1.4
 
 ### Patch Changes
