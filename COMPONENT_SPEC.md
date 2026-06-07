@@ -416,6 +416,25 @@ Stream of order/shop events.
 
 ---
 
+## Phase 14 — Page templates
+
+### 14.1 `AuthPage`
+
+Unified authentication page component handling sign in, sign up, password recovery, and reset flows.
+
+Props:
+- `defaultView?: 'signin' | 'signup' | 'forgot' | 'reset'`
+- `onLogin?: (email: string, pass: string, remember: boolean) => void`
+- `onSignup?: (name: string, email: string, pass: string, promo: boolean) => void`
+- `onForgot?: (email: string) => void`
+- `onReset?: (pass: string) => void`
+- `onViewChange?: (view: string) => void`
+- `error?: string | null`
+- `loading?: boolean`
+- `brandLogo?: React.ReactNode`
+
+---
+
 ## Component count summary
 
 | Phase | Components | Count |
@@ -433,4 +452,5 @@ Stream of order/shop events.
 | Feedback | EmptyState, ErrorState, OfflineBanner, Toast, Modal, Skeleton | 6 |
 | Data display | StatsCard, ActivityFeed | 2 |
 | Selection | Checkbox, Radio, Switch, Slider, DatePicker | 5 |
-| **Total** | | **58** |
+| Page templates | AuthPage | 1 |
+| **Total** | | **59** |
