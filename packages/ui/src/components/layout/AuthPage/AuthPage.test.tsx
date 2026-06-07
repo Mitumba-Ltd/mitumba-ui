@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import '@testing-library/jest-dom/vitest'
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { AuthPage } from './AuthPage';
 
@@ -15,8 +15,8 @@ describe('AuthPage', () => {
     const onLogin = vi.fn();
     render(<AuthPage onLogin={onLogin} />);
     
-    const emailInput = screen.getByLabelText(/Email/i);
-    const passwordInput = screen.getByLabelText(/Password/i);
+    const emailInput = screen.getAllByLabelText(/Email/i)[0];
+    const passwordInput = screen.getAllByLabelText(/Password/i)[0];
     const submitBtn = screen.getByRole('button', { name: /Sign In/i });
 
     fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
@@ -30,11 +30,11 @@ describe('AuthPage', () => {
     const onViewChange = vi.fn();
     render(<AuthPage onViewChange={onViewChange} />);
     
-    const signUpLink = screen.getByText('Sign Up', { selector: 'a' });
+    const signUpLink = screen.getAllByText('Sign Up', { selector: 'a' })[0];
     fireEvent.click(signUpLink);
 
     // After animation delay it calls onViewChange
-    await vi.waitFor(() => {
+    await waitFor(() => {
       expect(onViewChange).toHaveBeenCalledWith('signup');
     });
   });
