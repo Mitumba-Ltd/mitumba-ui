@@ -93,7 +93,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
           height: { xs: 'auto', md: 600 },
           bgcolor: isDark ? tokens.colors.textSecondary : tokens.colors.surface, 
           borderRadius: { xs: 0, md: `${tokens.radius.xl}px` }, 
-          boxShadow: { xs: 'none', md: tokens.shadows.lg }, 
+          boxShadow: { xs: 'none', md: tokens.shadows.elevated }, 
           overflow: 'hidden',
           display: 'flex',
           flexDirection: { xs: 'column', md: 'row' }
@@ -212,14 +212,14 @@ export const AuthPage: React.FC<AuthPageProps> = ({
               </Link>
             </Box>
 
+            <button type="submit" style={{ display: 'none' }} />
             <MitumbaPrimaryButton
               fullWidth
-              type="submit"
               disabled={loading}
               sx={{ py: 1.5, mb: `${tokens.spacing.lg}px` }}
-            >
-              {loading ? 'Signing in...' : 'Sign In'}
-            </MitumbaPrimaryButton>
+              label={loading ? 'Signing in...' : 'Sign In'}
+              onClick={handleLoginSubmit}
+            />
 
             {(onSocialAuth || socialProviders) && (
               <>
@@ -338,14 +338,14 @@ export const AuthPage: React.FC<AuthPageProps> = ({
               required
             />
 
+            <button type="submit" style={{ display: 'none' }} />
             <MitumbaPrimaryButton
               fullWidth
-              type="submit"
               disabled={loading}
               sx={{ py: 1.5, mt: `${tokens.spacing.xl}px`, mb: `${tokens.spacing.lg}px` }}
-            >
-              {loading ? 'Creating account...' : 'Sign Up'}
-            </MitumbaPrimaryButton>
+              label={loading ? 'Creating account...' : 'Sign Up'}
+              onClick={handleSignUpSubmit}
+            />
 
             {(onSocialAuth || socialProviders) && (
               <>
@@ -449,14 +449,14 @@ export const AuthPage: React.FC<AuthPageProps> = ({
               required
             />
 
+            <button type="submit" style={{ display: 'none' }} />
             <MitumbaPrimaryButton
               fullWidth
-              type="submit"
               disabled={loading}
               sx={{ py: 1.5, mt: `${tokens.spacing.xl}px`, mb: `${tokens.spacing.lg}px` }}
-            >
-              {loading ? 'Sending...' : 'Send Reset Link'}
-            </MitumbaPrimaryButton>
+              label={loading ? 'Sending...' : 'Send Reset Link'}
+              onClick={handleForgotPasswordSubmit}
+            />
 
             <Box sx={{ textAlign: 'center', mt: `${tokens.spacing.lg}px` }}>
               <Typography variant="body2" color={isDark ? tokens.colors.divider : tokens.colors.textSecondary}>
@@ -515,14 +515,14 @@ export const AuthPage: React.FC<AuthPageProps> = ({
               required
             />
 
+            <button type="submit" style={{ display: 'none' }} />
             <MitumbaPrimaryButton
               fullWidth
-              type="submit"
               disabled={loading}
               sx={{ py: 1.5, mt: `${tokens.spacing.xl}px`, mb: `${tokens.spacing.lg}px` }}
-            >
-              {loading ? 'Resetting...' : 'Reset Password'}
-            </MitumbaPrimaryButton>
+              label={loading ? 'Resetting...' : 'Reset Password'}
+              onClick={handleResetPasswordSubmit}
+            />
 
             <Box sx={{ textAlign: 'center', mt: `${tokens.spacing.lg}px` }}>
               <Typography variant="body2" color={isDark ? tokens.colors.divider : tokens.colors.textSecondary}>
