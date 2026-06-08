@@ -1,4 +1,3 @@
-import React from 'react'
 import type { SxProps, Theme } from '@mui/material'
 
 export interface AuthSubmitButtonProps {
@@ -10,8 +9,8 @@ export interface AuthSubmitButtonProps {
   disabled?: boolean
   /** Expand to full container width */
   fullWidth?: boolean
-  /** Called on click (in addition to native form submit) */
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+  /** Called on click */
+  onClick?: () => void
   /** MUI sx overrides */
   sx?: SxProps<Theme>
 }
