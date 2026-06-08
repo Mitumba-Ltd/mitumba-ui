@@ -46,22 +46,22 @@ export const AuthPage: React.FC<AuthPageProps> = ({
   const isForgot = currentView === 'forgot';
   const isDark = theme === 'mitumba-dark';
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault();
     onLogin?.(email, password, remember);
   };
 
-  const handleSignUpSubmit = (e: React.FormEvent) => {
+  const handleSignUpSubmit = (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault();
     onSignUp?.(email, password);
   };
 
-  const handleForgotPasswordSubmit = (e: React.FormEvent) => {
+  const handleForgotPasswordSubmit = (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault();
     onForgotPassword?.(email);
   };
 
-  const handleResetPasswordSubmit = (e: React.FormEvent) => {
+  const handleResetPasswordSubmit = (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault();
     onResetPassword?.(password, confirmPassword);
   };
@@ -130,7 +130,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
               <FormControlLabel control={<Checkbox checked={remember} onChange={(e) => setRemember(e.target.checked)} color="primary" />} label={<Typography variant="body2" color={isDark ? tokens.colors.white : tokens.colors.textPrimary}>Remember me</Typography>} />
               <Link href="#" onClick={(e) => { e.preventDefault(); handleViewChange('forgot'); }} variant="body2" sx={{ color: tokens.colors.green, '&:hover': { color: tokens.colors.greenDark } }}>Forgot password?</Link>
             </Box>
-            <AuthSubmitButton fullWidth loading={loading} label={loading ? 'Signing in...' : 'Sign In'} sx={{ py: 1.5, mb: `${tokens.spacing.lg}px` }} />
+            <AuthSubmitButton fullWidth loading={loading} label={loading ? 'Signing in...' : 'Sign In'} sx={{ py: 1.5, mb: `${tokens.spacing.lg}px` }} onClick={handleLoginSubmit} />
             {(onSocialAuth || socialProviders) && socialButtons('login')}
             <Box sx={{ textAlign: 'center', mt: `${tokens.spacing.lg}px` }}>
               <Typography variant="body2" color={isDark ? tokens.colors.divider : tokens.colors.textSecondary}>

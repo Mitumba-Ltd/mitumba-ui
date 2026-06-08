@@ -12,6 +12,7 @@ export const AuthSubmitButton: React.FC<AuthSubmitButtonProps> = ({
   loading = false,
   disabled = false,
   fullWidth = false,
+  onClick,
   sx,
 }) => (
   <Button
@@ -20,6 +21,7 @@ export const AuthSubmitButton: React.FC<AuthSubmitButtonProps> = ({
     color="primary"
     disabled={disabled || loading}
     fullWidth={fullWidth}
+    onClick={onClick}
     disableElevation
     sx={[
       {

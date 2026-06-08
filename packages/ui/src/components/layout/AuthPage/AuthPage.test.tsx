@@ -15,11 +15,10 @@ describe('AuthPage', () => {
     const onLogin = vi.fn();
     render(<AuthPage onLogin={onLogin} />);
 
-    const forms = screen.getAllByRole('form', { name: 'sign-in-form' });
-    const form = forms[0];
+    // Use first form instance; button onClick directly calls handleLoginSubmit
+    const form = screen.getAllByRole('form', { name: 'sign-in-form' })[0];
     fireEvent.change(within(form).getByLabelText(/Email/i), { target: { value: 'test@example.com' } });
     fireEvent.change(within(form).getByLabelText(/^Password/i), { target: { value: 'password123' } });
-    // Click the submit button — more reliable than fireEvent.submit with React synthetic events
     fireEvent.click(within(form).getByRole('button', { name: /Sign In/i }));
 
     expect(onLogin).toHaveBeenCalledWith('test@example.com', 'password123', false);
@@ -29,9 +28,8 @@ describe('AuthPage', () => {
     const onViewChange = vi.fn();
     render(<AuthPage onViewChange={onViewChange} />);
 
-    const forms = screen.getAllByRole('form', { name: 'sign-in-form' });
-    // Click the link and directly call the handler — bypass setTimeout animation delay
-    fireEvent.click(within(forms[0]).getByRole('link', { name: 'Sign Up' }));
+    const form = screen.getAllByRole('form', { name: 'sign-in-form' })[0];
+    fireEvent.click(within(form).getByRole('link', { name: 'Sign Up' }));
 
     await waitFor(() => {
       expect(onViewChange).toHaveBeenCalledWith('signup');
