@@ -19,12 +19,12 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: npm ci
+      - run: npm run build
       - name: Publish to Chromatic
         uses: chromaui/action@latest
         with:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           workingDir: .
-          storybookBuildDir: apps/storybook/storybook-static
           buildScriptName: build-storybook
           exitOnceUploaded: true
           exitZeroOnChanges: true

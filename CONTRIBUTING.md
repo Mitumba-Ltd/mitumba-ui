@@ -395,13 +395,26 @@ Run the Storybook accessibility panel on every story before opening a PR.
 
 ## Publishing rules
 
-- Packages publish automatically via GitHub Actions when a release tag is pushed
 - Version bumps use semantic versioning: `MAJOR.MINOR.PATCH`
 - `PATCH` — bug fixes, no API changes
 - `MINOR` — new components, new props (backward compatible)
 - `MAJOR` — breaking changes (prop renames, removed components, token renames)
 - Breaking changes require a migration guide in `docs/migrations/`
 - Never publish manually — always via the CI workflow
+
+### Release workflow (automated)
+
+1. **Include a changeset in your PR** — create `.changeset/<your-branch>.md`:
+   ```md
+   ---
+   "@mitumba/ui": minor
+   ---
+   feat(component): description of what changed
+   ```
+2. **Merge your PR into `main`** — the Changesets Action auto-opens a "Version Packages" PR that bumps `package.json` and updates `CHANGELOG.md`
+3. **Merge the Version Packages PR** — triggers the publish workflow, package ships to npm
+
+No manual tagging. No manual `npm publish`. The `.changeset/*.md` file in your PR is the only trigger needed.
 
 ---
 
@@ -419,4 +432,4 @@ If you are a Claude Code agent (Track G) reading this:
 8. **No hardcoded values anywhere** — tokens only
 9. **Do not create new tokens** — if a token is missing, note it in your PR under "Questions for review"
 10. **Do not install new dependencies** without noting them in the PR — the bundle size of this package matters
-11. **Changesets & Release Workflow** — When your PR requires a version bump, you **must** create a `.changeset/*.md` file in that same PR. **After** your PR merges, there is no automated bot: you must checkout `main`, create a `chore/release-vX` branch, run `npm run version` (which consumes the changesets and updates `package.json` & `CHANGELOG.md`), commit those changes, and open a final Release PR. The GitHub Action only publishes when tags are pushed!
+11. **Changesets & Release Workflow** — When your PR requires a version bump, you **must** create a `.changeset/*.md` file in that same PR. Once your PR merges into `main`, the Changesets GitHub Action automatically opens a "Version Packages" PR. Merging that PR publishes to npm. No manual steps required.
