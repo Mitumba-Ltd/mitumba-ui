@@ -15,12 +15,12 @@ describe('AuthPage', () => {
     const onLogin = vi.fn();
     render(<AuthPage onLogin={onLogin} />);
 
-    // Multiple responsive copies exist in DOM — use the first
     const forms = screen.getAllByRole('form', { name: 'sign-in-form' });
     const form = forms[0];
     fireEvent.change(within(form).getByLabelText(/Email/i), { target: { value: 'test@example.com' } });
     fireEvent.change(within(form).getByLabelText(/^Password/i), { target: { value: 'password123' } });
-    fireEvent.submit(form);
+    // Click the submit button — more reliable than fireEvent.submit with React synthetic events
+    fireEvent.click(within(form).getByRole('button', { name: /Sign In/i }));
 
     expect(onLogin).toHaveBeenCalledWith('test@example.com', 'password123', false);
   });
@@ -30,6 +30,7 @@ describe('AuthPage', () => {
     render(<AuthPage onViewChange={onViewChange} />);
 
     const forms = screen.getAllByRole('form', { name: 'sign-in-form' });
+    // Click the link and directly call the handler — bypass setTimeout animation delay
     fireEvent.click(within(forms[0]).getByRole('link', { name: 'Sign Up' }));
 
     await waitFor(() => {
