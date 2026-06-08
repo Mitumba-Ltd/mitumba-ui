@@ -67,6 +67,14 @@ export const WithIllustration: Story = {
   },
 };
 
+export const WithHeroImage: Story = {
+  args: {
+    view: 'signin',
+    theme: 'mitumba-light',
+    heroImageUrl: 'https://mitumba.stanl.ink/hero-aspect.png',
+  },
+};
+
 export const LoadingState: Story = {
   args: {
     view: 'signin',

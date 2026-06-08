@@ -45,6 +45,9 @@ export interface AuthPageProps {
   
   /** URL for the main illustration image shown on desktop */
   illustrationUrl?: string;
+
+  /** URL for a full-bleed hero photo behind the gradient panel (desktop only) */
+  heroImageUrl?: string;
   
   /** Additional actions to render in the footer area */
   footerActions?: React.ReactNode;
