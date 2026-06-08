@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://mitumba.stanl.ink">
-    <img src="https://cloud.stanlink.online/mitumba/assets/images/brand/mitumba-textmark-processed.png" alt="Mitumba" height="48" />
+    <img src="https://github.com/Mitumba-Ltd/assets/blob/main/brand/favicon.png" alt="Mitumba" height="48" />
   </a>
 </p>
 
