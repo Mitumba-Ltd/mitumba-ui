@@ -17,7 +17,7 @@ export interface AuthPageProps {
   onResetPassword?: (password: string, confirmPassword: string) => void;
   
   /** Handler for social authentication */
-  onSocialAuth?: (provider: string, mode: 'login' | 'signup', data?: any) => void;
+  onSocialAuth?: (provider: string, mode: 'login' | 'signup', data?: unknown) => void;
   
   /** Handler when the user attempts to switch views */
   onViewChange?: (view: 'signin' | 'signup' | 'forgot' | 'reset') => void;

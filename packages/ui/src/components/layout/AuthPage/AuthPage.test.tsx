@@ -31,7 +31,7 @@ describe('AuthPage', () => {
     render(<MitumbaThemeProvider><AuthPage onViewChange={onViewChange} /></MitumbaThemeProvider>);
 
     const form = screen.getAllByRole('form', { name: 'sign-in-form' })[0];
-    fireEvent.click(within(form).getByRole('link', { name: 'Sign Up' }));
+    fireEvent.click(within(form).getByRole('button', { name: 'Sign Up' }));
 
     await waitFor(() => {
       expect(onViewChange).toHaveBeenCalledWith('signup');
