@@ -1,5 +1,5 @@
-export { MitumbaPrimaryButton, MitumbaTextField, MitumbaSelect, MitumbaChip, MitumbaAvatar, MitumbaGlass } from './foundation'
-export type { MitumbaPrimaryButtonProps, MitumbaTextFieldProps, MitumbaSelectProps, MitumbaChipProps, MitumbaAvatarProps, MitumbaGlassProps } from './foundation'
+export { MitumbaPrimaryButton, MitumbaTextField, MitumbaSelect, MitumbaChip, MitumbaAvatar, MitumbaGlass, AuthSubmitButton } from './foundation'
+export type { MitumbaPrimaryButtonProps, MitumbaTextFieldProps, MitumbaSelectProps, MitumbaChipProps, MitumbaAvatarProps, MitumbaGlassProps, AuthSubmitButtonProps } from './foundation'
 export * from './selection'
 export * from './feedback'
 export { PageContainer, SectionHeader, MitumbaDivider, MitumbaGrid, AuthPage } from './layout'

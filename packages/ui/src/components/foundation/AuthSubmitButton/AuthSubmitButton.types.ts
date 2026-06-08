@@ -1,0 +1,14 @@
+import type { SxProps, Theme } from '@mui/material'
+
+export interface AuthSubmitButtonProps {
+  /** Button label text */
+  label: string
+  /** Whether a request is in progress — disables the button */
+  loading?: boolean
+  /** Whether the button is disabled */
+  disabled?: boolean
+  /** Expand to full container width */
+  fullWidth?: boolean
+  /** MUI sx overrides */
+  sx?: SxProps<Theme>
+}
