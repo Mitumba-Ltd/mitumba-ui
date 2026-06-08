@@ -36,7 +36,7 @@ export function AuthSubmitButton({
           '&:hover': { transform: 'translateY(-2px) scale(1.02)' },
           '&:active': { transform: 'translateY(0) scale(0.98)' },
         },
-        ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
+        ...(Array.isArray(sx) ? sx : [sx].filter(Boolean)),
       ]}
     >
       {label}
