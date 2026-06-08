@@ -22,6 +22,7 @@ export function AuthPage({
   socialProviders,
   theme = 'mitumba-light',
   illustrationUrl,
+  heroImageUrl,
   footerActions,
 }: AuthPageProps): React.ReactElement {
   const [currentView, setCurrentView] = React.useState<'signin' | 'signup' | 'forgot' | 'reset'>(view);
@@ -131,7 +132,7 @@ export function AuthPage({
       <Box sx={{ position: 'relative', width: '100%', maxWidth: { xs: '100%', md: 1000 }, minHeight: { xs: '100vh', md: 600 }, height: { xs: 'auto', md: 600 }, bgcolor: isDark ? tokens.colors.textSecondary : tokens.colors.surface, borderRadius: { xs: 0, md: `${tokens.radius.xl}px` }, boxShadow: { xs: 'none', md: tokens.shadows.elevated }, overflow: 'hidden', display: 'flex', flexDirection: { xs: 'column', md: 'row' } }}>
 
         {/* Gradient panel */}
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: `linear-gradient(135deg, ${tokens.colors.green}, ${tokens.colors.earth})`, clipPath: gradientClipPath, transition: 'clip-path 0.8s cubic-bezier(0.65, 0, 0.35, 1)', flexDirection: 'column', alignItems: gradientLeft ? 'flex-start' : 'flex-end', justifyContent: 'center', color: tokens.colors.white, p: `${tokens.spacing.giant}px`, pl: gradientLeft ? `${tokens.spacing.xxxl}px` : `${tokens.spacing.giant}px`, pr: gradientLeft ? `${tokens.spacing.giant}px` : `${tokens.spacing.xxxl}px`, zIndex: 10 }}>
+        <Box sx={{ display: { xs: 'none', md: 'flex' }, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: heroImageUrl ? `linear-gradient(135deg, ${tokens.colors.green}cc, ${tokens.colors.earth}99), url(${heroImageUrl})` : `linear-gradient(135deg, ${tokens.colors.green}, ${tokens.colors.earth})`, backgroundSize: 'cover', backgroundPosition: 'center', clipPath: gradientClipPath, transition: 'clip-path 0.8s cubic-bezier(0.65, 0, 0.35, 1)', flexDirection: 'column', alignItems: gradientLeft ? 'flex-start' : 'flex-end', justifyContent: 'center', color: tokens.colors.white, p: `${tokens.spacing.giant}px`, pl: gradientLeft ? `${tokens.spacing.xxxl}px` : `${tokens.spacing.giant}px`, pr: gradientLeft ? `${tokens.spacing.giant}px` : `${tokens.spacing.xxxl}px`, zIndex: 10 }}>
           <Box sx={{ opacity: isTransitioning ? 0 : 1, transition: 'opacity 0.3s', textAlign: 'center', maxWidth: 400 }}>
             <Typography variant="h3" fontWeight="bold" gutterBottom sx={{ color: tokens.colors.white }}>Mitumba</Typography>
             <Typography variant="h6" sx={{ opacity: 0.9, mt: `${tokens.spacing.lg}px`, color: tokens.colors.white }}>Your ultimate marketplace for sustainable fashion.</Typography>
