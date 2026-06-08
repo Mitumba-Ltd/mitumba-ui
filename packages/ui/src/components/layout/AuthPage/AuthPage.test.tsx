@@ -15,7 +15,9 @@ describe('AuthPage', () => {
     const onLogin = vi.fn();
     render(<AuthPage onLogin={onLogin} />);
 
-    const form = screen.getByRole('form', { name: 'sign-in-form' });
+    // Multiple responsive copies exist in DOM — use the first
+    const forms = screen.getAllByRole('form', { name: 'sign-in-form' });
+    const form = forms[0];
     fireEvent.change(within(form).getByLabelText(/Email/i), { target: { value: 'test@example.com' } });
     fireEvent.change(within(form).getByLabelText(/^Password/i), { target: { value: 'password123' } });
     fireEvent.submit(form);
@@ -27,8 +29,8 @@ describe('AuthPage', () => {
     const onViewChange = vi.fn();
     render(<AuthPage onViewChange={onViewChange} />);
 
-    const form = screen.getByRole('form', { name: 'sign-in-form' });
-    fireEvent.click(within(form).getByRole('link', { name: 'Sign Up' }));
+    const forms = screen.getAllByRole('form', { name: 'sign-in-form' });
+    fireEvent.click(within(forms[0]).getByRole('link', { name: 'Sign Up' }));
 
     await waitFor(() => {
       expect(onViewChange).toHaveBeenCalledWith('signup');
