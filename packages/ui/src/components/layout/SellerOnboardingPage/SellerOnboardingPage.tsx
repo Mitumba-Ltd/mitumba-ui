@@ -114,17 +114,23 @@ export function SellerOnboardingPage({
 
       <Box sx={{ position: 'relative', width: '100%', maxWidth: { xs: '100%', md: 1000 }, height: { xs: '100vh', md: 640 }, bgcolor: surface, borderRadius: { xs: 0, md: `${tokens.radius.xl}px` }, boxShadow: { xs: 'none', md: tokens.shadows.elevated }, overflow: 'hidden', display: 'flex' }}>
 
-        {/* Side panel — desktop only */}
+  const panelTitle = (() => {
+    if (step === 0) return 'Start selling on Mitumba';
+    if (step === 5) return "You're all set!";
+    return 'Almost there';
+  })();
+
+  const panelSubtitle = (() => {
+    if (step === 0) return 'Join thousands of Kenyan sellers building trusted businesses on Mitumba.';
+    if (step === 5) return 'Your store is ready. Start listing your items and grow your STI score.';
+    return 'Your information builds your Seller Trust Index — the foundation of buyer confidence.';
+  })();
         <Box sx={{ display: { xs: 'none', md: 'flex' }, flexShrink: 0, width: '38%', background: panelBg, backgroundSize: 'cover', backgroundPosition: 'center', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', p: `${tokens.spacing.xxxl}px`, color: tokens.colors.white, zIndex: 1 }}>
           <Typography variant="subtitle1" fontWeight="bold" gutterBottom sx={{ color: tokens.colors.white }}>
-            {step === 0 ? 'Start selling on Mitumba' : step === 5 ? 'You\'re all set!' : 'Almost there'}
+            {panelTitle}
           </Typography>
           <Typography variant="body1" sx={{ opacity: 0.9, color: tokens.colors.white, mb: `${tokens.spacing.xxxl}px` }}>
-            {step === 0
-              ? 'Join thousands of Kenyan sellers building trusted businesses on Mitumba.'
-              : step === 5
-              ? 'Your store is ready. Start listing your items and grow your STI score.'
-              : 'Your information builds your Seller Trust Index — the foundation of buyer confidence.'}
+            {panelSubtitle}
           </Typography>
           {step === 0 && (
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.lg}px` }}>

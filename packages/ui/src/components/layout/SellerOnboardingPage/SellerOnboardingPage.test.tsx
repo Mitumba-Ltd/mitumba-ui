@@ -8,44 +8,48 @@ import { SellerOnboardingPage } from './SellerOnboardingPage';
 
 afterEach(() => { cleanup(); });
 
-const wrap = (props = {}) =>
-  render(<MitumbaThemeProvider><SellerOnboardingPage {...props} /></MitumbaThemeProvider>);
-
 describe('SellerOnboardingPage', () => {
   it('renders welcome step by default', () => {
-    wrap();
+    render(<MitumbaThemeProvider><SellerOnboardingPage /></MitumbaThemeProvider>);
     expect(screen.getAllByText(/Start selling on Mitumba/i)[0]).toBeInTheDocument();
   });
 
   it('renders identity step when currentStep=1', () => {
-    wrap({ currentStep: 1 });
+    render(<MitumbaThemeProvider><SellerOnboardingPage currentStep={1} /></MitumbaThemeProvider>);
     expect(screen.getByRole('heading', { name: /Your identity/i })).toBeInTheDocument();
   });
 
   it('renders business step when currentStep=2', () => {
-    wrap({ currentStep: 2 });
+    render(<MitumbaThemeProvider><SellerOnboardingPage currentStep={2} /></MitumbaThemeProvider>);
     expect(screen.getByRole('heading', { name: /Your business/i })).toBeInTheDocument();
   });
 
   it('renders store step when currentStep=4', () => {
-    wrap({ currentStep: 4 });
+    render(<MitumbaThemeProvider><SellerOnboardingPage currentStep={4} /></MitumbaThemeProvider>);
     expect(screen.getByRole('heading', { name: /Your store/i })).toBeInTheDocument();
   });
 
   it('calls onStepChange when continuing from welcome', () => {
     const onStepChange = vi.fn();
-    wrap({ onStepChange });
+    render(<MitumbaThemeProvider><SellerOnboardingPage onStepChange={onStepChange} /></MitumbaThemeProvider>);
     fireEvent.click(screen.getByRole('button', { name: /Let's get started/i }));
     expect(onStepChange).toHaveBeenCalledWith(1);
   });
 
   it('shows error message when error prop provided', () => {
-    wrap({ currentStep: 1, error: 'Phone already registered' });
+    render(<MitumbaThemeProvider><SellerOnboardingPage currentStep={1} error="Phone already registered" /></MitumbaThemeProvider>);
     expect(screen.getByText('Phone already registered')).toBeInTheDocument();
   });
 
   it('renders confirmation step with STI score when currentStep=5', () => {
-    wrap({ currentStep: 5, initialData: { fullName: 'Test', phone: '0712345678', idNumber: 'A123', storeName: 'TestStore' } });
+    render(
+      <MitumbaThemeProvider>
+        <SellerOnboardingPage
+          currentStep={5}
+          initialData={{ fullName: 'Test', phone: '0712345678', idNumber: 'A123', storeName: 'TestStore' }}
+        />
+      </MitumbaThemeProvider>
+    );
     expect(screen.getAllByText(/You're all set/i)[0]).toBeInTheDocument();
     expect(screen.getAllByText(/Starting STI Score/i)[0]).toBeInTheDocument();
   });
