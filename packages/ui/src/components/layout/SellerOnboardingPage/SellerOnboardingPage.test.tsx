@@ -47,6 +47,6 @@ describe('SellerOnboardingPage', () => {
   it('renders confirmation step with STI score when currentStep=5', () => {
     wrap({ currentStep: 5, initialData: { fullName: 'Test', phone: '0712345678', idNumber: 'A123', storeName: 'TestStore' } });
     expect(screen.getAllByText(/You're all set/i)[0]).toBeInTheDocument();
-    expect(screen.getByText(/Starting STI Score/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Starting STI Score/i)[0]).toBeInTheDocument();
   });
 });
