@@ -125,6 +125,9 @@ export function AuthPage({
   // Inline link-as-button style — satisfies jsx-a11y/anchor-is-valid
   const linkBtnSx = { color: tokens.colors.green, fontWeight: 'bold', cursor: 'pointer', background: 'none', border: 'none', padding: 0, font: 'inherit', textDecoration: 'underline', '&:hover': { color: tokens.colors.greenDark } };
 
+  // Explicit white background on all inputs — prevents grey bleed-through from overlapping panels
+  const tfSx = { '& .MuiInputBase-root': { bgcolor: tokens.colors.surface } };
+
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: isDark ? tokens.colors.textPrimary : tokens.colors.background, p: `${tokens.spacing.lg}px` }}>
       <Backdrop open={loading} sx={{ zIndex: 1000, color: tokens.colors.white }} />
@@ -145,8 +148,8 @@ export function AuthPage({
           <Typography variant="h4" fontWeight="bold" gutterBottom color={textColor}>Sign In</Typography>
           <Typography variant="body2" sx={{ mb: `${tokens.spacing.xxxl}px`, color: subtitleColor }}>Welcome back! Please login to your account.</Typography>
           <Box component="form" aria-label="sign-in-form" onSubmit={handleLoginSubmit}>
-            <TextField fullWidth label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
-            <TextField fullWidth label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
+            <TextField sx={tfSx} fullWidth label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
+            <TextField sx={tfSx} fullWidth label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: `${tokens.spacing.md}px`, mb: `${tokens.spacing.xxl}px` }}>
               <FormControlLabel control={<Checkbox checked={remember} onChange={(e) => setRemember(e.target.checked)} color="primary" />} label={<Typography variant="body2" color={textColor}>Remember me</Typography>} />
               <ButtonBase onClick={() => handleViewChange('forgot')} sx={{ ...linkBtnSx, fontWeight: 'normal' }}>Forgot password?</ButtonBase>
@@ -168,8 +171,8 @@ export function AuthPage({
           <Typography variant="h4" fontWeight="bold" gutterBottom color={textColor}>Sign Up</Typography>
           <Typography variant="body2" sx={{ mb: `${tokens.spacing.xxxl}px`, color: subtitleColor }}>Create your account to get started.</Typography>
           <Box component="form" onSubmit={handleSignUpSubmit}>
-            <TextField fullWidth label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
-            <TextField fullWidth label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
+            <TextField sx={tfSx} fullWidth label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
+            <TextField sx={tfSx} fullWidth label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
             <AuthSubmitButton fullWidth loading={loading} label={loading ? 'Creating account...' : 'Sign Up'} sx={{ py: 1.5, mt: `${tokens.spacing.xl}px`, mb: `${tokens.spacing.lg}px` }} />
             {(onSocialAuth || socialProviders) && socialButtons('signup')}
             <Box sx={{ textAlign: 'center', mt: `${tokens.spacing.lg}px` }}>
@@ -186,7 +189,7 @@ export function AuthPage({
           <Typography variant="h4" fontWeight="bold" gutterBottom color={textColor}>Forgot Password</Typography>
           <Typography variant="body2" sx={{ mb: `${tokens.spacing.xxxl}px`, color: subtitleColor }}>Enter your email and we&apos;ll send you a reset link.</Typography>
           <Box component="form" onSubmit={handleForgotPasswordSubmit}>
-            <TextField fullWidth label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
+            <TextField sx={tfSx} fullWidth label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
             <AuthSubmitButton fullWidth loading={loading} label={loading ? 'Sending...' : 'Send Reset Link'} sx={{ py: 1.5, mt: `${tokens.spacing.xl}px`, mb: `${tokens.spacing.lg}px` }} />
             <Box sx={{ textAlign: 'center', mt: `${tokens.spacing.lg}px` }}>
               <Typography variant="body2" color={subtitleColor} component="span">
@@ -202,8 +205,8 @@ export function AuthPage({
           <Typography variant="h4" fontWeight="bold" gutterBottom color={textColor}>Reset Password</Typography>
           <Typography variant="body2" sx={{ mb: `${tokens.spacing.xxxl}px`, color: subtitleColor }}>Enter your new password below.</Typography>
           <Box component="form" onSubmit={handleResetPasswordSubmit}>
-            <TextField fullWidth label="New Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
-            <TextField fullWidth label="Confirm Password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} margin="normal" required />
+            <TextField sx={tfSx} fullWidth label="New Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
+            <TextField sx={tfSx} fullWidth label="Confirm Password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} margin="normal" required />
             <AuthSubmitButton fullWidth loading={loading} label={loading ? 'Resetting...' : 'Reset Password'} sx={{ py: 1.5, mt: `${tokens.spacing.xl}px`, mb: `${tokens.spacing.lg}px` }} />
             <Box sx={{ textAlign: 'center', mt: `${tokens.spacing.lg}px` }}>
               <Typography variant="body2" color={subtitleColor} component="span">
