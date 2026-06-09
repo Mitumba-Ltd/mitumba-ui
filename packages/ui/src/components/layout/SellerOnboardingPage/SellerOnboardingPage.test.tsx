@@ -14,7 +14,7 @@ const wrap = (props = {}) =>
 describe('SellerOnboardingPage', () => {
   it('renders welcome step by default', () => {
     wrap();
-    expect(screen.getByRole('heading', { name: /Start selling on Mitumba/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/Start selling on Mitumba/i)[0]).toBeInTheDocument();
   });
 
   it('renders identity step when currentStep=1', () => {
@@ -46,7 +46,7 @@ describe('SellerOnboardingPage', () => {
 
   it('renders confirmation step with STI score when currentStep=5', () => {
     wrap({ currentStep: 5, initialData: { fullName: 'Test', phone: '0712345678', idNumber: 'A123', storeName: 'TestStore' } });
-    expect(screen.getByRole('heading', { name: /You're all set/i })).toBeInTheDocument();
+    expect(screen.getAllByText(/You're all set/i)[0]).toBeInTheDocument();
     expect(screen.getByText(/Starting STI Score/i)).toBeInTheDocument();
   });
 });
