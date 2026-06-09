@@ -73,4 +73,23 @@ export interface SellerOnboardingPageProps {
 
   /** Hero photo URL layered under the side panel gradient (desktop) */
   heroImageUrl?: string;
+
+  /**
+   * Called when the user selects a profile photo file.
+   * Upload it to your CDN and return the public URL.
+   * The component shows a loading spinner while the promise is pending.
+   */
+  onProfilePhotoUpload?: (file: File) => Promise<string>;
+
+  /**
+   * Called when the user selects a store logo file.
+   * Upload it to your CDN and return the public URL.
+   */
+  onStoreLogoUpload?: (file: File) => Promise<string>;
+
+  /**
+   * Called when the user selects a store banner file.
+   * Upload it to your CDN and return the public URL.
+   */
+  onStoreBannerUpload?: (file: File) => Promise<string>;
 }

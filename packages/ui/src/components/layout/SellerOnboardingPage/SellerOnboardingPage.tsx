@@ -2,23 +2,25 @@ import React from 'react';
 import {
   Box, Typography, TextField, Radio, RadioGroup, FormControlLabel,
   Chip, Slider, LinearProgress, Alert, Backdrop, CircularProgress,
-  Select, MenuItem, InputLabel, FormControl, Avatar,
+  Select, MenuItem, InputLabel, FormControl, Avatar, IconButton,
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { tokens } from '@mitumba/tokens';
 import { AuthSubmitButton } from '../../foundation/AuthSubmitButton';
 import type { SellerOnboardingPageProps, SellerOnboardingData } from './SellerOnboardingPage.types';
 
-const TOTAL_STEPS = 5; // welcome(0) identity(1) business(2) sells(3) store(4) confirm(5)
+const TOTAL_STEPS = 5;
 
 const COUNTIES = [
   'Baringo','Bomet','Bungoma','Busia','Elgeyo-Marakwet','Embu','Garissa',
   'Homa Bay','Isiolo','Kajiado','Kakamega','Kericho','Kiambu','Kilifi',
   'Kirinyaga','Kisii','Kisumu','Kitui','Kwale','Laikipia','Lamu','Machakos',
-  'Makueni','Mandera','Marsabit','Meru','Migori','Mombasa','Murang\'a',
+  'Makueni','Mandera','Marsabit','Meru','Migori','Mombasa',"Murang'a",
   'Nairobi','Nakuru','Nandi','Narok','Nyamira','Nyandarua','Nyeri',
   'Samburu','Siaya','Taita-Taveta','Tana River','Tharaka-Nithi','Trans Nzoia',
   'Turkana','Uasin Gishu','Vihiga','Wajir','West Pokot',
@@ -35,7 +37,6 @@ const CONDITION_LABELS: Record<string, string> = {
   C: 'Grade C — Fair / visible wear',
 };
 
-// STI score calculation based on data completeness
 function computeStiScore(data: Partial<SellerOnboardingData>): number {
   let score = 0;
   if (data.fullName) score += 8;
@@ -50,11 +51,169 @@ function computeStiScore(data: Partial<SellerOnboardingData>): number {
   if (data.storeName) score += 8;
   if (data.storeLogoUrl) score += 4;
   if (data.storeBannerUrl) score += 3;
-  // min 35 for completing all required steps
   return Math.max(score, 35);
 }
 
 const tfSx = { '& .MuiInputBase-root': { bgcolor: tokens.colors.surface } };
+
+// ── Reusable upload widgets ──────────────────────────────────────────────────
+
+interface AvatarUploaderProps {
+  /** Current image URL — shown as preview */
+  value?: string;
+  /** Called with selected File; consumer uploads and returns CDN URL */
+  onUpload?: (file: File) => Promise<string>;
+  /** Fallback initials when no image */
+  initials?: string;
+  /** Size in px */
+  size?: number;
+  /** Label shown below */
+  label?: string;
+}
+
+function AvatarUploader({ value, onUpload, initials = '?', size = 96, label }: AvatarUploaderProps): React.ReactElement {
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = React.useState(false);
+
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !onUpload) return;
+    setUploading(true);
+    try {
+      await onUpload(file);
+    } finally {
+      setUploading(false);
+      if (inputRef.current) inputRef.current.value = '';
+    }
+  };
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: `${tokens.spacing.sm}px` }}>
+      <Box sx={{ position: 'relative', width: size, height: size }}>
+        <Avatar
+          src={value}
+          sx={{
+            width: size,
+            height: size,
+            bgcolor: tokens.colors.greenLight,
+            color: tokens.colors.green,
+            fontSize: size * 0.35,
+            fontWeight: 700,
+            border: `2px solid ${value ? tokens.colors.green : tokens.colors.border}`,
+            cursor: onUpload ? 'pointer' : 'default',
+            transition: 'border-color 0.2s',
+          }}
+          onClick={() => onUpload && inputRef.current?.click()}
+        >
+          {!value && initials}
+        </Avatar>
+
+        {uploading && (
+          <Box sx={{ position: 'absolute', inset: 0, borderRadius: '50%', bgcolor: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <CircularProgress size={24} sx={{ color: tokens.colors.green }} />
+          </Box>
+        )}
+
+        {onUpload && !uploading && (
+          <IconButton
+            size="small"
+            onClick={() => inputRef.current?.click()}
+            sx={{
+              position: 'absolute', bottom: 0, right: 0,
+              bgcolor: tokens.colors.green, color: tokens.colors.white, width: 28, height: 28,
+              border: `2px solid ${tokens.colors.surface}`,
+              '&:hover': { bgcolor: tokens.colors.greenDark },
+            }}
+          >
+            <AddAPhotoIcon sx={{ fontSize: 14 }} />
+          </IconButton>
+        )}
+
+        <input ref={inputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleChange} aria-label={label ?? 'Upload image'} />
+      </Box>
+
+      {label && (
+        <Typography variant="caption" color={tokens.colors.textSecondary} sx={{ textAlign: 'center' }}>
+          {value ? `Tap to replace` : label}
+        </Typography>
+      )}
+    </Box>
+  );
+}
+
+interface BannerUploaderProps {
+  value?: string;
+  onUpload?: (file: File) => Promise<string>;
+  label?: string;
+}
+
+function BannerUploader({ value, onUpload, label = 'Upload store banner' }: BannerUploaderProps): React.ReactElement {
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = React.useState(false);
+
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !onUpload) return;
+    setUploading(true);
+    try {
+      await onUpload(file);
+    } finally {
+      setUploading(false);
+      if (inputRef.current) inputRef.current.value = '';
+    }
+  };
+
+  return (
+    <Box>
+      <Box
+        onClick={() => onUpload && inputRef.current?.click()}
+        sx={{
+          width: '100%',
+          height: 120,
+          borderRadius: `${tokens.radius.lg}px`,
+          border: `2px dashed ${value ? tokens.colors.green : tokens.colors.border}`,
+          overflow: 'hidden',
+          position: 'relative',
+          cursor: onUpload ? 'pointer' : 'default',
+          bgcolor: tokens.colors.background,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          gap: `${tokens.spacing.xs}px`,
+          transition: 'border-color 0.2s, background-color 0.2s',
+          '&:hover': onUpload ? { borderColor: tokens.colors.green, bgcolor: tokens.colors.greenLight } : {},
+        }}
+      >
+        {value ? (
+          <Box component="img" src={value} alt="Store banner preview" sx={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} />
+        ) : (
+          <>
+            <AddPhotoAlternateIcon sx={{ color: tokens.colors.textSecondary, fontSize: 32 }} />
+            <Typography variant="caption" color={tokens.colors.textSecondary}>{label}</Typography>
+            <Typography variant="caption" color={tokens.colors.textSecondary} sx={{ opacity: 0.6 }}>Recommended: 1200 × 300px</Typography>
+          </>
+        )}
+
+        {uploading && (
+          <Box sx={{ position: 'absolute', inset: 0, bgcolor: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <CircularProgress size={28} sx={{ color: tokens.colors.green }} />
+          </Box>
+        )}
+
+        {value && onUpload && !uploading && (
+          <Box sx={{ position: 'absolute', bottom: `${tokens.spacing.sm}px`, right: `${tokens.spacing.sm}px`, bgcolor: 'rgba(0,0,0,0.55)', borderRadius: `${tokens.radius.sm}px`, px: `${tokens.spacing.sm}px`, py: '2px', display: 'flex', alignItems: 'center', gap: `${tokens.spacing.xs}px` }}>
+            <AddAPhotoIcon sx={{ color: tokens.colors.white, fontSize: 14 }} />
+            <Typography variant="caption" sx={{ color: tokens.colors.white }}>Replace</Typography>
+          </Box>
+        )}
+      </Box>
+      <input ref={inputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleChange} aria-label={label} />
+    </Box>
+  );
+}
+
+// ── Main component ───────────────────────────────────────────────────────────
 
 export function SellerOnboardingPage({
   currentStep = 0,
@@ -65,6 +224,9 @@ export function SellerOnboardingPage({
   initialData,
   theme = 'mitumba-light',
   heroImageUrl,
+  onProfilePhotoUpload,
+  onStoreLogoUpload,
+  onStoreBannerUpload,
 }: SellerOnboardingPageProps): React.ReactElement {
   const isDark = theme === 'mitumba-dark';
 
@@ -76,21 +238,28 @@ export function SellerOnboardingPage({
   const set = (patch: Partial<SellerOnboardingData>) =>
     setData((prev) => ({ ...prev, ...patch }));
 
-  const advance = () => {
-    const next = step + 1;
-    setStep(next);
-    onStepChange?.(next);
-  };
+  const advance = () => { const n = step + 1; setStep(n); onStepChange?.(n); };
+  const back = () => { const n = step - 1; setStep(n); onStepChange?.(n); };
+  const finish = () => { onComplete?.(data as SellerOnboardingData); };
 
-  const back = () => {
-    const prev = step - 1;
-    setStep(prev);
-    onStepChange?.(prev);
-  };
+  // Upload handlers — call onUpload callback, then update internal data with returned URL
+  const handleProfileUpload = React.useCallback(async (file: File) => {
+    if (!onProfilePhotoUpload) return;
+    const url = await onProfilePhotoUpload(file);
+    set({ profilePhotoUrl: url });
+  }, [onProfilePhotoUpload]);
 
-  const finish = () => {
-    onComplete?.(data as SellerOnboardingData);
-  };
+  const handleLogoUpload = React.useCallback(async (file: File) => {
+    if (!onStoreLogoUpload) return;
+    const url = await onStoreLogoUpload(file);
+    set({ storeLogoUrl: url });
+  }, [onStoreLogoUpload]);
+
+  const handleBannerUpload = React.useCallback(async (file: File) => {
+    if (!onStoreBannerUpload) return;
+    const url = await onStoreBannerUpload(file);
+    set({ storeBannerUrl: url });
+  }, [onStoreBannerUpload]);
 
   const bgColor = isDark ? tokens.colors.textPrimary : tokens.colors.background;
   const surface = isDark ? '#2a2a2a' : tokens.colors.surface;
@@ -102,7 +271,6 @@ export function SellerOnboardingPage({
     : `linear-gradient(135deg, ${tokens.colors.green}, ${tokens.colors.earth})`;
 
   const stiScore = computeStiScore(data);
-
   const progressPct = step >= 1 && step <= 4 ? (step / TOTAL_STEPS) * 100 : 0;
 
   const panelTitle = (() => {
@@ -117,6 +285,11 @@ export function SellerOnboardingPage({
     return 'Your information builds your Seller Trust Index — the foundation of buyer confidence.';
   })();
 
+  // Derive initials for profile avatar fallback
+  const initials = data.fullName
+    ? data.fullName.split(' ').map((w) => w[0]).slice(0, 2).join('').toUpperCase()
+    : '?';
+
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', p: { xs: 0, md: `${tokens.spacing.lg}px` } }}>
       <Backdrop open={loading} sx={{ zIndex: 1000, color: tokens.colors.white }}>
@@ -124,6 +297,8 @@ export function SellerOnboardingPage({
       </Backdrop>
 
       <Box sx={{ position: 'relative', width: '100%', maxWidth: { xs: '100%', md: 1000 }, height: { xs: '100vh', md: 640 }, bgcolor: surface, borderRadius: { xs: 0, md: `${tokens.radius.xl}px` }, boxShadow: { xs: 'none', md: tokens.shadows.elevated }, overflow: 'hidden', display: 'flex' }}>
+
+        {/* Side panel — desktop only */}
         <Box sx={{ display: { xs: 'none', md: 'flex' }, flexShrink: 0, width: '38%', background: panelBg, backgroundSize: 'cover', backgroundPosition: 'center', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', p: `${tokens.spacing.xxxl}px`, color: tokens.colors.white, zIndex: 1 }}>
           <Typography variant="subtitle1" fontWeight="bold" gutterBottom sx={{ color: tokens.colors.white }}>
             {panelTitle}
@@ -147,14 +322,8 @@ export function SellerOnboardingPage({
           )}
           {step >= 1 && step <= 4 && (
             <Box sx={{ width: '100%', mt: 'auto' }}>
-              <Typography variant="caption" sx={{ color: tokens.colors.white, opacity: 0.8 }}>
-                Step {step} of {TOTAL_STEPS}
-              </Typography>
-              <LinearProgress
-                variant="determinate"
-                value={progressPct}
-                sx={{ mt: 1, borderRadius: 4, bgcolor: 'rgba(255,255,255,0.2)', '& .MuiLinearProgress-bar': { bgcolor: tokens.colors.white } }}
-              />
+              <Typography variant="caption" sx={{ color: tokens.colors.white, opacity: 0.8 }}>Step {step} of {TOTAL_STEPS}</Typography>
+              <LinearProgress variant="determinate" value={progressPct} sx={{ mt: 1, borderRadius: 4, bgcolor: 'rgba(255,255,255,0.2)', '& .MuiLinearProgress-bar': { bgcolor: tokens.colors.white } }} />
             </Box>
           )}
           {step === 5 && (
@@ -165,10 +334,10 @@ export function SellerOnboardingPage({
           )}
         </Box>
 
-        {/* Main content area */}
+        {/* Main content */}
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', p: { xs: `${tokens.spacing.xl}px`, md: `${tokens.spacing.giant}px` } }}>
 
-          {/* Mobile progress bar */}
+          {/* Mobile progress */}
           {step >= 1 && step <= 4 && (
             <Box sx={{ display: { xs: 'block', md: 'none' }, mb: `${tokens.spacing.lg}px` }}>
               <Typography variant="caption" color={subtitleColor}>Step {step} of {TOTAL_STEPS}</Typography>
@@ -181,19 +350,17 @@ export function SellerOnboardingPage({
           {/* ── Step 0: Welcome ── */}
           {step === 0 && (
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <Typography variant="h4" fontWeight="bold" color={textColor} gutterBottom>
-                Start selling on Mitumba
-              </Typography>
+              <Typography variant="h4" fontWeight="bold" color={textColor} gutterBottom>Start selling on Mitumba</Typography>
               <Typography variant="body1" color={subtitleColor} sx={{ mb: `${tokens.spacing.xxxl}px` }}>
                 Set up your seller profile in 5 quick steps. Your information builds your STI (Seller Trust Index) — the score that makes buyers confident to purchase from you.
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.md}px`, mb: `${tokens.spacing.xxxl}px` }}>
                 {[
-                  { step: 1, label: 'Your identity — name, phone, ID, location' },
-                  { step: 2, label: 'Your business — type and KRA PIN' },
-                  { step: 3, label: 'What you sell — categories and grades' },
-                  { step: 4, label: 'Your store — name, logo, banner' },
-                ].map(({ step: n, label }) => (
+                  { n: 1, label: 'Your identity — name, phone, ID, location' },
+                  { n: 2, label: 'Your business — type and KRA PIN' },
+                  { n: 3, label: 'What you sell — categories and grades' },
+                  { n: 4, label: 'Your store — name, logo, banner' },
+                ].map(({ n, label }) => (
                   <Box key={n} sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.md}px` }}>
                     <Box sx={{ width: 28, height: 28, borderRadius: '50%', bgcolor: tokens.colors.greenLight, color: tokens.colors.green, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 13, flexShrink: 0 }}>{n}</Box>
                     <Typography variant="body2" color={subtitleColor}>{label}</Typography>
@@ -209,11 +376,22 @@ export function SellerOnboardingPage({
             <Box>
               <Typography variant="h5" fontWeight="bold" color={textColor} gutterBottom>Your identity</Typography>
               <Typography variant="body2" color={subtitleColor} sx={{ mb: `${tokens.spacing.xxl}px` }}>This information is used for KYC verification and is never shown publicly.</Typography>
+
+              {/* Profile photo upload */}
+              <Box sx={{ display: 'flex', justifyContent: 'center', mb: `${tokens.spacing.xxl}px` }}>
+                <AvatarUploader
+                  value={data.profilePhotoUrl}
+                  onUpload={onProfilePhotoUpload ? handleProfileUpload : undefined}
+                  initials={initials}
+                  size={96}
+                  label="Upload profile photo"
+                />
+              </Box>
+
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.lg}px` }}>
                 <TextField sx={tfSx} fullWidth label="Full name" value={data.fullName ?? ''} onChange={(e) => set({ fullName: e.target.value })} required />
                 <TextField sx={tfSx} fullWidth label="Phone number (M-Pesa)" type="tel" value={data.phone ?? ''} onChange={(e) => set({ phone: e.target.value })} required placeholder="e.g. 0712 345 678" />
                 <TextField sx={tfSx} fullWidth label="National ID / Passport number" value={data.idNumber ?? ''} onChange={(e) => set({ idNumber: e.target.value })} required />
-                <TextField sx={tfSx} fullWidth label="Profile photo URL" value={data.profilePhotoUrl ?? ''} onChange={(e) => set({ profilePhotoUrl: e.target.value })} placeholder="Upload via your app and paste the URL" helperText="Shows on your listings and seller card" />
                 <FormControl fullWidth required>
                   <InputLabel>County</InputLabel>
                   <Select sx={tfSx} value={data.county ?? ''} label="County" onChange={(e) => set({ county: e.target.value })}>
@@ -241,25 +419,8 @@ export function SellerOnboardingPage({
                 {data.sellerType === 'business' && (
                   <TextField sx={tfSx} fullWidth label="Business / trading name" value={data.businessName ?? ''} onChange={(e) => set({ businessName: e.target.value })} required />
                 )}
-                <TextField
-                  sx={tfSx}
-                  fullWidth
-                  label="KRA PIN (optional)"
-                  value={data.kraPin ?? ''}
-                  onChange={(e) => set({ kraPin: e.target.value })}
-                  helperText="Optional — adding your KRA PIN boosts your STI score by +10 points"
-                />
-                <TextField
-                  sx={tfSx}
-                  fullWidth
-                  multiline
-                  rows={3}
-                  label="About your business (optional)"
-                  value={data.businessDescription ?? ''}
-                  onChange={(e) => set({ businessDescription: e.target.value.slice(0, 300) })}
-                  helperText={`${(data.businessDescription ?? '').length}/300`}
-                  placeholder="e.g. We source premium secondhand clothing from Japan and Europe..."
-                />
+                <TextField sx={tfSx} fullWidth label="KRA PIN (optional)" value={data.kraPin ?? ''} onChange={(e) => set({ kraPin: e.target.value })} helperText="Optional — adding your KRA PIN boosts your STI score by +10 points" />
+                <TextField sx={tfSx} fullWidth multiline rows={3} label="About your business (optional)" value={data.businessDescription ?? ''} onChange={(e) => set({ businessDescription: e.target.value.slice(0, 300) })} helperText={`${(data.businessDescription ?? '').length}/300`} placeholder="e.g. We source premium secondhand clothing from Japan and Europe..." />
               </Box>
             </Box>
           )}
@@ -276,13 +437,7 @@ export function SellerOnboardingPage({
                     {CATEGORIES.map((cat) => {
                       const selected = data.categories?.includes(cat);
                       return (
-                        <Chip
-                          key={cat}
-                          label={cat}
-                          onClick={() => set({ categories: selected ? (data.categories ?? []).filter((c) => c !== cat) : [...(data.categories ?? []), cat] })}
-                          color={selected ? 'primary' : 'default'}
-                          variant={selected ? 'filled' : 'outlined'}
-                        />
+                        <Chip key={cat} label={cat} onClick={() => set({ categories: selected ? (data.categories ?? []).filter((c) => c !== cat) : [...(data.categories ?? []), cat] })} color={selected ? 'primary' : 'default'} variant={selected ? 'filled' : 'outlined'} />
                       );
                     })}
                   </Box>
@@ -293,14 +448,7 @@ export function SellerOnboardingPage({
                     {(['A', 'B', 'C'] as const).map((grade) => {
                       const selected = data.conditionGrades?.includes(grade);
                       return (
-                        <Chip
-                          key={grade}
-                          label={CONDITION_LABELS[grade]}
-                          onClick={() => set({ conditionGrades: selected ? (data.conditionGrades ?? []).filter((g) => g !== grade) : [...(data.conditionGrades ?? []), grade] })}
-                          color={selected ? 'primary' : 'default'}
-                          variant={selected ? 'filled' : 'outlined'}
-                          sx={{ justifyContent: 'flex-start', width: 'fit-content' }}
-                        />
+                        <Chip key={grade} label={CONDITION_LABELS[grade]} onClick={() => set({ conditionGrades: selected ? (data.conditionGrades ?? []).filter((g) => g !== grade) : [...(data.conditionGrades ?? []), grade] })} color={selected ? 'primary' : 'default'} variant={selected ? 'filled' : 'outlined'} sx={{ justifyContent: 'flex-start', width: 'fit-content' }} />
                       );
                     })}
                   </Box>
@@ -313,19 +461,8 @@ export function SellerOnboardingPage({
                   </RadioGroup>
                 </Box>
                 <Box>
-                  <Typography variant="body2" fontWeight={600} color={textColor} sx={{ mb: `${tokens.spacing.md}px` }}>
-                    Typical price range (KES) — optional
-                  </Typography>
-                  <Slider
-                    value={[data.priceRangeMin ?? 200, data.priceRangeMax ?? 5000]}
-                    onChange={(_, val) => { const [min, max] = val as number[]; set({ priceRangeMin: min, priceRangeMax: max }); }}
-                    min={0}
-                    max={50000}
-                    step={100}
-                    valueLabelDisplay="auto"
-                    valueLabelFormat={(v) => `KES ${v.toLocaleString()}`}
-                    sx={{ color: tokens.colors.green }}
-                  />
+                  <Typography variant="body2" fontWeight={600} color={textColor} sx={{ mb: `${tokens.spacing.md}px` }}>Typical price range (KES) — optional</Typography>
+                  <Slider value={[data.priceRangeMin ?? 200, data.priceRangeMax ?? 5000]} onChange={(_, val) => { const [min, max] = val as number[]; set({ priceRangeMin: min, priceRangeMax: max }); }} min={0} max={50000} step={100} valueLabelDisplay="auto" valueLabelFormat={(v) => `KES ${v.toLocaleString()}`} sx={{ color: tokens.colors.green }} />
                   <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography variant="caption" color={subtitleColor}>KES {(data.priceRangeMin ?? 200).toLocaleString()}</Typography>
                     <Typography variant="caption" color={subtitleColor}>KES {(data.priceRangeMax ?? 5000).toLocaleString()}</Typography>
@@ -340,22 +477,28 @@ export function SellerOnboardingPage({
             <Box>
               <Typography variant="h5" fontWeight="bold" color={textColor} gutterBottom>Your store</Typography>
               <Typography variant="body2" color={subtitleColor} sx={{ mb: `${tokens.spacing.xxl}px` }}>This is your public face on Mitumba.</Typography>
-              {data.storeLogoUrl && (
-                <Avatar src={data.storeLogoUrl} sx={{ width: 72, height: 72, mb: `${tokens.spacing.xl}px`, border: `2px solid ${tokens.colors.green}` }} />
-              )}
+
+              {/* Banner uploader */}
+              <BannerUploader
+                value={data.storeBannerUrl}
+                onUpload={onStoreBannerUpload ? handleBannerUpload : undefined}
+                label="Upload store banner"
+              />
+
+              {/* Logo uploader — overlapping the bottom of the banner */}
+              <Box sx={{ display: 'flex', alignItems: 'flex-end', mt: `-${tokens.spacing.xxxl}px`, mb: `${tokens.spacing.xxl}px`, pl: `${tokens.spacing.xl}px` }}>
+                <AvatarUploader
+                  value={data.storeLogoUrl}
+                  onUpload={onStoreLogoUpload ? handleLogoUpload : undefined}
+                  initials={(data.storeName ?? 'S')[0]?.toUpperCase() ?? 'S'}
+                  size={72}
+                  label="Store logo"
+                />
+              </Box>
+
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.lg}px` }}>
                 <TextField sx={tfSx} fullWidth label="Store name *" value={data.storeName ?? ''} onChange={(e) => set({ storeName: e.target.value })} required placeholder="e.g. NairobiKicks" />
-                <TextField
-                  sx={tfSx}
-                  fullWidth
-                  label="Store tagline (optional)"
-                  value={data.storeTagline ?? ''}
-                  onChange={(e) => set({ storeTagline: e.target.value.slice(0, 60) })}
-                  helperText={`${(data.storeTagline ?? '').length}/60`}
-                  placeholder='e.g. "Premium thrift in Nairobi"'
-                />
-                <TextField sx={tfSx} fullWidth label="Store logo URL (optional)" value={data.storeLogoUrl ?? ''} onChange={(e) => set({ storeLogoUrl: e.target.value })} helperText="Square image — shown on your seller card" />
-                <TextField sx={tfSx} fullWidth label="Store banner URL (optional)" value={data.storeBannerUrl ?? ''} onChange={(e) => set({ storeBannerUrl: e.target.value })} helperText="Wide image — shown on your seller profile page" />
+                <TextField sx={tfSx} fullWidth label="Store tagline (optional)" value={data.storeTagline ?? ''} onChange={(e) => set({ storeTagline: e.target.value.slice(0, 60) })} helperText={`${(data.storeTagline ?? '').length}/60`} placeholder='"Premium thrift in Nairobi"' />
               </Box>
             </Box>
           )}
@@ -365,9 +508,7 @@ export function SellerOnboardingPage({
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
               <CheckCircleIcon sx={{ fontSize: 72, color: tokens.colors.green, mb: `${tokens.spacing.xl}px` }} />
               <Typography variant="h4" fontWeight="bold" color={textColor} gutterBottom>You&apos;re all set!</Typography>
-              <Typography variant="body1" color={subtitleColor} sx={{ mb: `${tokens.spacing.xxxl}px` }}>
-                Your seller profile is ready. Here&apos;s your starting STI score:
-              </Typography>
+              <Typography variant="body1" color={subtitleColor} sx={{ mb: `${tokens.spacing.xxxl}px` }}>Your seller profile is ready. Here&apos;s your starting STI score:</Typography>
               <Box sx={{ bgcolor: tokens.colors.greenLight, borderRadius: `${tokens.radius.xl}px`, p: `${tokens.spacing.xxxl}px`, mb: `${tokens.spacing.xxxl}px`, width: '100%', maxWidth: 280 }}>
                 <Typography variant="h2" fontWeight="bold" color={tokens.colors.green}>{stiScore}</Typography>
                 <Typography variant="body2" color={tokens.colors.green} fontWeight={600}>/ 100 — Starting STI Score</Typography>
@@ -394,15 +535,11 @@ export function SellerOnboardingPage({
             </Box>
           )}
 
-          {/* Navigation buttons */}
+          {/* Navigation */}
           {step > 0 && step < 5 && (
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: `${tokens.spacing.xxxl}px`, pt: `${tokens.spacing.xl}px`, borderTop: `1px solid ${tokens.colors.border}` }}>
               <AuthSubmitButton label="Back" onClick={back} />
-              <AuthSubmitButton
-                label={step === 4 ? 'Finish setup' : 'Continue'}
-                onClick={advance}
-                loading={loading}
-              />
+              <AuthSubmitButton label={step === 4 ? 'Finish setup' : 'Continue'} onClick={advance} loading={loading} />
             </Box>
           )}
         </Box>
