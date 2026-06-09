@@ -1,0 +1,56 @@
+// @vitest-environment jsdom
+import '@testing-library/jest-dom/vitest'
+import React from 'react';
+import { cleanup, render, screen, fireEvent } from '@testing-library/react';
+import { afterEach, describe, it, expect, vi } from 'vitest';
+import { MitumbaThemeProvider } from '../../../theme';
+import { SellerOnboardingPage } from './SellerOnboardingPage';
+
+afterEach(() => { cleanup(); });
+
+describe('SellerOnboardingPage', () => {
+  it('renders welcome step by default', () => {
+    render(<MitumbaThemeProvider><SellerOnboardingPage /></MitumbaThemeProvider>);
+    expect(screen.getAllByText(/Start selling on Mitumba/i)[0]).toBeInTheDocument();
+  });
+
+  it('renders identity step when currentStep=1', () => {
+    render(<MitumbaThemeProvider><SellerOnboardingPage currentStep={1} /></MitumbaThemeProvider>);
+    expect(screen.getByRole('heading', { name: /Your identity/i })).toBeInTheDocument();
+  });
+
+  it('renders business step when currentStep=2', () => {
+    render(<MitumbaThemeProvider><SellerOnboardingPage currentStep={2} /></MitumbaThemeProvider>);
+    expect(screen.getByRole('heading', { name: /Your business/i })).toBeInTheDocument();
+  });
+
+  it('renders store step when currentStep=4', () => {
+    render(<MitumbaThemeProvider><SellerOnboardingPage currentStep={4} /></MitumbaThemeProvider>);
+    expect(screen.getByRole('heading', { name: /Your store/i })).toBeInTheDocument();
+  });
+
+  it('calls onStepChange when continuing from welcome', () => {
+    const onStepChange = vi.fn();
+    render(<MitumbaThemeProvider><SellerOnboardingPage onStepChange={onStepChange} /></MitumbaThemeProvider>);
+    fireEvent.click(screen.getByRole('button', { name: /Let's get started/i }));
+    expect(onStepChange).toHaveBeenCalledWith(1);
+  });
+
+  it('shows error message when error prop provided', () => {
+    render(<MitumbaThemeProvider><SellerOnboardingPage currentStep={1} error="Phone already registered" /></MitumbaThemeProvider>);
+    expect(screen.getByText('Phone already registered')).toBeInTheDocument();
+  });
+
+  it('renders confirmation step with STI score when currentStep=5', () => {
+    render(
+      <MitumbaThemeProvider>
+        <SellerOnboardingPage
+          currentStep={5}
+          initialData={{ fullName: 'Test', phone: '0712345678', idNumber: 'A123', storeName: 'TestStore' }}
+        />
+      </MitumbaThemeProvider>
+    );
+    expect(screen.getAllByText(/You're all set/i)[0]).toBeInTheDocument();
+    expect(screen.getAllByText(/Starting STI Score/i)[0]).toBeInTheDocument();
+  });
+});
