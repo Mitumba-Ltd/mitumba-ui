@@ -77,7 +77,7 @@ export interface SellerOnboardingPageProps {
   /**
    * Called when the user selects a profile photo file.
    * Upload it to your CDN and return the public URL.
-   * The component shows a loading spinner while the promise is pending.
+   * The component stores the returned URL in internal state and shows it as preview.
    */
   onProfilePhotoUpload?: (file: File) => Promise<string>;
 

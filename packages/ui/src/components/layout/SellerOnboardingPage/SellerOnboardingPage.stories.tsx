@@ -20,8 +20,10 @@ export const Welcome: Story = { args: { currentStep: 0 } };
 export const Identity: Story = {
   args: {
     currentStep: 1,
-    onProfilePhotoUpload: async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onProfilePhotoUpload: async (_file: File) => {
       await new Promise<void>((r) => { setTimeout(r, 1500); });
+      return 'https://placehold.co/100x100';
     },
   },
 };
@@ -32,8 +34,10 @@ export const BusinessRegistered: Story = { args: { currentStep: 2, initialData: 
 
 export const WhatYouSell: Story = { args: { currentStep: 3, initialData: { categories: ["Women's Wear", 'Shoes'], conditionGrades: ['A', 'B'], deliveryMethod: 'self' } } };
 
-const mockUpload = async (): Promise<void> => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const mockUpload = async (_file: File): Promise<string> => {
   await new Promise<void>((r) => { setTimeout(r, 1200); });
+  return 'https://placehold.co/400x400';
 };
 
 export const StoreSetup: Story = {
@@ -41,7 +45,8 @@ export const StoreSetup: Story = {
     currentStep: 4,
     initialData: { storeName: 'NairobiKicks', storeTagline: 'Premium thrift in Nairobi' },
     onStoreLogoUpload: mockUpload,
-    onStoreBannerUpload: async () => { await new Promise<void>((r) => { setTimeout(r, 1500); }); },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onStoreBannerUpload: async (_file: File) => { await new Promise<void>((r) => { setTimeout(r, 1500); }); return 'https://placehold.co/1200x300'; },
   },
 };
 

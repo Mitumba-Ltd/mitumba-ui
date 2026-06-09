@@ -62,7 +62,7 @@ interface AvatarUploaderProps {
   /** Current image URL — shown as preview */
   value?: string;
   /** Called with selected File; consumer uploads and returns CDN URL */
-  onUpload?: (file: File) => Promise<void>;
+  onUpload?: (file: File) => Promise<string>;
   /** Fallback initials when no image */
   initials?: string;
   /** Size in px */
@@ -143,7 +143,7 @@ function AvatarUploader({ value, onUpload, initials = '?', size = 96, label }: A
 
 interface BannerUploaderProps {
   value?: string;
-  onUpload?: (file: File) => Promise<void>;
+  onUpload?: (file: File) => Promise<string>;
   label?: string;
 }
 
@@ -242,23 +242,25 @@ export function SellerOnboardingPage({
   const back = () => { const n = step - 1; setStep(n); onStepChange?.(n); };
   const finish = () => { onComplete?.(data as SellerOnboardingData); };
 
-  // Upload handlers — call onUpload callback, then update internal data with returned URL
   const handleProfileUpload = React.useCallback(async (file: File) => {
-    if (!onProfilePhotoUpload) return;
+    if (!onProfilePhotoUpload) return '';
     const url = await onProfilePhotoUpload(file);
     set({ profilePhotoUrl: url });
+    return url;
   }, [onProfilePhotoUpload]);
 
   const handleLogoUpload = React.useCallback(async (file: File) => {
-    if (!onStoreLogoUpload) return;
+    if (!onStoreLogoUpload) return '';
     const url = await onStoreLogoUpload(file);
     set({ storeLogoUrl: url });
+    return url;
   }, [onStoreLogoUpload]);
 
   const handleBannerUpload = React.useCallback(async (file: File) => {
-    if (!onStoreBannerUpload) return;
+    if (!onStoreBannerUpload) return '';
     const url = await onStoreBannerUpload(file);
     set({ storeBannerUrl: url });
+    return url;
   }, [onStoreBannerUpload]);
 
   const bgColor = isDark ? tokens.colors.textPrimary : tokens.colors.background;
