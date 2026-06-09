@@ -103,16 +103,7 @@ export function SellerOnboardingPage({
 
   const stiScore = computeStiScore(data);
 
-  // Progress bar — only shown on steps 1-4
   const progressPct = step >= 1 && step <= 4 ? (step / TOTAL_STEPS) * 100 : 0;
-
-  return (
-    <Box sx={{ minHeight: '100vh', bgcolor: bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', p: { xs: 0, md: `${tokens.spacing.lg}px` } }}>
-      <Backdrop open={loading} sx={{ zIndex: 1000, color: tokens.colors.white }}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-
-      <Box sx={{ position: 'relative', width: '100%', maxWidth: { xs: '100%', md: 1000 }, height: { xs: '100vh', md: 640 }, bgcolor: surface, borderRadius: { xs: 0, md: `${tokens.radius.xl}px` }, boxShadow: { xs: 'none', md: tokens.shadows.elevated }, overflow: 'hidden', display: 'flex' }}>
 
   const panelTitle = (() => {
     if (step === 0) return 'Start selling on Mitumba';
@@ -125,6 +116,14 @@ export function SellerOnboardingPage({
     if (step === 5) return 'Your store is ready. Start listing your items and grow your STI score.';
     return 'Your information builds your Seller Trust Index — the foundation of buyer confidence.';
   })();
+
+  return (
+    <Box sx={{ minHeight: '100vh', bgcolor: bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', p: { xs: 0, md: `${tokens.spacing.lg}px` } }}>
+      <Backdrop open={loading} sx={{ zIndex: 1000, color: tokens.colors.white }}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+
+      <Box sx={{ position: 'relative', width: '100%', maxWidth: { xs: '100%', md: 1000 }, height: { xs: '100vh', md: 640 }, bgcolor: surface, borderRadius: { xs: 0, md: `${tokens.radius.xl}px` }, boxShadow: { xs: 'none', md: tokens.shadows.elevated }, overflow: 'hidden', display: 'flex' }}>
         <Box sx={{ display: { xs: 'none', md: 'flex' }, flexShrink: 0, width: '38%', background: panelBg, backgroundSize: 'cover', backgroundPosition: 'center', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', p: `${tokens.spacing.xxxl}px`, color: tokens.colors.white, zIndex: 1 }}>
           <Typography variant="subtitle1" fontWeight="bold" gutterBottom sx={{ color: tokens.colors.white }}>
             {panelTitle}
