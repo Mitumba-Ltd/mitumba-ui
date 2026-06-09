@@ -62,7 +62,7 @@ interface AvatarUploaderProps {
   /** Current image URL — shown as preview */
   value?: string;
   /** Called with selected File; consumer uploads and returns CDN URL */
-  onUpload?: (file: File) => Promise<string>;
+  onUpload?: (file: File) => Promise<void>;
   /** Fallback initials when no image */
   initials?: string;
   /** Size in px */
@@ -143,7 +143,7 @@ function AvatarUploader({ value, onUpload, initials = '?', size = 96, label }: A
 
 interface BannerUploaderProps {
   value?: string;
-  onUpload?: (file: File) => Promise<string>;
+  onUpload?: (file: File) => Promise<void>;
   label?: string;
 }
 
