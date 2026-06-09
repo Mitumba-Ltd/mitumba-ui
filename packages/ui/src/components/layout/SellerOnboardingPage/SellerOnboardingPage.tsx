@@ -116,7 +116,7 @@ export function SellerOnboardingPage({
 
         {/* Side panel — desktop only */}
         <Box sx={{ display: { xs: 'none', md: 'flex' }, flexShrink: 0, width: '38%', background: panelBg, backgroundSize: 'cover', backgroundPosition: 'center', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', p: `${tokens.spacing.xxxl}px`, color: tokens.colors.white, zIndex: 1 }}>
-          <Typography variant="h4" fontWeight="bold" gutterBottom sx={{ color: tokens.colors.white }}>
+          <Typography variant="h6" fontWeight="bold" gutterBottom sx={{ color: tokens.colors.white }}>
             {step === 0 ? 'Start selling on Mitumba' : step === 5 ? 'You\'re all set!' : 'Almost there'}
           </Typography>
           <Typography variant="body1" sx={{ opacity: 0.9, color: tokens.colors.white, mb: `${tokens.spacing.xxxl}px` }}>
