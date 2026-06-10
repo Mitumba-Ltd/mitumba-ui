@@ -142,7 +142,7 @@ export function TopNav({
         <Stack direction="row" spacing={1} alignItems="center">
           {actions}
           
-          <IconButton onClick={onCartClick} sx={{ color: tokens.colors.textPrimary }}>
+          <IconButton aria-label="Shopping cart" onClick={onCartClick} sx={{ color: tokens.colors.textPrimary }}>
             <Badge badgeContent={cartCount} color="error" sx={{ '& .MuiBadge-badge': { fontWeight: 800, fontSize: 10 } }}>
               <ShoppingCartIcon />
             </Badge>

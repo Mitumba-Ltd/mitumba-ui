@@ -86,6 +86,7 @@ export function MitumbaTextField({
           
           {type === 'password' && (
             <IconButton
+              aria-label="Toggle password visibility"
               onClick={handleTogglePassword}
               edge="end"
               size="small"

@@ -264,7 +264,7 @@ export function SellerOnboardingPage({
   }, [onStoreBannerUpload]);
 
   const bgColor = isDark ? tokens.colors.textPrimary : tokens.colors.background;
-  const surface = isDark ? '#2a2a2a' : tokens.colors.surface;
+  const surface = isDark ? tokens.colors.textPrimary : tokens.colors.surface;
   const textColor = isDark ? tokens.colors.white : tokens.colors.textPrimary;
   const subtitleColor = isDark ? tokens.colors.divider : tokens.colors.textSecondary;
 

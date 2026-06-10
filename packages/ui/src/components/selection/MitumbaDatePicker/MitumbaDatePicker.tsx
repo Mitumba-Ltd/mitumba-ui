@@ -109,11 +109,11 @@ export function MitumbaDatePicker({
       >
         {/* Header */}
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
-          <IconButton size="small" onClick={handlePrevMonth}><ChevronLeftIcon /></IconButton>
+          <IconButton aria-label="Previous month" size="small" onClick={handlePrevMonth}><ChevronLeftIcon /></IconButton>
           <Typography sx={{ fontWeight: 800, fontSize: 14, fontFamily: tokens.typography.fontFamily }}>
             {months[currentMonth.getMonth()]} {currentMonth.getFullYear()}
           </Typography>
-          <IconButton size="small" onClick={handleNextMonth}><ChevronRightIcon /></IconButton>
+          <IconButton aria-label="Next month" size="small" onClick={handleNextMonth}><ChevronRightIcon /></IconButton>
         </Box>
 
         {/* Days Header */}

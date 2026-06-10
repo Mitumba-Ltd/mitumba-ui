@@ -61,6 +61,7 @@ export function MitumbaModal({
       >
         {title}
         <IconButton
+          aria-label="Close modal"
           onClick={onClose}
           sx={{
             color: tokens.colors.textDisabled,

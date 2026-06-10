@@ -173,6 +173,7 @@ export function CartItem({
 
       {/* Remove Button (Absolute Position top right) */}
       <IconButton
+        aria-label="Remove item from cart"
         onClick={onRemove}
         sx={{
           position: 'absolute',

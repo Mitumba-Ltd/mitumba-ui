@@ -108,10 +108,10 @@ export function AuthPage({
           ))
         ) : (
           <>
-            <IconButton onClick={() => onSocialAuth?.('google', mode)} disabled={loading} sx={{ border: 1, borderColor: tokens.colors.border, '&:hover': { borderColor: tokens.colors.green, bgcolor: tokens.colors.green, color: tokens.colors.white } }}>
+            <IconButton aria-label="Sign in with Google" onClick={() => onSocialAuth?.('google', mode)} disabled={loading} sx={{ border: 1, borderColor: tokens.colors.border, '&:hover': { borderColor: tokens.colors.green, bgcolor: tokens.colors.green, color: tokens.colors.white } }}>
               <GoogleIcon />
             </IconButton>
-            <IconButton onClick={() => onSocialAuth?.('github', mode)} disabled={loading} sx={{ border: 1, borderColor: tokens.colors.border, '&:hover': { borderColor: tokens.colors.green, bgcolor: tokens.colors.green, color: tokens.colors.white } }}>
+            <IconButton aria-label="Sign in with GitHub" onClick={() => onSocialAuth?.('github', mode)} disabled={loading} sx={{ border: 1, borderColor: tokens.colors.border, '&:hover': { borderColor: tokens.colors.green, bgcolor: tokens.colors.green, color: tokens.colors.white } }}>
               <GitHubIcon />
             </IconButton>
           </>
