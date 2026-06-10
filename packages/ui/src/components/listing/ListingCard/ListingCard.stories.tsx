@@ -1,77 +1,77 @@
-import React from 'react'
-import type { Meta, StoryObj } from '@storybook/react'
-import Box from '@mui/material/Box'
-import { ListingCard } from './ListingCard'
-import { ListingGrid } from '../ListingGrid/ListingGrid'
+import type { Meta, StoryObj } from '@storybook/react';
+import { ListingCard } from './ListingCard';
 
 const meta: Meta<typeof ListingCard> = {
   title: 'Listing/ListingCard',
   component: ListingCard,
-  parameters: {
-    layout: 'centered',
-  },
+  parameters: { layout: 'padded' },
   tags: ['autodocs'],
-}
-
-export default meta
-
-type Story = StoryObj<typeof ListingCard>
-
-const sampleImages = [
-  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&w=800&q=80',
-]
-
-export const PremiumListing: Story = {
-  args: {
-    images: sampleImages,
-    title: 'Nike Airforce1 Premium',
-    brand: 'Own the Airforce',
-    size: 'UK 9 / US 10',
-    price: 11500,
-    originalPrice: 15000,
-    badge: 'Best Seller',
-    brandLogoUrl: 'https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg',
+  argTypes: {
+    onClick: { action: 'onClick' },
+    onSaveToggle: { action: 'onSaveToggle' },
   },
-}
+  decorators: [(Story) => <div style={{ maxWidth: 220 }}><Story /></div>],
+};
 
-export const GridShowcase: Story = {
-  render: () => (
-    <Box sx={{ width: 1200, p: 4, bgcolor: '#f5f5f5' }}>
-      <ListingGrid>
-        <ListingCard 
-          images={[sampleImages[0]]} 
-          title="Vintage Denim Jacket" 
-          price={4500} 
-          brand="Levis" 
-          size="Medium" 
-          badge="New"
-        />
-        <ListingCard 
-          images={[sampleImages[1]]} 
-          title="Classic Leather Boots" 
-          price={8200} 
-          brand="Clarks" 
-          size="UK 8" 
-          isLiked
-        />
-        <ListingCard 
-          images={[sampleImages[2]]} 
-          title="Sporty Mesh Sneakers" 
-          price={5500} 
-          originalPrice={7000}
-          brand="Adidas" 
-          size="UK 10" 
-        />
-        <ListingCard 
-          images={[sampleImages[0]]} 
-          title="Retro Graphic Tee" 
-          price={1200} 
-          brand="Thrift" 
-          size="Large" 
-        />
-      </ListingGrid>
-    </Box>
-  )
-}
+export default meta;
+type Story = StoryObj<typeof ListingCard>;
+
+export const Default: Story = {
+  args: {
+    id: 'abc123',
+    title: 'Nike Air Force 1 Low White',
+    price: 2500,
+    imageUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80',
+    storeName: 'NairobiKicks',
+    condition: 'like_new',
+  },
+};
+
+export const Saved: Story = {
+  args: { ...Default.args, isSaved: true },
+};
+
+export const NoCondition: Story = {
+  args: { ...Default.args, condition: undefined },
+};
+
+export const NoStore: Story = {
+  args: { ...Default.args, storeName: undefined },
+};
+
+export const LongTitle: Story = {
+  args: {
+    ...Default.args,
+    title: "Vintage Levi's 501 Original Fit Stonewash Blue Denim Jeans W32 L30 Made in USA",
+  },
+};
+
+export const ConditionNew: Story = { args: { ...Default.args, condition: 'new' } };
+export const ConditionGood: Story = { args: { ...Default.args, condition: 'good' } };
+export const ConditionFair: Story = { args: { ...Default.args, condition: 'fair' } };
+
+export const HighPrice: Story = {
+  args: { ...Default.args, price: 15000, title: 'Gucci Monogram Crossbody Bag' },
+};
+
+export const InGrid: Story = {
+  decorators: [
+    (Story) => (
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, maxWidth: 720 }}>
+        <Story />
+        <Story />
+        <Story />
+        <Story />
+        <Story />
+        <Story />
+      </div>
+    ),
+  ],
+  args: Default.args,
+};
+
+export const Mobile: Story = {
+  args: Default.args,
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+  decorators: [(Story) => <div style={{ maxWidth: 170 }}><Story /></div>],
+};
