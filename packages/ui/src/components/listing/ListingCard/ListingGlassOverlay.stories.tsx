@@ -25,7 +25,7 @@ function GlassOverlayComponent() {
       <Box sx={{ width: 220 }}>
         <ListingCard
           id="demo-1"
-          imageUrl={sampleImage}
+          media={[sampleImage]}
           title="Nike Airforce1 Premium"
           price={11500}
           storeName="NairobiKicks"

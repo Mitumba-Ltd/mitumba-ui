@@ -12,7 +12,7 @@ const defaultProps = {
   id: 'abc123',
   title: 'Nike Air Force 1 Low White',
   price: 2500,
-  imageUrl: 'https://placehold.co/300x400',
+  media: ['https://placehold.co/300x400'],
 };
 
 describe('ListingCard', () => {
@@ -46,8 +46,22 @@ describe('ListingCard', () => {
     expect(onSaveToggle).toHaveBeenCalledWith('abc123');
   });
 
+  it('calls onAddToCart with id when cart button is clicked', () => {
+    const onAddToCart = vi.fn();
+    render(<MitumbaThemeProvider><ListingCard {...defaultProps} onAddToCart={onAddToCart} /></MitumbaThemeProvider>);
+    fireEvent.click(screen.getByRole('button', { name: /Add to cart/i }));
+    expect(onAddToCart).toHaveBeenCalledWith('abc123');
+  });
+
   it('shows filled heart when isSaved is true', () => {
     render(<MitumbaThemeProvider><ListingCard {...defaultProps} isSaved onSaveToggle={vi.fn()} /></MitumbaThemeProvider>);
     expect(screen.getByRole('button', { name: /Remove from wishlist/i })).toBeInTheDocument();
+  });
+
+  it('renders carousel dots when multiple media items', () => {
+    render(<MitumbaThemeProvider><ListingCard {...defaultProps} media={['https://placehold.co/300x400', 'https://placehold.co/300x401', 'https://placehold.co/300x402']} /></MitumbaThemeProvider>);
+    // 3 dots rendered
+    const dots = document.querySelectorAll('[class*="MuiBox-root"]');
+    expect(dots.length).toBeGreaterThan(3);
   });
 });

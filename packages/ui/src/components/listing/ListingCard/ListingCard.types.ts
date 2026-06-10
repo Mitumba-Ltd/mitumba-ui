@@ -5,8 +5,8 @@ export interface ListingCardProps {
   title: string;
   /** Price in KES */
   price: number;
-  /** Primary listing image URL */
-  imageUrl: string;
+  /** Media URLs — first is shown by default, swipeable. Supports images and video (mp4) */
+  media: string[];
   /** Seller/store name shown as caption */
   storeName?: string;
   /** Item condition */
@@ -17,4 +17,6 @@ export interface ListingCardProps {
   onSaveToggle?: (id: string) => void;
   /** Called when the card is tapped/clicked */
   onClick?: (id: string) => void;
+  /** Called when "Add to cart" is tapped */
+  onAddToCart?: (id: string) => void;
 }

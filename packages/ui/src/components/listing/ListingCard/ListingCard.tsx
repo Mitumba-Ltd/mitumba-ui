@@ -5,6 +5,7 @@ import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { tokens } from '@mitumba/tokens';
 import type { ListingCardProps } from './ListingCard.types';
 
@@ -15,25 +16,46 @@ const CONDITION_LABELS: Record<string, string> = {
   fair: 'Fair',
 };
 
+function isVideo(url: string): boolean {
+  return /\.(mp4|webm|mov)(\?|$)/i.test(url);
+}
+
 /**
- * Listing card — Pinterest/Depop-style. No fixed height, image takes natural
- * aspect ratio. Works in CSS grid or masonry without breaking.
+ * Listing card — Pinterest/Depop-style. Supports multi-image + video media,
+ * wishlist toggle, add-to-cart, condition chip. No fixed height — image takes
+ * natural aspect ratio. Works in CSS grid/masonry.
  */
 export function ListingCard({
   id,
   title,
   price,
-  imageUrl,
+  media,
   storeName,
   condition,
   isSaved = false,
   onSaveToggle,
   onClick,
+  onAddToCart,
 }: ListingCardProps): React.ReactElement {
+  const [activeIndex, setActiveIndex] = React.useState(0);
+
   const handleSave = (e: React.MouseEvent) => {
     e.stopPropagation();
     onSaveToggle?.(id);
   };
+
+  const handleCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onAddToCart?.(id);
+  };
+
+  const handleDotClick = (e: React.MouseEvent, idx: number) => {
+    e.stopPropagation();
+    setActiveIndex(idx);
+  };
+
+  const currentMedia = media[activeIndex] ?? media[0];
+  const hasMultiple = media.length > 1;
 
   return (
     <Box
@@ -52,21 +74,50 @@ export function ListingCard({
         } : {},
       }}
     >
-      {/* Image — natural aspect ratio, no fixed height */}
+      {/* Media — natural aspect ratio */}
       <Box sx={{ position: 'relative', width: '100%', lineHeight: 0 }}>
-        <Box
-          component="img"
-          src={imageUrl}
-          alt={title}
-          sx={{
-            width: '100%',
-            height: 'auto',
-            display: 'block',
-            objectFit: 'cover',
-          }}
-        />
+        {isVideo(currentMedia) ? (
+          <Box
+            component="video"
+            src={currentMedia}
+            muted
+            autoPlay
+            loop
+            playsInline
+            sx={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }}
+          />
+        ) : (
+          <Box
+            component="img"
+            src={currentMedia}
+            alt={title}
+            sx={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }}
+          />
+        )}
 
-        {/* Wishlist heart — top right overlay */}
+        {/* Carousel dots */}
+        {hasMultiple && (
+          <Box sx={{ position: 'absolute', bottom: `${tokens.spacing.sm}px`, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '4px' }}>
+            {media.map((_, idx) => (
+              <Box
+                key={`dot-${String(idx)}`}
+                onClick={(e) => handleDotClick(e, idx)}
+                sx={{
+                  width: activeIndex === idx ? 12 : 6,
+                  height: 6,
+                  borderRadius: tokens.radius.full,
+                  bgcolor: tokens.colors.white,
+                  opacity: activeIndex === idx ? 1 : 0.55,
+                  transition: tokens.motion.transitions.interaction,
+                  cursor: 'pointer',
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.15)',
+                }}
+              />
+            ))}
+          </Box>
+        )}
+
+        {/* Wishlist heart — top right */}
         {onSaveToggle && (
           <IconButton
             aria-label={isSaved ? 'Remove from wishlist' : 'Save to wishlist'}
@@ -76,7 +127,7 @@ export function ListingCard({
               position: 'absolute',
               top: `${tokens.spacing.sm}px`,
               right: `${tokens.spacing.sm}px`,
-              bgcolor: 'rgba(255,255,255,0.9)',
+              bgcolor: 'rgba(255,255,255,0.92)',
               backdropFilter: 'blur(4px)',
               color: isSaved ? tokens.colors.error : tokens.colors.textSecondary,
               '&:hover': { bgcolor: tokens.colors.white, transform: 'scale(1.1)' },
@@ -86,14 +137,14 @@ export function ListingCard({
           </IconButton>
         )}
 
-        {/* Condition chip — bottom left overlay */}
+        {/* Condition chip — bottom left */}
         {condition && (
           <Chip
             label={CONDITION_LABELS[condition]}
             size="small"
             sx={{
               position: 'absolute',
-              bottom: `${tokens.spacing.sm}px`,
+              bottom: hasMultiple ? `${tokens.spacing.xl}px` : `${tokens.spacing.sm}px`,
               left: `${tokens.spacing.sm}px`,
               bgcolor: 'rgba(255,255,255,0.92)',
               backdropFilter: 'blur(4px)',
@@ -124,29 +175,51 @@ export function ListingCard({
           {title}
         </Typography>
 
-        <Typography
-          sx={{
-            fontSize: tokens.typography.fontSizes.md,
-            fontWeight: 800,
-            color: tokens.colors.textPrimary,
-            fontFamily: tokens.typography.fontFamily,
-          }}
-        >
-          KES {price.toLocaleString()}
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box>
+            <Typography
+              sx={{
+                fontSize: tokens.typography.fontSizes.md,
+                fontWeight: 800,
+                color: tokens.colors.textPrimary,
+                fontFamily: tokens.typography.fontFamily,
+              }}
+            >
+              KES {price.toLocaleString()}
+            </Typography>
+            {storeName && (
+              <Typography
+                sx={{
+                  fontSize: tokens.typography.fontSizes.xs,
+                  color: tokens.colors.textSecondary,
+                  fontFamily: tokens.typography.fontFamily,
+                  mt: '2px',
+                }}
+              >
+                {storeName}
+              </Typography>
+            )}
+          </Box>
 
-        {storeName && (
-          <Typography
-            sx={{
-              fontSize: tokens.typography.fontSizes.xs,
-              color: tokens.colors.textSecondary,
-              fontFamily: tokens.typography.fontFamily,
-              mt: `${tokens.spacing.xs}px`,
-            }}
-          >
-            {storeName}
-          </Typography>
-        )}
+          {/* Add to cart */}
+          {onAddToCart && (
+            <IconButton
+              aria-label="Add to cart"
+              onClick={handleCart}
+              size="small"
+              sx={{
+                bgcolor: tokens.colors.green,
+                color: tokens.colors.white,
+                '&:hover': { bgcolor: tokens.colors.greenDark, transform: 'scale(1.05)' },
+                transition: tokens.motion.transitions.interaction,
+                width: 32,
+                height: 32,
+              }}
+            >
+              <AddShoppingCartIcon sx={{ fontSize: 16 }} />
+            </IconButton>
+          )}
+        </Box>
       </Box>
     </Box>
   );
