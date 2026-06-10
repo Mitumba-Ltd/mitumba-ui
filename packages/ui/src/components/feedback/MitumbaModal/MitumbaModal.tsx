@@ -61,6 +61,7 @@ export function MitumbaModal({
       >
         {title}
         <IconButton
+          aria-label="Close modal"
           onClick={onClose}
           sx={{
             color: tokens.colors.textDisabled,
@@ -73,7 +74,6 @@ export function MitumbaModal({
               transform: 'rotate(90deg)',
             },
           }}
-          aria-label="Close modal"
         >
           <CloseIcon sx={{ fontSize: 20 }} />
         </IconButton>

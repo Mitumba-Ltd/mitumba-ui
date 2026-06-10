@@ -96,6 +96,7 @@ export function MitumbaBanner({
         {action}
         {onClose && (
           <IconButton
+            aria-label="Dismiss banner"
             onClick={onClose}
             size="small"
             sx={{

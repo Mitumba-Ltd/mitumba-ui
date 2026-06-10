@@ -136,6 +136,7 @@ export function ListingCard({
 
         {/* Like Button */}
         <IconButton
+          aria-label="Save to wishlist"
           onClick={handleLike}
           sx={{
             position: 'absolute',
