@@ -23,8 +23,8 @@ describe('BuyerOnboardingPage', () => {
   it('renders all form fields', () => {
     render(<MitumbaThemeProvider><BuyerOnboardingPage onComplete={vi.fn()} cities={cities} /></MitumbaThemeProvider>);
     expect(screen.getByLabelText(/Display name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/City/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Phone number/i)).toBeInTheDocument();
+    expect(screen.getByText('City')).toBeInTheDocument();
   });
 
   it('calls onComplete with form data on submit', () => {
