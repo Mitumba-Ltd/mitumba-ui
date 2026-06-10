@@ -8,13 +8,13 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Button from '@mui/material/Button';
+import { tokens } from '@mitumba/tokens';
 import { MitumbaToast } from './MitumbaToast/MitumbaToast';
 import { MitumbaModal } from './MitumbaModal/MitumbaModal';
 import { MitumbaPrimaryButton } from '../foundation/MitumbaPrimaryButton/MitumbaPrimaryButton';
 import { EmptyState } from './EmptyState/EmptyState';
 import { ErrorState } from './ErrorState/ErrorState';
 import { MitumbaSkeleton } from './MitumbaSkeleton/MitumbaSkeleton';
-import { tokens } from '@mitumba/tokens';
 
 const meta: Meta = {
   title: 'Feedback/Showcase',
@@ -22,6 +22,13 @@ const meta: Meta = {
 };
 
 export default meta;
+
+function getToastMessage(severity: string): string {
+  if (severity === 'success') return 'Item added to your cart';
+  if (severity === 'error') return 'Failed to save changes';
+  if (severity === 'warning') return 'Your session expires in 5 minutes';
+  return 'New message from seller';
+}
 
 function ShowcaseComponent() {
   const [toastOpen, setToastOpen] = useState(false);
@@ -120,7 +127,7 @@ function ShowcaseComponent() {
       <MitumbaToast
         open={toastOpen}
         onClose={() => setToastOpen(false)}
-        message={toastSeverity === 'success' ? 'Item added to your cart' : toastSeverity === 'error' ? 'Failed to save changes' : toastSeverity === 'warning' ? 'Your session expires in 5 minutes' : 'New message from seller'}
+        message={getToastMessage(toastSeverity)}
         severity={toastSeverity}
         showIconProgress
       />
