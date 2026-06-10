@@ -6,6 +6,9 @@ import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import CheckIcon from '@mui/icons-material/Check';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { tokens } from '@mitumba/tokens';
 import type { ListingCardProps } from './ListingCard.types';
 
@@ -38,6 +41,7 @@ export function ListingCard({
   onAddToCart,
 }: ListingCardProps): React.ReactElement {
   const [activeIndex, setActiveIndex] = React.useState(0);
+  const [cartAdded, setCartAdded] = React.useState(false);
 
   const handleSave = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -46,7 +50,20 @@ export function ListingCard({
 
   const handleCart = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (cartAdded) return;
+    setCartAdded(true);
     onAddToCart?.(id);
+    setTimeout(() => setCartAdded(false), 1500);
+  };
+
+  const handlePrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveIndex((prev) => (prev > 0 ? prev - 1 : media.length - 1));
+  };
+
+  const handleNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveIndex((prev) => (prev < media.length - 1 ? prev + 1 : 0));
   };
 
   const handleDotClick = (e: React.MouseEvent, idx: number) => {
@@ -68,6 +85,11 @@ export function ListingCard({
         cursor: onClick ? 'pointer' : 'default',
         bgcolor: tokens.colors.surface,
         transition: tokens.motion.transitions.interaction,
+        '@keyframes tickPop': {
+          '0%': { transform: 'scale(0) rotate(-45deg)' },
+          '60%': { transform: 'scale(1.3) rotate(0deg)' },
+          '100%': { transform: 'scale(1) rotate(0deg)' },
+        },
         '&:hover': onClick ? {
           borderColor: tokens.colors.green,
           transform: 'translateY(-2px)',
@@ -93,6 +115,54 @@ export function ListingCard({
             alt={title}
             sx={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }}
           />
+        )}
+
+        {/* Prev/Next arrows — visible on hover (desktop), always on mobile for multi-media */}
+        {hasMultiple && (
+          <>
+            <IconButton
+              aria-label="Previous image"
+              onClick={handlePrev}
+              size="small"
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: `${tokens.spacing.xs}px`,
+                transform: 'translateY(-50%)',
+                bgcolor: 'rgba(255,255,255,0.85)',
+                backdropFilter: 'blur(4px)',
+                width: 28,
+                height: 28,
+                opacity: { xs: 0.9, md: 0 },
+                transition: tokens.motion.transitions.interaction,
+                '.MuiBox-root:hover &': { opacity: 1 },
+                '&:hover': { bgcolor: tokens.colors.white },
+              }}
+            >
+              <ChevronLeftIcon sx={{ fontSize: 18 }} />
+            </IconButton>
+            <IconButton
+              aria-label="Next image"
+              onClick={handleNext}
+              size="small"
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                right: `${tokens.spacing.xs}px`,
+                transform: 'translateY(-50%)',
+                bgcolor: 'rgba(255,255,255,0.85)',
+                backdropFilter: 'blur(4px)',
+                width: 28,
+                height: 28,
+                opacity: { xs: 0.9, md: 0 },
+                transition: tokens.motion.transitions.interaction,
+                '.MuiBox-root:hover &': { opacity: 1 },
+                '&:hover': { bgcolor: tokens.colors.white },
+              }}
+            >
+              <ChevronRightIcon sx={{ fontSize: 18 }} />
+            </IconButton>
+          </>
         )}
 
         {/* Carousel dots */}
@@ -201,22 +271,26 @@ export function ListingCard({
             )}
           </Box>
 
-          {/* Add to cart */}
+          {/* Add to cart — animates to tick on click */}
           {onAddToCart && (
             <IconButton
-              aria-label="Add to cart"
+              aria-label={cartAdded ? 'Added to cart' : 'Add to cart'}
               onClick={handleCart}
               size="small"
               sx={{
-                bgcolor: tokens.colors.green,
+                bgcolor: cartAdded ? tokens.colors.green : tokens.colors.green,
                 color: tokens.colors.white,
-                '&:hover': { bgcolor: tokens.colors.greenDark, transform: 'scale(1.05)' },
-                transition: tokens.motion.transitions.interaction,
                 width: 32,
                 height: 32,
+                transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s',
+                transform: cartAdded ? 'scale(1.15)' : 'scale(1)',
+                '&:hover': { bgcolor: tokens.colors.greenDark, transform: cartAdded ? 'scale(1.15)' : 'scale(1.05)' },
               }}
             >
-              <AddShoppingCartIcon sx={{ fontSize: 16 }} />
+              {cartAdded
+                ? <CheckIcon sx={{ fontSize: 18, animation: 'tickPop 0.3s ease' }} />
+                : <AddShoppingCartIcon sx={{ fontSize: 16 }} />
+              }
             </IconButton>
           )}
         </Box>
