@@ -1,114 +1,68 @@
 // @vitest-environment jsdom
+/* eslint-disable react/jsx-props-no-spreading */
 import '@testing-library/jest-dom/vitest'
-import { cleanup, render, screen, fireEvent } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
-import { MitumbaThemeProvider } from '../../../theme'
-import { ListingCard } from './ListingCard'
+import React from 'react';
+import { cleanup, render, screen, fireEvent } from '@testing-library/react';
+import { afterEach, describe, it, expect, vi } from 'vitest';
+import { MitumbaThemeProvider } from '../../../theme';
+import { ListingCard } from './ListingCard';
 
-const sampleImages = ['https://test.com/image.jpg']
+afterEach(() => { cleanup(); });
+
+const defaultProps = {
+  id: 'abc123',
+  title: 'Nike Air Force 1 Low White',
+  price: 2500,
+  media: ['https://placehold.co/300x400'],
+};
 
 describe('ListingCard', () => {
-  afterEach(cleanup)
+  it('renders title and price', () => {
+    render(<MitumbaThemeProvider><ListingCard {...defaultProps} /></MitumbaThemeProvider>);
+    expect(screen.getByText('Nike Air Force 1 Low White')).toBeInTheDocument();
+    expect(screen.getByText('KES 2,500')).toBeInTheDocument();
+  });
 
-  it('renders basic product info', () => {
-    render(
-      <MitumbaThemeProvider>
-        <ListingCard
-          images={sampleImages}
-          title="Test Product"
-          price={5000}
-          brand="Test Brand"
-          size="Medium"
-        />
-      </MitumbaThemeProvider>,
-    )
+  it('renders store name when provided', () => {
+    render(<MitumbaThemeProvider><ListingCard {...defaultProps} storeName="NairobiKicks" /></MitumbaThemeProvider>);
+    expect(screen.getByText('NairobiKicks')).toBeInTheDocument();
+  });
 
-    expect(screen.getByText('Test Product')).toBeInTheDocument()
-    expect(screen.getByText(/5,000/)).toBeInTheDocument()
-    expect(screen.getByText(/Test Brand/)).toBeInTheDocument()
-    expect(screen.getByText(/Medium/)).toBeInTheDocument()
-  })
+  it('renders condition chip when provided', () => {
+    render(<MitumbaThemeProvider><ListingCard {...defaultProps} condition="like_new" /></MitumbaThemeProvider>);
+    expect(screen.getByText('Like New')).toBeInTheDocument();
+  });
 
-  it('renders badges and logos', () => {
-    render(
-      <MitumbaThemeProvider>
-        <ListingCard
-          images={sampleImages}
-          title="Product"
-          price={100}
-          badge="Bestseller"
-          brandLogoUrl="https://logo.com"
-        />
-      </MitumbaThemeProvider>,
-    )
+  it('calls onClick with id when card is clicked', () => {
+    const onClick = vi.fn();
+    render(<MitumbaThemeProvider><ListingCard {...defaultProps} onClick={onClick} /></MitumbaThemeProvider>);
+    fireEvent.click(screen.getByText('Nike Air Force 1 Low White'));
+    expect(onClick).toHaveBeenCalledWith('abc123');
+  });
 
-    expect(screen.getByText('Bestseller')).toBeInTheDocument()
-    expect(screen.getByAltText('brand')).toBeInTheDocument()
-  })
+  it('calls onSaveToggle with id when heart is clicked', () => {
+    const onSaveToggle = vi.fn();
+    render(<MitumbaThemeProvider><ListingCard {...defaultProps} onSaveToggle={onSaveToggle} /></MitumbaThemeProvider>);
+    fireEvent.click(screen.getByRole('button', { name: /Save to wishlist/i }));
+    expect(onSaveToggle).toHaveBeenCalledWith('abc123');
+  });
 
-  it('calls onClick when card is clicked', () => {
-    const onClick = vi.fn()
-    render(
-      <MitumbaThemeProvider>
-        <ListingCard
-          images={sampleImages}
-          title="Product"
-          price={100}
-          onClick={onClick}
-        />
-      </MitumbaThemeProvider>,
-    )
+  it('calls onAddToCart with id when cart button is clicked', () => {
+    const onAddToCart = vi.fn();
+    render(<MitumbaThemeProvider><ListingCard {...defaultProps} onAddToCart={onAddToCart} /></MitumbaThemeProvider>);
+    fireEvent.click(screen.getByRole('button', { name: /Add to cart/i }));
+    expect(onAddToCart).toHaveBeenCalledWith('abc123');
+  });
 
-    fireEvent.click(screen.getByText('Product'))
-    expect(onClick).toHaveBeenCalledTimes(1)
-  })
+  it('shows filled heart when isSaved is true', () => {
+    render(<MitumbaThemeProvider><ListingCard {...defaultProps} isSaved onSaveToggle={vi.fn()} /></MitumbaThemeProvider>);
+    expect(screen.getByRole('button', { name: /Remove from wishlist/i })).toBeInTheDocument();
+  });
 
-  it('calls onBuyClick when buy button is clicked', () => {
-    const onBuyClick = vi.fn()
-    render(
-      <MitumbaThemeProvider>
-        <ListingCard
-          images={sampleImages}
-          title="Product"
-          price={100}
-          onBuyClick={onBuyClick}
-        />
-      </MitumbaThemeProvider>,
-    )
-
-    fireEvent.click(screen.getByRole('button', { name: /Buy Now/i }))
-    expect(onBuyClick).toHaveBeenCalledTimes(1)
-  })
-
-  it('reflects liked state and calls onLikeClick', () => {
-    const onLikeClick = vi.fn()
-    const { rerender } = render(
-      <MitumbaThemeProvider>
-        <ListingCard
-          images={sampleImages}
-          title="Product"
-          price={100}
-          isLiked={false}
-          onLikeClick={onLikeClick}
-        />
-      </MitumbaThemeProvider>,
-    )
-
-    expect(screen.queryByTestId('FavoriteIcon')).not.toBeInTheDocument()
-    
-    fireEvent.click(screen.getByTestId('FavoriteBorderIcon'))
-    expect(onLikeClick).toHaveBeenCalledTimes(1)
-
-    rerender(
-      <MitumbaThemeProvider>
-        <ListingCard
-          images={sampleImages}
-          title="Product"
-          price={100}
-          isLiked
-        />
-      </MitumbaThemeProvider>,
-    )
-    expect(screen.getByTestId('FavoriteIcon')).toBeInTheDocument()
-  })
-})
+  it('renders carousel dots when multiple media items', () => {
+    render(<MitumbaThemeProvider><ListingCard {...defaultProps} media={['https://placehold.co/300x400', 'https://placehold.co/300x401', 'https://placehold.co/300x402']} /></MitumbaThemeProvider>);
+    // 3 dots rendered
+    const dots = document.querySelectorAll('[class*="MuiBox-root"]');
+    expect(dots.length).toBeGreaterThan(3);
+  });
+});

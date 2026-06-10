@@ -1,277 +1,302 @@
-import React, { useState } from 'react'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import Stack from '@mui/material/Stack'
-import IconButton from '@mui/material/IconButton'
-import FavoriteIcon from '@mui/icons-material/Favorite'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
-import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'
-import { tokens } from '@mitumba/tokens'
-import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
-import type { ListingCardProps } from './ListingCard.types'
+import React from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Chip from '@mui/material/Chip';
+import IconButton from '@mui/material/IconButton';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import CheckIcon from '@mui/icons-material/Check';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { tokens } from '@mitumba/tokens';
+import type { ListingCardProps } from './ListingCard.types';
+
+const CONDITION_LABELS: Record<string, string> = {
+  new: 'New',
+  like_new: 'Like New',
+  good: 'Good',
+  fair: 'Fair',
+};
+
+function isVideo(url: string): boolean {
+  return /\.(mp4|webm|mov)(\?|$)/i.test(url);
+}
 
 /**
- * Premium "Pinterest-Level" Listing Card primitive.
- * Engineered for absolute geometric harmony and high-fidelity action states.
- * Reigned in for professional visual sanity (Very Serious standard).
+ * Listing card — Pinterest/Depop-style. Supports multi-image + video media,
+ * wishlist toggle, add-to-cart, condition chip. No fixed height — image takes
+ * natural aspect ratio. Works in CSS grid/masonry.
  */
 export function ListingCard({
-  images,
+  id,
   title,
   price,
-  originalPrice,
-  brand,
-  size,
-  badge,
-  brandLogoUrl,
+  media,
+  storeName,
+  condition,
+  isSaved = false,
+  onSaveToggle,
   onClick,
-  onBuyClick,
-  isLiked = false,
-  onLikeClick,
-  sx,
-}: ListingCardProps) {
-  const [activeImage, setActiveImage] = useState(0)
+  onAddToCart,
+}: ListingCardProps): React.ReactElement {
+  const [activeIndex, setActiveIndex] = React.useState(0);
+  const [cartAdded, setCartAdded] = React.useState(false);
 
-  const handleBuy = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onBuyClick?.(e)
-  }
+  const handleSave = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onSaveToggle?.(id);
+  };
 
-  const handleLike = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onLikeClick?.(e)
-  }
+  const handleCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (cartAdded) return;
+    setCartAdded(true);
+    onAddToCart?.(id);
+    setTimeout(() => setCartAdded(false), 1500);
+  };
+
+  const handlePrev = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveIndex((prev) => (prev > 0 ? prev - 1 : media.length - 1));
+  };
+
+  const handleNext = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActiveIndex((prev) => (prev < media.length - 1 ? prev + 1 : 0));
+  };
+
+  const handleDotClick = (e: React.MouseEvent, idx: number) => {
+    e.stopPropagation();
+    setActiveIndex(idx);
+  };
+
+  const currentMedia = media[activeIndex] ?? media[0];
+  const hasMultiple = media.length > 1;
 
   return (
     <Box
-      onClick={onClick}
-      sx={[
-        {
-          width: '100%',
-          backgroundColor: tokens.colors.surface,
-          borderRadius: `${tokens.radius.lg}px`, // Standardized to 16px (Serious)
-          overflow: 'hidden',
-          // High-end layered shadow, no clunky borders
-          boxShadow: `
-            0 2px 4px 0 rgba(0, 0, 0, 0.05),
-            0 8px 16px -4px rgba(0, 0, 0, 0.1)
-          `,
-          transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-          cursor: 'pointer',
-          position: 'relative',
-          
-          '&:hover': {
-            transform: 'translateY(-6px)',
-            boxShadow: tokens.shadows.deep,
-          }
+      onClick={() => onClick?.(id)}
+      sx={{
+        width: '100%',
+        borderRadius: `${tokens.radius.lg}px`,
+        border: `1px solid ${tokens.colors.border}`,
+        overflow: 'hidden',
+        cursor: onClick ? 'pointer' : 'default',
+        bgcolor: tokens.colors.surface,
+        transition: tokens.motion.transitions.interaction,
+        '@keyframes tickPop': {
+          '0%': { transform: 'scale(0) rotate(-45deg)' },
+          '60%': { transform: 'scale(1.3) rotate(0deg)' },
+          '100%': { transform: 'scale(1) rotate(0deg)' },
         },
-        ...(Array.isArray(sx) ? sx : [sx]),
-      ]}
+        '&:hover': onClick ? {
+          borderColor: tokens.colors.green,
+          transform: 'translateY(-2px)',
+        } : {},
+      }}
     >
-      {/* Image Container */}
-      <Box sx={{ position: 'relative', width: '100%', pt: '100%', backgroundColor: tokens.colors.background }}>
-        <Box
-          component="img"
-          src={images[activeImage]}
-          alt={title}
-          sx={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            transition: 'opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-          }}
-        />
-
-        {/* Badge Overlay */}
-        {badge && (
+      {/* Media — natural aspect ratio */}
+      <Box sx={{ position: 'relative', width: '100%', lineHeight: 0 }}>
+        {isVideo(currentMedia) ? (
           <Box
-            sx={{
-              position: 'absolute',
-              top: 12,
-              left: 12,
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(4px)',
-              px: 1.5,
-              py: 0.5,
-              borderRadius: tokens.radius.full,
-              fontSize: 10,
-              fontWeight: 800,
-              color: tokens.colors.textPrimary,
-              fontFamily: tokens.typography.fontFamily,
-              textTransform: 'uppercase',
-              boxShadow: tokens.shadows.card,
-              zIndex: 2,
-            }}
-          >
-            {badge}
-          </Box>
+            component="video"
+            src={currentMedia}
+            muted
+            autoPlay
+            loop
+            playsInline
+            sx={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }}
+          />
+        ) : (
+          <Box
+            component="img"
+            src={currentMedia}
+            alt={title}
+            sx={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }}
+          />
         )}
 
-        {/* Brand Logo Overlay */}
-        {brandLogoUrl && (
-          <Box
-            sx={{
-              position: 'absolute',
-              top: 12,
-              right: 12,
-              width: 32,
-              height: 32,
-              backgroundColor: tokens.colors.white,
-              borderRadius: '50%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: tokens.shadows.card,
-              p: 0.5,
-              zIndex: 2,
-              '& img': { width: '100%', height: '100%', objectFit: 'contain' }
-            }}
-          >
-            <img src={brandLogoUrl} alt="brand" />
-          </Box>
+        {/* Prev/Next arrows — visible on hover (desktop), always on mobile for multi-media */}
+        {hasMultiple && (
+          <>
+            <IconButton
+              aria-label="Previous image"
+              onClick={handlePrev}
+              size="small"
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: `${tokens.spacing.xs}px`,
+                transform: 'translateY(-50%)',
+                bgcolor: 'rgba(255,255,255,0.85)',
+                backdropFilter: 'blur(4px)',
+                width: 28,
+                height: 28,
+                opacity: { xs: 0.9, md: 0 },
+                transition: tokens.motion.transitions.interaction,
+                '.MuiBox-root:hover &': { opacity: 1 },
+                '&:hover': { bgcolor: tokens.colors.white },
+              }}
+            >
+              <ChevronLeftIcon sx={{ fontSize: 18 }} />
+            </IconButton>
+            <IconButton
+              aria-label="Next image"
+              onClick={handleNext}
+              size="small"
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                right: `${tokens.spacing.xs}px`,
+                transform: 'translateY(-50%)',
+                bgcolor: 'rgba(255,255,255,0.85)',
+                backdropFilter: 'blur(4px)',
+                width: 28,
+                height: 28,
+                opacity: { xs: 0.9, md: 0 },
+                transition: tokens.motion.transitions.interaction,
+                '.MuiBox-root:hover &': { opacity: 1 },
+                '&:hover': { bgcolor: tokens.colors.white },
+              }}
+            >
+              <ChevronRightIcon sx={{ fontSize: 18 }} />
+            </IconButton>
+          </>
         )}
 
-        {/* Like Button */}
-        <IconButton
-          aria-label="Save to wishlist"
-          onClick={handleLike}
-          sx={{
-            position: 'absolute',
-            bottom: 12,
-            right: 12,
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
-            backdropFilter: 'blur(4px)',
-            boxShadow: tokens.shadows.card,
-            color: isLiked ? tokens.colors.error : tokens.colors.textSecondary,
-            zIndex: 2,
-            '&:hover': { backgroundColor: tokens.colors.white, transform: 'scale(1.1)' }
-          }}
-        >
-          {isLiked ? <FavoriteIcon sx={{ fontSize: 18 }} /> : <FavoriteBorderIcon sx={{ fontSize: 18 }} />}
-        </IconButton>
-
-        {/* Carousel Dots (Anime Style) */}
-        {images.length > 1 && (
-          <Stack
-            direction="row"
-            spacing={0.8}
-            sx={{
-              position: 'absolute',
-              bottom: 12,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              zIndex: 2,
-            }}
-          >
-            {images.map((img, i) => (
+        {/* Carousel dots */}
+        {hasMultiple && (
+          <Box sx={{ position: 'absolute', bottom: `${tokens.spacing.sm}px`, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '4px' }}>
+            {media.map((_, idx) => (
               <Box
-                key={img}
-                onClick={(e) => { e.stopPropagation(); setActiveImage(i); }}
+                key={`dot-${String(idx)}`}
+                onClick={(e) => handleDotClick(e, idx)}
                 sx={{
-                  width: activeImage === i ? 12 : 6,
+                  width: activeIndex === idx ? 12 : 6,
                   height: 6,
                   borderRadius: tokens.radius.full,
-                  backgroundColor: tokens.colors.white,
-                  opacity: activeImage === i ? 1 : 0.5,
-                  transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                  bgcolor: tokens.colors.white,
+                  opacity: activeIndex === idx ? 1 : 0.55,
+                  transition: tokens.motion.transitions.interaction,
                   cursor: 'pointer',
-                  boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.15)',
                 }}
               />
             ))}
-          </Stack>
+          </Box>
+        )}
+
+        {/* Wishlist heart — top right */}
+        {onSaveToggle && (
+          <IconButton
+            aria-label={isSaved ? 'Remove from wishlist' : 'Save to wishlist'}
+            onClick={handleSave}
+            size="small"
+            sx={{
+              position: 'absolute',
+              top: `${tokens.spacing.sm}px`,
+              right: `${tokens.spacing.sm}px`,
+              bgcolor: 'rgba(255,255,255,0.92)',
+              backdropFilter: 'blur(4px)',
+              color: isSaved ? tokens.colors.error : tokens.colors.textSecondary,
+              '&:hover': { bgcolor: tokens.colors.white, transform: 'scale(1.1)' },
+            }}
+          >
+            {isSaved ? <FavoriteIcon sx={{ fontSize: 18 }} /> : <FavoriteBorderIcon sx={{ fontSize: 18 }} />}
+          </IconButton>
+        )}
+
+        {/* Condition chip — bottom left */}
+        {condition && (
+          <Chip
+            label={CONDITION_LABELS[condition]}
+            size="small"
+            sx={{
+              position: 'absolute',
+              bottom: hasMultiple ? `${tokens.spacing.xl}px` : `${tokens.spacing.sm}px`,
+              left: `${tokens.spacing.sm}px`,
+              bgcolor: 'rgba(255,255,255,0.92)',
+              backdropFilter: 'blur(4px)',
+              fontWeight: 600,
+              fontSize: tokens.typography.fontSizes.xs,
+              height: 22,
+            }}
+          />
         )}
       </Box>
 
-      {/* Content Section */}
-      <Box sx={{ p: 2.5 }}> {/* Optimized padding */}
+      {/* Content */}
+      <Box sx={{ p: `${tokens.spacing.base}px` }}>
         <Typography
           sx={{
             fontSize: tokens.typography.fontSizes.base,
-            fontWeight: 800,
+            fontWeight: 600,
             color: tokens.colors.textPrimary,
             fontFamily: tokens.typography.fontFamily,
-            lineHeight: 1.2,
-            mb: 0.5,
-            whiteSpace: 'nowrap',
+            lineHeight: tokens.typography.lineHeights.snug,
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
-            textOverflow: 'ellipsis',
+            mb: `${tokens.spacing.xs}px`,
           }}
         >
           {title}
         </Typography>
 
-        {(brand || size) && (
-          <Typography
-            sx={{
-              fontSize: tokens.typography.fontSizes.xs,
-              color: tokens.colors.textSecondary,
-              fontFamily: tokens.typography.fontFamily,
-              fontWeight: 600,
-              mb: 2,
-            }}
-          >
-            {brand}{brand && size ? ' • ' : ''}{size}
-          </Typography>
-        )}
-
-        {/* Action Row */}
-        <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={2}>
-          <Box
-            sx={{
-              backgroundColor: tokens.colors.background,
-              px: 1.5,
-              py: 0.8,
-              borderRadius: tokens.radius.full,
-              fontSize: tokens.typography.fontSizes.base,
-              fontWeight: 800,
-              color: tokens.colors.textPrimary,
-              fontFamily: tokens.typography.fontFamily,
-              display: 'flex',
-              alignItems: 'baseline',
-              gap: 0.5,
-            }}
-          >
-            <Typography component="span" sx={{ fontSize: 10, fontWeight: 900 }}>KES</Typography>
-            {price.toLocaleString()}
-            {originalPrice && (
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <Box>
+            <Typography
+              sx={{
+                fontSize: tokens.typography.fontSizes.md,
+                fontWeight: 800,
+                color: tokens.colors.textPrimary,
+                fontFamily: tokens.typography.fontFamily,
+              }}
+            >
+              KES {price.toLocaleString()}
+            </Typography>
+            {storeName && (
               <Typography
-                component="span"
                 sx={{
-                  ml: 0.5,
-                  fontSize: 10,
-                  color: tokens.colors.textDisabled,
-                  textDecoration: 'line-through',
-                  fontWeight: 600,
+                  fontSize: tokens.typography.fontSizes.xs,
+                  color: tokens.colors.textSecondary,
+                  fontFamily: tokens.typography.fontFamily,
+                  mt: '2px',
                 }}
               >
-                {originalPrice.toLocaleString()}
+                {storeName}
               </Typography>
             )}
           </Box>
 
-          <MitumbaPrimaryButton
-            label="Buy Now"
-            variant="primary"
-            size="small"
-            onClick={handleBuy}
-            icon={<ArrowOutwardIcon sx={{ fontSize: 16 }} />}
-            iconPosition="right"
-            sx={{ 
-              borderRadius: tokens.radius.full, 
-              px: 2.5,
-              height: 32, // Forced small height for density
-              fontSize: 11,
-              fontWeight: 900,
-            }}
-          />
-        </Stack>
+          {/* Add to cart — animates to tick on click */}
+          {onAddToCart && (
+            <IconButton
+              aria-label={cartAdded ? 'Added to cart' : 'Add to cart'}
+              onClick={handleCart}
+              size="small"
+              sx={{
+                bgcolor: cartAdded ? tokens.colors.green : tokens.colors.green,
+                color: tokens.colors.white,
+                width: 32,
+                height: 32,
+                transition: 'transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s',
+                transform: cartAdded ? 'scale(1.15)' : 'scale(1)',
+                '&:hover': { bgcolor: tokens.colors.greenDark, transform: cartAdded ? 'scale(1.15)' : 'scale(1.05)' },
+              }}
+            >
+              {cartAdded
+                ? <CheckIcon sx={{ fontSize: 18, animation: 'tickPop 0.3s ease' }} />
+                : <AddShoppingCartIcon sx={{ fontSize: 16 }} />
+              }
+            </IconButton>
+          )}
+        </Box>
       </Box>
     </Box>
-  )
+  );
 }
 
-export default ListingCard
+export default ListingCard;

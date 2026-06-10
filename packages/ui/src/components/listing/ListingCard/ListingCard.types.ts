@@ -1,33 +1,22 @@
-import type { SxProps, Theme } from '@mui/material/styles'
-
 export interface ListingCardProps {
-  /** Array of image URLs for the carousel. */
-  images: string[]
-  /** Product title. */
-  title: string
-  /** Current price. */
-  price: number
-  /** Original price for discount display. */
-  originalPrice?: number
-  /** Brand or seller name. */
-  brand?: string
-  /** Product size metadata. */
-  size?: string
-  /** Floating badge text (e.g., "Best Seller"). */
-  badge?: string
-  /** URL for the brand logo overlay. */
-  brandLogoUrl?: string
-  
-  /** Called when the card is clicked. */
-  onClick?: () => void
-  /** Called when the "Buy Now" button is clicked. */
-  onBuyClick?: (e: React.MouseEvent) => void
-  
-  /** Whether the user has liked this item. */
-  isLiked?: boolean
-  /** Called when the heart icon is clicked. */
-  onLikeClick?: (e: React.MouseEvent) => void
-  
-  /** Optional style overrides. */
-  sx?: SxProps<Theme>
+  /** Unique listing identifier */
+  id: string;
+  /** Listing title — truncated to 2 lines */
+  title: string;
+  /** Price in KES */
+  price: number;
+  /** Media URLs — first is shown by default, swipeable. Supports images and video (mp4) */
+  media: string[];
+  /** Seller/store name shown as caption */
+  storeName?: string;
+  /** Item condition */
+  condition?: 'new' | 'like_new' | 'good' | 'fair';
+  /** Whether the buyer has saved/wishlisted this item */
+  isSaved?: boolean;
+  /** Called when the heart icon is toggled */
+  onSaveToggle?: (id: string) => void;
+  /** Called when the card is tapped/clicked */
+  onClick?: (id: string) => void;
+  /** Called when "Add to cart" is tapped */
+  onAddToCart?: (id: string) => void;
 }
