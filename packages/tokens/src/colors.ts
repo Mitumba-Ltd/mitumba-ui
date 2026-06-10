@@ -10,7 +10,9 @@ export const colors = {
   // Neutrals
   white: '#FFFFFF',
   background: '#F7F7F5',
+  backgroundDark: '#121210',
   surface: '#FFFFFF',
+  surfaceDark: '#1E1E1C',
   divider: '#EAEAE7',
   border: '#D9D9D5',
 
