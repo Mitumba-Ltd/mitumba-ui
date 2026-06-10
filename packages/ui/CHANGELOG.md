@@ -1,5 +1,37 @@
 # @mitumba/ui
 
+## 0.6.0
+
+### Minor Changes
+
+- ae228d2: feat(buyer-onboarding): add BuyerOnboardingPage component
+
+  Lightweight single-screen buyer onboarding — display name, city select, and
+  phone number (+254 format). Same split-layout visual style as AuthPage with
+  hero image panel on desktop, form-only on mobile.
+
+  Features:
+  - Hero image panel with gradient overlay (desktop)
+  - City dropdown from consumer-provided list
+  - Phone input with +254 prefix adornment
+  - Loading state with backdrop spinner
+  - Error message display
+  - Pre-fillable via initialData prop
+  - Full Storybook coverage (6 stories) and 5 unit tests
+
+### Patch Changes
+
+- 00ad03c: feat(tokens): add dark mode colors, z-index scale, motion tokens
+  - Add backgroundDark and surfaceDark color tokens
+  - Add zIndex scale (base → max)
+  - Add motion tokens (durations, easings, transitions)
+  - Comprehensive test rewrite
+  - AuthPage + SellerOnboardingPage use new dark mode tokens
+  - Fix CONTRIBUTING.md breakpoints table
+
+- Updated dependencies [00ad03c]
+  - @mitumba/tokens@0.2.0
+
 ## 0.5.0
 
 ### Minor Changes
