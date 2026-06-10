@@ -200,10 +200,10 @@ All components must be tested and documented at these breakpoints:
 | Breakpoint | Width | Represents |
 |---|---|---|
 | `xs` | 375px | Tecno Spark, budget Android |
-| `sm` | 390px | iPhone SE |
-| `md` | 768px | Tablet |
-| `lg` | 1280px | Desktop |
-| `xl` | 1440px | Wide desktop |
+| `sm` | 600px | Large phone, small tablet |
+| `md` | 900px | Tablet |
+| `lg` | 1200px | Desktop |
+| `xl` | 1536px | Wide desktop |
 
 Mobile (xs/sm) is the primary viewport. Desktop enhances. Never the other way around.
 

@@ -130,10 +130,10 @@ export function AuthPage({
   const tfSx = { '& .MuiInputBase-root': { bgcolor: tokens.colors.surface } };
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: isDark ? tokens.colors.textPrimary : tokens.colors.background, p: { xs: 0, md: `${tokens.spacing.lg}px` } }}>
+    <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: isDark ? tokens.colors.backgroundDark : tokens.colors.background, p: { xs: 0, md: `${tokens.spacing.lg}px` } }}>
       <Backdrop open={loading} sx={{ zIndex: 1000, color: tokens.colors.white }} />
 
-      <Box sx={{ position: 'relative', width: '100%', maxWidth: { xs: '100%', md: 1000 }, height: { xs: '100vh', md: 600 }, bgcolor: isDark ? tokens.colors.textSecondary : tokens.colors.surface, borderRadius: { xs: 0, md: `${tokens.radius.xl}px` }, boxShadow: { xs: 'none', md: tokens.shadows.elevated }, overflow: 'hidden' }}>
+      <Box sx={{ position: 'relative', width: '100%', maxWidth: { xs: '100%', md: 1000 }, height: { xs: '100vh', md: 600 }, bgcolor: isDark ? tokens.colors.surfaceDark : tokens.colors.surface, borderRadius: { xs: 0, md: `${tokens.radius.xl}px` }, boxShadow: { xs: 'none', md: tokens.shadows.elevated }, overflow: 'hidden' }}>
 
         {/* Gradient panel */}
         <Box sx={{ display: { xs: 'none', md: 'flex' }, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: heroImageUrl ? `linear-gradient(135deg, ${tokens.colors.green}cc, ${tokens.colors.earth}99), url(${heroImageUrl})` : `linear-gradient(135deg, ${tokens.colors.green}, ${tokens.colors.earth})`, backgroundSize: 'cover', backgroundPosition: 'center', clipPath: gradientClipPath, transition: 'clip-path 0.8s cubic-bezier(0.65, 0, 0.35, 1)', flexDirection: 'column', alignItems: gradientLeft ? 'flex-start' : 'flex-end', justifyContent: 'center', color: tokens.colors.white, p: `${tokens.spacing.giant}px`, pl: gradientLeft ? `${tokens.spacing.xxxl}px` : `${tokens.spacing.giant}px`, pr: gradientLeft ? `${tokens.spacing.giant}px` : `${tokens.spacing.xxxl}px`, zIndex: 10 }}>
