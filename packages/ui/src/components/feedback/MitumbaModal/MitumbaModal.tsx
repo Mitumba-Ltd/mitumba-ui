@@ -74,7 +74,6 @@ export function MitumbaModal({
               transform: 'rotate(90deg)',
             },
           }}
-          aria-label="Close modal"
         >
           <CloseIcon sx={{ fontSize: 20 }} />
         </IconButton>
