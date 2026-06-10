@@ -1,134 +1,149 @@
-import React, { useState } from 'react'
-import type { Meta, StoryObj } from '@storybook/react'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import { MitumbaToast } from './MitumbaToast/MitumbaToast'
-import { MitumbaModal } from './MitumbaModal/MitumbaModal'
-import { MitumbaPrimaryButton } from '../foundation/MitumbaPrimaryButton/MitumbaPrimaryButton'
-import { EmptyState } from './EmptyState/EmptyState'
-import { MitumbaSkeleton } from './MitumbaSkeleton/MitumbaSkeleton'
+import React, { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import SearchOffIcon from '@mui/icons-material/SearchOff';
+import WifiOffIcon from '@mui/icons-material/WifiOff';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
+import { MitumbaToast } from './MitumbaToast/MitumbaToast';
+import { MitumbaModal } from './MitumbaModal/MitumbaModal';
+import { MitumbaPrimaryButton } from '../foundation/MitumbaPrimaryButton/MitumbaPrimaryButton';
+import { EmptyState } from './EmptyState/EmptyState';
+import { ErrorState } from './ErrorState/ErrorState';
+import { MitumbaSkeleton } from './MitumbaSkeleton/MitumbaSkeleton';
+import { tokens } from '@mitumba/tokens';
 
 const meta: Meta = {
-  title: 'Feedback/Feedback Showcase',
-  parameters: {
-    layout: 'centered',
-  },
-}
+  title: 'Feedback/Showcase',
+  parameters: { layout: 'centered' },
+};
 
-export default meta
+export default meta;
 
-function FeedbackShowcaseComponent() {
-  const [toastOpen, setToastOpen] = useState(false)
-  const [toastType, setToastType] = useState<{
-    showIcon?: boolean,
-    showLinear?: boolean,
-    hasAction?: boolean,
-    severity: 'success' | 'error' | 'warning' | 'info'
-  }>({ severity: 'success' })
-  
-  const [modalOpen, setModalOpen] = useState(false)
-
-  const triggerToast = (config: typeof toastType) => {
-    setToastType(config)
-    setToastOpen(true)
-  }
+function ShowcaseComponent() {
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastSeverity, setToastSeverity] = useState<'success' | 'error' | 'warning' | 'info'>('success');
+  const [modalOpen, setModalOpen] = useState(false);
 
   return (
-    <Stack spacing={8} sx={{ width: 600, py: 4 }}>
-      <Box>
-        <Typography variant="h5" gutterBottom sx={{ fontWeight: 800 }}>Premium Feedback Suite</Typography>
-        <Typography variant="body2" color="text.secondary">Tactile responses and personality-led states.</Typography>
-      </Box>
+    <Box sx={{ width: '100%', maxWidth: 680, py: 6 }}>
+      <Typography variant="h4" sx={{ fontWeight: 800, fontFamily: tokens.typography.fontFamily, mb: 1 }}>
+        Feedback Components
+      </Typography>
+      <Typography variant="body1" sx={{ color: tokens.colors.textSecondary, mb: 6 }}>
+        States, toasts, modals, and skeletons — the full system for communicating app state to users.
+      </Typography>
 
       {/* Empty States */}
-      <Box>
-        <Typography variant="subtitle2" gutterBottom>1. Personality Empty State</Typography>
-        <EmptyState 
+      <Typography variant="overline" sx={{ color: tokens.colors.textSecondary, letterSpacing: 1.5 }}>Empty States</Typography>
+      <Divider sx={{ mb: 3 }} />
+      <Stack spacing={3} sx={{ mb: 6 }}>
+        <EmptyState
           icon={<ShoppingCartIcon />}
-          title="Your cart is lonely"
-          subtitle="Add some amazing finds to your cart and they will appear here."
-          action={{
-            label: 'Start Shopping',
-            onClick: () => alert('Shop'),
-          }}
+          title="Your cart is empty"
+          subtitle="Browse listings and add items you love."
+          action={{ label: 'Browse listings', onClick: () => {} }}
         />
-      </Box>
-
-      {/* Interaction Triggers */}
-      <Box>
-        <Typography variant="subtitle2" gutterBottom>2. Benchmark Toast Variants</Typography>
-        <Stack direction="row" spacing={2} sx={{ flexWrap: 'wrap', gap: 2 }}>
-          <MitumbaPrimaryButton 
-            label="Simple Success" 
-            onClick={() => triggerToast({ severity: 'success' })} 
-          />
-          <MitumbaPrimaryButton 
-            label="Icon Progress (Variant 2)" 
-            variant="error"
-            onClick={() => triggerToast({ severity: 'error', showIcon: true })} 
-          />
-          <MitumbaPrimaryButton 
-            label="Linear Progress (Variant 4)" 
-            variant="earth"
-            onClick={() => triggerToast({ severity: 'success', showLinear: true })} 
-          />
-          <MitumbaPrimaryButton 
-            label="Pill Action (Variant 5)" 
-            onClick={() => triggerToast({ severity: 'info', hasAction: true, showIcon: true })} 
-          />
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+          <Box sx={{ flex: 1 }}>
+            <EmptyState variant="elevated" icon={<SearchOffIcon />} title="No results" subtitle="Try different keywords." action={{ label: 'Clear filters', onClick: () => {}, variant: 'outline' }} />
+          </Box>
+          <Box sx={{ flex: 1 }}>
+            <EmptyState variant="compact" icon={<WifiOffIcon />} title="Offline" subtitle="Check your connection." />
+          </Box>
         </Stack>
-      </Box>
+      </Stack>
 
-      {/* Skeleton */}
-      <Box>
-        <Typography variant="subtitle2" gutterBottom>3. Premium Shimmer Skeletons</Typography>
-        <Stack spacing={2}>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <MitumbaSkeleton variant="circular" width={48} height={48} />
-            <Stack spacing={1}>
-              <MitumbaSkeleton variant="rectangular" width={200} height={16} />
-              <MitumbaSkeleton variant="rectangular" width={140} height={12} />
-            </Stack>
+      {/* Error States */}
+      <Typography variant="overline" sx={{ color: tokens.colors.textSecondary, letterSpacing: 1.5 }}>Error States</Typography>
+      <Divider sx={{ mb: 3 }} />
+      <Stack spacing={3} sx={{ mb: 6 }}>
+        <ErrorState type="network" title="No connection" subtitle="You appear to be offline. Your data is safe." onRetry={() => {}} variant="elevated" />
+        <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
+          <Box sx={{ flex: 1 }}>
+            <ErrorState type="404" variant="compact" title="Not found" subtitle="Listing removed." onBack={() => {}} />
+          </Box>
+          <Box sx={{ flex: 1 }}>
+            <ErrorState type="500" variant="compact" title="Server error" subtitle="Try again shortly." onRetry={() => {}} />
+          </Box>
+        </Stack>
+      </Stack>
+
+      {/* Toasts */}
+      <Typography variant="overline" sx={{ color: tokens.colors.textSecondary, letterSpacing: 1.5 }}>Toast Notifications</Typography>
+      <Divider sx={{ mb: 3 }} />
+      <Stack direction="row" spacing={2} sx={{ mb: 6, flexWrap: 'wrap', gap: 2 }}>
+        <MitumbaPrimaryButton label="Success" size="small" onClick={() => { setToastSeverity('success'); setToastOpen(true); }} />
+        <MitumbaPrimaryButton label="Error" size="small" variant="error" onClick={() => { setToastSeverity('error'); setToastOpen(true); }} />
+        <MitumbaPrimaryButton label="Warning" size="small" variant="earth" onClick={() => { setToastSeverity('warning'); setToastOpen(true); }} />
+        <MitumbaPrimaryButton label="Info" size="small" variant="outline" onClick={() => { setToastSeverity('info'); setToastOpen(true); }} />
+      </Stack>
+
+      {/* Modal */}
+      <Typography variant="overline" sx={{ color: tokens.colors.textSecondary, letterSpacing: 1.5 }}>Modal Dialog</Typography>
+      <Divider sx={{ mb: 3 }} />
+      <MitumbaPrimaryButton label="Open confirmation modal" onClick={() => setModalOpen(true)} sx={{ mb: 6 }} />
+
+      {/* Skeletons */}
+      <Typography variant="overline" sx={{ color: tokens.colors.textSecondary, letterSpacing: 1.5 }}>Loading Skeletons</Typography>
+      <Divider sx={{ mb: 3 }} />
+      <Stack spacing={3}>
+        {/* Card skeleton */}
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'flex-start' }}>
+          <MitumbaSkeleton variant="rectangular" width={80} height={80} />
+          <Stack spacing={1} sx={{ flex: 1 }}>
+            <MitumbaSkeleton variant="rectangular" width="70%" height={14} />
+            <MitumbaSkeleton variant="rectangular" width="40%" height={14} />
+            <MitumbaSkeleton variant="rectangular" width="30%" height={10} />
           </Stack>
+        </Box>
+        {/* Profile skeleton */}
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <MitumbaSkeleton variant="circular" width={48} height={48} />
+          <Stack spacing={1} sx={{ flex: 1 }}>
+            <MitumbaSkeleton variant="rectangular" width="50%" height={14} />
+            <MitumbaSkeleton variant="rectangular" width="80%" height={10} />
+          </Stack>
+        </Box>
+        {/* Grid skeleton */}
+        <Stack direction="row" spacing={2}>
+          <MitumbaSkeleton variant="rectangular" width="33%" height={120} />
+          <MitumbaSkeleton variant="rectangular" width="33%" height={120} />
+          <MitumbaSkeleton variant="rectangular" width="33%" height={120} />
         </Stack>
-      </Box>
+      </Stack>
 
-      {/* Toast component (Controlled) */}
-      <MitumbaToast 
-        open={toastOpen} 
-        onClose={() => setToastOpen(false)} 
-        message={
-          toastType.showIcon ? "This is a high-fidelity animated toast message." : "This is a clean & simple message."
-        } 
-        severity={toastType.severity}
-        showIconProgress={toastType.showIcon}
-        showLinearProgress={toastType.showLinear}
-        action={toastType.hasAction ? <Button size="small">Action</Button> : undefined}
+      {/* Controlled components */}
+      <MitumbaToast
+        open={toastOpen}
+        onClose={() => setToastOpen(false)}
+        message={toastSeverity === 'success' ? 'Item added to your cart' : toastSeverity === 'error' ? 'Failed to save changes' : toastSeverity === 'warning' ? 'Your session expires in 5 minutes' : 'New message from seller'}
+        severity={toastSeverity}
+        showIconProgress
       />
 
-      {/* Modal component (Controlled) */}
       <MitumbaModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        title="Confirm Your Order"
+        title="Confirm purchase"
         actions={
           <>
             <Button onClick={() => setModalOpen(false)} color="inherit">Cancel</Button>
-            <MitumbaPrimaryButton label="Pay Now" onClick={() => setModalOpen(false)} />
+            <MitumbaPrimaryButton label="Pay KES 2,500" onClick={() => setModalOpen(false)} />
           </>
         }
       >
-        <Typography variant="body2">
-          You are about to purchase the vintage denim jacket. Please confirm your delivery address and payment method to proceed.
+        <Typography variant="body2" sx={{ color: tokens.colors.textSecondary }}>
+          You&apos;re about to purchase &quot;Nike Air Force 1 Low White&quot; from NairobiKicks. Payment will be processed via M-Pesa.
         </Typography>
       </MitumbaModal>
-    </Stack>
-  )
+    </Box>
+  );
 }
 
 export const Showcase: StoryObj = {
-  render: () => <FeedbackShowcaseComponent />,
-}
+  render: () => <ShowcaseComponent />,
+};
