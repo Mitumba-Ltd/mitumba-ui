@@ -87,18 +87,14 @@ export const InGrid: Story = {
   decorators: [
     () => (
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }, gap: '12px', maxWidth: 960, mx: 'auto' }}>
-        {[
-          { id: '1', title: 'Nike Air Force 1', price: 2500, media: ['https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80'], storeName: 'NairobiKicks', condition: 'like_new' as const },
-          { id: '2', title: 'Vintage Denim Jacket — 90s Oversized', price: 4500, media: ['https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=400&q=80'], storeName: 'ThriftHub', condition: 'good' as const },
-          { id: '3', title: 'Leather Chelsea Boots', price: 8500, media: ['https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&w=400&q=80'], storeName: 'KisumuStyles', condition: 'like_new' as const },
-          { id: '4', title: 'Retro Band Tee', price: 1200, media: ['https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=400&q=80'], storeName: 'VintageKE', condition: 'fair' as const },
-          { id: '5', title: 'Adidas Originals Track Pants', price: 3200, media: ['https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80'], storeName: 'MombasaFinds' },
-          { id: '6', title: 'Canvas Tote Bag', price: 900, media: ['https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=400&q=80'], storeName: 'BagDeals', condition: 'new' as const },
-          { id: '7', title: 'Casio Vintage Watch', price: 6800, media: ['https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=400&q=80'], condition: 'good' as const },
-          { id: '8', title: 'Wool Overcoat — Camel', price: 12000, media: ['https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=400&q=80'], storeName: 'LuxThrift', condition: 'like_new' as const },
-        ].map((item) => (
-          <ListingCard key={item.id} {...item} onSaveToggle={() => {}} onAddToCart={() => {}} />
-        ))}
+        <ListingCard id="1" title="Nike Air Force 1" price={2500} media={['https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80']} storeName="NairobiKicks" condition="like_new" onSaveToggle={() => {}} onAddToCart={() => {}} />
+        <ListingCard id="2" title="Vintage Denim Jacket — 90s Oversized" price={4500} media={['https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=400&q=80']} storeName="ThriftHub" condition="good" onSaveToggle={() => {}} onAddToCart={() => {}} />
+        <ListingCard id="3" title="Leather Chelsea Boots" price={8500} media={['https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&w=400&q=80']} storeName="KisumuStyles" condition="like_new" onSaveToggle={() => {}} onAddToCart={() => {}} />
+        <ListingCard id="4" title="Retro Band Tee" price={1200} media={['https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=400&q=80']} storeName="VintageKE" condition="fair" onSaveToggle={() => {}} onAddToCart={() => {}} />
+        <ListingCard id="5" title="Adidas Originals Track Pants" price={3200} media={['https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80']} storeName="MombasaFinds" onSaveToggle={() => {}} onAddToCart={() => {}} />
+        <ListingCard id="6" title="Canvas Tote Bag" price={900} media={['https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=400&q=80']} storeName="BagDeals" condition="new" onSaveToggle={() => {}} onAddToCart={() => {}} />
+        <ListingCard id="7" title="Casio Vintage Watch" price={6800} media={['https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=400&q=80']} condition="good" onSaveToggle={() => {}} onAddToCart={() => {}} />
+        <ListingCard id="8" title="Wool Overcoat — Camel" price={12000} media={['https://images.unsplash.com/photo-1539533018447-63fcce2678e3?auto=format&fit=crop&w=400&q=80']} storeName="LuxThrift" condition="like_new" onSaveToggle={() => {}} onAddToCart={() => {}} />
       </Box>
     ),
   ],

@@ -1,4 +1,5 @@
 // @vitest-environment jsdom
+/* eslint-disable react/jsx-props-no-spreading */
 import '@testing-library/jest-dom/vitest'
 import React from 'react';
 import { cleanup, render, screen, fireEvent } from '@testing-library/react';
