@@ -30,14 +30,14 @@ describe('tokens', () => {
 
   it('defines breakpoints in ascending order', () => {
     const vals = Object.values(tokens.breakpoints)
-    for (let i = 1; i < vals.length; i++) {
+    for (let i = 1; i < vals.length; i += 1) {
       expect(vals[i], `breakpoints[${i}]`).toBeGreaterThan(vals[i - 1])
     }
   })
 
   it('defines font sizes in ascending order', () => {
     const vals = Object.values(tokens.typography.fontSizes)
-    for (let i = 1; i < vals.length; i++) {
+    for (let i = 1; i < vals.length; i += 1) {
       expect(vals[i], `fontSizes[${i}]`).toBeGreaterThanOrEqual(vals[i - 1])
     }
   })
