@@ -1,5 +1,17 @@
 # @mitumba/tokens
 
+## 0.2.0
+
+### Minor Changes
+
+- 00ad03c: feat(tokens): add dark mode colors, z-index scale, motion tokens
+  - Add backgroundDark and surfaceDark color tokens
+  - Add zIndex scale (base → max)
+  - Add motion tokens (durations, easings, transitions)
+  - Comprehensive test rewrite
+  - AuthPage + SellerOnboardingPage use new dark mode tokens
+  - Fix CONTRIBUTING.md breakpoints table
+
 ## 0.1.4
 
 ### Patch Changes
