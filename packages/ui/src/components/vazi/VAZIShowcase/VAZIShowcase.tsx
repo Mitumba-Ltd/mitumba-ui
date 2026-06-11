@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-use-before-define */
 import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';

@@ -2,7 +2,7 @@
 import '@testing-library/jest-dom/vitest'
 import React from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
-import { afterEach, describe, it, expect, vi } from 'vitest';
+import { afterEach, describe, it, expect } from 'vitest';
 import { MitumbaThemeProvider } from '../../../theme';
 import { VAZIShowcase } from './VAZIShowcase';
 import type { VAZIShowcaseOutfit } from './VAZIShowcase.types';
