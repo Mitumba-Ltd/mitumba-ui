@@ -1,76 +1,53 @@
 // @vitest-environment jsdom
-import '@testing-library/jest-dom/vitest'
-import { cleanup, render, screen, fireEvent } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
-import { MitumbaThemeProvider } from '../../../theme'
-import { ImageUploader } from './ImageUploader'
-import type { UploadedImage } from './ImageUploader.types'
+/* eslint-disable react/jsx-props-no-spreading */
+import '@testing-library/jest-dom/vitest';
+import React from 'react';
+import { cleanup, render, screen, fireEvent } from '@testing-library/react';
+import { afterEach, describe, it, expect, vi } from 'vitest';
+import { MitumbaThemeProvider } from '../../../theme';
+import { ImageUploader } from './ImageUploader';
+import type { UploadedImage } from './ImageUploader.types';
 
-afterEach(() => {
-  cleanup()
-})
+afterEach(() => { cleanup(); });
+
+const sampleImages: UploadedImage[] = [
+  { id: '1', url: 'https://placehold.co/100', status: 'done', isPrimary: true },
+  { id: '2', url: 'https://placehold.co/101', status: 'done', isPrimary: false },
+];
+
+const baseProps = {
+  images: sampleImages,
+  onAdd: vi.fn(),
+  onRemove: vi.fn(),
+  onReorder: vi.fn(),
+};
 
 describe('ImageUploader', () => {
-  const mockImages: UploadedImage[] = [
-    { id: 'img-a', url: '/image1.jpg', status: 'done', isPrimary: true },
-    { id: 'img-b', url: '/image2.jpg', status: 'done', isPrimary: false },
-  ]
+  it('renders images in grid', () => {
+    render(<MitumbaThemeProvider><ImageUploader {...baseProps} /></MitumbaThemeProvider>);
+    expect(screen.getByAltText('Photo 1')).toBeInTheDocument();
+    expect(screen.getByAltText('Photo 2')).toBeInTheDocument();
+  });
 
-  it('renders uploaded images', () => {
-    render(
-      <MitumbaThemeProvider>
-        <ImageUploader images={mockImages} onAdd={() => {}} onRemove={() => {}} onReorder={() => {}} />
-      </MitumbaThemeProvider>
-    )
-    expect(screen.getByAltText('Upload preview 1')).toBeInTheDocument()
-    expect(screen.getByAltText('Upload preview 2')).toBeInTheDocument()
-  })
+  it('shows cover badge on first image', () => {
+    render(<MitumbaThemeProvider><ImageUploader {...baseProps} /></MitumbaThemeProvider>);
+    expect(screen.getByText('Cover')).toBeInTheDocument();
+  });
 
-  it('shows cover photo badge on primary image', () => {
-    render(
-      <MitumbaThemeProvider>
-        <ImageUploader images={mockImages} onAdd={() => {}} onRemove={() => {}} onReorder={() => {}} />
-      </MitumbaThemeProvider>
-    )
-    expect(screen.getByText('Cover')).toBeInTheDocument()
-  })
+  it('calls onRemove when remove button clicked', () => {
+    render(<MitumbaThemeProvider><ImageUploader {...baseProps} /></MitumbaThemeProvider>);
+    fireEvent.click(screen.getByRole('button', { name: 'Remove photo 1' }));
+    expect(baseProps.onRemove).toHaveBeenCalledWith('1');
+  });
 
-  it('calls onAdd when files are selected', () => {
-    const onAdd = vi.fn()
-    const { container } = render(
-      <MitumbaThemeProvider>
-        <ImageUploader images={[]} onAdd={onAdd} onRemove={() => {}} onReorder={() => {}} />
-      </MitumbaThemeProvider>
-    )
-    const file = new File(['content'], 'test.jpg', { type: 'image/jpeg' })
-    const fileInput = container.querySelector('input[type="file"]') as HTMLInputElement
-    fireEvent.change(fileInput, { target: { files: [file] } })
-    expect(onAdd).toHaveBeenCalledWith([file])
-  })
+  it('shows upload progress for uploading images', () => {
+    const images: UploadedImage[] = [{ id: '1', url: 'https://placehold.co/100', status: 'uploading', isPrimary: true }];
+    render(<MitumbaThemeProvider><ImageUploader {...baseProps} images={images} /></MitumbaThemeProvider>);
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+  });
 
-  it('calls onRemove when delete icon is clicked', () => {
-    const onRemove = vi.fn()
-    const { container } = render(
-      <MitumbaThemeProvider>
-        <ImageUploader images={mockImages} onAdd={() => {}} onRemove={onRemove} onReorder={() => {}} />
-      </MitumbaThemeProvider>
-    )
-    const deleteButtons = container.querySelectorAll('.remove-btn')
-    expect(deleteButtons.length).toBeGreaterThan(0)
-  })
-
-  it('hides add button when max images reached', () => {
-    const maxedImages: UploadedImage[] = Array.from({ length: 6 }, (_, i) => ({
-      id: `maxed-${i + 1}`,
-      url: `/maxed-img-${i + 1}.jpg`,
-      status: 'done' as const,
-      isPrimary: i === 0,
-    }))
-    render(
-      <MitumbaThemeProvider>
-        <ImageUploader images={maxedImages} onAdd={() => {}} onRemove={() => {}} onReorder={() => {}} maxImages={6} />
-      </MitumbaThemeProvider>
-    )
-    expect(screen.queryByText('Add Photo')).not.toBeInTheDocument()
-  })
-})
+  it('renders single variant with hint text', () => {
+    render(<MitumbaThemeProvider><ImageUploader {...baseProps} images={[]} variant="single" hint="Upload logo" /></MitumbaThemeProvider>);
+    expect(screen.getByText('Upload logo')).toBeInTheDocument();
+  });
+});

@@ -2,30 +2,31 @@
  * Represents an uploaded image in the uploader.
  */
 export interface UploadedImage {
-  /** Unique identifier for the image. */
-  id: string
-  /** Preview URL or R2 URL after upload. */
-  url: string
-  /** Current upload status. */
-  status: 'uploading' | 'done' | 'error'
-  /** Whether this image is the primary/cover photo. */
-  isPrimary: boolean
+  /** Unique identifier */
+  id: string;
+  /** Preview URL (local blob) or CDN URL after upload */
+  url: string;
+  /** Upload status */
+  status: 'uploading' | 'done' | 'error';
+  /** Whether this is the cover/primary photo (first slot) */
+  isPrimary: boolean;
 }
 
-/**
- * Props for the ImageUploader component.
- */
 export interface ImageUploaderProps {
-  /** List of currently uploaded images. */
-  images: UploadedImage[]
-  /** Called when files are selected for upload. */
-  onAdd: (files: File[]) => void
-  /** Called when an image is removed. */
-  onRemove: (imageId: string) => void
-  /** Called when images are reordered. */
-  onReorder: (newOrder: string[]) => void
-  /** Maximum number of images allowed. */
-  maxImages?: number
-  /** Whether images are currently being uploaded. */
-  uploading?: boolean
+  /** Current images — managed externally */
+  images: UploadedImage[];
+  /** Called when user selects files to upload */
+  onAdd: (files: File[]) => void;
+  /** Called when an image is removed */
+  onRemove: (imageId: string) => void;
+  /** Called when images are reordered (returns new ID order) */
+  onReorder: (newOrder: string[]) => void;
+  /** Max images allowed — defaults to 6 */
+  maxImages?: number;
+  /** Layout variant — 'grid' for listings (default), 'single' for profile/logo */
+  variant?: 'grid' | 'single';
+  /** Aspect ratio for image slots — defaults to '1 / 1' */
+  aspectRatio?: string;
+  /** Hint text shown on empty slots */
+  hint?: string;
 }
