@@ -23,8 +23,8 @@ export { PriceTag, DeliveryBadge, CartItem, OrderStatusTimeline, EscrowStatusBan
 export type { PriceTagProps, DeliveryBadgeProps, CartItemProps, OrderStatusTimelineProps, OrderStatus, OrderEvent, EscrowStatusBannerProps, EscrowStatus } from './components'
 
 // VAZI
-export { VAZIOutfitCard, VAZIOutfitCardSkeleton, VAZIBadge, VAZIFeedSection, CompleteThisLookPanel } from './components'
-export type { VAZIOutfitCardProps, VAZIOutfitItem, VAZIOutfitCardSkeletonProps, VAZIBadgeProps, VAZIFeedSectionProps, CompleteThisLookPanelProps } from './components'
+export { VAZIOutfitCard, VAZIOutfitCardSkeleton, VAZIBadge, VAZIFeedSection, CompleteThisLookPanel, VAZIShowcase } from './components'
+export type { VAZIOutfitCardProps, VAZIOutfitItem, VAZIOutfitCardSkeletonProps, VAZIBadgeProps, VAZIFeedSectionProps, CompleteThisLookPanelProps, VAZIShowcaseProps, VAZIShowcaseOutfit, VAZIShowcaseItem } from './components'
 
 // Forms
 export { PhoneInput, OTPInput, ImageUploader, MitumbaSearchBar } from './components'

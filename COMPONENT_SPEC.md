@@ -290,6 +290,37 @@ Horizontal scrolling section for VAZI content.
 
 Contextual panel suggesting items to complete a look.
 
+### 7.6 `VAZIModelSpotlight`
+
+Full-height model display for the VAZI showcase feed. Renders a transparent `.webm` (alpha channel) video of a dressed model — appears as a living character floating on the page. Falls back to static image if video not available.
+
+Props:
+- `mediaUrl: string` — URL to `.webm` (alpha) video or fallback image
+- `mediaType: 'video' | 'image'`
+- `alt: string` — accessibility description
+- `isFocused?: boolean` — controls scale/opacity for depth effect
+- `depth?: number` — 0 = front/focused, 1+ = receding into background
+
+### 7.7 `VAZIOutfitPanel`
+
+Glassmorphism panel showing the individual listing items that make up the outfit worn by the focused model. Appears on the right side of the showcase.
+
+Props:
+- `items: { id: string; title: string; price: number; imageUrl: string }[]`
+- `totalPrice?: number`
+- `onItemClick?: (id: string) => void`
+- `onShopAll?: () => void`
+
+### 7.8 `VAZIShowcase`
+
+Full VAZI showcase layout — depth-perspective model queue on the left, outfit panel on the right. Scroll-driven transitions between models. Glassmorphism throughout.
+
+Props:
+- `outfits: VAZIShowcaseOutfit[]`
+- `activeIndex?: number`
+- `onIndexChange?: (index: number) => void`
+- `onItemClick?: (listingId: string) => void`
+
 ---
 
 ## Phase 8 — Seller components
