@@ -1,88 +1,78 @@
-import Box from '@mui/material/Box'
-import { tokens } from '@mitumba/tokens'
-import type { STIScoreChipProps } from './STIScoreChip.types'
+import React from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { tokens } from '@mitumba/tokens';
+import type { STIScoreChipProps } from './STIScoreChip.types';
 
-interface STIConfig {
-  color: string
-  label: string
+function getScoreConfig(score: number): { color: string; label: string } {
+  if (score >= 80) return { color: tokens.colors.stiTrusted, label: 'Trusted' };
+  if (score >= 60) return { color: tokens.colors.stiGood, label: 'Good' };
+  if (score >= 40) return { color: tokens.colors.stiAtRisk, label: 'At risk' };
+  if (score >= 20) return { color: tokens.colors.stiFlagged, label: 'Flagged' };
+  return { color: tokens.colors.stiSuspended, label: 'Suspended' };
 }
 
-function getSTIConfig(score: number): STIConfig {
-  if (score >= 85) {
-    return { color: tokens.colors.stiTrusted, label: 'Trusted ★' }
-  }
-  if (score >= 60) {
-    return { color: tokens.colors.stiGood, label: 'Good' }
-  }
-  if (score >= 40) {
-    return { color: tokens.colors.stiAtRisk, label: 'At risk' }
-  }
-  if (score >= 20) {
-    return { color: tokens.colors.stiFlagged, label: 'Flagged' }
-  }
-  return { color: tokens.colors.stiSuspended, label: 'Suspended' }
-}
-
+/**
+ * STI Score Chip — compact trust indicator. Shows score number with
+ * color-coded dot and optional label. Used on listing cards, seller cards,
+ * and search results.
+ */
 export function STIScoreChip({
   score,
   compact = false,
   showLabel,
-}: STIScoreChipProps) {
-  const clampedScore = Math.min(100, Math.max(0, score))
-  const { color, label } = getSTIConfig(clampedScore)
-  const shouldShowLabel = showLabel ?? !compact
+}: STIScoreChipProps): React.ReactElement {
+  const clamped = Math.min(100, Math.max(0, score));
+  const { color, label } = getScoreConfig(clamped);
+  const shouldShowLabel = showLabel ?? !compact;
 
   return (
     <Box
       sx={{
         display: 'inline-flex',
         alignItems: 'center',
-        gap: tokens.spacing.xs,
-        height: compact ? '24px' : '32px',
-        px: compact ? tokens.spacing.sm : tokens.spacing.md,
-        borderRadius: tokens.radius.full,
-        backgroundColor: `${color}14`,
-        border: `1px solid ${color}40`,
-        width: 'fit-content',
-        transition: 'all 200ms ease',
+        gap: `${tokens.spacing.xs}px`,
+        height: compact ? 22 : 28,
+        px: compact ? `${tokens.spacing.sm}px` : `${tokens.spacing.md}px`,
+        borderRadius: `${tokens.radius.full}px`,
+        bgcolor: `${color}12`,
       }}
-      aria-label={`STI Score: ${clampedScore}, ${label}`}
+      aria-label={`STI Score: ${clamped}, ${label}`}
     >
+      {/* Color dot */}
+      <Box sx={{ width: compact ? 6 : 8, height: compact ? 6 : 8, borderRadius: '50%', bgcolor: color, flexShrink: 0 }} />
+
+      {/* Score number */}
+      <Typography
+        component="span"
+        sx={{
+          fontSize: compact ? 11 : tokens.typography.fontSizes.sm,
+          fontWeight: 700,
+          color,
+          lineHeight: 1,
+          fontFamily: tokens.typography.fontFamily,
+        }}
+      >
+        {clamped}
+      </Typography>
+
+      {/* Label */}
       {shouldShowLabel && (
-        <Box
+        <Typography
           component="span"
           sx={{
-            color,
             fontSize: compact ? 10 : tokens.typography.fontSizes.xs,
-            fontWeight: tokens.typography.fontWeights.bold,
-            textTransform: 'uppercase',
-            letterSpacing: tokens.typography.letterSpacings.wide,
+            fontWeight: 600,
+            color: tokens.colors.textSecondary,
             lineHeight: 1,
+            fontFamily: tokens.typography.fontFamily,
           }}
         >
           {label}
-        </Box>
+        </Typography>
       )}
-      <Box
-        component="span"
-        sx={{
-          color,
-          fontSize: compact ? tokens.typography.fontSizes.xs : tokens.typography.fontSizes.sm,
-          fontWeight: tokens.typography.fontWeights.extrabold,
-          lineHeight: 1,
-          minWidth: '1.2em',
-          textAlign: 'center',
-          ...(shouldShowLabel && {
-            borderLeft: `1px solid ${color}40`,
-            paddingLeft: tokens.spacing.xs,
-            marginLeft: '2px',
-          }),
-        }}
-      >
-        {clampedScore}
-      </Box>
     </Box>
-  )
+  );
 }
 
-export default STIScoreChip
+export default STIScoreChip;
