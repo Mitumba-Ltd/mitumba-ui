@@ -1,0 +1,80 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import Box from '@mui/material/Box';
+import { VAZIHeroSpotlight } from './VAZIHeroSpotlight';
+import type { VAZIHeroOutfit } from './VAZIHeroSpotlight.types';
+
+const meta: Meta<typeof VAZIHeroSpotlight> = {
+  title: 'VAZI/VAZIHeroSpotlight',
+  component: VAZIHeroSpotlight,
+  parameters: { layout: 'padded' },
+  tags: ['autodocs'],
+  argTypes: {
+    onShopLook: { action: 'onShopLook' },
+    onItemClick: { action: 'onItemClick' },
+    onSeeAll: { action: 'onSeeAll' },
+  },
+  decorators: [(Story) => <Box sx={{ maxWidth: 900, mx: 'auto' }}><Story /></Box>],
+};
+
+export default meta;
+type Story = StoryObj<typeof VAZIHeroSpotlight>;
+
+const OUTFITS: VAZIHeroOutfit[] = [
+  {
+    id: 'hero-1',
+    modelMediaUrl: 'https://github.com/Mitumba-Ltd/assets/raw/main/lab/vazi/p-webm/webm-video-of-a-guy-001.webm',
+    modelMediaType: 'video',
+    modelAlt: 'Model in streetwear outfit',
+    name: 'Earth Tone Minimalist',
+    totalPrice: 4200,
+    items: [
+      { id: 'h1', title: 'Oversized Denim Jacket', price: 1800, imageUrl: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=100&q=80' },
+      { id: 'h2', title: 'White Crop Top', price: 600, imageUrl: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=100&q=80' },
+      { id: 'h3', title: 'High-waist Jeans', price: 1200, imageUrl: 'https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=100&q=80' },
+      { id: 'h4', title: 'White Sneakers', price: 600, imageUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=100&q=80' },
+    ],
+  },
+  {
+    id: 'hero-2',
+    modelMediaUrl: 'https://github.com/Mitumba-Ltd/assets/raw/main/lab/vazi/p-webm/webm-video-of-a-guy-001.webm',
+    modelMediaType: 'video',
+    modelAlt: 'Model in evening outfit',
+    name: 'Streetwear Fusion',
+    totalPrice: 6800,
+    items: [
+      { id: 'h5', title: 'Black Blazer', price: 3500, imageUrl: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?auto=format&fit=crop&w=100&q=80' },
+      { id: 'h6', title: 'Tailored Trousers', price: 2500, imageUrl: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?auto=format&fit=crop&w=100&q=80' },
+      { id: 'h7', title: 'Leather Heels', price: 800, imageUrl: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=100&q=80' },
+    ],
+  },
+  {
+    id: 'hero-3',
+    modelMediaUrl: 'https://github.com/Mitumba-Ltd/assets/raw/main/lab/vazi/p-webm/webm-video-of-a-guy-001.webm',
+    modelMediaType: 'video',
+    modelAlt: 'Model in casual outfit',
+    name: 'Weekend Casual',
+    totalPrice: 3200,
+    items: [
+      { id: 'h8', title: 'Track Jacket', price: 1500, imageUrl: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?auto=format&fit=crop&w=100&q=80' },
+      { id: 'h9', title: 'Running Shorts', price: 800, imageUrl: 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=100&q=80' },
+      { id: 'h10', title: 'Retro Trainers', price: 900, imageUrl: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=100&q=80' },
+    ],
+  },
+];
+
+export const Default: Story = {
+  args: { outfits: OUTFITS },
+};
+
+export const SingleOutfit: Story = {
+  args: { outfits: [OUTFITS[0]] },
+};
+
+export const NoAutoAdvance: Story = {
+  args: { outfits: OUTFITS, autoAdvanceMs: 0 },
+};
+
+export const Mobile: Story = {
+  args: { outfits: OUTFITS },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};

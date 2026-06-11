@@ -14,3 +14,5 @@ export { CompleteThisLookPanel } from './CompleteThisLookPanel'
 export type { CompleteThisLookPanelProps } from './CompleteThisLookPanel'
 export { VAZIShowcase } from "./VAZIShowcase"
 export type { VAZIShowcaseProps, VAZIShowcaseOutfit, VAZIShowcaseItem } from "./VAZIShowcase"
+export { VAZIHeroSpotlight } from "./VAZIHeroSpotlight"
+export type { VAZIHeroSpotlightProps, VAZIHeroOutfit } from "./VAZIHeroSpotlight"
