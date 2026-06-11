@@ -12,3 +12,5 @@ export type { VAZIFeedSectionProps } from './VAZIFeedSection'
 
 export { CompleteThisLookPanel } from './CompleteThisLookPanel'
 export type { CompleteThisLookPanelProps } from './CompleteThisLookPanel'
+export { VAZIShowcase } from "./VAZIShowcase"
+export type { VAZIShowcaseProps, VAZIShowcaseOutfit, VAZIShowcaseItem } from "./VAZIShowcase"

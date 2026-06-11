@@ -14,5 +14,5 @@ export { ListingCard, ListingCardSkeleton, ListingGrid, ListingImageGallery, Con
 export type { ListingCardProps, ListingGridProps, ListingImageGalleryProps, ConditionBadgeProps } from './listing'
 export { PriceTag, DeliveryBadge, CartItem, OrderStatusTimeline, EscrowStatusBanner } from './commerce'
 export type { PriceTagProps, DeliveryBadgeProps, CartItemProps, OrderStatusTimelineProps, OrderStatus, OrderEvent, EscrowStatusBannerProps, EscrowStatus } from './commerce'
-export { VAZIOutfitCard, VAZIOutfitCardSkeleton, VAZIBadge, VAZIFeedSection, CompleteThisLookPanel } from './vazi'
-export type { VAZIOutfitCardProps, VAZIOutfitItem, VAZIOutfitCardSkeletonProps, VAZIBadgeProps, VAZIFeedSectionProps, CompleteThisLookPanelProps } from './vazi'
+export { VAZIOutfitCard, VAZIOutfitCardSkeleton, VAZIBadge, VAZIFeedSection, CompleteThisLookPanel, VAZIShowcase } from './vazi'
+export type { VAZIOutfitCardProps, VAZIOutfitItem, VAZIOutfitCardSkeletonProps, VAZIBadgeProps, VAZIFeedSectionProps, CompleteThisLookPanelProps, VAZIShowcaseProps, VAZIShowcaseOutfit, VAZIShowcaseItem } from './vazi'
