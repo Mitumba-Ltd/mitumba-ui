@@ -35,4 +35,16 @@ export interface VAZIShowcaseProps {
   onItemClick?: (listingId: string) => void;
   /** Called when "Shop this look" is tapped */
   onShopAll?: (outfitId: string) => void;
+  /** Called when user saves/likes a look */
+  onSaveLook?: (outfitId: string) => void;
+  /** Called when "Share" is tapped — copies link to clipboard, not video export */
+  onShare?: (outfitId: string) => void;
+  /** Whether the showcase is loading (shows skeleton silhouettes) */
+  loading?: boolean;
+  /** Auto-advance to next outfit every N ms. Set to 0 or undefined to disable. */
+  autoAdvanceMs?: number;
+  /** Background audio URL — royalty-free fashion/lifestyle ambient track */
+  audioUrl?: string;
+  /** Whether audio is muted — defaults to true (user must opt-in) */
+  muted?: boolean;
 }
