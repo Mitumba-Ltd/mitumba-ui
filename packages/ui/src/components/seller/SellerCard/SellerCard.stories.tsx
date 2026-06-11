@@ -18,6 +18,7 @@ type Story = StoryObj<typeof SellerCard>;
 export const Trusted: Story = {
   args: {
     name: 'NairobiKicks',
+    sellerId: "seller-1",
     avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=100&q=80',
     city: 'Nairobi',
     stiScore: 92,
@@ -28,6 +29,7 @@ export const Trusted: Story = {
 export const Good: Story = {
   args: {
     name: 'ThriftHub Kisumu',
+    sellerId: "seller-2",
     city: 'Kisumu',
     stiScore: 68,
     totalListings: 15,
@@ -37,6 +39,7 @@ export const Good: Story = {
 export const AtRisk: Story = {
   args: {
     name: 'QuickSells',
+    sellerId: "seller-3",
     city: 'Mombasa',
     stiScore: 42,
     totalListings: 3,
@@ -46,6 +49,7 @@ export const AtRisk: Story = {
 export const VaziFeatured: Story = {
   args: {
     name: 'AminaFinds',
+    sellerId: "seller-4",
     avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80',
     city: 'Nakuru',
     stiScore: 88,
@@ -57,6 +61,7 @@ export const VaziFeatured: Story = {
 export const LongName: Story = {
   args: {
     name: 'Premium Vintage Clothing & Accessories Kenya',
+    sellerId: "seller-5",
     city: 'Eldoret',
     stiScore: 75,
     totalListings: 120,
@@ -67,10 +72,10 @@ export const ListOfSellers: Story = {
   decorators: [
     () => (
       <Stack spacing={2} sx={{ maxWidth: 380 }}>
-        <SellerCard name="NairobiKicks" city="Nairobi" stiScore={92} totalListings={48} avatarUrl="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=100&q=80" onTap={() => {}} />
-        <SellerCard name="ThriftHub" city="Kisumu" stiScore={68} totalListings={15} onTap={() => {}} />
-        <SellerCard name="AminaFinds" city="Nakuru" stiScore={88} totalListings={72} isVaziFeatured onTap={() => {}} />
-        <SellerCard name="MombasaStyles" city="Mombasa" stiScore={45} totalListings={8} onTap={() => {}} />
+        <SellerCard sellerId="s1" name="NairobiKicks" city="Nairobi" stiScore={92} totalListings={48} avatarUrl="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=100&q=80" onTap={() => {}} />
+        <SellerCard sellerId="s2" name="ThriftHub" city="Kisumu" stiScore={68} totalListings={15} onTap={() => {}} />
+        <SellerCard sellerId="s3" name="AminaFinds" city="Nakuru" stiScore={88} totalListings={72} isVaziFeatured onTap={() => {}} />
+        <SellerCard sellerId="s4" name="MombasaStyles" city="Mombasa" stiScore={45} totalListings={8} onTap={() => {}} />
       </Stack>
     ),
   ],
