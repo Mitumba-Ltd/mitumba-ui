@@ -20,8 +20,8 @@ type Story = StoryObj<typeof VAZIShowcase>;
 const SAMPLE_OUTFITS: VAZIShowcaseOutfit[] = [
   {
     id: 'outfit-1',
-    modelMediaUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
-    modelMediaType: 'image',
+    modelMediaUrl: 'https://github.com/Mitumba-Ltd/assets/raw/main/lab/vazi/p-webm/webm-video-of-a-guy-001.webm',
+    modelMediaType: 'video',
     modelAlt: 'Model wearing casual streetwear outfit',
     totalPrice: 4200,
     items: [
@@ -33,8 +33,8 @@ const SAMPLE_OUTFITS: VAZIShowcaseOutfit[] = [
   },
   {
     id: 'outfit-2',
-    modelMediaUrl: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=600&q=80',
-    modelMediaType: 'image',
+    modelMediaUrl: 'https://github.com/Mitumba-Ltd/assets/raw/main/lab/vazi/p-webm/webm-video-of-a-guy-001.webm',
+    modelMediaType: 'video',
     modelAlt: 'Model wearing elegant evening outfit',
     totalPrice: 8500,
     items: [
@@ -46,8 +46,8 @@ const SAMPLE_OUTFITS: VAZIShowcaseOutfit[] = [
   },
   {
     id: 'outfit-3',
-    modelMediaUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
-    modelMediaType: 'image',
+    modelMediaUrl: 'https://github.com/Mitumba-Ltd/assets/raw/main/lab/vazi/p-webm/webm-video-of-a-guy-001.webm',
+    modelMediaType: 'video',
     modelAlt: 'Model wearing sporty casual outfit',
     totalPrice: 3800,
     items: [
@@ -58,8 +58,8 @@ const SAMPLE_OUTFITS: VAZIShowcaseOutfit[] = [
   },
   {
     id: 'outfit-4',
-    modelMediaUrl: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80',
-    modelMediaType: 'image',
+    modelMediaUrl: 'https://github.com/Mitumba-Ltd/assets/raw/main/lab/vazi/p-webm/webm-video-of-a-guy-001.webm',
+    modelMediaType: 'video',
     modelAlt: 'Model wearing bohemian summer outfit',
     totalPrice: 5200,
     items: [
