@@ -62,8 +62,6 @@ export function ErrorState({
           sx={{
             width: isCompact ? 48 : 72,
             height: isCompact ? 48 : 72,
-            borderRadius: '50%',
-            bgcolor: `${config.color}10`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
