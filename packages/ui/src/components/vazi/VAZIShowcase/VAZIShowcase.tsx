@@ -48,6 +48,7 @@ export function VAZIShowcase({
         display: 'grid',
         gridTemplateColumns: { xs: '1fr', md: '1fr 1.6fr 1fr' },
         bgcolor: '#e8f0f2',
+        background: '#e8f0f2',
         overflow: 'hidden',
         position: 'relative',
         fontFamily: tokens.typography.fontFamily,
