@@ -27,7 +27,7 @@ export const WithHeroImage: Story = {
 
 export const WithInitialData: Story = {
   args: {
-    initialData: { display_name: 'Amina K.', city: 'nairobi', phone: '712345678' },
+    initialData: { display_name: 'Amina K.', county: 'Nairobi', phone: '712345678' },
   },
 };
 
