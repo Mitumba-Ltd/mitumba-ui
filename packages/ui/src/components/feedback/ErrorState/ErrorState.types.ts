@@ -1,28 +1,23 @@
-import type { ReactNode } from 'react'
+import type { ReactNode } from 'react';
 
-export type ErrorType = 'general' | '404' | '500' | 'network' | 'forbidden'
-export type ErrorVariant = 'standard' | 'elevated' | 'compact'
+export type ErrorType = 'general' | '404' | '500' | 'network' | 'forbidden';
+export type ErrorVariant = 'standard' | 'elevated' | 'compact';
 
-/**
- * Props for the ErrorState component.
- */
 export interface ErrorStateProps {
-  /** Main error heading. Defaults to "Something went wrong". */
-  title?: string
-  /** Detailed error message. Defaults to "Please try again". */
-  subtitle?: string
-  /** Error archetype for icon/color mapping. Defaults to "general". */
-  type?: ErrorType
-  /** Visual container treatment. Defaults to "standard". */
-  variant?: ErrorVariant
-  /** Called when the primary action (Retry) is clicked. */
-  onRetry?: () => void
-  /** Label for the retry button. Defaults to "Try Again". */
-  retryLabel?: string
-  /** Called when the secondary action (Go Back) is clicked. */
-  onBack?: () => void
-  /** Custom illustration or icon. Overrides automatic type-based icon. */
-  illustration?: ReactNode
-  /** Whether to show the decorative background blob. Defaults to true. */
-  showBlob?: boolean
+  /** Main heading — defaults to "Something went wrong" */
+  title?: string;
+  /** Supporting message — explains what happened and how to recover */
+  subtitle?: string;
+  /** Error type — determines icon and accent color */
+  type?: ErrorType;
+  /** Layout variant */
+  variant?: ErrorVariant;
+  /** Primary action — retry/refresh/reconnect */
+  onRetry?: () => void;
+  /** Label for retry button — defaults to "Try again" */
+  retryLabel?: string;
+  /** Secondary action — go back/home */
+  onBack?: () => void;
+  /** Custom icon/illustration — overrides type-based icon */
+  illustration?: ReactNode;
 }

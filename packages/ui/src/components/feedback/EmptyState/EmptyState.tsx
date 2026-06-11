@@ -1,144 +1,105 @@
-import React from 'react'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import { tokens } from '@mitumba/tokens'
-import type { EmptyStateProps } from './EmptyState.types'
-import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
+import React from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { tokens } from '@mitumba/tokens';
+import type { EmptyStateProps } from './EmptyState.types';
+import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
 
 /**
- * Premium "Personality-Led" Empty State primitive.
- * Fulfills high-end illustrative standards with reigned-in, professional geometry.
+ * Empty state — communicates absence of content and guides users to a next action.
+ * Follows Google/Airbnb patterns: centered illustration, clear headline, single CTA.
  */
-export function EmptyState({ 
-  illustration, 
+export function EmptyState({
+  illustration,
   icon,
-  title, 
-  subtitle, 
+  title,
+  subtitle,
   action,
   variant = 'standard',
-  showBlob = true
-}: EmptyStateProps) {
-  const isCompact = variant === 'compact'
-  const isElevated = variant === 'elevated'
-  const displayIllustration = illustration || icon
-
-  const renderIllustrationContent = () => {
-    if (!displayIllustration) return null
-
-    const isValidElement = React.isValidElement(displayIllustration)
-    const isBasicTag = isValidElement && typeof (displayIllustration as React.ReactElement).type === 'string'
-
-    if (isValidElement && isBasicTag) {
-      return displayIllustration
-    }
-
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          mb: isCompact ? 0 : tokens.spacing.md,
-          position: 'relative',
-          width: isCompact ? 48 : 80, // Reigned in from 120
-          height: isCompact ? 48 : 80, // Reigned in from 120
-        }}
-      >
-        {/* Decorative Benchmark Blob */}
-        {showBlob && !isCompact && (
-          <Box 
-            sx={{
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              backgroundColor: tokens.colors.background,
-              borderRadius: '50% 50% 50% 0',
-              transform: 'rotate(-45deg)',
-              opacity: 0.6,
-              zIndex: 0,
-            }}
-          />
-        )}
-        
-        <Box
-          sx={{
-            zIndex: 1,
-            color: tokens.colors.textDisabled,
-            display: 'flex',
-            backgroundColor: isElevated ? 'transparent' : tokens.colors.surface,
-            borderRadius: tokens.radius.full,
-            p: isCompact ? 0 : tokens.spacing.lg,
-            '& svg': { fontSize: isCompact ? 24 : 40 } // Reigned in
-          }}
-        >
-          {displayIllustration}
-        </Box>
-      </Box>
-    )
-  }
+}: EmptyStateProps): React.ReactElement {
+  const isCompact = variant === 'compact';
+  const isElevated = variant === 'elevated';
+  const displayIcon = illustration || icon;
 
   return (
     <Box
       sx={{
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: isCompact ? 'row' : 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        textAlign: 'center',
+        textAlign: isCompact ? 'left' : 'center',
         width: '100%',
-        boxSizing: 'border-box',
-        padding: isCompact || isElevated ? tokens.spacing.xl : tokens.spacing.xxxl,
-        gap: isCompact ? tokens.spacing.xs : tokens.spacing.sm, // Professional density
-        backgroundColor: isElevated ? tokens.colors.surface : tokens.colors.background,
-        borderRadius: tokens.radius.lg, // Reigned in from XL
-        border: isElevated ? 'none' : `1px dashed ${tokens.colors.divider}`,
+        py: isCompact ? `${tokens.spacing.xl}px` : `${tokens.spacing.huge}px`,
+        px: isCompact ? `${tokens.spacing.xl}px` : `${tokens.spacing.xxxl}px`,
+        gap: isCompact ? `${tokens.spacing.lg}px` : `${tokens.spacing.md}px`,
+        bgcolor: isElevated ? tokens.colors.surface : 'transparent',
+        borderRadius: `${tokens.radius.xl}px`,
+        border: isElevated ? 'none' : `1px solid ${tokens.colors.divider}`,
         boxShadow: isElevated ? tokens.shadows.card : 'none',
-        transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
       }}
     >
-      {renderIllustrationContent()}
-
-      <Typography
-        sx={{
-          fontSize: isCompact ? tokens.typography.fontSizes.base : tokens.typography.fontSizes.lg, // Reigned in
-          fontWeight: 800,
-          color: tokens.colors.textPrimary,
-          fontFamily: tokens.typography.fontFamily,
-          lineHeight: 1.1,
-          width: '100%',
-          mt: isCompact ? 0 : 1,
-        }}
-      >
-        {title}
-      </Typography>
-
-      <Typography
-        sx={{
-          fontSize: isCompact ? tokens.typography.fontSizes.xs : tokens.typography.fontSizes.base,
-          color: tokens.colors.textSecondary,
-          fontFamily: tokens.typography.fontFamily,
-          width: '100%',
-          marginInline: 'auto',
-          lineHeight: 1.4,
-          mt: 0.5,
-        }}
-      >
-        {subtitle}
-      </Typography>
-
-      {action && (
-        <Box sx={{ mt: isCompact ? tokens.spacing.sm : tokens.spacing.base }}>
-          <MitumbaPrimaryButton
-            label={action.label}
-            onClick={action.onClick}
-            variant={action.variant || 'primary'}
-            size={isCompact ? 'small' : 'medium'}
-            fullWidth={false}
-          />
+      {/* Icon/illustration */}
+      {displayIcon && (
+        <Box
+          sx={{
+            width: isCompact ? 48 : 72,
+            height: isCompact ? 48 : 72,
+            borderRadius: '50%',
+            bgcolor: tokens.colors.background,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            color: tokens.colors.textDisabled,
+            '& svg': { fontSize: isCompact ? 24 : 32 },
+          }}
+        >
+          {displayIcon}
         </Box>
       )}
+
+      {/* Text content */}
+      <Box sx={{ flex: isCompact ? 1 : undefined }}>
+        <Typography
+          sx={{
+            fontSize: isCompact ? tokens.typography.fontSizes.base : tokens.typography.fontSizes.lg,
+            fontWeight: 700,
+            color: tokens.colors.textPrimary,
+            fontFamily: tokens.typography.fontFamily,
+            lineHeight: tokens.typography.lineHeights.tight,
+            mb: `${tokens.spacing.xs}px`,
+          }}
+        >
+          {title}
+        </Typography>
+
+        <Typography
+          sx={{
+            fontSize: isCompact ? tokens.typography.fontSizes.sm : tokens.typography.fontSizes.base,
+            color: tokens.colors.textSecondary,
+            fontFamily: tokens.typography.fontFamily,
+            lineHeight: tokens.typography.lineHeights.normal,
+            maxWidth: isCompact ? undefined : 320,
+            mx: isCompact ? undefined : 'auto',
+          }}
+        >
+          {subtitle}
+        </Typography>
+
+        {action && (
+          <Box sx={{ mt: isCompact ? `${tokens.spacing.md}px` : `${tokens.spacing.xl}px` }}>
+            <MitumbaPrimaryButton
+              label={action.label}
+              onClick={action.onClick}
+              variant={action.variant || 'primary'}
+              size={isCompact ? 'small' : 'medium'}
+            />
+          </Box>
+        )}
+      </Box>
     </Box>
-  )
+  );
 }
 
-export default EmptyState
+export default EmptyState;

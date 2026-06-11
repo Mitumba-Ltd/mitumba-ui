@@ -1,28 +1,20 @@
-import type { ReactNode } from 'react'
+import type { ReactNode } from 'react';
 
-/**
- * Props for the EmptyState component.
- */
 export interface EmptyStateProps {
-  /** Icon, illustration, or custom SVG to display. */
-  illustration?: ReactNode
-  /** Main title text. */
-  title: string
-  /** Subtitle or description text. */
-  subtitle: string
-  /** Optional action configuration ('No Dead Ends'). */
+  /** Icon or illustration element displayed above/beside the text */
+  illustration?: ReactNode;
+  /** Legacy alias for illustration */
+  icon?: ReactNode;
+  /** Primary headline — short, human, contextual */
+  title: string;
+  /** Supporting description — explains why it's empty and what to do */
+  subtitle: string;
+  /** Single CTA action — one path forward, never multiple */
   action?: {
-    /** Label for the action button. */
-    label: string
-    /** Called when the action button is clicked. */
-    onClick: () => void
-    /** Visual variant of the button. Defaults to 'primary'. */
-    variant?: 'primary' | 'earth' | 'outline'
-  }
-  /** Overall scale and container style. Defaults to 'standard'. */
-  variant?: 'standard' | 'compact' | 'elevated'
-  /** Whether to show a decorative background blob behind the illustration. Defaults to true. */
-  showBlob?: boolean
-  /** Legacy icon support. Map to illustration if provided. */
-  icon?: ReactNode
+    label: string;
+    onClick: () => void;
+    variant?: 'primary' | 'earth' | 'outline';
+  };
+  /** Layout variant — standard (centered), compact (inline row), elevated (card with shadow) */
+  variant?: 'standard' | 'compact' | 'elevated';
 }
