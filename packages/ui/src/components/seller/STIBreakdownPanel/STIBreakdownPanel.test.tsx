@@ -20,7 +20,7 @@ function renderPanel(overrides: {
         score={overrides.score ?? 85}
         fulfillmentRate={overrides.fulfillmentRate ?? 0.95}
         accuracyRate={overrides.accuracyRate ?? 0.88}
-        avgResponseHours={overrides.avgResponseHours ?? 2.5}
+        avgResponseHours={overrides.avgResponseHours ?? 2}
         daysActive={overrides.daysActive ?? 180}
         recentEvents={overrides.recentEvents ?? []}
       />
@@ -28,38 +28,36 @@ function renderPanel(overrides: {
   )
 }
 
-afterEach(() => {
-  cleanup()
-})
+afterEach(() => { cleanup() })
 
 describe('STIBreakdownPanel', () => {
-  it('renders score chip', () => {
+  it('renders score and status label', () => {
     renderPanel()
-    expect(screen.getByText('Trusted ★')).toBeInTheDocument()
     expect(screen.getByText('85')).toBeInTheDocument()
+    expect(screen.getByText('Trusted')).toBeInTheDocument()
   })
 
   it('renders factor labels', () => {
     renderPanel()
-    expect(screen.getByText('Fulfillment Rate')).toBeInTheDocument()
-    expect(screen.getByText('Listing Accuracy')).toBeInTheDocument()
-    expect(screen.getByText('Avg Response Time')).toBeInTheDocument()
-    expect(screen.getByText('Days Active')).toBeInTheDocument()
+    expect(screen.getByText('Order fulfillment')).toBeInTheDocument()
+    expect(screen.getByText('Listing accuracy')).toBeInTheDocument()
+    expect(screen.getByText('Avg. response time')).toBeInTheDocument()
+    expect(screen.getByText('Days active')).toBeInTheDocument()
   })
 
   it('renders factor values', () => {
     renderPanel()
     expect(screen.getByText('95%')).toBeInTheDocument()
     expect(screen.getByText('88%')).toBeInTheDocument()
-    expect(screen.getByText('2.5h')).toBeInTheDocument()
+    expect(screen.getByText('2h')).toBeInTheDocument()
     expect(screen.getByText('180')).toBeInTheDocument()
   })
 
   it('renders recent events', () => {
     renderPanel({
       recentEvents: [
-        { type: 'positive', reason: 'Fast shipping', pointsChange: 5, timestamp: '2024-01-01' },
-        { type: 'penalty', reason: 'Late delivery', pointsChange: -3, timestamp: '2024-01-02' },
+        { type: 'positive', reason: 'Fast shipping', pointsChange: 5, timestamp: '2 hours ago' },
+        { type: 'penalty', reason: 'Late delivery', pointsChange: -3, timestamp: '1 day ago' },
       ],
     })
     expect(screen.getByText('Fast shipping')).toBeInTheDocument()
@@ -70,6 +68,6 @@ describe('STIBreakdownPanel', () => {
 
   it('does not show events section when empty', () => {
     renderPanel({ recentEvents: [] })
-    expect(screen.queryByText('Recent Events')).not.toBeInTheDocument()
+    expect(screen.queryByText('Recent activity')).not.toBeInTheDocument()
   })
 })
