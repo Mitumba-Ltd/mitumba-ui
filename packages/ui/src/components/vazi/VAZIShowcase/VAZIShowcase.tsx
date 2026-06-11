@@ -63,7 +63,7 @@ export function VAZIShowcase({
       onTouchEnd={handleTouchEnd}
       sx={{
         width: '100%',
-        height: '100%',
+        height: '100vh',
         bgcolor: '#e8f0f2',
         background: '#e8f0f2',
         overflow: 'hidden',
@@ -96,7 +96,7 @@ export function VAZIShowcase({
 
         {/* Center — 3D Carousel */}
         <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', perspective: '1200px', perspectiveOrigin: 'center center' }}>
-          <Box sx={{ position: 'relative', width: '100%', height: '100%', transformStyle: 'preserve-3d' }}>
+          <Box sx={{ position: 'relative', width: '100%', height: '100vh', transformStyle: 'preserve-3d' }}>
             {outfits.map((outfit, i) => (
               <DesktopModelItem key={outfit.id} outfit={outfit} diff={i - current} onClick={() => navigateTo(i)} />
             ))}
@@ -110,7 +110,7 @@ export function VAZIShowcase({
       </Box>
 
       {/* ═══ MOBILE LAYOUT ═══ */}
-      <Box sx={{ display: { xs: 'flex', md: 'none' }, flexDirection: 'column', width: '100%', height: '100%', position: 'relative' }}>
+      <Box sx={{ display: { xs: 'flex', md: 'none' }, flexDirection: 'column', width: '100%', height: '100vh', position: 'relative' }}>
 
         {/* Look counter pill */}
         <Box sx={{ position: 'absolute', top: `${tokens.spacing.lg}px`, left: `${tokens.spacing.lg}px`, zIndex: 20, bgcolor: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(8px)', borderRadius: `${tokens.radius.full}px`, px: `${tokens.spacing.md}px`, py: `${tokens.spacing.xs}px` }}>
