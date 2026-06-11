@@ -7,6 +7,16 @@ import { tokens } from '@mitumba/tokens';
 import { AuthSubmitButton } from '../../foundation/AuthSubmitButton';
 import type { BuyerOnboardingPageProps } from './BuyerOnboardingPage.types';
 
+const KENYA_COUNTIES = [
+  'Baringo','Bomet','Bungoma','Busia','Elgeyo-Marakwet','Embu','Garissa',
+  'Homa Bay','Isiolo','Kajiado','Kakamega','Kericho','Kiambu','Kilifi',
+  'Kirinyaga','Kisii','Kisumu','Kitui','Kwale','Laikipia','Lamu','Machakos',
+  'Makueni','Mandera','Marsabit','Meru','Migori','Mombasa',"Murang'a",
+  'Nairobi','Nakuru','Nandi','Narok','Nyamira','Nyandarua','Nyeri',
+  'Samburu','Siaya','Taita-Taveta','Tana River','Tharaka-Nithi','Trans Nzoia',
+  'Turkana','Uasin Gishu','Vihiga','Wajir','West Pokot',
+];
+
 const tfSx = { '& .MuiInputBase-root': { bgcolor: tokens.colors.surface } };
 
 export function BuyerOnboardingPage({
@@ -14,16 +24,17 @@ export function BuyerOnboardingPage({
   loading = false,
   error,
   heroImageUrl,
-  cities,
+  counties,
   initialData,
 }: BuyerOnboardingPageProps): React.ReactElement {
+  const countyList = counties ?? KENYA_COUNTIES;
   const [displayName, setDisplayName] = React.useState(initialData?.display_name ?? '');
-  const [city, setCity] = React.useState(initialData?.city ?? '');
+  const [county, setCounty] = React.useState(initialData?.county ?? '');
   const [phone, setPhone] = React.useState(initialData?.phone ?? '');
 
   const handleSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();
-    onComplete({ display_name: displayName, city, phone });
+    onComplete({ display_name: displayName, county, phone });
   };
 
   const panelBg = heroImageUrl
@@ -99,15 +110,15 @@ export function BuyerOnboardingPage({
               />
 
               <FormControl fullWidth required>
-                <InputLabel>City</InputLabel>
+                <InputLabel>County</InputLabel>
                 <Select
                   sx={tfSx}
-                  value={city}
-                  label="City"
-                  onChange={(e) => setCity(e.target.value)}
+                  value={county}
+                  label="County"
+                  onChange={(e) => setCounty(e.target.value)}
                 >
-                  {cities.map((c) => (
-                    <MenuItem key={c.id} value={c.id}>{c.name}</MenuItem>
+                  {countyList.map((c) => (
+                    <MenuItem key={c} value={c}>{c}</MenuItem>
                   ))}
                 </Select>
               </FormControl>
