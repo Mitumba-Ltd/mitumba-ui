@@ -1,13 +1,17 @@
-import { useRef, useCallback } from 'react'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import DeleteIcon from '@mui/icons-material/Delete'
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
-import { tokens } from '@mitumba/tokens'
-import type { ImageUploaderProps } from './ImageUploader.types'
+import React, { useRef, useCallback } from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import CircularProgress from '@mui/material/CircularProgress';
+import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import CloseIcon from '@mui/icons-material/Close';
+import StarIcon from '@mui/icons-material/Star';
+import { tokens } from '@mitumba/tokens';
+import type { ImageUploaderProps } from './ImageUploader.types';
 
 /**
- * Drag-and-drop image uploader with reorder and cover photo support.
+ * Image uploader — Depop/Vinted-style grid with cover photo emphasis.
+ * Supports drag-to-reorder, tap-to-add, and single/grid variants.
  */
 export function ImageUploader({
   images,
@@ -15,246 +19,222 @@ export function ImageUploader({
   onRemove,
   onReorder,
   maxImages = 6,
-}: ImageUploaderProps) {
-  const inputRef = useRef<HTMLInputElement>(null)
-  const dragItem = useRef<number | null>(null)
-  const dragOverItem = useRef<number | null>(null)
+  variant = 'grid',
+  aspectRatio = '1 / 1',
+  hint = 'Add photo',
+}: ImageUploaderProps): React.ReactElement {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const dragItem = useRef<number | null>(null);
+  const dragOverItem = useRef<number | null>(null);
 
   const handleFileSelect = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const files = Array.from(e.target.files ?? [])
+      const files = Array.from(e.target.files ?? []);
       if (files.length > 0) {
-        onAdd(files)
-        if (inputRef.current) {
-          inputRef.current.value = ''
-        }
+        onAdd(files);
+        if (inputRef.current) inputRef.current.value = '';
       }
     },
-    [onAdd]
-  )
+    [onAdd],
+  );
 
-   const handleDrop = useCallback(
+  const handleDrop = useCallback(
     (e: React.DragEvent<HTMLDivElement>) => {
-      e.preventDefault()
-      const files: File[] = e.dataTransfer ? Array.from(e.dataTransfer.files) : []
-      if (files.length > 0) {
-        onAdd(files)
-      }
+      e.preventDefault();
+      const files = Array.from(e.dataTransfer?.files ?? []);
+      if (files.length > 0) onAdd(files);
     },
-    [onAdd]
-  )
+    [onAdd],
+  );
 
-  const handleDragStart = (index: number) => {
-    dragItem.current = index
-  }
+  const handleDragStart = (index: number) => { dragItem.current = index; };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>, index: number) => {
-    e.preventDefault()
-    dragOverItem.current = index
-  }
+    e.preventDefault();
+    dragOverItem.current = index;
+  };
 
   const handleDragEnd = useCallback(() => {
-    if (dragItem.current !== null && dragOverItem.current !== null) {
-      const [draggedItem] = images.splice(dragItem.current, 1)
-      images.splice(dragOverItem.current, 0, draggedItem)
-      onReorder(images.map((img) => img.id))
+    if (dragItem.current !== null && dragOverItem.current !== null && dragItem.current !== dragOverItem.current) {
+      const reordered = [...images.map((img) => img.id)];
+      const [moved] = reordered.splice(dragItem.current, 1);
+      reordered.splice(dragOverItem.current, 0, moved);
+      onReorder(reordered);
     }
-    dragItem.current = null
-    dragOverItem.current = null
-  }, [images, onReorder])
+    dragItem.current = null;
+    dragOverItem.current = null;
+  }, [images, onReorder]);
 
-  const canAdd = images.length < maxImages
+  const canAdd = images.length < maxImages;
+  const isSingle = variant === 'single';
 
-  return (
-    <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: tokens.spacing.base,
-      }}
-      onDragOver={(e) => e.preventDefault()}
-    >
-      {images.map((image, index) => (
+  // Single variant — one large upload area
+  if (isSingle) {
+    const img = images[0];
+    return (
+      <Box>
         <Box
-          key={image.id}
-          draggable
-          onDragStart={() => handleDragStart(index)}
-          onDragOver={(e) => handleDragOver(e, index)}
-          onDragEnd={handleDragEnd}
+          onClick={() => !img && inputRef.current?.click()}
+          onDrop={handleDrop}
+          onDragOver={(e) => e.preventDefault()}
           sx={{
-            position: 'relative',
-            aspectRatio: '1 / 1',
-            borderRadius: tokens.radius.md,
+            width: '100%',
+            aspectRatio,
+            borderRadius: `${tokens.radius.lg}px`,
+            border: `2px dashed ${img ? tokens.colors.green : tokens.colors.border}`,
             overflow: 'hidden',
-            border: '1px solid',
-            borderColor: image.isPrimary ? tokens.colors.green : tokens.colors.border,
-            borderWidth: image.isPrimary ? '2px' : '1px',
-            cursor: 'grab',
-            transition: 'all 200ms ease',
-            backgroundColor: tokens.colors.background,
-            '&:hover': {
-              borderColor: tokens.colors.green,
-              boxShadow: tokens.shadows.card,
-            },
-            '&:hover .remove-btn': {
-              opacity: 1,
-              transform: 'scale(1)',
-            },
+            position: 'relative',
+            cursor: img ? 'default' : 'pointer',
+            bgcolor: tokens.colors.background,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            gap: `${tokens.spacing.xs}px`,
+            transition: tokens.motion.transitions.interaction,
+            '&:hover': !img ? { borderColor: tokens.colors.green, bgcolor: tokens.colors.greenLight } : {},
           }}
         >
-           <Box
-              component="img"
-              src={image.url}
-              alt={`Upload preview ${index + 1}`}
-              sx={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-              }}
-            />
-           {image.isPrimary && (
-            <Box
-              sx={{
-                position: 'absolute',
-                top: tokens.spacing.xs,
-                left: tokens.spacing.xs,
-                backgroundColor: tokens.colors.green,
-                color: tokens.colors.white,
-                fontSize: 10,
-                fontWeight: tokens.typography.fontWeights.extrabold,
-                textTransform: 'uppercase',
-                letterSpacing: tokens.typography.letterSpacings.wide,
-                paddingInline: tokens.spacing.sm,
-                paddingBlock: '2px',
-                borderRadius: tokens.radius.xs,
-                boxShadow: tokens.shadows.card,
-                zIndex: 1,
-              }}
-            >
-              Cover
-            </Box>
+          {img ? (
+            <>
+              <Box component="img" src={img.url} alt="Upload preview" sx={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} />
+              {img.status === 'uploading' && (
+                <Box sx={{ position: 'absolute', inset: 0, bgcolor: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <CircularProgress size={32} sx={{ color: tokens.colors.green }} />
+                </Box>
+              )}
+              <IconButton
+                aria-label="Remove image"
+                onClick={(e) => { e.stopPropagation(); onRemove(img.id); }}
+                size="small"
+                sx={{ position: 'absolute', top: `${tokens.spacing.sm}px`, right: `${tokens.spacing.sm}px`, bgcolor: 'rgba(0,0,0,0.5)', color: tokens.colors.white, '&:hover': { bgcolor: 'rgba(0,0,0,0.7)' } }}
+              >
+                <CloseIcon sx={{ fontSize: 16 }} />
+              </IconButton>
+            </>
+          ) : (
+            <>
+              <AddAPhotoIcon sx={{ color: tokens.colors.textDisabled, fontSize: 32 }} />
+              <Typography variant="caption" color={tokens.colors.textSecondary}>{hint}</Typography>
+            </>
           )}
-          {image.status === 'uploading' && (
-            <Box
-              sx={{
-                position: 'absolute',
-                inset: 0,
-                backgroundColor: 'rgba(255,255,255,0.7)',
-                backdropFilter: 'blur(2px)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: tokens.colors.green,
-                fontSize: 10,
-                fontWeight: tokens.typography.fontWeights.bold,
-                textTransform: 'uppercase',
-                zIndex: 1,
-              }}
-            >
-              Uploading...
-            </Box>
-          )}
-          {image.status === 'error' && (
-            <Box
-              sx={{
-                position: 'absolute',
-                inset: 0,
-                backgroundColor: `${tokens.colors.errorLight}CC`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: tokens.colors.error,
-                fontSize: 10,
-                fontWeight: tokens.typography.fontWeights.bold,
-                textTransform: 'uppercase',
-                zIndex: 1,
-              }}
-            >
-              Error
-            </Box>
-          )}
+        </Box>
+        <input ref={inputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={handleFileSelect} aria-label={hint} />
+      </Box>
+    );
+  }
+
+  // Grid variant — multi-image with cover emphasis
+  const slots = Array.from({ length: maxImages }, (_, i) => images[i] ?? null);
+
+  return (
+    <Box>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: `${tokens.spacing.sm}px`,
+        }}
+        onDragOver={(e) => e.preventDefault()}
+      >
+        {slots.map((img, index) => (
           <Box
-            className="remove-btn"
-            onClick={(e) => {
-              e.stopPropagation()
-              onRemove(image.id)
-            }}
+            key={img ? img.id : `empty-${String(index)}`}
+            draggable={!!img}
+            onDragStart={() => img && handleDragStart(index)}
+            onDragOver={(e) => handleDragOver(e, index)}
+            onDragEnd={handleDragEnd}
+            onClick={() => !img && canAdd && inputRef.current?.click()}
+            onDrop={!img ? handleDrop : undefined}
             sx={{
-              position: 'absolute',
-              top: tokens.spacing.xs,
-              right: tokens.spacing.xs,
-              width: 24,
-              height: 24,
-              borderRadius: tokens.radius.full,
-              backgroundColor: tokens.colors.white,
+              position: 'relative',
+              aspectRatio,
+              borderRadius: `${tokens.radius.md}px`,
+              overflow: 'hidden',
+              border: img
+                ? `2px solid ${index === 0 ? tokens.colors.green : tokens.colors.border}`
+                : `2px dashed ${tokens.colors.border}`,
+              cursor: img ? 'grab' : canAdd ? 'pointer' : 'default',
+              bgcolor: tokens.colors.background,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: tokens.colors.error,
-              cursor: 'pointer',
-              opacity: 0,
-              transform: 'scale(0.8)',
-              transition: 'all 200ms cubic-bezier(0.4, 0, 0.2, 1)',
-              boxShadow: tokens.shadows.elevated,
-              zIndex: 2,
-              '&:hover': {
-                backgroundColor: tokens.colors.error,
-                color: tokens.colors.white,
-              },
+              flexDirection: 'column',
+              gap: `${tokens.spacing.xs}px`,
+              transition: tokens.motion.transitions.interaction,
+              '&:hover': !img && canAdd ? { borderColor: tokens.colors.green, bgcolor: tokens.colors.greenLight } : {},
+              '&:active': img ? { cursor: 'grabbing' } : {},
             }}
           >
-            <DeleteIcon sx={{ fontSize: 14 }} />
+            {img ? (
+              <>
+                <Box component="img" src={img.url} alt={`Photo ${index + 1}`} sx={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', inset: 0 }} />
+
+                {/* Cover badge */}
+                {index === 0 && (
+                  <Box sx={{ position: 'absolute', top: `${tokens.spacing.xs}px`, left: `${tokens.spacing.xs}px`, bgcolor: tokens.colors.green, color: tokens.colors.white, borderRadius: `${tokens.radius.sm}px`, px: `${tokens.spacing.xs}px`, py: '2px', display: 'flex', alignItems: 'center', gap: '2px' }}>
+                    <StarIcon sx={{ fontSize: 10 }} />
+                    <Typography sx={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5 }}>Cover</Typography>
+                  </Box>
+                )}
+
+                {/* Upload progress */}
+                {img.status === 'uploading' && (
+                  <Box sx={{ position: 'absolute', inset: 0, bgcolor: 'rgba(255,255,255,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <CircularProgress size={24} sx={{ color: tokens.colors.green }} />
+                  </Box>
+                )}
+
+                {/* Error overlay */}
+                {img.status === 'error' && (
+                  <Box sx={{ position: 'absolute', inset: 0, bgcolor: `${tokens.colors.errorLight}dd`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Typography sx={{ fontSize: 10, fontWeight: 700, color: tokens.colors.error, textTransform: 'uppercase' }}>Failed</Typography>
+                  </Box>
+                )}
+
+                {/* Remove button */}
+                <IconButton
+                  aria-label={`Remove photo ${index + 1}`}
+                  onClick={(e) => { e.stopPropagation(); onRemove(img.id); }}
+                  size="small"
+                  sx={{
+                    position: 'absolute',
+                    top: `${tokens.spacing.xs}px`,
+                    right: `${tokens.spacing.xs}px`,
+                    width: 22,
+                    height: 22,
+                    bgcolor: 'rgba(0,0,0,0.5)',
+                    color: tokens.colors.white,
+                    opacity: 0,
+                    transition: tokens.motion.transitions.interaction,
+                    '.MuiBox-root:hover &': { opacity: 1 },
+                    '&:hover': { bgcolor: tokens.colors.error },
+                  }}
+                >
+                  <CloseIcon sx={{ fontSize: 12 }} />
+                </IconButton>
+              </>
+            ) : (
+              canAdd && (
+                <>
+                  <AddAPhotoIcon sx={{ color: tokens.colors.textDisabled, fontSize: 22 }} />
+                  {index === 0 && (
+                    <Typography sx={{ fontSize: 9, color: tokens.colors.textSecondary, fontWeight: 600, textTransform: 'uppercase' }}>Cover</Typography>
+                  )}
+                </>
+              )
+            )}
           </Box>
-        </Box>
-      ))}
-      {canAdd && (
-        <Box
-          onClick={() => inputRef.current?.click()}
-          onDrop={handleDrop}
-          sx={{
-            aspectRatio: '1 / 1',
-            border: `2px dashed ${tokens.colors.border}`,
-            borderRadius: tokens.radius.md,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: tokens.spacing.xs,
-            cursor: 'pointer',
-            transition: 'all 200ms ease',
-            backgroundColor: tokens.colors.background,
-            '&:hover': {
-              borderColor: tokens.colors.green,
-              backgroundColor: tokens.colors.greenLight,
-              '& .add-icon': { color: tokens.colors.green },
-            },
-          }}
-        >
-          <AddPhotoAlternateIcon className="add-icon" sx={{ color: tokens.colors.textDisabled, fontSize: 28, transition: 'color 200ms ease' }} />
-          <Typography
-            sx={{
-              fontSize: 10,
-              fontWeight: tokens.typography.fontWeights.bold,
-              textTransform: 'uppercase',
-              letterSpacing: tokens.typography.letterSpacings.wide,
-              color: tokens.colors.textSecondary,
-              textAlign: 'center',
-            }}
-          >
-            Add Photo
-          </Typography>
-        </Box>
-      )}
-      <input
-        ref={inputRef}
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleFileSelect}
-        style={{ display: 'none' }}
-      />
+        ))}
+      </Box>
+
+      <Typography variant="caption" sx={{ color: tokens.colors.textSecondary, mt: `${tokens.spacing.sm}px`, display: 'block' }}>
+        {images.length}/{maxImages} photos · Drag to reorder · First photo is the cover
+      </Typography>
+
+      <input ref={inputRef} type="file" accept="image/*" multiple style={{ display: 'none' }} onChange={handleFileSelect} aria-label="Upload photos" />
     </Box>
-  )
+  );
 }
 
-export default ImageUploader
+export default ImageUploader;
