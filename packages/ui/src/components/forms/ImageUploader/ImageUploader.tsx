@@ -154,7 +154,7 @@ export function ImageUploader({
               border: img
                 ? `2px solid ${index === 0 ? tokens.colors.green : tokens.colors.border}`
                 : `2px dashed ${tokens.colors.border}`,
-              cursor: img ? 'grab' : canAdd ? 'pointer' : 'default',
+              cursor: (() => { if (img) return 'grab'; if (canAdd) return 'pointer'; return 'default'; })(),
               bgcolor: tokens.colors.background,
               display: 'flex',
               alignItems: 'center',
