@@ -63,7 +63,7 @@ export function VAZIShowcase({
       onTouchEnd={handleTouchEnd}
       sx={{
         width: '100%',
-        height: '100vh',
+        height: '100%',
         bgcolor: '#e8f0f2',
         background: '#e8f0f2',
         overflow: 'hidden',
