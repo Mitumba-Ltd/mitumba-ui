@@ -1,20 +1,27 @@
-import React from 'react'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import Stack from '@mui/material/Stack'
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
-import WifiOffIcon from '@mui/icons-material/WifiOff'
-import GppBadIcon from '@mui/icons-material/GppBad'
-import BugReportIcon from '@mui/icons-material/BugReport'
-import { tokens } from '@mitumba/tokens'
-import type { ErrorStateProps } from './ErrorState.types'
-import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
+import React from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import WifiOffIcon from '@mui/icons-material/WifiOff';
+import GppBadIcon from '@mui/icons-material/GppBad';
+import BugReportIcon from '@mui/icons-material/BugReport';
+import { tokens } from '@mitumba/tokens';
+import type { ErrorStateProps } from './ErrorState.types';
+import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
+
+const TYPE_CONFIG = {
+  general: { icon: <BugReportIcon />, color: tokens.colors.error },
+  '404': { icon: <SentimentVeryDissatisfiedIcon />, color: tokens.colors.earth },
+  '500': { icon: <ErrorOutlineIcon />, color: tokens.colors.error },
+  network: { icon: <WifiOffIcon />, color: tokens.colors.info },
+  forbidden: { icon: <GppBadIcon />, color: tokens.colors.error },
+} as const;
 
 /**
- * Premium "Personality-Led" Error State primitive.
- * Engineered for urgent recovery and professional visual sanity.
- * Reigned in from 'wild' geometries to a 'Very Serious' standard.
+ * Error state — communicates failure and provides recovery path.
+ * Centered layout with type-specific icon/color, human copy, and retry/back actions.
  */
 export function ErrorState({
   title = 'Something went wrong',
@@ -22,109 +29,63 @@ export function ErrorState({
   type = 'general',
   variant = 'standard',
   onRetry,
-  retryLabel = 'Try Again',
+  retryLabel = 'Try again',
   onBack,
   illustration,
-  showBlob = true,
-}: ErrorStateProps) {
-  const isCompact = variant === 'compact'
-  const isElevated = variant === 'elevated'
-
-  const typeConfig = {
-    general: { icon: <BugReportIcon />, color: tokens.colors.error },
-    '404': { icon: <SentimentVeryDissatisfiedIcon />, color: tokens.colors.earth },
-    '500': { icon: <ErrorOutlineIcon />, color: tokens.colors.error },
-    network: { icon: <WifiOffIcon />, color: tokens.colors.info },
-    forbidden: { icon: <GppBadIcon />, color: tokens.colors.error },
-  }
-
-  const activeConfig = typeConfig[type]
-  const displayIllustration = illustration || activeConfig.icon
-
-  const renderIllustrationContent = () => {
-    if (!displayIllustration) return null
-
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          mb: isCompact ? 0 : tokens.spacing.md,
-          position: 'relative',
-          width: isCompact ? 48 : 80, // Reigned in from 120
-          height: isCompact ? 48 : 80, // Reigned in from 120
-        }}
-      >
-        {/* Decorative Error Blob */}
-        {showBlob && !isCompact && (
-          <Box 
-            sx={{
-              position: 'absolute',
-              width: '100%',
-              height: '100%',
-              backgroundColor: `${activeConfig.color}15`,
-              borderRadius: '50%', // Reigned in from asymmetric morph
-              opacity: 0.6,
-              zIndex: 0,
-            }}
-          />
-        )}
-        
-        <Box
-          sx={{
-            zIndex: 1,
-            color: activeConfig.color,
-            display: 'flex',
-            backgroundColor: tokens.colors.surface,
-            borderRadius: tokens.radius.full,
-            boxShadow: tokens.shadows.card,
-            p: isCompact ? 1 : tokens.spacing.lg,
-            '& svg': { fontSize: isCompact ? 24 : 40 } // Reigned in
-          }}
-        >
-          {displayIllustration}
-        </Box>
-      </Box>
-    )
-  }
+}: ErrorStateProps): React.ReactElement {
+  const isCompact = variant === 'compact';
+  const isElevated = variant === 'elevated';
+  const config = TYPE_CONFIG[type];
+  const displayIcon = illustration || config.icon;
 
   return (
     <Box
       sx={{
         display: 'flex',
-        flexDirection: 'column',
+        flexDirection: isCompact ? 'row' : 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        textAlign: 'center',
+        textAlign: isCompact ? 'left' : 'center',
         width: '100%',
-        boxSizing: 'border-box',
-        padding: isCompact || isElevated ? tokens.spacing.xl : tokens.spacing.xxxl,
-        gap: isCompact ? tokens.spacing.xs : tokens.spacing.sm, // Professional density
-        backgroundColor: isElevated ? tokens.colors.surface : `${activeConfig.color}05`,
-        borderRadius: tokens.radius.lg, // Reigned in from XL
-        border: isElevated ? 'none' : `1px solid ${activeConfig.color}20`,
-        boxShadow: isElevated ? tokens.shadows.deep : 'none',
+        py: isCompact ? `${tokens.spacing.xl}px` : `${tokens.spacing.huge}px`,
+        px: isCompact ? `${tokens.spacing.xl}px` : `${tokens.spacing.xxxl}px`,
+        gap: isCompact ? `${tokens.spacing.lg}px` : `${tokens.spacing.md}px`,
+        bgcolor: isElevated ? tokens.colors.surface : `${config.color}05`,
+        borderRadius: `${tokens.radius.xl}px`,
+        border: isElevated ? 'none' : `1px solid ${config.color}15`,
+        boxShadow: isElevated ? tokens.shadows.card : 'none',
       }}
     >
-      <Box 
-        sx={{ 
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
-      >
-        {renderIllustrationContent()}
+      {/* Icon */}
+      {displayIcon && (
+        <Box
+          sx={{
+            width: isCompact ? 48 : 72,
+            height: isCompact ? 48 : 72,
+            borderRadius: '50%',
+            bgcolor: `${config.color}10`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            color: config.color,
+            '& svg': { fontSize: isCompact ? 24 : 32 },
+          }}
+        >
+          {displayIcon}
+        </Box>
+      )}
 
+      {/* Content */}
+      <Box sx={{ flex: isCompact ? 1 : undefined }}>
         <Typography
           sx={{
-            fontSize: isCompact ? tokens.typography.fontSizes.base : tokens.typography.fontSizes.lg, // Reigned in
-            fontWeight: 800,
-            color: activeConfig.color,
+            fontSize: isCompact ? tokens.typography.fontSizes.base : tokens.typography.fontSizes.lg,
+            fontWeight: 700,
+            color: tokens.colors.textPrimary,
             fontFamily: tokens.typography.fontFamily,
-            lineHeight: 1.1,
-            mt: isCompact ? 0 : 1.5,
+            lineHeight: tokens.typography.lineHeights.tight,
+            mb: `${tokens.spacing.xs}px`,
           }}
         >
           {title}
@@ -132,53 +93,34 @@ export function ErrorState({
 
         <Typography
           sx={{
-            fontSize: isCompact ? tokens.typography.fontSizes.xs : tokens.typography.fontSizes.base,
+            fontSize: isCompact ? tokens.typography.fontSizes.sm : tokens.typography.fontSizes.base,
             color: tokens.colors.textSecondary,
             fontFamily: tokens.typography.fontFamily,
-            maxWidth: 400,
-            marginInline: 'auto',
-            lineHeight: 1.4,
-            mt: 0.5,
+            lineHeight: tokens.typography.lineHeights.normal,
+            maxWidth: isCompact ? undefined : 360,
+            mx: isCompact ? undefined : 'auto',
           }}
         >
           {subtitle}
         </Typography>
 
         {(onRetry || onBack) && (
-          <Stack 
-            direction={isCompact ? 'column' : 'row'} 
-            spacing={2} 
-            sx={{ mt: isCompact ? 2 : 4, width: { xs: '100%', sm: 'auto' } }}
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{ mt: isCompact ? `${tokens.spacing.md}px` : `${tokens.spacing.xl}px`, justifyContent: isCompact ? 'flex-start' : 'center' }}
           >
             {onBack && (
-              <MitumbaPrimaryButton
-                label="Go Back"
-                onClick={onBack}
-                variant="outline"
-                size={isCompact ? 'small' : 'medium'}
-              />
+              <MitumbaPrimaryButton label="Go back" onClick={onBack} variant="outline" size={isCompact ? 'small' : 'medium'} />
             )}
             {onRetry && (
-              <MitumbaPrimaryButton
-                label={retryLabel}
-                onClick={onRetry}
-                variant={type === '404' ? 'earth' : 'primary'}
-                size={isCompact ? 'small' : 'medium'}
-                sx={{
-                  ...(type !== '404' && {
-                    backgroundColor: activeConfig.color,
-                    '&:hover': {
-                      backgroundColor: tokens.colors[`${type === 'network' ? 'info' : 'error'}Dark` as keyof typeof tokens.colors] || activeConfig.color,
-                    }
-                  })
-                }}
-              />
+              <MitumbaPrimaryButton label={retryLabel} onClick={onRetry} variant="primary" size={isCompact ? 'small' : 'medium'} />
             )}
           </Stack>
         )}
       </Box>
     </Box>
-  )
+  );
 }
 
-export default ErrorState
+export default ErrorState;
