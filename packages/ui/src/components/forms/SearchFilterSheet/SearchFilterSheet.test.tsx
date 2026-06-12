@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 // @vitest-environment jsdom
 import '@testing-library/jest-dom/vitest';
 import React from 'react';

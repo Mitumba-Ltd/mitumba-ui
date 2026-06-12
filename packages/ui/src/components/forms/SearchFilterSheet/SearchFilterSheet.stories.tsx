@@ -1,4 +1,4 @@
-import React from 'react';
+
 import type { Meta, StoryObj } from '@storybook/react';
 import { SearchFilterSheet } from './SearchFilterSheet';
 import type { FilterState } from './SearchFilterSheet.types';
