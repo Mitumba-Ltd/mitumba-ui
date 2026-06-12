@@ -1,6 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { tokens } from '@mitumba/tokens';
 import { STIScoreChip } from '../STIScoreChip';
 import { MitumbaAvatar } from '../../foundation';
@@ -19,6 +20,8 @@ export function SellerCard({
   totalListings,
   isVaziFeatured = false,
   onTap,
+  actionLabel,
+  onAction,
 }: SellerCardProps): React.ReactElement {
   return (
     <Box
@@ -35,6 +38,7 @@ export function SellerCard({
       sx={{
         display: 'flex',
         alignItems: 'center',
+        flexWrap: 'wrap',
         gap: `${tokens.spacing.base}px`,
         p: `${tokens.spacing.lg}px`,
         borderRadius: `${tokens.radius.lg}px`,
@@ -91,6 +95,28 @@ export function SellerCard({
 
       {/* STI Score */}
       <STIScoreChip score={stiScore} compact />
+
+      {/* Action button */}
+      {actionLabel && (
+        <Button
+          variant="outlined"
+          fullWidth
+          onClick={(e) => { e.stopPropagation(); onAction?.(); }}
+          sx={{
+            mt: `${tokens.spacing.md}px`,
+            width: '100%',
+            borderColor: tokens.colors.border,
+            color: tokens.colors.textPrimary,
+            fontWeight: 600,
+            fontSize: tokens.typography.fontSizes.sm,
+            textTransform: 'none',
+            borderRadius: `${tokens.radius.md}px`,
+            '&:hover': { borderColor: tokens.colors.green, color: tokens.colors.green },
+          }}
+        >
+          {actionLabel}
+        </Button>
+      )}
     </Box>
   );
 }
