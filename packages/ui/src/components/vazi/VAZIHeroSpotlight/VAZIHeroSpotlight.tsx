@@ -58,22 +58,20 @@ export function VAZIHeroSpotlight({
         )}
       </Box>
 
-      {/* Models row */}
+      {/* Models row — evenly spaced, contained */}
       <Box
         sx={{
-          display: 'flex',
-          alignItems: 'flex-end',
-          justifyContent: { xs: 'flex-start', md: 'center' },
-          gap: { xs: `${tokens.spacing.sm}px`, md: `${tokens.spacing.lg}px` },
-          overflowX: { xs: 'auto', md: 'visible' },
+          display: 'grid',
+          gridTemplateColumns: { xs: `repeat(${outfits.length}, 200px)`, md: `repeat(${outfits.length}, 1fr)` },
+          gap: { xs: `${tokens.spacing.sm}px`, md: `${tokens.spacing.md}px` },
+          overflowX: { xs: 'auto', md: 'hidden' },
           scrollbarWidth: 'none',
           '&::-webkit-scrollbar': { display: 'none' },
-          px: { xs: `${tokens.spacing.lg}px`, md: 0 },
-          py: `${tokens.spacing.xl}px`,
           minHeight: { xs: 320, md: 420 },
           background: 'linear-gradient(180deg, #f0f4f5 0%, #e8eef0 100%)',
           borderRadius: `${tokens.radius.xl}px`,
           position: 'relative',
+          p: { xs: `${tokens.spacing.md}px`, md: `${tokens.spacing.lg}px` },
         }}
       >
         {outfits.map((outfit) => (
@@ -106,25 +104,29 @@ export function VAZIHeroSpotlight({
   );
 }
 
-/** Single model figure — tappable */
+/** Single model figure — fills its grid cell, contained */
 function ModelFigure({ outfit, isActive, onClick }: { outfit: VAZIHeroOutfit; isActive: boolean; onClick: (e: React.MouseEvent<HTMLElement>) => void }): React.ReactElement {
   return (
     <Box
       onClick={onClick}
       sx={{
-        flexShrink: 0,
         cursor: 'pointer',
         height: { xs: 280, md: 380 },
-        transition: 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.3s',
-        transform: isActive ? 'scale(1.05)' : 'scale(1)',
-        filter: isActive ? 'drop-shadow(0 12px 24px rgba(0,0,0,0.12))' : 'drop-shadow(0 8px 16px rgba(0,0,0,0.06))',
-        '&:hover': { transform: 'scale(1.03)' },
+        display: 'flex',
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        borderRadius: `${tokens.radius.lg}px`,
+        transition: 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s',
+        transform: isActive ? 'scale(1.02)' : 'scale(1)',
+        boxShadow: isActive ? '0 8px 24px rgba(0,0,0,0.1)' : 'none',
+        '&:hover': { transform: 'scale(1.02)', boxShadow: '0 4px 16px rgba(0,0,0,0.08)' },
       }}
     >
       {outfit.modelMediaType === 'video' ? (
-        <Box component="video" src={outfit.modelMediaUrl} autoPlay muted loop playsInline sx={{ height: '100%', width: 'auto', objectFit: 'contain', display: 'block' }} />
+        <Box component="video" src={outfit.modelMediaUrl} autoPlay muted loop playsInline sx={{ height: '100%', width: 'auto', maxWidth: '100%', objectFit: 'contain', display: 'block' }} />
       ) : (
-        <Box component="img" src={outfit.modelMediaUrl} alt={outfit.modelAlt} sx={{ height: '100%', width: 'auto', objectFit: 'contain', display: 'block' }} />
+        <Box component="img" src={outfit.modelMediaUrl} alt={outfit.modelAlt} sx={{ height: '100%', width: 'auto', maxWidth: '100%', objectFit: 'contain', display: 'block' }} />
       )}
     </Box>
   );
