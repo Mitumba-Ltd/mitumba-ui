@@ -17,7 +17,7 @@ const outfits: VAZIHeroOutfit[] = [
 describe('VAZIHeroSpotlight', () => {
   it('renders VAZI header', () => {
     render(<MitumbaThemeProvider><VAZIHeroSpotlight outfits={outfits} /></MitumbaThemeProvider>);
-    expect(screen.getByText('VAZI')).toBeInTheDocument();
+    expect(screen.getByText('VAZI Featured')).toBeInTheDocument();
   });
 
   it('renders model images', () => {

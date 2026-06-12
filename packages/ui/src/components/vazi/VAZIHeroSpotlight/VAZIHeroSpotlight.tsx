@@ -17,6 +17,7 @@ import type { VAZIShowcaseItem } from '../VAZIShowcase/VAZIShowcase.types';
  */
 export function VAZIHeroSpotlight({
   outfits,
+  title = 'VAZI Featured',
   onShopLook,
   onItemClick,
   onSeeAll,
@@ -45,12 +46,9 @@ export function VAZIHeroSpotlight({
     <Box sx={{ mb: `${tokens.spacing.huge}px` }}>
       {/* Header */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: `${tokens.spacing.lg}px` }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.sm}px` }}>
-          <Typography sx={{ fontSize: tokens.typography.fontSizes.lg, fontWeight: 800, color: tokens.colors.textPrimary, fontFamily: tokens.typography.fontFamily, letterSpacing: '-0.02em' }}>
-            VAZI
-          </Typography>
-          <Box sx={{ bgcolor: tokens.colors.earthLight, color: tokens.colors.earth, fontSize: 10, fontWeight: 700, px: `${tokens.spacing.sm}px`, py: '2px', borderRadius: `${tokens.radius.sm}px` }}>AI</Box>
-        </Box>
+        <Typography sx={{ fontSize: tokens.typography.fontSizes.lg, fontWeight: 800, color: tokens.colors.textPrimary, fontFamily: tokens.typography.fontFamily, letterSpacing: '-0.02em' }}>
+          {title}
+        </Typography>
         {onSeeAll && (
           <Typography onClick={onSeeAll} sx={{ color: tokens.colors.green, fontWeight: 600, fontSize: 14, cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}>
             See all
