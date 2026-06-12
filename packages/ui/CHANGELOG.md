@@ -1,5 +1,15 @@
 # @mitumba/ui
 
+## 0.10.4
+
+### Patch Changes
+
+- ed8b17b: fix(vazi-hero): popover appears at click position — like Gmail hover card
+
+  Uses a virtual anchor element positioned at the cursor's clientX/clientY
+  coordinates instead of anchoring to the model element. The popover now
+  appears exactly where the user clicked.
+
 ## 0.10.3
 
 ### Patch Changes
