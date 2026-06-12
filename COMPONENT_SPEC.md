@@ -447,9 +447,62 @@ Stream of order/shop events.
 
 ---
 
-## Phase 14 — Page templates
+## Phase 14 — Messaging components
 
-### 14.1 `AuthPage`
+### 14.1 `ConversationList`
+
+Left panel of the inbox — shows all conversations with search + compose.
+
+Props:
+- `conversations: Conversation[]`
+- `activeId?: string | null`
+- `onSelect: (partnerId: string) => void`
+- `onSearch?: (query: string) => void`
+- `onCompose?: () => void`
+- `loading?: boolean`
+
+### 14.2 `MessageBubble`
+
+Individual chat message — supports text, file attachments, and image previews.
+
+Props:
+- `body: string`
+- `timestamp: string`
+- `isMine: boolean`
+- `senderName?: string`
+- `senderAvatarUrl?: string`
+- `attachment?: { type: 'file' | 'image'; name: string; size?: string; url: string }`
+
+### 14.3 `ChatThread`
+
+Right panel of the inbox — message thread with scrollable history and input bar.
+
+Props:
+- `messages: MessageBubbleProps[]`
+- `partnerName: string`
+- `partnerAvatarUrl?: string`
+- `partnerStatus?: 'online' | 'offline' | string`
+- `onSend: (body: string) => void`
+- `onAttach?: (file: File) => void`
+- `sending?: boolean`
+- `loading?: boolean`
+
+### 14.4 `InboxLayout`
+
+Split-panel messaging shell — composes ConversationList + ChatThread responsively.
+
+Props:
+- `conversationList: React.ReactNode`
+- `chatThread: React.ReactNode`
+- `title?: string`
+- `showMobileBack?: boolean`
+- `onMobileBack?: () => void`
+
+---
+
+## Phase 15 — Page templates
+
+### 15.1 `AuthPage`
 
 Unified authentication page component handling sign in, sign up, password recovery, and reset flows.
 
