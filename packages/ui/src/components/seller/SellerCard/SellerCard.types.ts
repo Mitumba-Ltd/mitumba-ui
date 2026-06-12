@@ -15,4 +15,8 @@ export interface SellerCardProps {
   isVaziFeatured?: boolean
   /** Called when the card is tapped/clicked. */
   onTap?: () => void
+  /** Optional action button label (e.g. "Visit Store"). Renders a button at the bottom. */
+  actionLabel?: string
+  /** Called when the action button is clicked. Does NOT fire onTap. */
+  onAction?: () => void
 }
