@@ -2,36 +2,44 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Popper from '@mui/material/Popper';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Fade from '@mui/material/Fade';
 import { tokens } from '@mitumba/tokens';
 import { AuthSubmitButton } from '../../foundation/AuthSubmitButton';
 import type { VAZIHeroSpotlightProps, VAZIHeroOutfit } from './VAZIHeroSpotlight.types';
 import type { VAZIShowcaseItem } from '../VAZIShowcase/VAZIShowcase.types';
 
 /**
- * VAZIHeroSpotlight — embeddable hero section for the home page.
- * Shows one featured model at a time with outfit items, auto-rotates.
- * Not full-page — sits inside a scrollable page alongside other content.
+ * VAZIHeroSpotlight — row of living models standing side by side.
+ * Tap/click a model → floating popover shows outfit details + "Shop" CTA.
+ * Clean, no clutter — just the models alive on a subtle background.
  */
 export function VAZIHeroSpotlight({
   outfits,
-  autoAdvanceMs = 8000,
   onShopLook,
   onItemClick,
   onSeeAll,
 }: VAZIHeroSpotlightProps): React.ReactElement {
-  const [current, setCurrent] = React.useState(0);
+  const [activeId, setActiveId] = React.useState<string | null>(null);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
-  // Auto-rotate
-  React.useEffect(() => {
-    if (!autoAdvanceMs || outfits.length <= 1) return undefined;
-    const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % outfits.length);
-    }, autoAdvanceMs);
-    return () => clearInterval(timer);
-  }, [autoAdvanceMs, outfits.length]);
+  const handleModelClick = (e: React.MouseEvent<HTMLElement>, id: string) => {
+    if (activeId === id) {
+      setActiveId(null);
+      setAnchorEl(null);
+    } else {
+      setActiveId(id);
+      setAnchorEl(e.currentTarget);
+    }
+  };
 
-  const outfit = outfits[current];
-  if (!outfit) return <Box />;
+  const handleClose = () => {
+    setActiveId(null);
+    setAnchorEl(null);
+  };
+
+  const activeOutfit = outfits.find((o) => o.id === activeId);
 
   return (
     <Box sx={{ mb: `${tokens.spacing.huge}px` }}>
@@ -44,114 +52,129 @@ export function VAZIHeroSpotlight({
           <Box sx={{ bgcolor: tokens.colors.earthLight, color: tokens.colors.earth, fontSize: 10, fontWeight: 700, px: `${tokens.spacing.sm}px`, py: '2px', borderRadius: `${tokens.radius.sm}px` }}>AI</Box>
         </Box>
         {onSeeAll && (
-          <Typography
-            onClick={onSeeAll}
-            sx={{ color: tokens.colors.green, fontWeight: 600, fontSize: 14, cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
-          >
+          <Typography onClick={onSeeAll} sx={{ color: tokens.colors.green, fontWeight: 600, fontSize: 14, cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}>
             See all
           </Typography>
         )}
       </Box>
 
-      {/* Main spotlight area */}
-      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, borderRadius: `${tokens.radius.xl}px`, overflow: 'hidden', bgcolor: '#f0f4f5', position: 'relative', minHeight: { xs: 420, md: 400 } }}>
-
-        {/* Model area */}
-        <Box sx={{ flex: { xs: 'none', md: 1 }, height: { xs: 300, md: '100%' }, position: 'relative', display: 'flex', alignItems: 'flex-end', justifyContent: 'center', background: 'linear-gradient(160deg, #e8f0f2 0%, #dce8ec 100%)' }}>
-          {outfits.map((o, i) => (
-            <Box
-              key={o.id}
-              sx={{
-                position: 'absolute',
-                bottom: 0,
-                left: '50%',
-                transform: `translateX(-50%) scale(${i === current ? 1 : 0.9})`,
-                opacity: i === current ? 1 : 0,
-                transition: 'all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                height: '95%',
-                pointerEvents: i === current ? 'auto' : 'none',
-              }}
-            >
-              {o.modelMediaType === 'video' ? (
-                <Box component="video" src={o.modelMediaUrl} autoPlay muted loop playsInline sx={{ height: '100%', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 12px 32px rgba(0,0,0,0.1))' }} />
-              ) : (
-                <Box component="img" src={o.modelMediaUrl} alt={o.modelAlt} sx={{ height: '100%', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 12px 32px rgba(0,0,0,0.1))' }} />
-              )}
-            </Box>
-          ))}
-
-          {/* Dots */}
-          {outfits.length > 1 && (
-            <Box sx={{ position: 'absolute', bottom: `${tokens.spacing.lg}px`, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '6px', zIndex: 5 }}>
-              {outfits.map((o, i) => (
-                <Box
-                  key={o.id}
-                  onClick={() => setCurrent(i)}
-                  sx={{
-                    width: i === current ? 16 : 6,
-                    height: 6,
-                    borderRadius: `${tokens.radius.full}px`,
-                    bgcolor: i === current ? tokens.colors.green : 'rgba(0,0,0,0.2)',
-                    cursor: 'pointer',
-                    transition: tokens.motion.transitions.interaction,
-                  }}
-                />
-              ))}
-            </Box>
-          )}
-        </Box>
-
-        {/* Outfit panel — desktop: right side, mobile: below */}
-        <OutfitCard outfit={outfit} onItemClick={onItemClick} onShopLook={onShopLook} />
+      {/* Models row — evenly spaced, contained */}
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: `repeat(${outfits.length}, 200px)`, md: `repeat(${outfits.length}, 1fr)` },
+          gap: { xs: `${tokens.spacing.sm}px`, md: `${tokens.spacing.md}px` },
+          overflowX: { xs: 'auto', md: 'hidden' },
+          scrollbarWidth: 'none',
+          '&::-webkit-scrollbar': { display: 'none' },
+          minHeight: { xs: 320, md: 420 },
+          background: 'linear-gradient(180deg, #f0f4f5 0%, #e8eef0 100%)',
+          borderRadius: `${tokens.radius.xl}px`,
+          position: 'relative',
+          p: { xs: `${tokens.spacing.md}px`, md: `${tokens.spacing.lg}px` },
+        }}
+      >
+        {outfits.map((outfit) => (
+          <ModelFigure
+            key={outfit.id}
+            outfit={outfit}
+            isActive={activeId === outfit.id}
+            onClick={(e) => handleModelClick(e, outfit.id)}
+          />
+        ))}
       </Box>
+
+      {/* Floating popover */}
+      <Popper open={!!activeOutfit} anchorEl={anchorEl} placement="top" transition sx={{ zIndex: 1300 }}>
+        {({ TransitionProps }) => (
+          // eslint-disable-next-line react/jsx-props-no-spreading
+          <Fade {...TransitionProps} timeout={200}>
+            <Box>
+              <ClickAwayListener onClickAway={handleClose}>
+                <Box>
+                  {activeOutfit && (
+                    <OutfitPopover outfit={activeOutfit} onItemClick={onItemClick} onShopLook={onShopLook} />
+                  )}
+                </Box>
+              </ClickAwayListener>
+            </Box>
+          </Fade>
+        )}
+      </Popper>
     </Box>
   );
 }
 
-function OutfitCard({ outfit, onItemClick, onShopLook }: { outfit: VAZIHeroOutfit; onItemClick?: (id: string) => void; onShopLook?: (id: string) => void }): React.ReactElement {
+/** Single model figure — fills its grid cell, contained */
+function ModelFigure({ outfit, isActive, onClick }: { outfit: VAZIHeroOutfit; isActive: boolean; onClick: (e: React.MouseEvent<HTMLElement>) => void }): React.ReactElement {
   return (
-    <Box sx={{
-      width: { xs: '100%', md: 280 },
-      p: `${tokens.spacing.xl}px`,
-      display: 'flex',
-      flexDirection: 'column',
-      gap: `${tokens.spacing.md}px`,
-      bgcolor: 'rgba(255,255,255,0.7)',
-      backdropFilter: 'blur(12px)',
-      borderLeft: { xs: 'none', md: '1px solid rgba(255,255,255,0.5)' },
-      borderTop: { xs: '1px solid rgba(255,255,255,0.5)', md: 'none' },
-    }}>
-      <Typography sx={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.5px', color: '#888', textTransform: 'uppercase' }}>
-        Today&apos;s look
-      </Typography>
-      <Typography sx={{ fontSize: tokens.typography.fontSizes.base, fontWeight: 700, color: tokens.colors.textPrimary }}>
+    <Box
+      onClick={onClick}
+      sx={{
+        cursor: 'pointer',
+        height: { xs: 280, md: 380 },
+        display: 'flex',
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        borderRadius: `${tokens.radius.lg}px`,
+        transition: 'transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s',
+        transform: isActive ? 'scale(1.02)' : 'scale(1)',
+        boxShadow: isActive ? '0 8px 24px rgba(0,0,0,0.1)' : 'none',
+        '&:hover': { transform: 'scale(1.02)', boxShadow: '0 4px 16px rgba(0,0,0,0.08)' },
+      }}
+    >
+      {outfit.modelMediaType === 'video' ? (
+        <Box component="video" src={outfit.modelMediaUrl} autoPlay muted loop playsInline sx={{ height: '100%', width: 'auto', maxWidth: '100%', objectFit: 'contain', display: 'block' }} />
+      ) : (
+        <Box component="img" src={outfit.modelMediaUrl} alt={outfit.modelAlt} sx={{ height: '100%', width: 'auto', maxWidth: '100%', objectFit: 'contain', display: 'block' }} />
+      )}
+    </Box>
+  );
+}
+
+/** Floating outfit popover — appears above the tapped model */
+function OutfitPopover({ outfit, onItemClick, onShopLook }: { outfit: VAZIHeroOutfit; onItemClick?: (id: string) => void; onShopLook?: (id: string) => void }): React.ReactElement {
+  return (
+    <Box
+      sx={{
+        width: 260,
+        bgcolor: 'rgba(255,255,255,0.92)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        border: '1px solid rgba(255,255,255,0.6)',
+        borderRadius: `${tokens.radius.lg}px`,
+        boxShadow: '0 12px 40px rgba(0,0,0,0.12), 0 4px 12px rgba(0,0,0,0.06)',
+        p: `${tokens.spacing.lg}px`,
+        mb: `${tokens.spacing.md}px`,
+      }}
+    >
+      {/* Outfit name */}
+      <Typography sx={{ fontSize: tokens.typography.fontSizes.base, fontWeight: 700, color: tokens.colors.textPrimary, mb: `${tokens.spacing.md}px` }}>
         {outfit.name}
       </Typography>
 
-      {/* Items */}
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.sm}px`, flex: 1 }}>
+      {/* Item thumbnails row */}
+      <Box sx={{ display: 'flex', gap: `${tokens.spacing.sm}px`, mb: `${tokens.spacing.lg}px`, overflowX: 'auto' }}>
         {outfit.items.map((item: VAZIShowcaseItem) => (
           <Box
             key={item.id}
-            onClick={() => onItemClick?.(item.id)}
-            sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.sm}px`, cursor: onItemClick ? 'pointer' : 'default', py: `${tokens.spacing.xs}px`, borderRadius: `${tokens.radius.sm}px`, transition: tokens.motion.transitions.interaction, '&:hover': onItemClick ? { bgcolor: 'rgba(0,0,0,0.03)' } : {} }}
-          >
-            <Box component="img" src={item.imageUrl} alt={item.title} sx={{ width: 36, height: 36, borderRadius: `${tokens.radius.sm}px`, objectFit: 'cover', flexShrink: 0 }} />
-            <Box sx={{ flex: 1, minWidth: 0 }}>
-              <Typography sx={{ fontSize: 12, fontWeight: 600, color: '#333', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</Typography>
-            </Box>
-            <Typography sx={{ fontSize: 11, fontWeight: 700, color: '#555', flexShrink: 0 }}>KES {item.price.toLocaleString()}</Typography>
-          </Box>
+            onClick={(e) => { e.stopPropagation(); onItemClick?.(item.id); }}
+            component="img"
+            src={item.imageUrl}
+            alt={item.title}
+            sx={{ width: 40, height: 40, borderRadius: `${tokens.radius.sm}px`, objectFit: 'cover', flexShrink: 0, cursor: onItemClick ? 'pointer' : 'default', border: '1px solid rgba(0,0,0,0.06)', '&:hover': { opacity: 0.8 } }}
+          />
         ))}
       </Box>
 
-      {/* Total + CTA */}
-      <Box sx={{ borderTop: '1px solid rgba(0,0,0,0.06)', pt: `${tokens.spacing.md}px` }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: `${tokens.spacing.sm}px` }}>
-          <Typography sx={{ fontSize: 11, color: '#888' }}>{outfit.items.length} items</Typography>
-          <Typography sx={{ fontSize: 15, fontWeight: 800, color: tokens.colors.textPrimary }}>KES {outfit.totalPrice.toLocaleString()}</Typography>
+      {/* Price + CTA */}
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <Box>
+          <Typography sx={{ fontSize: 11, color: tokens.colors.textSecondary }}>{outfit.items.length} items</Typography>
+          <Typography sx={{ fontSize: tokens.typography.fontSizes.md, fontWeight: 800, color: tokens.colors.textPrimary }}>KES {outfit.totalPrice.toLocaleString()}</Typography>
         </Box>
-        <AuthSubmitButton fullWidth label="Shop this look" onClick={() => onShopLook?.(outfit.id)} />
+        <AuthSubmitButton label="Shop" onClick={() => onShopLook?.(outfit.id)} />
       </Box>
     </Box>
   );

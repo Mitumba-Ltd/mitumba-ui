@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
 import '@testing-library/jest-dom/vitest'
 import React from 'react';
-import { cleanup, render, screen } from '@testing-library/react';
-import { afterEach, describe, it, expect } from 'vitest';
+import { cleanup, render, screen, fireEvent } from '@testing-library/react';
+import { afterEach, describe, it, expect, vi } from 'vitest';
 import { MitumbaThemeProvider } from '../../../theme';
 import { VAZIHeroSpotlight } from './VAZIHeroSpotlight';
 import type { VAZIHeroOutfit } from './VAZIHeroSpotlight.types';
@@ -10,7 +10,8 @@ import type { VAZIHeroOutfit } from './VAZIHeroSpotlight.types';
 afterEach(() => { cleanup(); });
 
 const outfits: VAZIHeroOutfit[] = [
-  { id: 'o1', modelMediaUrl: 'https://placehold.co/300x600', modelMediaType: 'image', modelAlt: 'Model 1', name: 'Test Look', totalPrice: 3000, items: [{ id: 'i1', title: 'Jacket', price: 2000, imageUrl: 'https://placehold.co/50' }, { id: 'i2', title: 'Jeans', price: 1000, imageUrl: 'https://placehold.co/50' }] },
+  { id: 'o1', modelMediaUrl: 'https://placehold.co/200x400', modelMediaType: 'image', modelAlt: 'Model 1', name: 'Test Look', totalPrice: 3000, items: [{ id: 'i1', title: 'Jacket', price: 2000, imageUrl: 'https://placehold.co/50' }, { id: 'i2', title: 'Jeans', price: 1000, imageUrl: 'https://placehold.co/50' }] },
+  { id: 'o2', modelMediaUrl: 'https://placehold.co/200x401', modelMediaType: 'image', modelAlt: 'Model 2', name: 'Second Look', totalPrice: 4000, items: [{ id: 'i3', title: 'Blazer', price: 2500, imageUrl: 'https://placehold.co/50' }] },
 ];
 
 describe('VAZIHeroSpotlight', () => {
@@ -19,24 +20,29 @@ describe('VAZIHeroSpotlight', () => {
     expect(screen.getByText('VAZI')).toBeInTheDocument();
   });
 
-  it('renders outfit name', () => {
+  it('renders model images', () => {
     render(<MitumbaThemeProvider><VAZIHeroSpotlight outfits={outfits} /></MitumbaThemeProvider>);
+    expect(screen.getByAltText('Model 1')).toBeInTheDocument();
+    expect(screen.getByAltText('Model 2')).toBeInTheDocument();
+  });
+
+  it('shows popover with outfit name when model clicked', () => {
+    render(<MitumbaThemeProvider><VAZIHeroSpotlight outfits={outfits} /></MitumbaThemeProvider>);
+    fireEvent.click(screen.getByAltText('Model 1'));
     expect(screen.getByText('Test Look')).toBeInTheDocument();
-  });
-
-  it('renders outfit items', () => {
-    render(<MitumbaThemeProvider><VAZIHeroSpotlight outfits={outfits} /></MitumbaThemeProvider>);
-    expect(screen.getByText('Jacket')).toBeInTheDocument();
-    expect(screen.getByText('Jeans')).toBeInTheDocument();
-  });
-
-  it('renders total price', () => {
-    render(<MitumbaThemeProvider><VAZIHeroSpotlight outfits={outfits} /></MitumbaThemeProvider>);
     expect(screen.getByText('KES 3,000')).toBeInTheDocument();
   });
 
-  it('renders shop button', () => {
-    render(<MitumbaThemeProvider><VAZIHeroSpotlight outfits={outfits} /></MitumbaThemeProvider>);
-    expect(screen.getByRole('button', { name: /Shop this look/i })).toBeInTheDocument();
+  it('calls onShopLook when Shop is clicked in popover', () => {
+    const onShopLook = vi.fn();
+    render(<MitumbaThemeProvider><VAZIHeroSpotlight outfits={outfits} onShopLook={onShopLook} /></MitumbaThemeProvider>);
+    fireEvent.click(screen.getByAltText('Model 1'));
+    fireEvent.click(screen.getByRole('button', { name: /Shop/i }));
+    expect(onShopLook).toHaveBeenCalledWith('o1');
+  });
+
+  it('renders See all link when onSeeAll provided', () => {
+    render(<MitumbaThemeProvider><VAZIHeroSpotlight outfits={outfits} onSeeAll={() => {}} /></MitumbaThemeProvider>);
+    expect(screen.getByText('See all')).toBeInTheDocument();
   });
 });

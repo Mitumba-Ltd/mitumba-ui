@@ -9,7 +9,7 @@ export interface VAZIHeroOutfit {
   modelMediaType: 'video' | 'image';
   /** Accessibility description */
   modelAlt: string;
-  /** Outfit name / style title */
+  /** Outfit name */
   name: string;
   /** Items in this outfit */
   items: VAZIShowcaseItem[];
@@ -18,13 +18,11 @@ export interface VAZIHeroOutfit {
 }
 
 export interface VAZIHeroSpotlightProps {
-  /** Featured outfits to rotate through (3-5 recommended) */
+  /** Outfits to display as standing models */
   outfits: VAZIHeroOutfit[];
-  /** Auto-rotate interval in ms — defaults to 8000 */
-  autoAdvanceMs?: number;
-  /** Called when "Shop this look" is tapped */
+  /** Called when "Shop" is tapped in the popover */
   onShopLook?: (outfitId: string) => void;
-  /** Called when an item thumbnail is tapped */
+  /** Called when an item in the popover is tapped */
   onItemClick?: (listingId: string) => void;
   /** Called when "See all" is tapped */
   onSeeAll?: () => void;
