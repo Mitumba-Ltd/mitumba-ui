@@ -1,5 +1,14 @@
 # @mitumba/ui
 
+## 0.10.2
+
+### Patch Changes
+
+- a3c06d6: feat(seller-card): add actionLabel + onAction props
+
+  Renders an outlined button at the bottom of SellerCard when actionLabel is
+  provided. Clicking the button fires onAction without triggering onTap.
+
 ## 0.10.1
 
 ### Patch Changes
