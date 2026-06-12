@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.12.0
+
+### Minor Changes
+
+- be8451a: feat(search): add SearchFilterSheet — bottom sheet (mobile) / sidebar panel (desktop) for filtering
+
 ## 0.11.0
 
 ### Minor Changes
