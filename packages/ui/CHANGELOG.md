@@ -1,5 +1,13 @@
 # @mitumba/ui
 
+## 0.10.3
+
+### Patch Changes
+
+- a125ed1: feat(vazi-hero): add title prop, default to "VAZI Featured"
+
+  Replaces hardcoded "VAZI" + "AI" badge with a single configurable title prop.
+
 ## 0.10.2
 
 ### Patch Changes
