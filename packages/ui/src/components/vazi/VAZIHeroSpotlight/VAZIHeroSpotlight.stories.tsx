@@ -13,7 +13,7 @@ const meta: Meta<typeof VAZIHeroSpotlight> = {
     onItemClick: { action: 'onItemClick' },
     onSeeAll: { action: 'onSeeAll' },
   },
-  decorators: [(Story) => <Box sx={{ maxWidth: 900, mx: 'auto' }}><Story /></Box>],
+  decorators: [(Story) => <Box sx={{ maxWidth: 1100, mx: 'auto' }}><Story /></Box>],
 };
 
 export default meta;
@@ -24,7 +24,7 @@ const OUTFITS: VAZIHeroOutfit[] = [
     id: 'hero-1',
     modelMediaUrl: 'https://github.com/Mitumba-Ltd/assets/raw/main/lab/vazi/p-webm/webm-video-of-a-guy-001.webm',
     modelMediaType: 'video',
-    modelAlt: 'Model in streetwear outfit',
+    modelAlt: 'Model in earth tone outfit',
     name: 'Earth Tone Minimalist',
     totalPrice: 4200,
     items: [
@@ -38,7 +38,7 @@ const OUTFITS: VAZIHeroOutfit[] = [
     id: 'hero-2',
     modelMediaUrl: 'https://github.com/Mitumba-Ltd/assets/raw/main/lab/vazi/p-webm/webm-video-of-a-guy-001.webm',
     modelMediaType: 'video',
-    modelAlt: 'Model in evening outfit',
+    modelAlt: 'Model in streetwear',
     name: 'Streetwear Fusion',
     totalPrice: 6800,
     items: [
@@ -60,18 +60,27 @@ const OUTFITS: VAZIHeroOutfit[] = [
       { id: 'h10', title: 'Retro Trainers', price: 900, imageUrl: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&w=100&q=80' },
     ],
   },
+  {
+    id: 'hero-4',
+    modelMediaUrl: 'https://github.com/Mitumba-Ltd/assets/raw/main/lab/vazi/p-webm/webm-video-of-a-guy-001.webm',
+    modelMediaType: 'video',
+    modelAlt: 'Model in vintage look',
+    name: 'Vintage Revival',
+    totalPrice: 5100,
+    items: [
+      { id: 'h11', title: 'Vintage Leather Jacket', price: 3200, imageUrl: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=100&q=80' },
+      { id: 'h12', title: 'Band Tee', price: 900, imageUrl: 'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=100&q=80' },
+      { id: 'h13', title: 'Chelsea Boots', price: 1000, imageUrl: 'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&w=100&q=80' },
+    ],
+  },
 ];
 
 export const Default: Story = {
   args: { outfits: OUTFITS },
 };
 
-export const SingleOutfit: Story = {
-  args: { outfits: [OUTFITS[0]] },
-};
-
-export const NoAutoAdvance: Story = {
-  args: { outfits: OUTFITS, autoAdvanceMs: 0 },
+export const TwoModels: Story = {
+  args: { outfits: OUTFITS.slice(0, 2) },
 };
 
 export const Mobile: Story = {
