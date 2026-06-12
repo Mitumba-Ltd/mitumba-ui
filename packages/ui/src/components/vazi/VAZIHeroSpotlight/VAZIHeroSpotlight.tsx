@@ -87,6 +87,7 @@ export function VAZIHeroSpotlight({
       {/* Floating popover */}
       <Popper open={!!activeOutfit} anchorEl={anchorEl} placement="top" transition sx={{ zIndex: 1300 }}>
         {({ TransitionProps }) => (
+          // eslint-disable-next-line react/jsx-props-no-spreading
           <Fade {...TransitionProps} timeout={200}>
             <Box>
               <ClickAwayListener onClickAway={handleClose}>
