@@ -23,7 +23,7 @@ export function VAZIHeroSpotlight({
   onSeeAll,
 }: VAZIHeroSpotlightProps): React.ReactElement {
   const [activeId, setActiveId] = React.useState<string | null>(null);
-  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const [anchorEl, setAnchorEl] = React.useState<{ getBoundingClientRect: () => DOMRect } | null>(null);
 
   const handleModelClick = (e: React.MouseEvent<HTMLElement>, id: string) => {
     if (activeId === id) {
@@ -31,7 +31,12 @@ export function VAZIHeroSpotlight({
       setAnchorEl(null);
     } else {
       setActiveId(id);
-      setAnchorEl(e.currentTarget);
+      // Virtual anchor at click position — like Gmail hover card
+      const x = e.clientX;
+      const y = e.clientY;
+      setAnchorEl({
+        getBoundingClientRect: () => new DOMRect(x, y, 0, 0),
+      });
     }
   };
 
@@ -83,7 +88,7 @@ export function VAZIHeroSpotlight({
       </Box>
 
       {/* Floating popover */}
-      <Popper open={!!activeOutfit} anchorEl={anchorEl} placement="top" transition sx={{ zIndex: 1300 }}>
+      <Popper open={!!activeOutfit} anchorEl={anchorEl} placement="bottom-start" transition sx={{ zIndex: 1300 }}>
         {({ TransitionProps }) => (
           // eslint-disable-next-line react/jsx-props-no-spreading
           <Fade {...TransitionProps} timeout={200}>
