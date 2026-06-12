@@ -20,6 +20,8 @@ export interface VAZIHeroOutfit {
 export interface VAZIHeroSpotlightProps {
   /** Outfits to display as standing models */
   outfits: VAZIHeroOutfit[];
+  /** Section title — defaults to "VAZI Featured" */
+  title?: string;
   /** Called when "Shop" is tapped in the popover */
   onShopLook?: (outfitId: string) => void;
   /** Called when an item in the popover is tapped */
