@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable no-use-before-define */
 import React from 'react';
 import Box from '@mui/material/Box';

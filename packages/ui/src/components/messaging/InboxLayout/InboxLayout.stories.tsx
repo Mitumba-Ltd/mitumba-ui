@@ -14,8 +14,8 @@ const meta: Meta<typeof InboxLayout> = {
 export default meta;
 type Story = StoryObj<typeof InboxLayout>;
 
-const MockList = () => <Box sx={{ p: 2 }}><Typography>Conversations go here</Typography></Box>;
-const MockThread = () => <Box sx={{ p: 2 }}><Typography>Chat thread goes here</Typography></Box>;
+function MockList() { return <Box sx={{ p: 2 }}><Typography>Conversations go here</Typography></Box>}
+function MockThread() { return <Box sx={{ p: 2 }}><Typography>Chat thread goes here</Typography></Box>}
 
 export const Desktop: Story = {
   args: { conversationList: <MockList />, chatThread: <MockThread /> },

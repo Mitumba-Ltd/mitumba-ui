@@ -15,7 +15,7 @@ describe('MessageBubble', () => {
   });
 
   it('renders timestamp', () => {
-    render(<MitumbaThemeProvider><MessageBubble body="Hi" timestamp="2:15 PM" isMine={true} /></MitumbaThemeProvider>);
+    render(<MitumbaThemeProvider><MessageBubble body="Hi" timestamp="2:15 PM" isMine /></MitumbaThemeProvider>);
     expect(screen.getByText('2:15 PM')).toBeInTheDocument();
   });
 
@@ -25,7 +25,7 @@ describe('MessageBubble', () => {
   });
 
   it('renders file attachment with name', () => {
-    render(<MitumbaThemeProvider><MessageBubble body="Check this" timestamp="11:00 AM" isMine={true} attachment={{ type: 'file', name: 'receipt.pdf', size: '1.2 MB', url: '#' }} /></MitumbaThemeProvider>);
+    render(<MitumbaThemeProvider><MessageBubble body="Check this" timestamp="11:00 AM" isMine attachment={{ type: 'file', name: 'receipt.pdf', size: '1.2 MB', url: '#' }} /></MitumbaThemeProvider>);
     expect(screen.getByText('receipt.pdf')).toBeInTheDocument();
     expect(screen.getByText('1.2 MB')).toBeInTheDocument();
   });

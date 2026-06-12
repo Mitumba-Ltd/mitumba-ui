@@ -1,4 +1,4 @@
-/* eslint-disable no-use-before-define */
+/* eslint-disable react/no-array-index-key, react/jsx-props-no-spreading, react/jsx-no-bind, no-use-before-define */
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
