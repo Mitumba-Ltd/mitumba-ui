@@ -16,3 +16,4 @@ export { PriceTag, DeliveryBadge, CartItem, OrderStatusTimeline, EscrowStatusBan
 export type { PriceTagProps, DeliveryBadgeProps, CartItemProps, OrderStatusTimelineProps, OrderStatus, OrderEvent, EscrowStatusBannerProps, EscrowStatus } from './commerce'
 export { VAZIOutfitCard, VAZIOutfitCardSkeleton, VAZIBadge, VAZIFeedSection, CompleteThisLookPanel, VAZIShowcase, VAZIHeroSpotlight } from './vazi'
 export type { VAZIOutfitCardProps, VAZIOutfitItem, VAZIOutfitCardSkeletonProps, VAZIBadgeProps, VAZIFeedSectionProps, CompleteThisLookPanelProps, VAZIShowcaseProps, VAZIShowcaseOutfit, VAZIShowcaseItem, VAZIHeroSpotlightProps, VAZIHeroOutfit } from './vazi'
+export * from './messaging'
