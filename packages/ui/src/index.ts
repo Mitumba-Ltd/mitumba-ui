@@ -42,6 +42,10 @@ export type { MitumbaCheckboxProps, MitumbaRadioProps, MitumbaSwitchProps, Mitum
 export { MitumbaBanner, MitumbaSkeleton, MitumbaToast, MitumbaModal, EmptyState, ErrorState, OfflineBanner } from './components'
 export type { MitumbaBannerProps, BannerSeverity, MitumbaSkeletonProps, MitumbaToastProps, MitumbaModalProps, EmptyStateProps, ErrorStateProps, OfflineBannerProps } from './components'
 
+// Messaging
+export { ConversationList, MessageBubble, ChatThread, InboxLayout } from './components'
+export type { ConversationListProps, Conversation, MessageBubbleProps, MessageAttachment, ChatThreadProps, InboxLayoutProps } from './components'
+
 // Theme
 export { MitumbaThemeProvider, mitumbaTheme } from './theme'
 export type { MitumbaThemeProviderProps } from './theme'
