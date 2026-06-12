@@ -27,8 +27,8 @@ export { VAZIOutfitCard, VAZIOutfitCardSkeleton, VAZIBadge, VAZIFeedSection, Com
 export type { VAZIOutfitCardProps, VAZIOutfitItem, VAZIOutfitCardSkeletonProps, VAZIBadgeProps, VAZIFeedSectionProps, CompleteThisLookPanelProps, VAZIShowcaseProps, VAZIShowcaseOutfit, VAZIShowcaseItem, VAZIHeroSpotlightProps, VAZIHeroOutfit } from './components'
 
 // Forms
-export { PhoneInput, OTPInput, ImageUploader, MitumbaSearchBar } from './components'
-export type { PhoneInputProps, OTPInputProps, ImageUploaderProps, UploadedImage, MitumbaSearchBarProps } from './components'
+export { PhoneInput, OTPInput, ImageUploader, MitumbaSearchBar, SearchFilterSheet } from './components'
+export type { PhoneInputProps, OTPInputProps, ImageUploaderProps, UploadedImage, MitumbaSearchBarProps, SearchFilterSheetProps, FilterState } from './components'
 
 // Data
 export { StatsCard, ActivityFeed } from './components'
