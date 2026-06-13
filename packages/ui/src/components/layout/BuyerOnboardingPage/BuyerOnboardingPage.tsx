@@ -31,9 +31,20 @@ export function BuyerOnboardingPage({
   const [displayName, setDisplayName] = React.useState(initialData?.display_name ?? '');
   const [county, setCounty] = React.useState(initialData?.county ?? '');
   const [phone, setPhone] = React.useState(initialData?.phone ?? '');
+  const [touched, setTouched] = React.useState<Record<string, boolean>>({});
+
+  const errors: Record<string, string> = {};
+  if (!displayName.trim()) errors.displayName = 'Display name is required';
+  if (!county) errors.county = 'Please select a county';
+  if (!phone.trim() || phone.trim().length < 9) errors.phone = 'Enter a valid phone number (min 9 digits)';
+
+  const isValid = Object.keys(errors).length === 0;
+
+  const handleBlur = (field: string) => setTouched((prev) => ({ ...prev, [field]: true }));
 
   const handleSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();
+    if (!isValid) return;
     onComplete({ display_name: displayName, county, phone });
   };
 
@@ -104,9 +115,11 @@ export function BuyerOnboardingPage({
                 label="Display name"
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
+                onBlur={() => handleBlur('displayName')}
                 required
                 placeholder="e.g. Amina K."
-                helperText="This is how sellers will see you"
+                helperText={touched.displayName && errors.displayName ? errors.displayName : 'This is how sellers will see you'}
+                error={!!touched.displayName && !!errors.displayName}
               />
 
               <FormControl fullWidth required>
@@ -130,9 +143,11 @@ export function BuyerOnboardingPage({
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+                onBlur={() => handleBlur('phone')}
                 required
                 placeholder="712 345 678"
-                helperText="For delivery updates and M-Pesa payments"
+                helperText={touched.phone && errors.phone ? errors.phone : 'For delivery updates and M-Pesa payments'}
+                error={!!touched.phone && !!errors.phone}
                 InputProps={{
                   startAdornment: <InputAdornment position="start">+254</InputAdornment>,
                 }}
@@ -144,6 +159,7 @@ export function BuyerOnboardingPage({
                 fullWidth
                 label={loading ? 'Setting up...' : 'Continue'}
                 loading={loading}
+                disabled={!isValid}
                 onClick={() => handleSubmit()}
               />
             </Box>

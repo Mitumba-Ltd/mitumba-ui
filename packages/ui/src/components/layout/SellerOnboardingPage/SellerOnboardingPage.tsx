@@ -238,7 +238,20 @@ export function SellerOnboardingPage({
   const set = (patch: Partial<SellerOnboardingData>) =>
     setData((prev) => ({ ...prev, ...patch }));
 
-  const advance = () => { const n = step + 1; setStep(n); onStepChange?.(n); };
+  // Step-level validation
+  const isStepValid = (): boolean => {
+    if (step === 0) return true; // welcome — always valid
+    if (step === 1) return !!(data.fullName?.trim() && data.phone?.trim() && data.idNumber?.trim() && data.county);
+    if (step === 2) {
+      if (data.sellerType === 'business') return !!(data.businessName?.trim());
+      return true; // individual has no required fields on step 2
+    }
+    if (step === 3) return !!(data.categories?.length && data.conditionGrades?.length);
+    if (step === 4) return !!(data.storeName?.trim());
+    return true;
+  };
+
+  const advance = () => { if (!isStepValid()) return; const n = step + 1; setStep(n); onStepChange?.(n); };
   const back = () => { const n = step - 1; setStep(n); onStepChange?.(n); };
   const finish = () => { onComplete?.(data as SellerOnboardingData); };
 
@@ -541,7 +554,7 @@ export function SellerOnboardingPage({
           {step > 0 && step < 5 && (
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: `${tokens.spacing.xxxl}px`, pt: `${tokens.spacing.xl}px`, borderTop: `1px solid ${tokens.colors.border}` }}>
               <AuthSubmitButton label="Back" onClick={back} />
-              <AuthSubmitButton label={step === 4 ? 'Finish setup' : 'Continue'} onClick={advance} loading={loading} />
+              <AuthSubmitButton label={step === 4 ? 'Finish setup' : 'Continue'} onClick={advance} loading={loading} disabled={!isStepValid()} />
             </Box>
           )}
         </Box>
