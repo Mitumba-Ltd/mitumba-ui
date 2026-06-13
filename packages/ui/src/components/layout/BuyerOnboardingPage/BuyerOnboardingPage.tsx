@@ -4,7 +4,7 @@ import {
   Backdrop, CircularProgress, InputAdornment,
 } from '@mui/material';
 import { tokens } from '@mitumba/tokens';
-import { AuthSubmitButton } from '../../foundation/AuthSubmitButton';
+import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
 import type { BuyerOnboardingPageProps } from './BuyerOnboardingPage.types';
 
 const KENYA_COUNTIES = [
@@ -155,7 +155,7 @@ export function BuyerOnboardingPage({
             </Box>
 
             <Box sx={{ mt: `${tokens.spacing.xxxl}px` }}>
-              <AuthSubmitButton
+              <MitumbaPrimaryButton
                 fullWidth
                 label={loading ? 'Setting up...' : 'Continue'}
                 loading={loading}

@@ -3,7 +3,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { tokens } from '@mitumba/tokens';
-import { AuthSubmitButton } from '../../foundation/AuthSubmitButton';
+import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
 import type { VAZIShowcaseProps, VAZIShowcaseOutfit, VAZIShowcaseItem } from './VAZIShowcase.types';
 
 /**
@@ -221,7 +221,7 @@ export function VAZIShowcase({
 
           {sheetExpanded && (
             <Box sx={{ mt: `${tokens.spacing.lg}px` }}>
-              <AuthSubmitButton fullWidth label="Shop this look" onClick={() => onShopAll?.(activeOutfit.id)} />
+              <MitumbaPrimaryButton fullWidth label="Shop this look" onClick={() => onShopAll?.(activeOutfit.id)} />
             </Box>
           )}
         </Box>
@@ -333,7 +333,7 @@ function DesktopOutfitPanel({ outfit, onItemClick, onShopAll }: { outfit: VAZISh
           <Typography sx={{ fontSize: 11, color: '#888' }}>Total</Typography>
           <Typography sx={{ fontSize: 16, fontWeight: 800, color: '#222' }}>KES {outfit.totalPrice.toLocaleString()}</Typography>
         </Box>
-        <AuthSubmitButton fullWidth label="Shop this look" onClick={() => onShopAll?.(outfit.id)} />
+        <MitumbaPrimaryButton fullWidth label="Shop this look" onClick={() => onShopAll?.(outfit.id)} />
       </Box>
     </Box>
   );

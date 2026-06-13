@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import ButtonBase from '@mui/material/ButtonBase';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { tokens } from '@mitumba/tokens';
-import { AuthSubmitButton } from '../../foundation/AuthSubmitButton';
+import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
 import type { UnauthenticatedStateProps } from './UnauthenticatedState.types';
 
 /**
@@ -83,7 +83,7 @@ export function UnauthenticatedState({
 
       {/* Sign In button */}
       <Box sx={{ width: '100%', maxWidth: 300, mb: secondaryAction ? `${tokens.spacing.lg}px` : 0 }}>
-        <AuthSubmitButton fullWidth label={signInLabel} onClick={onSignIn} />
+        <MitumbaPrimaryButton fullWidth label={signInLabel} onClick={onSignIn} />
       </Box>
 
       {/* Secondary action */}

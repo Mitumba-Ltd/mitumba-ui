@@ -11,7 +11,7 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { tokens } from '@mitumba/tokens';
-import { AuthSubmitButton } from '../../foundation/AuthSubmitButton';
+import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
 import type { SellerOnboardingPageProps, SellerOnboardingData } from './SellerOnboardingPage.types';
 
 const TOTAL_STEPS = 5;
@@ -382,7 +382,7 @@ export function SellerOnboardingPage({
                   </Box>
                 ))}
               </Box>
-              <AuthSubmitButton fullWidth label="Let's get started" onClick={advance} />
+              <MitumbaPrimaryButton fullWidth label="Let's get started" onClick={advance} />
             </Box>
           )}
 
@@ -546,15 +546,15 @@ export function SellerOnboardingPage({
                   </Box>
                 ))}
               </Box>
-              <AuthSubmitButton fullWidth label="Start listing my items →" onClick={finish} loading={loading} />
+              <MitumbaPrimaryButton fullWidth label="Start listing my items →" onClick={finish} loading={loading} />
             </Box>
           )}
 
           {/* Navigation */}
           {step > 0 && step < 5 && (
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: `${tokens.spacing.xxxl}px`, pt: `${tokens.spacing.xl}px`, borderTop: `1px solid ${tokens.colors.border}` }}>
-              <AuthSubmitButton label="Back" onClick={back} />
-              <AuthSubmitButton label={step === 4 ? 'Finish setup' : 'Continue'} onClick={advance} loading={loading} disabled={!isStepValid()} />
+              <MitumbaPrimaryButton label="Back" onClick={back} variant="outline" />
+              <MitumbaPrimaryButton label={step === 4 ? 'Finish setup' : 'Continue'} onClick={advance} loading={loading} disabled={!isStepValid()} />
             </Box>
           )}
         </Box>
