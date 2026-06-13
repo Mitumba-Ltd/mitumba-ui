@@ -1,90 +1,52 @@
-import React, { useState } from 'react'
-import type { Meta, StoryObj } from '@storybook/react'
-import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import Stack from '@mui/material/Stack'
-import { MobileBottomNav } from './MobileBottomNav'
-import type { MobileBottomNavProps, BottomNavVariant } from './MobileBottomNav.types'
+import React, { useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import { MobileBottomNav } from './MobileBottomNav';
 
 const meta: Meta<typeof MobileBottomNav> = {
   title: 'Navigation/MobileBottomNav',
   component: MobileBottomNav,
-  parameters: {
-    layout: 'fullscreen',
-  },
+  parameters: { layout: 'fullscreen', viewport: { defaultViewport: 'mobile' } },
   tags: ['autodocs'],
-}
+};
 
-export default meta
+export default meta;
+type Story = StoryObj<typeof MobileBottomNav>;
 
-type Story = StoryObj<typeof MobileBottomNav>
-
-function InteractiveNav({ variant = 'm3' as BottomNavVariant }: Partial<MobileBottomNavProps>) {
-  const [activeTab, setActiveTab] = useState('home')
+function Interactive({ variant }: { variant: string }) {
+  const [active, setActive] = useState('home');
   return (
-    <Box sx={{ height: 200, width: '100%', position: 'relative', bgcolor: '#f5f5f5' }}>
-      <Box sx={{ p: 4 }}>
-         <Typography variant="subtitle2" color="text.secondary">
-           Variant: <strong>{variant}</strong>
-         </Typography>
-      </Box>
-      <MobileBottomNav 
-        variant={variant}
-        activeTab={activeTab} 
-        onTabChange={setActiveTab} 
-        sx={{ position: 'absolute' }}
-      />
+    <Box sx={{ height: '100vh', bgcolor: '#f8f8f8', pt: 4, px: 2 }}>
+      <Typography variant="h6" sx={{ fontWeight: 800, mb: 1 }}>Variant: {variant}</Typography>
+      <Typography variant="body2" color="text.secondary">Tap the nav items below</Typography>
+      <MobileBottomNav activeTab={active} onTabChange={setActive} variant={variant as never} />
     </Box>
-  )
+  );
 }
 
-export const M3Style: Story = {
-  render: () => <InteractiveNav variant="m3" />,
-}
+export const Indicator: Story = { render: () => <Interactive variant="indicator" /> };
+export const M3: Story = { render: () => <Interactive variant="m3" /> };
+export const Expansive: Story = { render: () => <Interactive variant="expansive" /> };
+export const Bubble: Story = { render: () => <Interactive variant="bubble" /> };
+export const Pill: Story = { render: () => <Interactive variant="pill" /> };
+export const PillHorizontal: Story = { render: () => <Interactive variant="pill-horizontal" /> };
 
-export const Expansive: Story = {
-  render: () => <InteractiveNav variant="expansive" />,
-}
-
-export const IndicatorLine: Story = {
-  render: () => <InteractiveNav variant="indicator" />,
-}
-
-export const PillTransition: Story = {
-  render: () => <InteractiveNav variant="pill" />,
-}
-
-export const Standalone: Story = {
-  render: () => <InteractiveNav variant="standalone" />,
-}
-
-export const MultiShowcase: Story = {
-  render: () => (
-    <Stack spacing={20} sx={{ p: 4, pb: 40, width: '100%' }}>
-       <Box sx={{ height: 80, position: 'relative' }}>
-          <Typography variant="caption" sx={{ fontWeight: 800, mb: 1, display: 'block' }}>MATERIAL 3 (VARIANT 1)</Typography>
-          <MobileBottomNav activeTab="home" onTabChange={() => {}} variant="m3" sx={{ position: 'absolute' }} />
-       </Box>
-       
-       <Box sx={{ height: 80, position: 'relative' }}>
-          <Typography variant="caption" sx={{ fontWeight: 800, mb: 1, display: 'block' }}>EXPANSIVE (VARIANT 2)</Typography>
-          <MobileBottomNav activeTab="vazi" onTabChange={() => {}} variant="expansive" sx={{ position: 'absolute' }} />
-       </Box>
-
-       <Box sx={{ height: 80, position: 'relative' }}>
-          <Typography variant="caption" sx={{ fontWeight: 800, mb: 1, display: 'block' }}>INDICATOR (VARIANT 5)</Typography>
-          <MobileBottomNav activeTab="home" onTabChange={() => {}} variant="indicator" sx={{ position: 'absolute' }} />
-       </Box>
-
-       <Box sx={{ height: 80, position: 'relative' }}>
-          <Typography variant="caption" sx={{ fontWeight: 800, mb: 1, display: 'block' }}>PILL (VARIANT 3/4)</Typography>
-          <MobileBottomNav activeTab="search" onTabChange={() => {}} variant="pill" sx={{ position: 'absolute' }} />
-       </Box>
-
-       <Box sx={{ height: 80, position: 'relative' }}>
-          <Typography variant="caption" sx={{ fontWeight: 800, mb: 1, display: 'block' }}>STANDALONE (VARIANT 6)</Typography>
-          <MobileBottomNav activeTab="search" onTabChange={() => {}} variant="standalone" sx={{ position: 'absolute' }} />
-       </Box>
-    </Stack>
-  )
-}
+export const AllVariants: Story = {
+  parameters: { viewport: { defaultViewport: 'responsive' } },
+  render: () => {
+    const variants = ['indicator', 'm3', 'expansive', 'bubble', 'pill', 'pill-horizontal'];
+    return (
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2, p: 3, maxWidth: 800, mx: 'auto' }}>
+        {variants.map((v) => (
+          <Box key={v} sx={{ position: 'relative', height: 120, border: '1px solid #eee', borderRadius: 2, overflow: 'hidden' }}>
+            <Typography sx={{ position: 'absolute', top: 8, left: 12, fontSize: 11, fontWeight: 700, color: '#888' }}>{v}</Typography>
+            <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
+              <MobileBottomNav activeTab="home" onTabChange={() => {}} variant={v as never} sx={{ position: 'relative' }} />
+            </Box>
+          </Box>
+        ))}
+      </Box>
+    );
+  },
+};
