@@ -88,7 +88,7 @@ function TwoFactorSetupModal(props: TwoFactorSetupModalProps) {
             <Box key={s} sx={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
               <StepCircle step={s} active={activeStep === s - 1} completed={activeStep > s - 1} />
               <Typography variant="body2" sx={{ color: activeStep === s - 1 ? colors.textPrimary : colors.textSecondary }}>
-                {[,'Scan QR','Verify','Backup'][s]}
+                {['','Scan QR','Verify','Backup'][s]}
               </Typography>
             </Box>
           ))}
