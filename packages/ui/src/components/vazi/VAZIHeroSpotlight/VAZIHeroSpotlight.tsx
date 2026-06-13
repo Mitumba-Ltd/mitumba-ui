@@ -6,7 +6,7 @@ import Popper from '@mui/material/Popper';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Fade from '@mui/material/Fade';
 import { tokens } from '@mitumba/tokens';
-import { AuthSubmitButton } from '../../foundation/AuthSubmitButton';
+import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
 import type { VAZIHeroSpotlightProps, VAZIHeroOutfit } from './VAZIHeroSpotlight.types';
 import type { VAZIShowcaseItem } from '../VAZIShowcase/VAZIShowcase.types';
 
@@ -177,7 +177,7 @@ function OutfitPopover({ outfit, onItemClick, onShopLook }: { outfit: VAZIHeroOu
           <Typography sx={{ fontSize: 11, color: tokens.colors.textSecondary }}>{outfit.items.length} items</Typography>
           <Typography sx={{ fontSize: tokens.typography.fontSizes.md, fontWeight: 800, color: tokens.colors.textPrimary }}>KES {outfit.totalPrice.toLocaleString()}</Typography>
         </Box>
-        <AuthSubmitButton label="Shop" onClick={() => onShopLook?.(outfit.id)} />
+        <MitumbaPrimaryButton label="Shop" onClick={() => onShopLook?.(outfit.id)} />
       </Box>
     </Box>
   );
