@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-no-bind */
+/* eslint-disable react/jsx-no-bind, @typescript-eslint/no-use-before-define */
 import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -51,7 +51,7 @@ export function MobileBottomNav({
           zIndex: 1200,
           paddingBottom: 'env(safe-area-inset-bottom)',
         },
-        ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
+        ...(Array.isArray(sx) ? sx : [sx].filter(Boolean)),
       ]}
     >
       {items.map((item) => {
@@ -80,8 +80,8 @@ function NavItem({ item, icon, isActive, variant, onTap }: {
   variant: string;
   onTap: () => void;
 }): React.ReactElement {
-  const green = tokens.colors.green;
-  const grey = tokens.colors.textSecondary;
+  const { green } = tokens.colors;
+  const { textSecondary: grey } = tokens.colors;
   const activeColor = isActive ? green : grey;
 
   // ── Variant: m3 (Material 3 — pill behind icon) ──
