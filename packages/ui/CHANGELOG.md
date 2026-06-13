@@ -1,5 +1,15 @@
 # @mitumba/ui
 
+## 0.13.0
+
+### Minor Changes
+
+- 1d8d3ab: feat(feedback): add UnauthenticatedState — login-required page prompt
+
+  Centered full-page prompt for pages requiring authentication. Shows icon,
+  title, subtitle, "Sign In" CTA, and optional secondary action ("Create Account").
+  Used on /orders, /wishlist, /cart, /inbox, /profile when user is not logged in.
+
 ## 0.12.0
 
 ### Minor Changes
