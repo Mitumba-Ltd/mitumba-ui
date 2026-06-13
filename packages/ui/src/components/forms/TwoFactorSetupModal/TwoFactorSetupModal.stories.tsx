@@ -17,7 +17,7 @@ export const Default: Story = {
     onClose: () => {},
     otpauthUri: 'otpauth://totp/Mitumba:john@example.com?secret=JBSWY3DPEHPK3PXP&issuer=Mitumba',
     secret: 'JBSWY3DPEHPK3PXP',
-    onVerify: () => new Promise((r) => setTimeout(r, 1500)),
+    onVerify: () => new Promise<void>((r) => { setTimeout(r, 1500); }),
   },
 };
 

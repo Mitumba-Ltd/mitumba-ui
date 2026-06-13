@@ -17,9 +17,12 @@ import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
 import type { TwoFactorSetupModalProps } from './TwoFactorSetupModal.types';
 
 function StepCircle({ step, active, completed }: { step: number; active: boolean; completed: boolean }) {
-  const bg = completed ? colors.green : active ? 'transparent' : colors.textDisabled;
-  const border = completed || active ? colors.green : colors.textDisabled;
-  const color = completed ? colors.surface : active ? colors.green : colors.surface;
+  const getBg = () => { if (completed) return colors.green; if (active) return 'transparent'; return colors.textDisabled; };
+  const getBorder = () => { if (completed || active) return colors.green; return colors.textDisabled; };
+  const getColor = () => { if (completed) return colors.surface; if (active) return colors.green; return colors.surface; };
+  const bg = getBg();
+  const border = getBorder();
+  const color = getColor();
 
   return (
     <Box
@@ -85,7 +88,7 @@ function TwoFactorSetupModal(props: TwoFactorSetupModalProps) {
             <Box key={s} sx={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
               <StepCircle step={s} active={activeStep === s - 1} completed={activeStep > s - 1} />
               <Typography variant="body2" sx={{ color: activeStep === s - 1 ? colors.textPrimary : colors.textSecondary }}>
-                {s === 1 ? 'Scan QR' : s === 2 ? 'Verify' : 'Backup'}
+                {[,'Scan QR','Verify','Backup'][s]}
               </Typography>
             </Box>
           ))}
