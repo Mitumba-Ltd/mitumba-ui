@@ -39,8 +39,8 @@ export { MitumbaCheckbox, MitumbaRadio, MitumbaSwitch, MitumbaSlider, MitumbaDat
 export type { MitumbaCheckboxProps, MitumbaRadioProps, MitumbaSwitchProps, MitumbaSliderProps, MitumbaDatePickerProps } from './components'
 
 // Feedback
-export { MitumbaBanner, MitumbaSkeleton, MitumbaToast, MitumbaModal, EmptyState, ErrorState, OfflineBanner } from './components'
-export type { MitumbaBannerProps, BannerSeverity, MitumbaSkeletonProps, MitumbaToastProps, MitumbaModalProps, EmptyStateProps, ErrorStateProps, OfflineBannerProps } from './components'
+export { MitumbaBanner, MitumbaSkeleton, MitumbaToast, MitumbaModal, EmptyState, ErrorState, OfflineBanner, UnauthenticatedState } from './components'
+export type { MitumbaBannerProps, BannerSeverity, MitumbaSkeletonProps, MitumbaToastProps, MitumbaModalProps, EmptyStateProps, ErrorStateProps, OfflineBannerProps, UnauthenticatedStateProps } from './components'
 
 // Messaging
 export { ConversationList, MessageBubble, ChatThread, InboxLayout } from './components'
