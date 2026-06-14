@@ -3,8 +3,8 @@ export { MitumbaPrimaryButton, AuthSubmitButton, MitumbaTextField, MitumbaSelect
 export type { MitumbaPrimaryButtonProps, AuthSubmitButtonProps, MitumbaTextFieldProps, MitumbaSelectProps, MitumbaChipProps, MitumbaAvatarProps, MitumbaGlassProps } from './components'
 
 // Layout
-export { PageContainer, SectionHeader, MitumbaDivider, MitumbaGrid, AuthPage, SellerOnboardingPage, BuyerOnboardingPage } from './components'
-export type { PageContainerProps, SectionHeaderProps, MitumbaGridProps, AuthPageProps, SellerOnboardingPageProps, SellerOnboardingData, BuyerOnboardingPageProps, BuyerOnboardingData } from './components'
+export { PageContainer, SectionHeader, MitumbaDivider, MitumbaGrid, AuthPage, SellerOnboardingPage, BuyerOnboardingPage, EmailVerificationPage } from './components'
+export type { PageContainerProps, SectionHeaderProps, MitumbaGridProps, AuthPageProps, SellerOnboardingPageProps, SellerOnboardingData, BuyerOnboardingPageProps, BuyerOnboardingData, EmailVerificationPageProps } from './components'
 
 // Navigation
 export { TopNav, MobileBottomNav, MitumbaBreadcrumb, MitumbaTabs, MitumbaPagination, MitumbaStepper } from './components'
