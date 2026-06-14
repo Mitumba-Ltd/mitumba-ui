@@ -127,9 +127,8 @@ export function TwoFactorSetupModal({
             <MitumbaTextField
               label="Verification code"
               value={code}
-              onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-              placeholder="000000"
-              fullWidth
+              onChange={(val) => setCode(val.replace(/\D/g, '').slice(0, 6))}
+              hint="000000"
               sx={{
                 mb: `${tokens.spacing.lg}px`,
                 maxWidth: 240,
@@ -141,8 +140,7 @@ export function TwoFactorSetupModal({
             {error && <Alert severity="error" sx={{ mb: `${tokens.spacing.lg}px`, textAlign: 'left' }}>{error}</Alert>}
 
             <MitumbaPrimaryButton
-              label={verifying ? 'Verifying...' : 'Verify & Enable'}
-              fullWidth
+              label={verifying ? 'Verifying...' : 'Verify & Enable'} fullWidth
               disabled={code.length !== 6 || verifying}
               loading={verifying}
               onClick={handleVerify}

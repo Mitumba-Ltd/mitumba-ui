@@ -58,9 +58,8 @@ export function TwoFactorLoginStep({
         <MitumbaTextField
           label="Verification code"
           value={code}
-          onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-          placeholder="000000"
-          fullWidth
+          onChange={(val) => setCode(val.replace(/\D/g, '').slice(0, 6))}
+          hint="000000"
           sx={{
             mb: `${tokens.spacing.xl}px`,
             '& input': { fontSize: 28, letterSpacing: '10px', textAlign: 'center', fontFamily: 'monospace', fontWeight: 700 },
@@ -71,9 +70,8 @@ export function TwoFactorLoginStep({
         {error && <Alert severity="error" sx={{ mb: `${tokens.spacing.lg}px`, textAlign: 'left' }}>{error}</Alert>}
 
         {/* Submit */}
-        <MitumbaPrimaryButton
+        <MitumbaPrimaryButton fullWidth
           label={loading ? 'Verifying...' : 'Verify'}
-          fullWidth
           disabled={code.length !== 6 || loading}
           loading={loading}
           onClick={handleSubmit}
