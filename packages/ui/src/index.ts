@@ -35,8 +35,8 @@ export { StatsCard, ActivityFeed } from './components'
 export type { StatsCardProps, StatsTrend, ActivityFeedProps, ActivityEvent } from './components'
 
 // Selection
-export { MitumbaCheckbox, MitumbaRadio, MitumbaSwitch, MitumbaSlider, MitumbaDatePicker } from './components'
-export type { MitumbaCheckboxProps, MitumbaRadioProps, MitumbaSwitchProps, MitumbaSliderProps, MitumbaDatePickerProps } from './components'
+export { MitumbaCheckbox, MitumbaRadio, MitumbaSwitch, MitumbaSlider, MitumbaDatePicker, StylePicker } from './components'
+export type { MitumbaCheckboxProps, MitumbaRadioProps, MitumbaSwitchProps, MitumbaSliderProps, MitumbaDatePickerProps, StylePickerProps, StyleOption } from './components'
 
 // Feedback
 export { MitumbaBanner, MitumbaSkeleton, MitumbaToast, MitumbaModal, EmptyState, ErrorState, OfflineBanner, UnauthenticatedState } from './components'
