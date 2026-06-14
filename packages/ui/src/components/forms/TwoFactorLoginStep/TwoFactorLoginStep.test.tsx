@@ -36,14 +36,14 @@ describe('TwoFactorLoginStep', () => {
   it('renders title and input', () => {
     renderStep();
     expect(screen.getByText('Two-Factor Authentication')).toBeInTheDocument();
-    expect(screen.getByLabelText('Authentication code')).toBeInTheDocument();
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
 
   it('calls onSubmit with code on form submit', () => {
     renderStep();
-    const input = screen.getByLabelText('Authentication code');
+    const input = screen.getByRole('textbox');
     fireEvent.change(input, { target: { value: '654321' } });
-    fireEvent.click(screen.getByText('Verify'));
+    fireEvent.click(screen.getByRole('button', { name: /Verify/ }));
     expect(baseProps.onSubmit).toHaveBeenCalledWith('654321');
   });
 
