@@ -1,52 +1,96 @@
 /* eslint-disable react/jsx-no-bind */
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Alert from '@mui/material/Alert';
 import ButtonBase from '@mui/material/ButtonBase';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { colors, spacing, radius, shadows } from '@mitumba/tokens';
+import { tokens } from '@mitumba/tokens';
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
+import { MitumbaTextField } from '../../foundation/MitumbaTextField';
 import type { TwoFactorLoginStepProps } from './TwoFactorLoginStep.types';
 
-function TwoFactorLoginStep(props: TwoFactorLoginStepProps) {
-  const { onSubmit, loading, error, onUseBackupCode } = props;
+/**
+ * TwoFactorLoginStep — standalone centered view for 2FA verification during login.
+ * Matches AuthPage visual language — clean, spacious, professional.
+ */
+export function TwoFactorLoginStep({
+  onSubmit,
+  loading,
+  error,
+  onUseBackupCode,
+}: TwoFactorLoginStepProps): React.ReactElement {
   const [code, setCode] = useState('');
 
-  function handleSubmit() {
+  const handleSubmit = () => {
     if (code.length === 6) onSubmit(code);
-  }
+  };
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', p: spacing.md }}>
-      <Card
-        sx={{ maxWidth: 400, width: '100%', borderRadius: radius.xl, backgroundColor: colors.surface, boxShadow: shadows.elevated, p: spacing.xl, textAlign: 'center' }}
+    <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: tokens.colors.background, p: { xs: `${tokens.spacing.lg}px`, md: `${tokens.spacing.xl}px` } }}>
+      <Box
+        sx={{
+          maxWidth: 420,
+          width: '100%',
+          bgcolor: tokens.colors.surface,
+          borderRadius: `${tokens.radius.xl}px`,
+          boxShadow: tokens.shadows.elevated,
+          p: { xs: `${tokens.spacing.xl}px`, md: `${tokens.spacing.huge}px` },
+          textAlign: 'center',
+        }}
       >
-        <Box sx={{ width: 72, height: 72, borderRadius: '50%', backgroundColor: colors.background, display: 'flex', alignItems: 'center', justifyContent: 'center', mx: 'auto', mb: spacing.md }}>
-          <LockOutlinedIcon sx={{ fontSize: 32, color: colors.textDisabled }} />
+        {/* Icon */}
+        <Box sx={{ width: 80, height: 80, borderRadius: '50%', bgcolor: tokens.colors.greenLight, display: 'flex', alignItems: 'center', justifyContent: 'center', mx: 'auto', mb: `${tokens.spacing.xl}px` }}>
+          <LockOutlinedIcon sx={{ fontSize: 36, color: tokens.colors.green }} />
         </Box>
-        <Typography variant="h5" sx={{ fontWeight: 800, mb: spacing.xs }}>Two-Factor Authentication</Typography>
-        <Typography sx={{ color: colors.textSecondary, mb: spacing.lg }}>
+
+        {/* Title */}
+        <Typography sx={{ fontSize: tokens.typography.fontSizes.xl, fontWeight: 800, color: tokens.colors.textPrimary, fontFamily: tokens.typography.fontFamily, mb: `${tokens.spacing.sm}px` }}>
+          Two-Factor Authentication
+        </Typography>
+
+        {/* Subtitle */}
+        <Typography sx={{ fontSize: tokens.typography.fontSizes.base, color: tokens.colors.textSecondary, fontFamily: tokens.typography.fontFamily, mb: `${tokens.spacing.xxxl}px`, maxWidth: 320, mx: 'auto' }}>
           Enter the 6-digit code from your authenticator app
         </Typography>
-        <TextField
+
+        {/* Code input */}
+        <MitumbaTextField
+          label="Verification code"
           value={code}
           onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-          inputProps={{ maxLength: 6, inputMode: 'numeric', autoFocus: true, 'aria-label': 'Authentication code' }}
-          sx={{ '& input': { fontSize: 24, letterSpacing: 8, textAlign: 'center', fontFamily: 'monospace' }, width: '100%', mb: spacing.md }}
+          placeholder="000000"
+          fullWidth
+          sx={{
+            mb: `${tokens.spacing.xl}px`,
+            '& input': { fontSize: 28, letterSpacing: '10px', textAlign: 'center', fontFamily: 'monospace', fontWeight: 700 },
+          }}
         />
-        {error && <Alert severity="error" sx={{ mb: spacing.md, textAlign: 'left' }}>{error}</Alert>}
-        <MitumbaPrimaryButton label={loading ? 'Verifying…' : 'Verify'} fullWidth disabled={code.length !== 6 || loading} onClick={handleSubmit} />
+
+        {/* Error */}
+        {error && <Alert severity="error" sx={{ mb: `${tokens.spacing.lg}px`, textAlign: 'left' }}>{error}</Alert>}
+
+        {/* Submit */}
+        <MitumbaPrimaryButton
+          label={loading ? 'Verifying...' : 'Verify'}
+          fullWidth
+          disabled={code.length !== 6 || loading}
+          loading={loading}
+          onClick={handleSubmit}
+        />
+
+        {/* Backup code link */}
         {onUseBackupCode && (
-          <ButtonBase onClick={onUseBackupCode} sx={{ mt: spacing.md, color: colors.green, cursor: 'pointer', fontSize: 14 }}>
+          <ButtonBase
+            onClick={onUseBackupCode}
+            sx={{ mt: `${tokens.spacing.xl}px`, color: tokens.colors.green, fontSize: tokens.typography.fontSizes.sm, fontWeight: 600, fontFamily: tokens.typography.fontFamily, cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
+          >
             Use a backup code instead
           </ButtonBase>
         )}
-      </Card>
+      </Box>
     </Box>
   );
 }
 
-export { TwoFactorLoginStep };
+export default TwoFactorLoginStep;
