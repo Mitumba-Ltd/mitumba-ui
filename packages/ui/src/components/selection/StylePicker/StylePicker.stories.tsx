@@ -43,24 +43,28 @@ export const NavBarStyles: Story = {
   render: () => <InteractivePicker />,
 };
 
+function ThreeColumnsPicker() {
+  const [val, setVal] = useState('indicator');
+  return (
+    <Box sx={{ maxWidth: 700 }}>
+      <StylePicker options={NAV_OPTIONS} value={val} onChange={setVal} columns={3} title="Pick your style" />
+    </Box>
+  );
+}
+
+function SingleColumnPicker() {
+  const [val, setVal] = useState('m3');
+  return (
+    <Box sx={{ maxWidth: 320 }}>
+      <StylePicker options={NAV_OPTIONS.slice(0, 3)} value={val} onChange={setVal} columns={1} title="Navigation" subtitle="Select a variant" />
+    </Box>
+  );
+}
+
 export const ThreeColumns: Story = {
-  render: () => {
-    const [val, setVal] = useState('indicator');
-    return (
-      <Box sx={{ maxWidth: 700 }}>
-        <StylePicker options={NAV_OPTIONS} value={val} onChange={setVal} columns={3} title="Pick your style" />
-      </Box>
-    );
-  },
+  render: () => <ThreeColumnsPicker />,
 };
 
 export const SingleColumn: Story = {
-  render: () => {
-    const [val, setVal] = useState('m3');
-    return (
-      <Box sx={{ maxWidth: 320 }}>
-        <StylePicker options={NAV_OPTIONS.slice(0, 3)} value={val} onChange={setVal} columns={1} title="Navigation" subtitle="Select a variant" />
-      </Box>
-    );
-  },
+  render: () => <SingleColumnPicker />,
 };
