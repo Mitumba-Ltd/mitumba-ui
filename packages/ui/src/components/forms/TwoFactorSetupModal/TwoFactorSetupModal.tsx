@@ -129,6 +129,7 @@ export function TwoFactorSetupModal({
               value={code}
               onChange={(val) => setCode(val.replace(/\D/g, '').slice(0, 6))}
               hint="000000"
+              error={error}
               sx={{
                 mb: `${tokens.spacing.lg}px`,
                 maxWidth: 240,
@@ -136,8 +137,6 @@ export function TwoFactorSetupModal({
                 '& input': { fontSize: 28, letterSpacing: '10px', textAlign: 'center', fontFamily: 'monospace', fontWeight: 700 },
               }}
             />
-
-            {error && <Alert severity="error" sx={{ mb: `${tokens.spacing.lg}px`, textAlign: 'left' }}>{error}</Alert>}
 
             <MitumbaPrimaryButton
               label={verifying ? 'Verifying...' : 'Verify & Enable'} fullWidth

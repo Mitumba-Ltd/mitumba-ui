@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Alert from '@mui/material/Alert';
 import ButtonBase from '@mui/material/ButtonBase';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { tokens } from '@mitumba/tokens';
@@ -60,14 +59,12 @@ export function TwoFactorLoginStep({
           value={code}
           onChange={(val) => setCode(val.replace(/\D/g, '').slice(0, 6))}
           hint="000000"
+          error={error}
           sx={{
             mb: `${tokens.spacing.xl}px`,
             '& input': { fontSize: 28, letterSpacing: '10px', textAlign: 'center', fontFamily: 'monospace', fontWeight: 700 },
           }}
         />
-
-        {/* Error */}
-        {error && <Alert severity="error" sx={{ mb: `${tokens.spacing.lg}px`, textAlign: 'left' }}>{error}</Alert>}
 
         {/* Submit */}
         <MitumbaPrimaryButton fullWidth
