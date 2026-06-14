@@ -445,6 +445,18 @@ Stream of order/shop events.
 
 ### 13.5 `MitumbaDatePicker`
 
+### 13.6 `StylePicker`
+
+Generic visual style selector with live miniature previews. Used for any customizable UI preference (nav bar style, theme, layout, font size, etc.).
+
+Props:
+- `options: StyleOption[]` — `{ id: string; label: string; description?: string; preview: ReactNode }`
+- `value: string` — currently selected option ID
+- `onChange: (styleId: string) => void` — fires immediately on click
+- `title?: string`
+- `subtitle?: string`
+- `columns?: number` — grid columns, defaults to 2
+
 ---
 
 ## Phase 14 — Messaging components
