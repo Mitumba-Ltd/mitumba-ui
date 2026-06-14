@@ -39,27 +39,27 @@ function renderModal(props = {}) {
 describe('TwoFactorSetupModal', () => {
   it('renders QR code step by default', () => {
     renderModal();
-    expect(screen.getByAltText('QR Code')).toBeInTheDocument();
+    expect(screen.getByAltText('QR Code for authenticator app')).toBeInTheDocument();
   }, 10000);
 
   it('shows secret when toggle is clicked', () => {
     renderModal();
-    fireEvent.click(screen.getByText("Can't scan? Show secret"));
+    fireEvent.click(screen.getByText("Can't scan? Enter key manually"));
     expect(screen.getByText('ABC123')).toBeInTheDocument();
   });
 
   it('navigates to verify step', () => {
     renderModal();
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-    expect(screen.getByLabelText('Verification code')).toBeInTheDocument();
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
   });
 
   it('calls onVerify with entered code', () => {
     renderModal();
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-    const input = screen.getByLabelText('Verification code');
+    const input = screen.getByRole('textbox');
     fireEvent.change(input, { target: { value: '123456' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Verify' }));
+    fireEvent.click(screen.getByRole('button', { name: /Verify & Enable/ }));
     expect(baseProps.onVerify).toHaveBeenCalledWith('123456');
   });
 
