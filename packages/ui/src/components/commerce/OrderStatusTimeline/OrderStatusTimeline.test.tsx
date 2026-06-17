@@ -18,7 +18,11 @@ function renderTimeline(props: Partial<OrderStatusTimelineProps> = {}) {
       <OrderStatusTimeline
         currentStatus={props.currentStatus ?? 'SHIPPED'}
         events={props.events ?? baseEvents}
-        {...props}
+        orientation={props.orientation}
+        compact={props.compact}
+        estimatedDelivery={props.estimatedDelivery}
+        title={props.title}
+        bare={props.bare}
       />
     </MitumbaThemeProvider>,
   )

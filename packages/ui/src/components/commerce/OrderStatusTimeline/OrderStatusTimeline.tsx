@@ -118,6 +118,7 @@ export function OrderStatusTimeline({
           const latestEvent = statusEvents.length > 0 ? statusEvents[statusEvents.length - 1] : null
           const isLast = index === steps.length - 1
 
+          // eslint-disable-next-line no-nested-ternary
           const nodeColor = isCompleted
             ? tokens.colors.green
             : isCurrent
@@ -180,7 +181,8 @@ export function OrderStatusTimeline({
                     }),
                   }}
                 >
-                  {isCompleted ? (
+                  {/* eslint-disable-next-line no-nested-ternary */}
+                {isCompleted ? (
                     <CheckCircleIcon sx={{ fontSize: 'inherit' }} />
                   ) : isCurrent ? (
                     meta.icon
