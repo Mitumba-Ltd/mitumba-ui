@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.17.0
+
+### Minor Changes
+
+- f69a0e2: fix(commerce): redesign OrderStatusTimeline — color-coded icons, animated nodes, horizontal/vertical orientation, cancelled/disputed terminal states, compact mode, estimated delivery, bare mode
+
 ## 0.16.0
 
 ### Minor Changes
