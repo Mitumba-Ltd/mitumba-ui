@@ -391,6 +391,18 @@ Drag-and-drop or click-to-upload for listing photos.
 
 Advanced search with filters and suggestions.
 
+### 10.5 `AddAddressModal`
+
+Inline delivery address form modal built on MitumbaModal. Used during checkout.
+
+Props:
+- `open: boolean`
+- `onClose: () => void`
+- `onSave: (data: AddressFormData) => void`
+- `saving?: boolean`
+- `error?: string`
+- `isFirstAddress?: boolean`
+
 ---
 
 ## Phase 11 — Feedback components
