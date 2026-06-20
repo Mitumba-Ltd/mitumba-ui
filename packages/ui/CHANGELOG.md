@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.17.1
+
+### Patch Changes
+
+- a8ded85: fix(listing-card): add shimmer loading placeholder and crossfade for images — eliminates layout shift when images load
+
 ## 0.17.0
 
 ### Minor Changes
