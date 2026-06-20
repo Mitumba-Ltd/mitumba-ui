@@ -1,5 +1,13 @@
 # @mitumba/ui
 
+## 0.18.0
+
+### Minor Changes
+
+- 40f106e: feat(forms): add AddAddressModal — inline delivery address form for checkout
+
+  feat(feedback): upgrade MitumbaModal to universal base — mobile bottom-sheet, subtitle, loading overlay, showClose, closeOnBackdrop props
+
 ## 0.17.2
 
 ### Patch Changes
