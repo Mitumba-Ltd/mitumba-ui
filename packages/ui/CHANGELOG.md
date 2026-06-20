@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.17.2
+
+### Patch Changes
+
+- d9299f9: fix(listing-card): dynamic height after image loads — switches from fixed aspectRatio to natural image height for proper masonry layout
+
 ## 0.17.1
 
 ### Patch Changes
