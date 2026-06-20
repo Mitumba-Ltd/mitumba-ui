@@ -19,4 +19,6 @@ export interface ListingCardProps {
   onClick?: (id: string) => void;
   /** Called when "Add to cart" is tapped */
   onAddToCart?: (id: string) => void;
+  /** Aspect ratio for the image area while loading (CSS value). @default '4/5' */
+  aspectRatio?: string;
 }

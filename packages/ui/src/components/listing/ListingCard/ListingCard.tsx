@@ -39,9 +39,18 @@ export function ListingCard({
   onSaveToggle,
   onClick,
   onAddToCart,
+  aspectRatio = '4/5',
 }: ListingCardProps): React.ReactElement {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [cartAdded, setCartAdded] = React.useState(false);
+  const [imageLoaded, setImageLoaded] = React.useState(false);
+
+  const currentMedia = media[activeIndex] ?? media[0];
+
+  // Reset loaded state when media changes
+  React.useEffect(() => {
+    if (!isVideo(currentMedia)) setImageLoaded(false);
+  }, [currentMedia]);
 
   const handleSave = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -71,7 +80,6 @@ export function ListingCard({
     setActiveIndex(idx);
   };
 
-  const currentMedia = media[activeIndex] ?? media[0];
   const hasMultiple = media.length > 1;
 
   return (
@@ -90,14 +98,31 @@ export function ListingCard({
           '60%': { transform: 'scale(1.3) rotate(0deg)' },
           '100%': { transform: 'scale(1) rotate(0deg)' },
         },
+        '@keyframes shimmer': {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
         '&:hover': onClick ? {
           borderColor: tokens.colors.green,
           transform: 'translateY(-2px)',
         } : {},
       }}
     >
-      {/* Media — natural aspect ratio */}
-      <Box sx={{ position: 'relative', width: '100%', lineHeight: 0 }}>
+      {/* Media — reserved aspect ratio with shimmer */}
+      <Box sx={{ position: 'relative', width: '100%', aspectRatio, overflow: 'hidden', bgcolor: tokens.colors.background }}>
+        {/* Shimmer placeholder — visible until image loads */}
+        {!isVideo(currentMedia) && !imageLoaded && (
+          <Box
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              background: `linear-gradient(90deg, ${tokens.colors.background} 25%, ${tokens.colors.divider} 50%, ${tokens.colors.background} 75%)`,
+              backgroundSize: '200% 100%',
+              animation: 'shimmer 1.5s ease-in-out infinite',
+            }}
+          />
+        )}
+
         {isVideo(currentMedia) ? (
           <Box
             component="video"
@@ -106,14 +131,24 @@ export function ListingCard({
             autoPlay
             loop
             playsInline
-            sx={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }}
+            sx={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', position: 'absolute', inset: 0 }}
           />
         ) : (
           <Box
             component="img"
             src={currentMedia}
             alt={title}
-            sx={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }}
+            onLoad={() => setImageLoaded(true)}
+            sx={{
+              width: '100%',
+              height: '100%',
+              display: 'block',
+              objectFit: 'cover',
+              position: 'absolute',
+              inset: 0,
+              opacity: imageLoaded ? 1 : 0,
+              transition: 'opacity 0.4s ease-in-out',
+            }}
           />
         )}
 
