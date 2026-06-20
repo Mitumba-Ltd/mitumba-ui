@@ -108,8 +108,8 @@ export function ListingCard({
         } : {},
       }}
     >
-      {/* Media — reserved aspect ratio with shimmer */}
-      <Box sx={{ position: 'relative', width: '100%', aspectRatio, overflow: 'hidden', bgcolor: tokens.colors.background }}>
+      {/* Media — reserved aspect ratio with shimmer, natural height after load */}
+      <Box sx={{ position: 'relative', width: '100%', ...(!imageLoaded && !isVideo(currentMedia) ? { aspectRatio } : {}), overflow: 'hidden', bgcolor: tokens.colors.background }}>
         {/* Shimmer placeholder — visible until image loads */}
         {!isVideo(currentMedia) && !imageLoaded && (
           <Box
@@ -131,7 +131,7 @@ export function ListingCard({
             autoPlay
             loop
             playsInline
-            sx={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', position: 'absolute', inset: 0 }}
+            sx={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }}
           />
         ) : (
           <Box
@@ -141,12 +141,10 @@ export function ListingCard({
             onLoad={() => setImageLoaded(true)}
             sx={{
               width: '100%',
-              height: '100%',
               display: 'block',
-              objectFit: 'cover',
-              position: 'absolute',
-              inset: 0,
-              opacity: imageLoaded ? 1 : 0,
+              ...(imageLoaded
+                ? { position: 'relative', height: 'auto', opacity: 1 }
+                : { position: 'absolute', inset: 0, height: '100%', objectFit: 'cover', opacity: 0 }),
               transition: 'opacity 0.4s ease-in-out',
             }}
           />
