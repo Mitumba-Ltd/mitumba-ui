@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.19.0
+
+### Minor Changes
+
+- 01173e7: feat(messaging): add OrderMessageAttachment — compact order context card for chat bubbles. Extends MessageAttachment type to support `type: 'order'`.
+
 ## 0.18.1
 
 ### Patch Changes
