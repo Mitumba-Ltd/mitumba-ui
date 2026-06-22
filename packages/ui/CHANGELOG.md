@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.18.1
+
+### Patch Changes
+
+- b46b778: fix(vazi): redesign VAZIBadge as a smooth compact chip — no glassmorphism, no animation, just a clean inline earth-toned chip
+
 ## 0.18.0
 
 ### Minor Changes
