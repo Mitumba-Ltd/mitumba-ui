@@ -8,6 +8,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 
 import { colors, spacing, radius } from '@mitumba/tokens';
+import { OrderMessageAttachment } from '../OrderMessageAttachment';
 import type { MessageBubbleProps } from './MessageBubble.types';
 
 function MessageBubble({ body, timestamp, isMine, senderName, senderAvatarUrl, attachment }: MessageBubbleProps) {
@@ -47,6 +48,17 @@ function MessageBubble({ body, timestamp, isMine, senderName, senderAvatarUrl, a
               <DownloadIcon fontSize="small" />
             </IconButton>
           </Box>
+        )}
+        {attachment?.type === 'order' && (
+          <OrderMessageAttachment
+            orderId={attachment.data.orderId}
+            orderShortId={attachment.data.orderShortId}
+            listingTitle={attachment.data.listingTitle}
+            listingImageUrl={attachment.data.listingImageUrl}
+            amount={attachment.data.amount}
+            status={attachment.data.status}
+            createdAt={attachment.data.createdAt}
+          />
         )}
         <Typography variant="body2">{body}</Typography>
         <Typography variant="caption" sx={{ display: 'block', textAlign: 'right', mt: `${spacing.xs}px`, opacity: 0.7, fontSize: 11 }}>
