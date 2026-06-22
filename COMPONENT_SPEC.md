@@ -522,6 +522,19 @@ Props:
 - `showMobileBack?: boolean`
 - `onMobileBack?: () => void`
 
+### 14.5 `OrderMessageAttachment`
+
+Compact order context card rendered inside a message bubble. Shows order info so the seller knows which order the conversation is about.
+
+Props:
+- `orderId: string`
+- `orderShortId: string`
+- `listingTitle: string`
+- `listingImageUrl: string | null`
+- `amount: number`
+- `status: string`
+- `createdAt: string`
+
 ---
 
 ## Phase 15 — Page templates
