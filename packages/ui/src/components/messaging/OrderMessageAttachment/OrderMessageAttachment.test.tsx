@@ -4,6 +4,7 @@ import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 import { MitumbaThemeProvider } from '../../../theme'
 import { OrderMessageAttachment } from './OrderMessageAttachment'
+import type { OrderMessageAttachmentProps } from './OrderMessageAttachment.types'
 
 afterEach(cleanup)
 
@@ -17,7 +18,7 @@ const props = {
   createdAt: '2024-01-15',
 }
 
-function renderAttachment(overrides: Partial<typeof props> = {}) {
+function renderAttachment(overrides: Partial<OrderMessageAttachmentProps> = {}) {
   const merged = { ...props, ...overrides }
   return render(
     <MitumbaThemeProvider>
