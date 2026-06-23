@@ -18,6 +18,8 @@ export interface CartItemProps {
   size?: string
   /** Current quantity. */
   quantity?: number
+  /** Maximum selectable quantity (e.g. from stock_quantity). @default 10 */
+  maxQuantity?: number
   
   /** Called when the item should be removed. */
   onRemove?: () => void

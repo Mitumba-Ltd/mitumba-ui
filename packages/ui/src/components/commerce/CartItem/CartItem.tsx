@@ -20,9 +20,9 @@ export function CartItem({
   priceKes,
   size = 'M',
   quantity = 1,
+  maxQuantity = 10,
   onRemove,
   onQuantityChange,
-  onSizeChange,
   sx,
 }: CartItemProps) {
   return (
@@ -139,14 +139,9 @@ export function CartItem({
             <Typography variant="caption" sx={{ display: 'block', mb: 1, fontWeight: 700, color: tokens.colors.textDisabled, fontSize: 10 }}>
               SIZE
             </Typography>
-            <MitumbaSelect
-              value={size}
-              size="small"
-              onChange={(val) => onSizeChange?.(val as string)}
-              options={[{ label: size, value: size }]}
-              rounding="rounded"
-              sx={{ minWidth: 56 }}
-            />
+            <Typography sx={{ fontWeight: 700, fontSize: tokens.typography.fontSizes.sm, color: tokens.colors.textPrimary, fontFamily: tokens.typography.fontFamily }}>
+              {size}
+            </Typography>
           </Box>
 
           {/* QUANTITY COLUMN */}
@@ -158,7 +153,7 @@ export function CartItem({
               value={quantity}
               size="small"
               onChange={(val) => onQuantityChange?.(Number(val))}
-              options={[{ label: `${quantity}`, value: quantity }]}
+              options={Array.from({ length: maxQuantity }, (_, i) => ({ label: `${i + 1}`, value: i + 1 }))}
               rounding="rounded"
               sx={{ minWidth: 56 }}
             />
