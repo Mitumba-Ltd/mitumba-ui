@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.19.3
+
+### Patch Changes
+
+- 353a555: fix(commerce): CartItem quantity selector now shows 1–N options via new `maxQuantity` prop (default 10). Size field changed to display-only text.
+
 ## 0.19.2
 
 ### Patch Changes
