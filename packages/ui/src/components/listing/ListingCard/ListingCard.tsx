@@ -1,7 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -10,14 +9,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { tokens } from '@mitumba/tokens';
+import { ConditionBadge } from '../ConditionBadge';
 import type { ListingCardProps } from './ListingCard.types';
-
-const CONDITION_LABELS: Record<string, string> = {
-  new: 'New',
-  like_new: 'Like New',
-  good: 'Good',
-  fair: 'Fair',
-};
 
 function isVideo(url: string): boolean {
   return /\.(mp4|webm|mov)(\?|$)/i.test(url);
@@ -240,22 +233,17 @@ export function ListingCard({
           </IconButton>
         )}
 
-        {/* Condition chip — bottom left */}
+        {/* Condition badge — bottom left */}
         {condition && (
-          <Chip
-            label={CONDITION_LABELS[condition]}
-            size="small"
+          <Box
             sx={{
               position: 'absolute',
               bottom: hasMultiple ? `${tokens.spacing.xl}px` : `${tokens.spacing.sm}px`,
               left: `${tokens.spacing.sm}px`,
-              bgcolor: 'rgba(255,255,255,0.92)',
-              backdropFilter: 'blur(4px)',
-              fontWeight: 600,
-              fontSize: tokens.typography.fontSizes.xs,
-              height: 22,
             }}
-          />
+          >
+            <ConditionBadge grade={condition} />
+          </Box>
         )}
       </Box>
 
