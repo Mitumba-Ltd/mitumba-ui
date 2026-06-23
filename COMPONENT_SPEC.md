@@ -371,6 +371,43 @@ Vertical/Horizontal visualization of order progress.
 
 Status indicator for Mitumba Escrow protection.
 
+### 9.6 `RaiseDisputeModal`
+
+Modal for buyers to raise a dispute on an order.
+
+Props:
+- `open: boolean`
+- `onClose: () => void`
+- `orderShortId: string`
+- `onSubmit: (input: RaiseDisputeSubmitInput) => Promise<void>`
+- `submitting?: boolean`
+
+### 9.7 `DisputeStatusTimeline`
+
+Vertical timeline for dispute events with color-coded status chip and actor badges.
+
+Props:
+- `status: DisputeStatus`
+- `events: DisputeEvent[]`
+
+### 9.8 `DisputeEvidenceGallery`
+
+Evidence display grouped by uploader role. Images as thumbnails, text as blockquotes.
+
+Props:
+- `evidence: DisputeEvidenceItem[]`
+
+### 9.9 `SellerDisputeResponseCard`
+
+Inline card for sellers to accept or contest a dispute.
+
+Props:
+- `reason: string`
+- `description: string`
+- `onAccept: () => Promise<void>`
+- `onContest: (message: string, files: File[]) => Promise<void>`
+- `submitting?: boolean`
+
 ---
 
 ## Phase 10 — Form components
