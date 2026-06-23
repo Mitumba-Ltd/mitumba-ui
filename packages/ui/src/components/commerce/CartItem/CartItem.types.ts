@@ -16,6 +16,8 @@ export interface CartItemProps {
   priceKes: number
   /** Selected size metadata. */
   size?: string
+  /** Available sizes for the dropdown. If not provided, size shows as text only. */
+  availableSizes?: string[]
   /** Current quantity. */
   quantity?: number
   /** Maximum selectable quantity (e.g. from stock_quantity). @default 10 */
