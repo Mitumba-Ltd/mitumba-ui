@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.20.0
+
+### Minor Changes
+
+- 22aabe8: feat(commerce): add dispute components — RaiseDisputeModal, DisputeStatusTimeline, DisputeEvidenceGallery, SellerDisputeResponseCard
+
 ## 0.19.4
 
 ### Patch Changes
