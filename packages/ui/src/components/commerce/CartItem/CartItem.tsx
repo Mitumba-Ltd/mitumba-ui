@@ -31,8 +31,9 @@ export function CartItem({
         {
           display: 'flex',
           width: '100%',
+          overflow: 'hidden',
           backgroundColor: tokens.colors.surface,
-          borderRadius: `${tokens.radius.lg}px`, // 16px (Serious Standard)
+          borderRadius: `${tokens.radius.lg}px`,
           p: { xs: 2, md: 3 },
           boxShadow: `
             0 2px 4px 0 rgba(0, 0, 0, 0.05),
@@ -73,25 +74,29 @@ export function CartItem({
       <Box
         sx={{
           flexGrow: 1,
-          ml: { xs: 2, sm: 3, md: 4 },
+          minWidth: 0,
+          ml: { xs: 1.5, sm: 3, md: 4 },
           display: 'flex',
           flexDirection: { xs: 'column', lg: 'row' },
           justifyContent: 'space-between',
           alignItems: { xs: 'flex-start', lg: 'center' },
-          gap: { xs: 2, lg: 4 },
+          gap: { xs: 1.5, lg: 4 },
         }}
       >
         {/* Basic Metadata */}
-        <Box sx={{ flex: 1.5 }}>
+        <Box sx={{ flex: 1.5, minWidth: 0, width: '100%' }}>
           <Typography
             sx={{
-              fontSize: tokens.typography.fontSizes.lg,
+              fontSize: { xs: tokens.typography.fontSizes.base, md: tokens.typography.fontSizes.lg },
               fontWeight: 900,
               color: tokens.colors.textPrimary,
               fontFamily: tokens.typography.fontFamily,
               textTransform: 'uppercase',
               lineHeight: 1.1,
               mb: 0.5,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
             }}
           >
             {title}
@@ -126,42 +131,42 @@ export function CartItem({
           </Typography>
         </Box>
 
-        {/* Dynamic Selectors Columns (Desktop) */}
-        <Stack direction="row" spacing={{ xs: 2, sm: 4, md: 6 }} alignItems="center" sx={{ width: { xs: '100%', lg: 'auto' } }}>
+        {/* Dynamic Selectors Columns */}
+        <Stack direction="row" spacing={{ xs: 1.5, sm: 4, md: 6 }} alignItems="center" sx={{ width: '100%', flexWrap: 'wrap', rowGap: 1.5 }}>
           
           {/* SIZE COLUMN */}
-          <Box sx={{ width: 80 }}>
-            <Typography variant="caption" sx={{ display: 'block', mb: 1.5, fontWeight: 700, color: tokens.colors.textDisabled, fontSize: 10 }}>
+          <Box sx={{ minWidth: 60 }}>
+            <Typography variant="caption" sx={{ display: 'block', mb: 1, fontWeight: 700, color: tokens.colors.textDisabled, fontSize: 10 }}>
               SIZE
             </Typography>
             <MitumbaSelect
               value={size}
               size="small"
               onChange={(val) => onSizeChange?.(val as string)}
-              options={[{ label: size, value: size }]} // Simplified for now
+              options={[{ label: size, value: size }]}
               rounding="rounded"
-              sx={{ minWidth: 60 }}
+              sx={{ minWidth: 56 }}
             />
           </Box>
 
           {/* QUANTITY COLUMN */}
-          <Box sx={{ width: 80 }}>
-            <Typography variant="caption" sx={{ display: 'block', mb: 1.5, fontWeight: 700, color: tokens.colors.textDisabled, fontSize: 10 }}>
-              QUANTITY
+          <Box sx={{ minWidth: 60 }}>
+            <Typography variant="caption" sx={{ display: 'block', mb: 1, fontWeight: 700, color: tokens.colors.textDisabled, fontSize: 10 }}>
+              QTY
             </Typography>
             <MitumbaSelect
               value={quantity}
               size="small"
               onChange={(val) => onQuantityChange?.(Number(val))}
-              options={[{ label: `${quantity}`, value: quantity }]} // Simplified for now
+              options={[{ label: `${quantity}`, value: quantity }]}
               rounding="rounded"
-              sx={{ minWidth: 60 }}
+              sx={{ minWidth: 56 }}
             />
           </Box>
 
           {/* PRICE COLUMN */}
-          <Box sx={{ textAlign: 'right', minWidth: 100 }}>
-            <Typography variant="caption" sx={{ display: 'block', mb: 1.5, fontWeight: 700, color: tokens.colors.textDisabled, fontSize: 10 }}>
+          <Box sx={{ textAlign: 'right', ml: 'auto' }}>
+            <Typography variant="caption" sx={{ display: 'block', mb: 1, fontWeight: 700, color: tokens.colors.textDisabled, fontSize: 10 }}>
               PRICE
             </Typography>
             <Typography sx={{ fontWeight: 900, color: tokens.colors.textPrimary, fontSize: tokens.typography.fontSizes.base, fontFamily: tokens.typography.fontFamily }}>
