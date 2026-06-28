@@ -35,6 +35,7 @@ export function OrderCard({
   sx,
 }: OrderCardProps) {
   const config = STATUS_CONFIG[status]
+  const [imageLoaded, setImageLoaded] = React.useState(false)
 
   return (
     <Box
@@ -69,13 +70,36 @@ export function OrderCard({
             overflow: 'hidden',
             bgcolor: tokens.colors.background,
             flexShrink: 0,
+            position: 'relative',
+            '@keyframes shimmer': {
+              '0%': { backgroundPosition: '-200% 0' },
+              '100%': { backgroundPosition: '200% 0' },
+            },
           }}
         >
+          {!imageLoaded && (
+            <Box
+              sx={{
+                position: 'absolute',
+                inset: 0,
+                background: `linear-gradient(90deg, ${tokens.colors.background} 25%, ${tokens.colors.divider} 50%, ${tokens.colors.background} 75%)`,
+                backgroundSize: '200% 100%',
+                animation: 'shimmer 1.5s ease-in-out infinite',
+              }}
+            />
+          )}
           <Box
             component="img"
             src={imageUrl}
             alt={title}
-            sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            onLoad={() => setImageLoaded(true)}
+            sx={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              opacity: imageLoaded ? 1 : 0,
+              transition: 'opacity 0.4s ease-in-out',
+            }}
           />
         </Box>
       )}
