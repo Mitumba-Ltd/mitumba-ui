@@ -44,7 +44,7 @@ export type { MitumbaBannerProps, BannerSeverity, MitumbaSkeletonProps, MitumbaT
 
 // Messaging
 export { ConversationList, MessageBubble, ChatThread, InboxLayout, OrderMessageAttachment } from './components'
-export type { ConversationListProps, Conversation, MessageBubbleProps, MessageAttachment, ChatThreadProps, InboxLayoutProps, OrderMessageAttachmentProps } from './components'
+export type { ConversationListProps, Conversation, MessageBubbleProps, MessageAttachment, ChatThreadProps, ChatThreadDraftAttachment, InboxLayoutProps, OrderMessageAttachmentProps } from './components'
 
 // Theme
 export { MitumbaThemeProvider, mitumbaTheme } from './theme'
