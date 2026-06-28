@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.21.1
+
+### Patch Changes
+
+- 2d4dc49: fix(commerce): OrderCard image shimmer + crossfade matching ListingCard behavior
+
 ## 0.21.0
 
 ### Minor Changes
