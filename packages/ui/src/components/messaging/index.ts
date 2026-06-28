@@ -8,7 +8,7 @@ export { OrderMessageAttachment } from './OrderMessageAttachment';
 export type { OrderMessageAttachmentProps } from './OrderMessageAttachment';
 
 export { ChatThread } from './ChatThread';
-export type { ChatThreadProps } from './ChatThread';
+export type { ChatThreadProps, ChatThreadDraftAttachment } from './ChatThread';
 
 export { InboxLayout } from './InboxLayout';
 export type { InboxLayoutProps } from './InboxLayout';

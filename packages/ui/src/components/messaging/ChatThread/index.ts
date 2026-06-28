@@ -1,2 +1,2 @@
 export { ChatThread } from './ChatThread';
-export type { ChatThreadProps } from './ChatThread.types';
+export type { ChatThreadProps, ChatThreadDraftAttachment } from './ChatThread.types';

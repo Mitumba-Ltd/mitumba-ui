@@ -9,12 +9,14 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Skeleton from '@mui/material/Skeleton';
 import SendIcon from '@mui/icons-material/Send';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
+import CloseIcon from '@mui/icons-material/Close';
 
 import { colors, spacing, radius } from '@mitumba/tokens';
 import { MessageBubble } from '../MessageBubble/MessageBubble';
+import { OrderMessageAttachment } from '../OrderMessageAttachment';
 import type { ChatThreadProps } from './ChatThread.types';
 
-function ChatThread({ messages, partnerName, partnerAvatarUrl, partnerStatus, onSend, onAttach, sending, loading }: ChatThreadProps) {
+function ChatThread({ messages, partnerName, partnerAvatarUrl, partnerStatus, onSend, onAttach, sending, loading, attachment, onRemoveAttachment }: ChatThreadProps) {
   const [input, setInput] = useState('');
 
   function handleSend() {
@@ -49,6 +51,31 @@ function ChatThread({ messages, partnerName, partnerAvatarUrl, partnerStatus, on
           messages.map((msg, i) => <MessageBubble key={i} {...msg} />)
         )}
       </Box>
+
+      {/* Draft attachment */}
+      {attachment?.type === 'order' && (
+        <Box sx={{ px: `${spacing.lg}px`, pt: `${spacing.sm}px`, position: 'relative' }}>
+          <OrderMessageAttachment
+            orderId={attachment.data.orderId}
+            orderShortId={attachment.data.orderShortId}
+            listingTitle={attachment.data.listingTitle}
+            listingImageUrl={attachment.data.listingImageUrl}
+            amount={attachment.data.amount}
+            status={attachment.data.status}
+            createdAt={attachment.data.createdAt}
+          />
+          {onRemoveAttachment && (
+            <IconButton
+              aria-label="Remove attachment"
+              onClick={onRemoveAttachment}
+              size="small"
+              sx={{ position: 'absolute', top: 4, right: `${spacing.lg}px`, bgcolor: colors.background, '&:hover': { bgcolor: colors.errorLight, color: colors.error } }}
+            >
+              <CloseIcon sx={{ fontSize: 14 }} />
+            </IconButton>
+          )}
+        </Box>
+      )}
 
       {/* Input */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: `${spacing.md}px`, px: `${spacing.lg}px`, py: `${spacing.base}px`, borderTop: `1px solid ${colors.divider}` }}>
