@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.21.0
+
+### Minor Changes
+
+- c404700: feat(commerce): add OrderCard — compact order summary card for order history, matching CartItem design language
+
 ## 0.20.0
 
 ### Minor Changes
