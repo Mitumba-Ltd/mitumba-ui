@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.22.0
+
+### Minor Changes
+
+- ba44bfa: feat(messaging): ChatThread `attachment` prop — renders draft order card above composer with remove control
+
 ## 0.21.1
 
 ### Patch Changes
