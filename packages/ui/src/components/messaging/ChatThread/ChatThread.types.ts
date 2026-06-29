@@ -19,4 +19,6 @@ export interface ChatThreadProps {
   attachment?: ChatThreadDraftAttachment;
   /** Called when the user removes the draft attachment */
   onRemoveAttachment?: () => void;
+  /** Fired when the user starts/stops typing. Debounced internally — emits true on input, false after 2s idle or on send. */
+  onTyping?: (isTyping: boolean) => void;
 }

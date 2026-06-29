@@ -16,13 +16,34 @@ import { MessageBubble } from '../MessageBubble/MessageBubble';
 import { OrderMessageAttachment } from '../OrderMessageAttachment';
 import type { ChatThreadProps } from './ChatThread.types';
 
-function ChatThread({ messages, partnerName, partnerAvatarUrl, partnerStatus, onSend, onAttach, sending, loading, attachment, onRemoveAttachment }: ChatThreadProps) {
+function ChatThread({ messages, partnerName, partnerAvatarUrl, partnerStatus, onSend, onAttach, sending, loading, attachment, onRemoveAttachment, onTyping }: ChatThreadProps) {
   const [input, setInput] = useState('');
+  const typingTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isTypingRef = React.useRef(false);
+
+  function emitTyping(typing: boolean) {
+    if (!onTyping || isTypingRef.current === typing) return;
+    isTypingRef.current = typing;
+    onTyping(typing);
+  }
+
+  function handleInputChange(value: string) {
+    setInput(value);
+    if (value.trim()) {
+      emitTyping(true);
+      if (typingTimer.current) clearTimeout(typingTimer.current);
+      typingTimer.current = setTimeout(() => emitTyping(false), 2000);
+    } else {
+      emitTyping(false);
+    }
+  }
 
   function handleSend() {
     if (!input.trim() || sending) return;
     onSend(input.trim());
     setInput('');
+    emitTyping(false);
+    if (typingTimer.current) clearTimeout(typingTimer.current);
   }
 
   return (
@@ -89,7 +110,7 @@ function ChatThread({ messages, partnerName, partnerAvatarUrl, partnerStatus, on
           size="small"
           fullWidth
           value={input}
-          onChange={(e) => setInput(e.target.value)}
+          onChange={(e) => handleInputChange(e.target.value)}
           onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
           sx={{ '& .MuiOutlinedInput-root': { borderRadius: `${radius.full}px` } }}
           aria-label="Message input"
