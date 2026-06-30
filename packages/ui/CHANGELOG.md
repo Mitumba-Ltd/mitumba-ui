@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.25.0
+
+### Minor Changes
+
+- 00ec991: feat(messaging): add FloatingChatDock — persistent bottom-right chat window for desktop with minimize/close, unread badge, renders ChatThread as children
+
 ## 0.24.1
 
 ### Patch Changes
