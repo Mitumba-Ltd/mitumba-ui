@@ -12,3 +12,6 @@ export type { ChatThreadProps, ChatThreadDraftAttachment } from './ChatThread';
 
 export { InboxLayout } from './InboxLayout';
 export type { InboxLayoutProps } from './InboxLayout';
+
+export { FloatingChatDock } from './FloatingChatDock';
+export type { FloatingChatDockProps } from './FloatingChatDock';
