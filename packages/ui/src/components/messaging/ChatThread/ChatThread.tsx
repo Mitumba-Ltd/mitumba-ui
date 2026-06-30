@@ -20,6 +20,22 @@ function ChatThread({ messages, partnerName, partnerAvatarUrl, partnerStatus, on
   const [input, setInput] = useState('');
   const typingTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const isTypingRef = React.useRef(false);
+  const messagesContainerRef = React.useRef<HTMLDivElement>(null);
+  const userScrolledUp = React.useRef(false);
+
+  // Auto-scroll to bottom on new messages (unless user scrolled up)
+  React.useEffect(() => {
+    const container = messagesContainerRef.current;
+    if (!container || userScrolledUp.current) return;
+    container.scrollTop = container.scrollHeight;
+  }, [messages, loading]);
+
+  function handleScroll() {
+    const container = messagesContainerRef.current;
+    if (!container) return;
+    const distanceFromBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
+    userScrolledUp.current = distanceFromBottom > 80;
+  }
 
   function emitTyping(typing: boolean) {
     if (!onTyping || isTypingRef.current === typing) return;
@@ -44,6 +60,11 @@ function ChatThread({ messages, partnerName, partnerAvatarUrl, partnerStatus, on
     setInput('');
     emitTyping(false);
     if (typingTimer.current) clearTimeout(typingTimer.current);
+    userScrolledUp.current = false;
+    setTimeout(() => {
+      const container = messagesContainerRef.current;
+      if (container) container.scrollTop = container.scrollHeight;
+    }, 50);
   }
 
   return (
@@ -65,7 +86,7 @@ function ChatThread({ messages, partnerName, partnerAvatarUrl, partnerStatus, on
       </Box>
 
       {/* Messages */}
-      <Box sx={{ flex: 1, overflowY: 'auto', p: `${spacing.lg}px` }}>
+      <Box ref={messagesContainerRef} onScroll={handleScroll} sx={{ flex: 1, minHeight: 0, overflowY: 'auto', p: `${spacing.lg}px` }}>
         {loading ? (
           Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} variant="rectangular" height={48} sx={{ borderRadius: `${radius.md}px`, mb: `${spacing.md}px`, width: i % 2 === 0 ? '60%' : '45%', ml: i % 2 === 0 ? 0 : 'auto' }} />)
         ) : (
