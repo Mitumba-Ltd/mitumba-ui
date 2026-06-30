@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.24.0
+
+### Minor Changes
+
+- c66146d: feat(feedback): add DestructiveConfirmDialog — danger confirmation with optional blockers, confirm phrase, and TOTP verification
+
 ## 0.23.0
 
 ### Minor Changes
