@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.24.1
+
+### Patch Changes
+
+- 8227282: fix(messaging): ChatThread scrollable message area — minHeight: 0 for proper flex containment, auto-scroll to newest message on mount/new messages/send, preserves scroll position when user scrolls up
+
 ## 0.24.0
 
 ### Minor Changes
