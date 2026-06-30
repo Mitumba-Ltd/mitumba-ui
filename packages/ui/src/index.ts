@@ -43,8 +43,8 @@ export { MitumbaBanner, MitumbaSkeleton, MitumbaToast, MitumbaModal, EmptyState,
 export type { MitumbaBannerProps, BannerSeverity, MitumbaSkeletonProps, MitumbaToastProps, MitumbaModalProps, EmptyStateProps, ErrorStateProps, OfflineBannerProps, UnauthenticatedStateProps, DestructiveConfirmDialogProps } from './components'
 
 // Messaging
-export { ConversationList, MessageBubble, ChatThread, InboxLayout, OrderMessageAttachment } from './components'
-export type { ConversationListProps, Conversation, MessageBubbleProps, MessageAttachment, ChatThreadProps, ChatThreadDraftAttachment, InboxLayoutProps, OrderMessageAttachmentProps } from './components'
+export { ConversationList, MessageBubble, ChatThread, InboxLayout, OrderMessageAttachment, FloatingChatDock } from './components'
+export type { ConversationListProps, Conversation, MessageBubbleProps, MessageAttachment, ChatThreadProps, ChatThreadDraftAttachment, InboxLayoutProps, OrderMessageAttachmentProps, FloatingChatDockProps } from './components'
 
 // Theme
 export { MitumbaThemeProvider, mitumbaTheme } from './theme'
