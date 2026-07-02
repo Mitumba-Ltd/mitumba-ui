@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.26.0
+
+### Minor Changes
+
+- 93492c9: feat(forms): add TwoFactorMethodList + AddTwoFactorMethodModal — manage multiple 2FA methods on security settings
+
 ## 0.25.0
 
 ### Minor Changes
