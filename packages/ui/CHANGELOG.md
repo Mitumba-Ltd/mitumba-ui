@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.27.0
+
+### Minor Changes
+
+- 06b3af2: feat(forms): TwoFactorLoginStep method chooser — segmented buttons for switching between TOTP/SMS/Email methods at login, with send code trigger for SMS/email
+
 ## 0.26.0
 
 ### Minor Changes
