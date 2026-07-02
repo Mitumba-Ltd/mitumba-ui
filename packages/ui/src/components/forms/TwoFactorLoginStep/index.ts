@@ -1,2 +1,2 @@
 export { TwoFactorLoginStep } from './TwoFactorLoginStep';
-export type { TwoFactorLoginStepProps } from './TwoFactorLoginStep.types';
+export type { TwoFactorLoginStepProps, TwoFactorLoginMethod } from './TwoFactorLoginStep.types';
