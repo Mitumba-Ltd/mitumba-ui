@@ -27,6 +27,7 @@ export function StatsCard({
 }: StatsCardProps) {
   const isGlass = variant === 'glass'
   const isElevated = variant === 'elevated'
+  const isCompact = variant === 'compact'
 
   const themeColor = useMemo(() => {
     if (color === 'primary') return tokens.colors.green
@@ -149,6 +150,52 @@ export function StatsCard({
       transform: 'translateY(-4px) scale(1.02)',
       '& .icon-wrapper': { transform: 'rotate(10deg) scale(1.1)' }
     }
+  }
+
+  if (isCompact) {
+    return (
+      <Box
+        sx={[
+          {
+            p: `${tokens.spacing.lg}px`,
+            width: '100%',
+            textAlign: 'center',
+            backgroundColor: tokens.colors.surface,
+            borderRadius: `${tokens.radius.lg}px`,
+            border: `1px solid ${tokens.colors.divider}`,
+            boxShadow: tokens.shadows.card,
+            transition: tokens.motion.transitions.interaction,
+            '&:hover': { boxShadow: tokens.shadows.elevated },
+          },
+          ...(Array.isArray(sx) ? sx : [sx]),
+        ]}
+      >
+        <Typography
+          sx={{
+            fontSize: tokens.typography.fontSizes.display,
+            fontWeight: tokens.typography.fontWeights.extrabold,
+            color: tokens.colors.textPrimary,
+            fontFamily: tokens.typography.fontFamily,
+            lineHeight: 1,
+            mb: '4px',
+          }}
+        >
+          {unit && unitPosition === 'prefix' ? `${unit} ` : ''}{value}{unit && unitPosition === 'suffix' ? ` ${unit}` : ''}
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: tokens.typography.fontSizes.xs,
+            fontWeight: tokens.typography.fontWeights.semibold,
+            color: tokens.colors.textSecondary,
+            fontFamily: tokens.typography.fontFamily,
+            textTransform: 'uppercase',
+            letterSpacing: '0.04em',
+          }}
+        >
+          {label}
+        </Typography>
+      </Box>
+    )
   }
 
   if (isGlass) {
