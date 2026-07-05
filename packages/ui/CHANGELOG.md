@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.29.0
+
+### Minor Changes
+
+- 4decb90: feat(commerce): add OrderSummaryCard — sticky sidebar card for cart/checkout with line items, total, checkout button, trust line. Matches CartItem design language (tokens.radius.lg, shadows.card, hover-lift).
+
 ## 0.28.0
 
 ### Minor Changes
