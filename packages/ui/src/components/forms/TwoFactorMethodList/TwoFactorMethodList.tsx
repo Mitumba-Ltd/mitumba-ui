@@ -11,6 +11,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import QrCode2Icon from '@mui/icons-material/QrCode2'
 import SmsIcon from '@mui/icons-material/Sms'
 import EmailIcon from '@mui/icons-material/Email'
+import FingerprintIcon from '@mui/icons-material/Fingerprint'
 import StarIcon from '@mui/icons-material/Star'
 import ToggleOnIcon from '@mui/icons-material/ToggleOn'
 import ToggleOffIcon from '@mui/icons-material/ToggleOff'
@@ -25,12 +26,14 @@ const TYPE_ICONS: Record<TwoFactorMethodType, React.ReactNode> = {
   totp: <QrCode2Icon />,
   sms: <SmsIcon />,
   email: <EmailIcon />,
+  passkey: <FingerprintIcon />,
 }
 
 const TYPE_LABELS: Record<TwoFactorMethodType, string> = {
   totp: 'Authenticator App',
   sms: 'SMS',
   email: 'Email',
+  passkey: 'Passkey',
 }
 
 /**

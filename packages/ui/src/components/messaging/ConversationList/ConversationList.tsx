@@ -11,11 +11,12 @@ import Chip from '@mui/material/Chip';
 import Skeleton from '@mui/material/Skeleton';
 import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from '@mui/icons-material/Edit';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 
 import { colors, spacing, radius } from '@mitumba/tokens';
 import type { ConversationListProps } from './ConversationList.types';
 
-function ConversationList({ conversations, activeId, onSelect, onSearch, onCompose, loading }: ConversationListProps) {
+function ConversationList({ conversations, activeId, onSelect, onSearch, onCompose, loading, emptyText, emptyHint }: ConversationListProps) {
   if (loading) {
     return (
       <Box sx={{ p: `${spacing.lg}px` }}>
@@ -44,6 +45,26 @@ function ConversationList({ conversations, activeId, onSelect, onSearch, onCompo
         )}
       </Box>
       <Box sx={{ flex: 1, overflowY: 'auto' }}>
+        {conversations.length === 0 && (
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', py: `${spacing.huge}px`, px: `${spacing.lg}px`, textAlign: 'center' }}>
+            <ChatBubbleOutlineIcon sx={{ fontSize: 40, color: colors.textDisabled, mb: `${spacing.base}px` }} />
+            <Typography sx={{ fontSize: 14, fontWeight: 700, color: colors.textPrimary, mb: `${spacing.xs}px` }}>
+              {emptyText || 'No messages yet'}
+            </Typography>
+            <Typography sx={{ fontSize: 12, color: colors.textSecondary, maxWidth: 240 }}>
+              {emptyHint || 'Conversations with sellers and buyers show up here.'}
+            </Typography>
+            {onCompose && (
+              <Typography
+                component="button"
+                onClick={onCompose}
+                sx={{ mt: `${spacing.lg}px`, fontSize: 12, fontWeight: 600, color: colors.green, cursor: 'pointer', background: 'none', border: 'none', '&:hover': { textDecoration: 'underline' } }}
+              >
+                Start a conversation
+              </Typography>
+            )}
+          </Box>
+        )}
         {conversations.map((conv) => (
           <Box
             key={conv.id}

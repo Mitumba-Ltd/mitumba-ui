@@ -1,4 +1,4 @@
-export type TwoFactorMethodType = 'totp' | 'sms' | 'email'
+export type TwoFactorMethodType = 'totp' | 'sms' | 'email' | 'passkey'
 
 export interface TwoFactorMethodView {
   /** Method ID */

@@ -4,14 +4,16 @@ import Typography from '@mui/material/Typography'
 import QrCode2Icon from '@mui/icons-material/QrCode2'
 import SmsIcon from '@mui/icons-material/Sms'
 import EmailIcon from '@mui/icons-material/Email'
+import FingerprintIcon from '@mui/icons-material/Fingerprint'
 import { tokens } from '@mitumba/tokens'
 import { MitumbaModal } from '../../feedback/MitumbaModal'
 import { MitumbaChip } from '../../foundation/MitumbaChip'
 import type { AddTwoFactorMethodModalProps } from './AddTwoFactorMethodModal.types'
 import type { TwoFactorMethodType } from '../TwoFactorMethodList/TwoFactorMethodList.types'
 
-const METHOD_CONFIG: Record<TwoFactorMethodType, { icon: React.ReactNode; title: string; description: string; recommended?: boolean }> = {
+const METHOD_CONFIG: Record<TwoFactorMethodType, { icon: React.ReactNode; title: string; description: string; recommended?: boolean; badge?: string }> = {
   totp: { icon: <QrCode2Icon />, title: 'Authenticator App', description: 'Use Google Authenticator, Authy, 1Password, or similar', recommended: true },
+  passkey: { icon: <FingerprintIcon />, title: 'Passkey', description: 'Face ID, Touch ID, or a security key', badge: 'Strongest' },
   sms: { icon: <SmsIcon />, title: 'SMS', description: 'Get a code by text message' },
   email: { icon: <EmailIcon />, title: 'Email', description: 'Get a code by email' },
 }
@@ -34,7 +36,7 @@ export function AddTwoFactorMethodModal({
       maxWidth={480}
     >
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.md}px` }}>
-        {(['totp', 'sms', 'email'] as TwoFactorMethodType[]).map((type) => {
+        {(['totp', 'passkey', 'sms', 'email'] as TwoFactorMethodType[]).map((type) => {
           const config = METHOD_CONFIG[type]
           const available = availableTypes.includes(type)
 
@@ -72,6 +74,7 @@ export function AddTwoFactorMethodModal({
                     {config.title}
                   </Typography>
                   {config.recommended && <MitumbaChip label="Recommended" status="success" size="small" variant="solid" rounding="pill" />}
+                  {config.badge && !config.recommended && <MitumbaChip label={config.badge} status="special" size="small" variant="solid" rounding="pill" />}
                 </Box>
                 <Typography sx={{ fontSize: tokens.typography.fontSizes.xs, color: tokens.colors.textSecondary, fontFamily: tokens.typography.fontFamily, mt: '2px' }}>
                   {config.description}

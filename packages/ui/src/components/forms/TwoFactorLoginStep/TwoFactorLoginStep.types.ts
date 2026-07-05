@@ -26,4 +26,6 @@ export interface TwoFactorLoginStepProps {
   onMethodChange?: (methodId: string) => void
   /** Called to trigger sending a code for SMS/email methods */
   onSendCode?: (methodId: string) => void
+  /** Called when the active method is a passkey — triggers browser WebAuthn prompt */
+  onUsePasskey?: (methodId: string) => void
 }

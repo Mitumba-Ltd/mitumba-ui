@@ -9,6 +9,7 @@ import { useTheme } from '@mui/material/styles'
 import MinimizeIcon from '@mui/icons-material/Remove'
 import OpenInFullIcon from '@mui/icons-material/OpenInFull'
 import CloseIcon from '@mui/icons-material/Close'
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { tokens } from '@mitumba/tokens'
 import type { FloatingChatDockProps } from './FloatingChatDock.types'
 
@@ -29,6 +30,7 @@ export function FloatingChatDock({
   onToggleMinimize,
   onClose,
   unreadCount,
+  onBack,
   children,
 }: FloatingChatDockProps) {
   const theme = useTheme()
@@ -69,6 +71,17 @@ export function FloatingChatDock({
           flexShrink: 0,
         }}
       >
+        {onBack && (
+          <IconButton
+            aria-label="Back"
+            onClick={(e) => { e.stopPropagation(); onBack() }}
+            size="small"
+            sx={{ color: tokens.colors.textOnGreen, mr: '-4px', '&:hover': { bgcolor: 'rgba(255,255,255,0.15)' } }}
+          >
+            <ChevronLeftIcon sx={{ fontSize: 20 }} />
+          </IconButton>
+        )}
+
         <Badge
           badgeContent={minimized ? unreadCount : 0}
           color="error"

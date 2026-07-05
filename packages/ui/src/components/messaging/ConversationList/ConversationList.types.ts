@@ -16,4 +16,8 @@ export interface ConversationListProps {
   onSearch?: (query: string) => void;
   onCompose?: () => void;
   loading?: boolean;
+  /** Override empty state title. @default "No messages yet" */
+  emptyText?: string;
+  /** Override empty state subtitle. @default "Conversations with sellers and buyers show up here." */
+  emptyHint?: string;
 }

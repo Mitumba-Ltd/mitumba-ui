@@ -17,6 +17,8 @@ export interface FloatingChatDockProps {
   onClose: () => void
   /** Unread message count — shown as badge when minimized */
   unreadCount?: number
+  /** When set, shows a back chevron in the header */
+  onBack?: () => void
   /** The chat UI (e.g. ChatThread) rendered in the expanded body */
   children: ReactNode
 }
