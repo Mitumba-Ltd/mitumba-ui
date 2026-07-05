@@ -408,6 +408,20 @@ Props:
 - `onContest: (message: string, files: File[]) => Promise<void>`
 - `submitting?: boolean`
 
+### 9.10 `OrderSummaryCard`
+
+Sticky sidebar card for cart/checkout showing line items, total, and action button.
+
+Props:
+- `items: OrderSummaryLineItem[]`
+- `totalKes: number`
+- `actionLabel?: string`
+- `onAction?: () => void`
+- `loading?: boolean`
+- `disabled?: boolean`
+- `trustLine?: string`
+- `sx?: SxProps<Theme>`
+
 ---
 
 ## Phase 10 — Form components
