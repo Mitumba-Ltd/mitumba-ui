@@ -8,6 +8,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import QrCode2Icon from '@mui/icons-material/QrCode2';
 import SmsIcon from '@mui/icons-material/Sms';
 import EmailIcon from '@mui/icons-material/Email';
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import { tokens } from '@mitumba/tokens';
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
 import { MitumbaTextField } from '../../foundation/MitumbaTextField';
@@ -18,12 +19,14 @@ const TYPE_ICONS: Record<TwoFactorMethodType, React.ReactNode> = {
   totp: <QrCode2Icon sx={{ fontSize: 16 }} />,
   sms: <SmsIcon sx={{ fontSize: 16 }} />,
   email: <EmailIcon sx={{ fontSize: 16 }} />,
+  passkey: <FingerprintIcon sx={{ fontSize: 16 }} />,
 };
 
 const TYPE_LABELS: Record<TwoFactorMethodType, string> = {
   totp: 'Authenticator',
   sms: 'SMS',
   email: 'Email',
+  passkey: 'Passkey',
 };
 
 function getSubtitle(method?: TwoFactorLoginMethod): string {
@@ -32,6 +35,7 @@ function getSubtitle(method?: TwoFactorLoginMethod): string {
     case 'totp': return 'Enter the 6-digit code from your authenticator app';
     case 'sms': return `Enter the code sent to your phone${method.label ? ` (${method.label})` : ''}`;
     case 'email': return `Enter the code sent to your email${method.label ? ` (${method.label})` : ''}`;
+    case 'passkey': return 'Use your fingerprint, face, or security key to verify';
     default: return 'Enter your verification code';
   }
 }
@@ -49,6 +53,7 @@ export function TwoFactorLoginStep({
   activeMethodId,
   onMethodChange,
   onSendCode,
+  onUsePasskey,
 }: TwoFactorLoginStepProps): React.ReactElement {
   const [code, setCode] = useState('');
   const [codeSent, setCodeSent] = useState(false);
@@ -56,6 +61,7 @@ export function TwoFactorLoginStep({
   const hasMultipleMethods = methods && methods.length > 1;
   const activeMethod = methods?.find((m) => m.id === activeMethodId) ?? methods?.[0];
   const needsSend = activeMethod && (activeMethod.type === 'sms' || activeMethod.type === 'email');
+  const isPasskey = activeMethod?.type === 'passkey';
 
   const handleSubmit = () => {
     if (code.length === 6) onSubmit(code);
@@ -134,7 +140,7 @@ export function TwoFactorLoginStep({
         )}
 
         {/* Send code button for SMS/email */}
-        {needsSend && !codeSent && onSendCode && (
+        {!isPasskey && needsSend && !codeSent && onSendCode && (
           <Box sx={{ mb: `${tokens.spacing.xl}px` }}>
             <MitumbaPrimaryButton
               label={`Send code via ${TYPE_LABELS[activeMethod.type]}`}
@@ -145,8 +151,26 @@ export function TwoFactorLoginStep({
           </Box>
         )}
 
+        {/* Passkey button */}
+        {isPasskey && onUsePasskey && activeMethod && (
+          <Box sx={{ mb: `${tokens.spacing.xl}px` }}>
+            <MitumbaPrimaryButton
+              label="Use a passkey"
+              onClick={() => onUsePasskey(activeMethod.id)}
+              loading={loading}
+              icon={<FingerprintIcon sx={{ fontSize: 20 }} />}
+              fullWidth
+            />
+            {error && (
+              <Typography sx={{ color: tokens.colors.error, fontSize: tokens.typography.fontSizes.xs, mt: `${tokens.spacing.sm}px`, textAlign: 'center' }}>
+                {error}
+              </Typography>
+            )}
+          </Box>
+        )}
+
         {/* Code input */}
-        {(!needsSend || codeSent || !onSendCode) && (
+        {!isPasskey && (!needsSend || codeSent || !onSendCode) && (
           <>
             <MitumbaTextField
               label="Verification code"
