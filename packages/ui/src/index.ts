@@ -11,8 +11,8 @@ export { TopNav, MobileBottomNav, MitumbaBreadcrumb, MitumbaTabs, MitumbaPaginat
 export type { TopNavProps, MobileBottomNavProps, MitumbaBreadcrumbProps, MitumbaTabsProps, MitumbaStepperProps, MitumbaPaginationProps } from './components'
 
 // Seller
-export { STIScoreChip, SellerCard, STIBreakdownPanel } from './components'
-export type { STIScoreChipProps, SellerCardProps, STIBreakdownPanelProps } from './components'
+export { STIScoreChip, SellerCard, STIBreakdownPanel, StoreCard } from './components'
+export type { STIScoreChipProps, SellerCardProps, STIBreakdownPanelProps, StoreCardProps } from './components'
 
 // Listing
 export { ListingCard, ListingCardSkeleton, ListingGrid, ListingImageGallery, ConditionBadge } from './components'
