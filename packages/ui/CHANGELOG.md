@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.31.0
+
+### Minor Changes
+
+- 55b498b: feat(seller): add StoreCard — clickable store selector card with avatar initials, name, subtitle, chevron. Matches CartItem materialness.
+
 ## 0.30.0
 
 ### Minor Changes
