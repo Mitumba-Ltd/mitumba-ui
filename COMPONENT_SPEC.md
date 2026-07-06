@@ -161,6 +161,27 @@ Props:
 - `columns?: number | object`
 - `gap?: number`
 
+### 4.5 `ProfileCard`
+
+User identity card with avatar, name, role chips, and action button.
+
+Props:
+- `name: string`
+- `avatarUrl?: string`
+- `roles?: { label: string; icon?: ReactNode; color?: 'primary' | 'secondary' }[]`
+- `actionLabel?: string`
+- `onAction?: () => void`
+- `subtitle?: string`
+- `sx?: SxProps<Theme>`
+
+### 4.6 `ProfileNavList`
+
+Navigation list with icons, labels, chevrons, and optional badges.
+
+Props:
+- `items: ProfileNavItem[]`
+- `sx?: SxProps<Theme>`
+
 ---
 
 ## Phase 5 — Navigation components
@@ -347,6 +368,17 @@ Props:
 
 Detailed view of how an STI score is calculated.
 
+### 8.4 `StoreCard`
+
+Clickable store selector card with avatar initials, name, subtitle, and chevron.
+
+Props:
+- `name: string`
+- `avatarUrl?: string`
+- `subtitle?: string`
+- `onClick?: () => void`
+- `sx?: SxProps<Theme>`
+
 ---
 
 ## Phase 9 — Commerce components
@@ -422,6 +454,21 @@ Props:
 - `trustLine?: string`
 - `sx?: SxProps<Theme>`
 
+### 9.11 `OrderCard`
+
+Compact order history card for order lists. Image, order ID, title, status chip, price, delivery fee, track button.
+
+Props:
+- `orderShortId: string`
+- `title: string`
+- `imageUrl?: string`
+- `totalKes: number`
+- `deliveryFeeKes?: number`
+- `status: OrderCardStatus`
+- `createdAt: string`
+- `onClick?: () => void`
+- `sx?: SxProps<Theme>`
+
 ---
 
 ## Phase 10 — Form components
@@ -454,6 +501,30 @@ Props:
 - `error?: string`
 - `isFirstAddress?: boolean`
 
+### 10.6 `TwoFactorMethodList`
+
+Lists user's 2FA methods with enable/disable/delete/set-primary actions via overflow menu.
+
+Props:
+- `methods: TwoFactorMethodView[]`
+- `loading?: boolean`
+- `onAdd: () => void`
+- `onEnable: (id: string) => void`
+- `onDisable: (id: string) => void`
+- `onDelete: (id: string) => void`
+- `onSetPrimary: (id: string) => void`
+- `onVerifyPending?: (id: string) => void`
+
+### 10.7 `AddTwoFactorMethodModal`
+
+Type selection step for adding a new 2FA method (TOTP, SMS, Email, Passkey).
+
+Props:
+- `open: boolean`
+- `onClose: () => void`
+- `availableTypes: TwoFactorMethodType[]`
+- `onSelectType: (type: TwoFactorMethodType) => void`
+
 ---
 
 ## Phase 11 — Feedback components
@@ -481,6 +552,22 @@ High-depth dialogs with 32px rounding.
 ### 11.6 `MitumbaSkeleton` (Overhauled)
 
 Shimmer wave animations.
+
+### 11.7 `DestructiveConfirmDialog`
+
+Danger confirmation modal with optional blockers, confirm phrase, and TOTP verification.
+
+Props:
+- `open: boolean`
+- `onClose: () => void`
+- `title: string`
+- `description: string`
+- `blockers?: string[]`
+- `confirmPhrase?: string`
+- `requireTotp?: boolean`
+- `onConfirm: (input: { code?: string }) => Promise<void>`
+- `submitting?: boolean`
+- `confirmLabel?: string`
 
 ---
 
@@ -585,6 +672,22 @@ Props:
 - `amount: number`
 - `status: string`
 - `createdAt: string`
+
+### 14.6 `FloatingChatDock`
+
+Persistent bottom-right desktop chat window. Pure presentation chrome — renders ChatThread as children.
+
+Props:
+- `open: boolean`
+- `title: string`
+- `subtitle?: string`
+- `avatarUrl?: string`
+- `minimized: boolean`
+- `onToggleMinimize: () => void`
+- `onClose: () => void`
+- `unreadCount?: number`
+- `onBack?: () => void`
+- `children: ReactNode`
 
 ---
 
