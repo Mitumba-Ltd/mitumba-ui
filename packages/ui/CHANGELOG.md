@@ -1,5 +1,13 @@
 # @mitumba/ui
 
+## 0.30.0
+
+### Minor Changes
+
+- fb1094f: feat(layout): add ProfileCard — user identity card with avatar, name, role chips, action button
+  feat(layout): add ProfileNavList — navigation list with icons, labels, chevrons, optional badges
+  feat(data): StatsCard gains `compact` variant — centered number + label for profile stat tiles
+
 ## 0.29.0
 
 ### Minor Changes
