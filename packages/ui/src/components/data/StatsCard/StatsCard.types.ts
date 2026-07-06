@@ -13,7 +13,7 @@ export interface StatsTrend {
   label?: string
 }
 
-export type StatsCardVariant = 'standard' | 'glass' | 'elevated'
+export type StatsCardVariant = 'standard' | 'glass' | 'elevated' | 'compact'
 
 /**
  * Props for the StatsCard component.
