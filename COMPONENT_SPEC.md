@@ -182,6 +182,18 @@ Props:
 - `items: ProfileNavItem[]`
 - `sx?: SxProps<Theme>`
 
+### 4.7 `FormCard`
+
+Reusable card wrapper for form pages. Icon + title header, error alert, padded content area.
+
+Props:
+- `icon?: ReactNode`
+- `title: string`
+- `subtitle?: string`
+- `children: ReactNode`
+- `error?: string`
+- `sx?: SxProps<Theme>`
+
 ---
 
 ## Phase 5 — Navigation components
