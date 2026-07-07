@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.32.0
+
+### Minor Changes
+
+- ead726f: feat(layout): add FormCard — reusable card wrapper for form pages with icon + title header, error alert, padded body. Matches CartItem materialness.
+
 ## 0.31.0
 
 ### Minor Changes
