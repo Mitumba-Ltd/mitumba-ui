@@ -16,9 +16,11 @@ Your work here powers every pixel of the Mitumba platform. The Next.js web app a
 
 Read these documents in order:
 
-1. `README.md` — understand what this package is and who consumes it
-2. `CONTRIBUTING.md` — understand the rules, component file structure, testing requirements, accessibility requirements
-3. `COMPONENT_SPEC.md` — your full build list, in order, with exact prop interfaces
+1. `AGENTS.md` — the canonical entry point for any coding agent: the golden rules in one place
+2. `docs/WORKFLOW.md` — the **authoritative** end-to-end workflow: how a request (feature / fix / update) flows from issue → branch → implementation → PR → review → merge → versioning → npm publish. This and `AGENTS.md` are the primary workflow references
+3. `README.md` — understand what this package is and who consumes it
+4. `CONTRIBUTING.md` — understand the rules, component file structure, testing requirements, accessibility requirements
+5. `COMPONENT_SPEC.md` — your full build list, in order, with exact prop interfaces
 
 Do not skip any. Do not assume. Read them.
 
