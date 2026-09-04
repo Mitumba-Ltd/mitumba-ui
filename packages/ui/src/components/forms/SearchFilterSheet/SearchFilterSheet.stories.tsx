@@ -56,6 +56,13 @@ export const WithFiltersApplied: Story = {
   },
 };
 
+export const WithoutVaziFilter: Story = {
+  args: {
+    ...Default.args,
+    showVaziFilter: false,
+  },
+};
+
 export const Desktop: Story = {
   args: { ...Default.args },
   parameters: {
