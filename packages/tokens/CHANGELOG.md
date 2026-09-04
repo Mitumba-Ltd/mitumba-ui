@@ -1,5 +1,11 @@
 # @mitumba/tokens
 
+## 0.2.1
+
+### Patch Changes
+
+- 5ef87fd: chore: add repository, homepage, and bugs metadata to package manifests so npm OIDC trusted publishing can generate and validate sigstore provenance.
+
 ## 0.2.0
 
 ### Minor Changes

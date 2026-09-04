@@ -1,5 +1,13 @@
 # @mitumba/ui
 
+## 0.33.1
+
+### Patch Changes
+
+- 5ef87fd: chore: add repository, homepage, and bugs metadata to package manifests so npm OIDC trusted publishing can generate and validate sigstore provenance.
+- Updated dependencies [5ef87fd]
+  - @mitumba/tokens@0.2.1
+
 ## 0.33.0
 
 ### Minor Changes
