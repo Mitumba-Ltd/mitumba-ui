@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.33.0
+
+### Minor Changes
+
+- a700bb6: feat(forms): SearchFilterSheet — add optional showVaziFilter prop (default true) to hide the "VAZI Eligible Only" toggle, and make FilterState.vaziOnly optional. Backward compatible.
+
 ## 0.32.0
 
 ### Minor Changes
