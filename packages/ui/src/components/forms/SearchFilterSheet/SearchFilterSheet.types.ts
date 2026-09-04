@@ -4,7 +4,7 @@ export interface FilterState {
   priceRange: [number, number] | null;
   city: string | null;
   sort: 'relevant' | 'newest' | 'price_asc' | 'price_desc';
-  vaziOnly: boolean;
+  vaziOnly?: boolean;
 }
 
 export interface SearchFilterSheetProps {
@@ -15,4 +15,6 @@ export interface SearchFilterSheetProps {
   onClose: () => void;
   open: boolean;
   resultCount?: number;
+  /** When false, the "VAZI Eligible Only" toggle is not rendered. Defaults to true. */
+  showVaziFilter?: boolean;
 }

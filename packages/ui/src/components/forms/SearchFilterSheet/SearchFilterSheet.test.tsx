@@ -76,4 +76,14 @@ describe('SearchFilterSheet', () => {
     fireEvent.click(screen.getByText('Clear All'));
     expect(baseProps.onClear).toHaveBeenCalled();
   });
+
+  it('renders the VAZI toggle by default', () => {
+    render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} /></MitumbaThemeProvider>);
+    expect(screen.getByText('VAZI Eligible Only')).toBeInTheDocument();
+  });
+
+  it('hides the VAZI toggle when showVaziFilter is false', () => {
+    render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} showVaziFilter={false} /></MitumbaThemeProvider>);
+    expect(screen.queryByText('VAZI Eligible Only')).not.toBeInTheDocument();
+  });
 });

@@ -75,6 +75,7 @@ export function SearchFilterSheet({
   onClose,
   open,
   resultCount,
+  showVaziFilter = true,
 }: SearchFilterSheetProps): React.ReactElement {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
@@ -174,12 +175,14 @@ export function SearchFilterSheet({
       </Box>
 
       {/* VAZI Eligible Only */}
-      <Box>
-        <FormControlLabel
-          control={<Switch checked={filters.vaziOnly} onChange={handleVaziToggle} />}
-          label="VAZI Eligible Only"
-        />
-      </Box>
+      {showVaziFilter && (
+        <Box>
+          <FormControlLabel
+            control={<Switch checked={filters.vaziOnly ?? false} onChange={handleVaziToggle} />}
+            label="VAZI Eligible Only"
+          />
+        </Box>
+      )}
     </Box>
   );
 
