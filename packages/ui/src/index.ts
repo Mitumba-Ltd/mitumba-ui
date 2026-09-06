@@ -49,3 +49,6 @@ export type { ConversationListProps, Conversation, MessageBubbleProps, MessageAt
 // Theme
 export { MitumbaThemeProvider, mitumbaTheme } from './theme'
 export type { MitumbaThemeProviderProps } from './theme'
+
+// Semantic
+export type { HeadingLevel, SemanticTitleProps, SemanticDestinationProps } from './types/semantic'
