@@ -43,6 +43,8 @@ export function RaiseDisputeModal({
   orderShortId,
   onSubmit,
   submitting = false,
+  titleLevel,
+  errorMessage,
 }: RaiseDisputeModalProps) {
   const [reason, setReason] = useState<DisputeReason | ''>('')
   const [description, setDescription] = useState('')
@@ -50,6 +52,8 @@ export function RaiseDisputeModal({
   const [files, setFiles] = useState<File[]>([])
   const [previews, setPreviews] = useState<string[]>([])
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const resolutionLabelId = React.useId()
+  const evidenceLabelId = React.useId()
 
   const descLength = description.length
   const isValid =
@@ -90,6 +94,7 @@ export function RaiseDisputeModal({
       onClose={onClose}
       title="Raise a Dispute"
       subtitle={`Order #${orderShortId}`}
+      titleLevel={titleLevel}
       loading={submitting}
       actions={
         <MitumbaPrimaryButton
@@ -142,8 +147,9 @@ export function RaiseDisputeModal({
         </Box>
 
         {/* Desired Resolution */}
-        <Box>
+        <Box role="radiogroup" aria-labelledby={resolutionLabelId}>
           <Typography
+            id={resolutionLabelId}
             sx={{
               fontSize: tokens.typography.fontSizes.sm,
               fontWeight: tokens.typography.fontWeights.medium,
@@ -154,36 +160,41 @@ export function RaiseDisputeModal({
             Desired Resolution
           </Typography>
           <Box sx={{ display: 'flex', gap: `${tokens.spacing.xs}px` }}>
-            {RESOLUTION_OPTIONS.map((opt) => (
-              <Button
-                key={opt.value}
-                onClick={() => setResolution(opt.value)}
-                sx={{
-                  flex: 1,
-                  textTransform: 'none',
-                  borderRadius: `${tokens.radius.md}px`,
-                  fontFamily: tokens.typography.fontFamily,
-                  fontSize: tokens.typography.fontSizes.sm,
-                  fontWeight: tokens.typography.fontWeights.medium,
-                  py: 1,
-                  border: `1.5px solid ${resolution === opt.value ? tokens.colors.green : tokens.colors.divider}`,
-                  bgcolor: resolution === opt.value ? tokens.colors.greenLight : 'transparent',
-                  color: resolution === opt.value ? tokens.colors.green : tokens.colors.textPrimary,
-                  '&:hover': {
-                    bgcolor: tokens.colors.greenLight,
-                    borderColor: tokens.colors.green,
-                  },
-                }}
-              >
-                {opt.label}
-              </Button>
-            ))}
+            {RESOLUTION_OPTIONS.map((opt) => {
+              const selected = resolution === opt.value
+              return (
+                <Button
+                  key={opt.value}
+                  role="radio"
+                  aria-checked={selected}
+                  onClick={() => setResolution(opt.value)}
+                  sx={{
+                    flex: 1,
+                    textTransform: 'none',
+                    borderRadius: `${tokens.radius.md}px`,
+                    fontSize: tokens.typography.fontSizes.sm,
+                    fontWeight: tokens.typography.fontWeights.medium,
+                    py: 1,
+                    border: `1.5px solid ${selected ? tokens.colors.green : tokens.colors.divider}`,
+                    bgcolor: selected ? tokens.colors.greenLight : 'transparent',
+                    color: selected ? tokens.colors.green : tokens.colors.textPrimary,
+                    '&:hover': {
+                      bgcolor: tokens.colors.greenLight,
+                      borderColor: tokens.colors.green,
+                    },
+                  }}
+                >
+                  {opt.label}
+                </Button>
+              )
+            })}
           </Box>
         </Box>
 
         {/* Evidence Upload */}
-        <Box>
+        <Box role="group" aria-labelledby={evidenceLabelId}>
           <Typography
+            id={evidenceLabelId}
             sx={{
               fontSize: tokens.typography.fontSizes.sm,
               fontWeight: tokens.typography.fontWeights.medium,
@@ -230,12 +241,17 @@ export function RaiseDisputeModal({
             ))}
             {files.length < MAX_FILES && (
               <Box
+                component="button"
+                type="button"
+                aria-label="Add evidence photo"
                 onClick={() => fileInputRef.current?.click()}
                 sx={{
                   width: 64,
                   height: 64,
+                  p: 0,
                   borderRadius: `${tokens.radius.sm}px`,
                   border: `1.5px dashed ${tokens.colors.divider}`,
+                  bgcolor: 'transparent',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -256,6 +272,34 @@ export function RaiseDisputeModal({
             onChange={handleFileChange}
           />
         </Box>
+
+        {/* Submit / error announcement */}
+        {errorMessage && (
+          <Typography
+            role="alert"
+            sx={{
+              fontSize: tokens.typography.fontSizes.sm,
+              color: tokens.colors.error,
+              textAlign: 'center',
+            }}
+          >
+            {errorMessage}
+          </Typography>
+        )}
+        <Typography
+          role="status"
+          aria-live="polite"
+          sx={{
+            position: 'absolute',
+            width: 1,
+            height: 1,
+            overflow: 'hidden',
+            clip: 'rect(0 0 0 0)',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {submitting ? 'Submitting dispute' : ''}
+        </Typography>
 
         {/* Reassurance */}
         <Typography
