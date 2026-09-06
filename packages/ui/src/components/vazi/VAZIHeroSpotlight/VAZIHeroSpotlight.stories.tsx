@@ -87,3 +87,27 @@ export const Mobile: Story = {
   args: { outfits: OUTFITS },
   parameters: { viewport: { defaultViewport: 'mobile' } },
 };
+
+/**
+ * Journey — Desktop (1280px). Semantic h2 title + native "See all" link
+ * (renders as an anchor when `seeAllHref` is set). Each model is a native
+ * `<button>`; Tab to a model and press Enter/Space to open the labelled dialog
+ * popover, which closes on Escape or an outside click and returns focus to the
+ * triggering model. Exercises responsive heading typography under the host
+ * theme.
+ */
+export const JourneyDesktop1280: Story = {
+  args: { outfits: OUTFITS, titleLevel: 2, seeAllHref: '/vazi/featured' },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};
+
+/**
+ * Journey — Mobile (375px). Horizontally scrollable model row with the same
+ * keyboard-accessible native model buttons and labelled popover (Escape /
+ * outside-close / focus-return). Title emitted as h2 for correct document
+ * outline on small screens.
+ */
+export const JourneyMobile375: Story = {
+  args: { outfits: OUTFITS, titleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};

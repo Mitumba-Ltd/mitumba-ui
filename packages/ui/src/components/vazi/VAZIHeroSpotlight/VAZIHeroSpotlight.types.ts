@@ -1,4 +1,5 @@
 import type { VAZIShowcaseItem } from '../VAZIShowcase/VAZIShowcase.types';
+import type { HeadingLevel } from '../../../types/semantic';
 
 export interface VAZIHeroOutfit {
   /** Unique outfit ID */
@@ -28,4 +29,15 @@ export interface VAZIHeroSpotlightProps {
   onItemClick?: (listingId: string) => void;
   /** Called when "See all" is tapped */
   onSeeAll?: () => void;
+  /**
+   * Emits the section title as an h1-h6 heading when provided; omission
+   * preserves the existing non-heading markup (backward compatible).
+   */
+  titleLevel?: HeadingLevel;
+  /**
+   * When supplied, the "See all" control renders as an anchor to this
+   * destination (in addition to firing `onSeeAll`); omission keeps it a
+   * native button.
+   */
+  seeAllHref?: string;
 }

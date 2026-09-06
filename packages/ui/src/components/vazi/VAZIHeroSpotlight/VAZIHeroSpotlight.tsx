@@ -7,6 +7,7 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Fade from '@mui/material/Fade';
 import { tokens } from '@mitumba/tokens';
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
+import { SemanticTitle } from '../../../internal/SemanticTitle';
 import type { VAZIHeroSpotlightProps, VAZIHeroOutfit } from './VAZIHeroSpotlight.types';
 import type { VAZIShowcaseItem } from '../VAZIShowcase/VAZIShowcase.types';
 
@@ -14,6 +15,10 @@ import type { VAZIShowcaseItem } from '../VAZIShowcase/VAZIShowcase.types';
  * VAZIHeroSpotlight — row of living models standing side by side.
  * Tap/click a model → floating popover shows outfit details + "Shop" CTA.
  * Clean, no clutter — just the models alive on a subtle background.
+ *
+ * Accessibility: each model is a native `<button>` so keyboard activation
+ * (Enter/Space) comes for free. The popover is a labelled dialog that closes
+ * on Escape or an outside click and returns focus to the triggering model.
  */
 export function VAZIHeroSpotlight({
   outfits,
@@ -21,43 +26,53 @@ export function VAZIHeroSpotlight({
   onShopLook,
   onItemClick,
   onSeeAll,
+  titleLevel,
+  seeAllHref,
 }: VAZIHeroSpotlightProps): React.ReactElement {
   const [activeId, setActiveId] = React.useState<string | null>(null);
-  const [anchorEl, setAnchorEl] = React.useState<{ getBoundingClientRect: () => DOMRect } | null>(null);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+  const triggerRef = React.useRef<HTMLButtonElement | null>(null);
 
-  const handleModelClick = (e: React.MouseEvent<HTMLElement>, id: string) => {
+  const handleModelClick = (e: React.MouseEvent<HTMLButtonElement>, id: string) => {
     if (activeId === id) {
       setActiveId(null);
       setAnchorEl(null);
     } else {
+      triggerRef.current = e.currentTarget;
       setActiveId(id);
-      // Virtual anchor at click position — like Gmail hover card
-      const x = e.clientX;
-      const y = e.clientY;
-      setAnchorEl({
-        getBoundingClientRect: () => new DOMRect(x, y, 0, 0),
-      });
+      setAnchorEl(e.currentTarget);
     }
   };
 
   const handleClose = () => {
     setActiveId(null);
     setAnchorEl(null);
+    // Return focus to the model that opened the popover.
+    triggerRef.current?.focus();
+  };
+
+  const handlePopoverKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      e.stopPropagation();
+      handleClose();
+    }
   };
 
   const activeOutfit = outfits.find((o) => o.id === activeId);
+  const titleId = 'vazi-hero-popover-title';
 
   return (
     <Box sx={{ mb: `${tokens.spacing.huge}px` }}>
       {/* Header */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: `${tokens.spacing.lg}px` }}>
-        <Typography sx={{ fontSize: tokens.typography.fontSizes.lg, fontWeight: 800, color: tokens.colors.textPrimary, fontFamily: tokens.typography.fontFamily, letterSpacing: '-0.02em' }}>
+        <SemanticTitle
+          titleLevel={titleLevel}
+          sx={{ fontSize: tokens.typography.fontSizes.lg, fontWeight: 800, color: tokens.colors.textPrimary, letterSpacing: '-0.02em' }}
+        >
           {title}
-        </Typography>
+        </SemanticTitle>
         {onSeeAll && (
-          <Typography onClick={onSeeAll} sx={{ color: tokens.colors.green, fontWeight: 600, fontSize: 14, cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}>
-            See all
-          </Typography>
+          <SeeAllControl href={seeAllHref} onClick={onSeeAll} />
         )}
       </Box>
 
@@ -95,9 +110,16 @@ export function VAZIHeroSpotlight({
             <Box>
               <ClickAwayListener onClickAway={handleClose}>
                 <Box>
-                  {activeOutfit && (
-                    <OutfitPopover outfit={activeOutfit} onItemClick={onItemClick} onShopLook={onShopLook} />
-                  )}
+                  {activeOutfit ? (
+                    <Box
+                      role="dialog"
+                      aria-modal={false}
+                      aria-labelledby={titleId}
+                      onKeyDown={handlePopoverKeyDown}
+                    >
+                      <OutfitPopover outfit={activeOutfit} titleId={titleId} onItemClick={onItemClick} onShopLook={onShopLook} />
+                    </Box>
+                  ) : null}
                 </Box>
               </ClickAwayListener>
             </Box>
@@ -108,12 +130,46 @@ export function VAZIHeroSpotlight({
   );
 }
 
-/** Single model figure — fills its grid cell, contained */
-function ModelFigure({ outfit, isActive, onClick }: { outfit: VAZIHeroOutfit; isActive: boolean; onClick: (e: React.MouseEvent<HTMLElement>) => void }): React.ReactElement {
+/**
+ * "See all" affordance — a native anchor when `href` is supplied, otherwise a
+ * native button. Both fire the supplied `onClick`.
+ */
+function SeeAllControl({ href, onClick }: { href?: string; onClick: () => void }): React.ReactElement {
+  const sx = {
+    all: 'unset' as const,
+    cursor: 'pointer',
+    color: tokens.colors.green,
+    fontWeight: 600,
+    fontSize: 14,
+    '&:hover': { textDecoration: 'underline' },
+    '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2, borderRadius: `${tokens.radius.sm}px` },
+  };
+  if (href) {
+    return (
+      <Box component="a" href={href} onClick={onClick} sx={sx}>
+        See all
+      </Box>
+    );
+  }
+  return (
+    <Box component="button" type="button" onClick={onClick} sx={sx}>
+      See all
+    </Box>
+  );
+}
+
+/** Single model figure — a native button filling its grid cell, contained */
+function ModelFigure({ outfit, isActive, onClick }: { outfit: VAZIHeroOutfit; isActive: boolean; onClick: (e: React.MouseEvent<HTMLButtonElement>) => void }): React.ReactElement {
   return (
     <Box
+      component="button"
+      type="button"
       onClick={onClick}
+      aria-haspopup="dialog"
+      aria-expanded={isActive}
+      aria-label={`View ${outfit.name}`}
       sx={{
+        all: 'unset',
         cursor: 'pointer',
         height: { xs: 280, md: 380 },
         display: 'flex',
@@ -125,6 +181,7 @@ function ModelFigure({ outfit, isActive, onClick }: { outfit: VAZIHeroOutfit; is
         transform: isActive ? 'scale(1.02)' : 'scale(1)',
         boxShadow: isActive ? '0 8px 24px rgba(0,0,0,0.1)' : 'none',
         '&:hover': { transform: 'scale(1.02)', boxShadow: '0 4px 16px rgba(0,0,0,0.08)' },
+        '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2 },
       }}
     >
       {outfit.modelMediaType === 'video' ? (
@@ -136,8 +193,8 @@ function ModelFigure({ outfit, isActive, onClick }: { outfit: VAZIHeroOutfit; is
   );
 }
 
-/** Floating outfit popover — appears above the tapped model */
-function OutfitPopover({ outfit, onItemClick, onShopLook }: { outfit: VAZIHeroOutfit; onItemClick?: (id: string) => void; onShopLook?: (id: string) => void }): React.ReactElement {
+/** Floating outfit popover — appears near the tapped model */
+function OutfitPopover({ outfit, titleId, onItemClick, onShopLook }: { outfit: VAZIHeroOutfit; titleId: string; onItemClick?: (id: string) => void; onShopLook?: (id: string) => void }): React.ReactElement {
   return (
     <Box
       sx={{
@@ -153,7 +210,7 @@ function OutfitPopover({ outfit, onItemClick, onShopLook }: { outfit: VAZIHeroOu
       }}
     >
       {/* Outfit name */}
-      <Typography sx={{ fontSize: tokens.typography.fontSizes.base, fontWeight: 700, color: tokens.colors.textPrimary, mb: `${tokens.spacing.md}px` }}>
+      <Typography id={titleId} sx={{ fontSize: tokens.typography.fontSizes.base, fontWeight: 700, color: tokens.colors.textPrimary, mb: `${tokens.spacing.md}px` }}>
         {outfit.name}
       </Typography>
 
@@ -162,12 +219,25 @@ function OutfitPopover({ outfit, onItemClick, onShopLook }: { outfit: VAZIHeroOu
         {outfit.items.map((item: VAZIShowcaseItem) => (
           <Box
             key={item.id}
+            component="button"
+            type="button"
             onClick={(e) => { e.stopPropagation(); onItemClick?.(item.id); }}
-            component="img"
-            src={item.imageUrl}
-            alt={item.title}
-            sx={{ width: 40, height: 40, borderRadius: `${tokens.radius.sm}px`, objectFit: 'cover', flexShrink: 0, cursor: onItemClick ? 'pointer' : 'default', border: '1px solid rgba(0,0,0,0.06)', '&:hover': { opacity: 0.8 } }}
-          />
+            aria-label={`View ${item.title}`}
+            sx={{
+              all: 'unset',
+              width: 40,
+              height: 40,
+              flexShrink: 0,
+              borderRadius: `${tokens.radius.sm}px`,
+              overflow: 'hidden',
+              cursor: onItemClick ? 'pointer' : 'default',
+              border: '1px solid rgba(0,0,0,0.06)',
+              '&:hover': { opacity: 0.8 },
+              '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2 },
+            }}
+          >
+            <Box component="img" src={item.imageUrl} alt={item.title} sx={{ width: 40, height: 40, objectFit: 'cover', display: 'block' }} />
+          </Box>
         ))}
       </Box>
 
