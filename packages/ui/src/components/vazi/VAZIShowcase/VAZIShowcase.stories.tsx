@@ -82,3 +82,27 @@ export const SingleOutfit: Story = {
 export const StartAtSecond: Story = {
   args: { outfits: SAMPLE_OUTFITS, activeIndex: 1 },
 };
+
+/**
+ * Journey — Desktop (1280px). 3D runway carousel. The feed is a focusable
+ * `role="region"` carousel: focus it and press ArrowRight/ArrowLeft (or
+ * ArrowDown/ArrowUp) to move between looks. Inactive models are native
+ * `<button>`s that jump to that look; item rows are labelled native buttons.
+ * Primary title emitted as h1 and the panel section title as h2 for a correct
+ * document outline, with typography inherited from the host theme.
+ */
+export const JourneyDesktop1280: Story = {
+  args: { outfits: SAMPLE_OUTFITS, titleLevel: 1, sectionTitleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};
+
+/**
+ * Journey — Mobile (375px). Vertical swipe feed with the glassmorphism bottom
+ * sheet. The sheet handle/header is a native toggle button that reports its
+ * expanded state (`aria-expanded`) and reveals the "Shop this look" CTA when
+ * expanded. ArrowUp/ArrowDown also navigate looks. Section title emitted as h2.
+ */
+export const JourneyMobile375: Story = {
+  args: { outfits: SAMPLE_OUTFITS, titleLevel: 1, sectionTitleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};

@@ -1,3 +1,5 @@
+import type { HeadingLevel } from '../../../types/semantic';
+
 export interface VAZIShowcaseItem {
   /** Listing ID */
   id: string;
@@ -47,4 +49,14 @@ export interface VAZIShowcaseProps {
   audioUrl?: string;
   /** Whether audio is muted — defaults to true (user must opt-in) */
   muted?: boolean;
+  /**
+   * Emits the primary showcase title ("LOOK NN") as an h1-h6 heading when
+   * provided; omission preserves the existing non-heading markup.
+   */
+  titleLevel?: HeadingLevel;
+  /**
+   * Emits the per-panel section titles ("This look") as an h1-h6 heading when
+   * provided; omission preserves the existing non-heading markup.
+   */
+  sectionTitleLevel?: HeadingLevel;
 }
