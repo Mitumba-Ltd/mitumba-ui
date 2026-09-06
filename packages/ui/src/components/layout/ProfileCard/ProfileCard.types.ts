@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import type { SxProps, Theme } from '@mui/material/styles'
+import type { HeadingLevel } from '../../../types/semantic'
 
 export interface ProfileCardProps {
   /** Display name */
@@ -16,4 +17,10 @@ export interface ProfileCardProps {
   subtitle?: string
   /** Optional sx override */
   sx?: SxProps<Theme>
+  /**
+   * Emits an h1-h6 element for the profile name when provided. When omitted the
+   * name keeps its current non-heading paragraph element and unchanged visual
+   * size/weight.
+   */
+  titleLevel?: HeadingLevel
 }
