@@ -55,3 +55,13 @@ export const InsideBubbleTheirs: Story = {
     </Box>
   ),
 }
+
+export const Desktop1280: Story = {
+  args: orderData,
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+}
+
+export const Mobile375: Story = {
+  args: orderData,
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+}
