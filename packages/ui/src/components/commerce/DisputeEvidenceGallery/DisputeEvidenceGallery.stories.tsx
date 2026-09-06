@@ -44,5 +44,15 @@ export const TextOnly: Story = {
 
 export const Mobile: Story = {
   args: { evidence: MIXED_EVIDENCE },
-  parameters: { viewport: { defaultViewport: 'mobile1' } },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};
+
+export const WithHeadingDesktop: Story = {
+  args: { evidence: MIXED_EVIDENCE, titleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};
+
+export const WithHeadingMobile: Story = {
+  args: { evidence: MIXED_EVIDENCE, titleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
 };
