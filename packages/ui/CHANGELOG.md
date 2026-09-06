@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.34.1
+
+### Patch Changes
+
+- 0b67d8d: docs(readme): add a Theming & typography section covering host font overrides (body vs heading families via the MUI theme), the optional titleLevel/stepTitleLevel/sectionTitleLevel/emptyTitleLevel semantic-title API, and href/linkComponent semantic links, with a link to docs/typography-semantic-matrix.md.
+
 ## 0.34.0
 
 ### Minor Changes
