@@ -50,3 +50,59 @@ export const AllVariants: Story = {
     );
   },
 };
+
+export const AllVariantsMobile: Story = {
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+  render: () => {
+    const variants = ['indicator', 'm3', 'expansive', 'bubble', 'pill', 'pill-horizontal'];
+    return (
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: 2 }}>
+        {variants.map((v) => (
+          <Box key={v} sx={{ position: 'relative', height: 100, border: '1px solid #eee', borderRadius: 2, overflow: 'hidden' }}>
+            <Typography sx={{ position: 'absolute', top: 8, left: 12, fontSize: 11, fontWeight: 700, color: '#888' }}>{v}</Typography>
+            <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
+              <MobileBottomNav activeTab="home" onTabChange={() => {}} variant={v as never} sx={{ position: 'relative' }} />
+            </Box>
+          </Box>
+        ))}
+      </Box>
+    );
+  },
+};
+
+export const AllVariantsDesktop: Story = {
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+  render: () => {
+    const variants = ['indicator', 'm3', 'expansive', 'bubble', 'pill', 'pill-horizontal'];
+    return (
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2, p: 3 }}>
+        {variants.map((v) => (
+          <Box key={v} sx={{ position: 'relative', height: 120, border: '1px solid #eee', borderRadius: 2, overflow: 'hidden' }}>
+            <Typography sx={{ position: 'absolute', top: 8, left: 12, fontSize: 11, fontWeight: 700, color: '#888' }}>{v}</Typography>
+            <Box sx={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
+              <MobileBottomNav activeTab="home" onTabChange={() => {}} variant={v as never} sx={{ position: 'relative' }} />
+            </Box>
+          </Box>
+        ))}
+      </Box>
+    );
+  },
+};
+
+export const AsLinksWithBadge: Story = {
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+  render: () => (
+    <Box sx={{ height: '100vh', bgcolor: '#f8f8f8' }}>
+      <MobileBottomNav
+        activeTab="home"
+        onTabChange={() => {}}
+        variant="indicator"
+        items={[
+          { id: 'home', label: 'Home', icon: <Typography component="span">H</Typography>, href: '/home' },
+          { id: 'orders', label: 'Orders', icon: <Typography component="span">O</Typography>, href: '/orders', badgeCount: 3 },
+          { id: 'profile', label: 'Profile', icon: <Typography component="span">P</Typography>, href: '/profile' },
+        ]}
+      />
+    </Box>
+  ),
+};
