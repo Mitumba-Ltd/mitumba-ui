@@ -1,4 +1,5 @@
 import type { TwoFactorMethodType } from '../TwoFactorMethodList/TwoFactorMethodList.types'
+import type { HeadingLevel } from '../../../types/semantic'
 
 export interface TwoFactorLoginMethod {
   /** Method ID */
@@ -28,4 +29,10 @@ export interface TwoFactorLoginStepProps {
   onSendCode?: (methodId: string) => void
   /** Called when the active method is a passkey — triggers browser WebAuthn prompt */
   onUsePasskey?: (methodId: string) => void
+  /**
+   * Emits an h1-h6 element for the "Two-Factor Authentication" title when
+   * provided. When omitted the title keeps its current non-heading paragraph
+   * element and unchanged visual size/weight.
+   */
+  titleLevel?: HeadingLevel
 }
