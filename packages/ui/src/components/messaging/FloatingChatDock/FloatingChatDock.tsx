@@ -11,6 +11,7 @@ import OpenInFullIcon from '@mui/icons-material/OpenInFull'
 import CloseIcon from '@mui/icons-material/Close'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { tokens } from '@mitumba/tokens'
+import { SemanticTitle } from '../../../internal/SemanticTitle'
 import type { FloatingChatDockProps } from './FloatingChatDock.types'
 
 const DOCK_WIDTH = 360
@@ -31,6 +32,8 @@ export function FloatingChatDock({
   onClose,
   unreadCount,
   onBack,
+  titleLevel,
+  announcement,
   children,
 }: FloatingChatDockProps) {
   const theme = useTheme()
@@ -40,6 +43,9 @@ export function FloatingChatDock({
 
   return (
     <Box
+      role="dialog"
+      aria-modal="false"
+      aria-label={`Chat with ${title}`}
       sx={{
         position: 'fixed',
         bottom: `${tokens.spacing.lg}px`,
@@ -93,12 +99,12 @@ export function FloatingChatDock({
         </Badge>
 
         <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Typography
+          <SemanticTitle
+            titleLevel={titleLevel}
             sx={{
               fontSize: tokens.typography.fontSizes.sm,
               fontWeight: tokens.typography.fontWeights.bold,
               color: tokens.colors.textOnGreen,
-              fontFamily: tokens.typography.fontFamily,
               lineHeight: 1.2,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
@@ -106,13 +112,12 @@ export function FloatingChatDock({
             }}
           >
             {title}
-          </Typography>
+          </SemanticTitle>
           {subtitle && (
             <Typography
               sx={{
                 fontSize: tokens.typography.fontSizes.xs,
                 color: 'rgba(255,255,255,0.8)',
-                fontFamily: tokens.typography.fontFamily,
                 lineHeight: 1,
                 mt: '1px',
               }}
@@ -124,6 +129,7 @@ export function FloatingChatDock({
 
         <IconButton
           aria-label={minimized ? 'Expand chat' : 'Minimize chat'}
+          aria-expanded={!minimized}
           onClick={(e) => { e.stopPropagation(); onToggleMinimize() }}
           size="small"
           sx={{ color: tokens.colors.textOnGreen, '&:hover': { bgcolor: 'rgba(255,255,255,0.15)' } }}
@@ -147,6 +153,15 @@ export function FloatingChatDock({
           {children}
         </Box>
       )}
+
+      {/* Single non-repeating polite live region for controlled announcements */}
+      <Box
+        role="status"
+        aria-live="polite"
+        sx={{ position: 'absolute', width: 1, height: 1, p: 0, m: '-1px', overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0 }}
+      >
+        {announcement ?? ''}
+      </Box>
     </Box>
   )
 }

@@ -12,8 +12,14 @@ import { OrderMessageAttachment } from '../OrderMessageAttachment';
 import type { MessageBubbleProps } from './MessageBubble.types';
 
 function MessageBubble({ body, timestamp, isMine, senderName, senderAvatarUrl, attachment }: MessageBubbleProps) {
+  const author = isMine ? 'You' : (senderName ?? 'Them');
+  const metadataLabel = `${author}, ${timestamp}`;
   return (
-    <Box sx={{ display: 'flex', justifyContent: isMine ? 'flex-end' : 'flex-start', alignItems: 'flex-end', gap: `${spacing.md}px`, mb: `${spacing.md}px` }}>
+    <Box
+      role="group"
+      aria-label={metadataLabel}
+      sx={{ display: 'flex', justifyContent: isMine ? 'flex-end' : 'flex-start', alignItems: 'flex-end', gap: `${spacing.md}px`, mb: `${spacing.md}px` }}
+    >
       {!isMine && (
         <Avatar src={senderAvatarUrl} alt={senderName} sx={{ width: 28, height: 28 }}>
           {senderName?.[0]}

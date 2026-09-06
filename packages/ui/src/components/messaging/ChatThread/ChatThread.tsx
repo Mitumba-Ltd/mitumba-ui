@@ -14,9 +14,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import { colors, spacing, radius } from '@mitumba/tokens';
 import { MessageBubble } from '../MessageBubble/MessageBubble';
 import { OrderMessageAttachment } from '../OrderMessageAttachment';
+import { SemanticTitle } from '../../../internal/SemanticTitle';
 import type { ChatThreadProps } from './ChatThread.types';
 
-function ChatThread({ messages, partnerName, partnerAvatarUrl, partnerStatus, onSend, onAttach, sending, loading, attachment, onRemoveAttachment, onTyping }: ChatThreadProps) {
+function ChatThread({ messages, partnerName, partnerAvatarUrl, partnerStatus, onSend, onAttach, sending, loading, attachment, onRemoveAttachment, onTyping, titleLevel, announcement }: ChatThreadProps) {
   const [input, setInput] = useState('');
   const typingTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const isTypingRef = React.useRef(false);
@@ -68,14 +69,14 @@ function ChatThread({ messages, partnerName, partnerAvatarUrl, partnerStatus, on
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <Box component="section" aria-label={`Conversation with ${partnerName}`} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       {/* Header */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: `${spacing.base}px`, px: `${spacing.lg}px`, py: `${spacing.base}px`, borderBottom: `1px solid ${colors.divider}` }}>
         <Avatar src={partnerAvatarUrl} alt={partnerName} sx={{ width: 36, height: 36 }}>
           {partnerName[0]}
         </Avatar>
         <Box>
-          <Typography variant="body2" sx={{ fontWeight: 600, color: colors.textPrimary }}>{partnerName}</Typography>
+          <SemanticTitle titleLevel={titleLevel} variant="body2" sx={{ fontWeight: 600, color: colors.textPrimary }}>{partnerName}</SemanticTitle>
           {partnerStatus && (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: `${spacing.xs}px` }}>
               <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: partnerStatus === 'online' ? colors.green : colors.textSecondary }} />
@@ -86,12 +87,30 @@ function ChatThread({ messages, partnerName, partnerAvatarUrl, partnerStatus, on
       </Box>
 
       {/* Messages */}
-      <Box ref={messagesContainerRef} onScroll={handleScroll} sx={{ flex: 1, minHeight: 0, overflowY: 'auto', p: `${spacing.lg}px` }}>
+      <Box
+        ref={messagesContainerRef}
+        onScroll={handleScroll}
+        role="log"
+        aria-label="Messages"
+        aria-busy={loading || undefined}
+        sx={{ flex: 1, minHeight: 0, overflowY: 'auto', p: `${spacing.lg}px` }}
+      >
         {loading ? (
-          Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} variant="rectangular" height={48} sx={{ borderRadius: `${radius.md}px`, mb: `${spacing.md}px`, width: i % 2 === 0 ? '60%' : '45%', ml: i % 2 === 0 ? 0 : 'auto' }} />)
+          Array.from({ length: 4 }).map((_, i) => (
+            <Skeleton key={i} variant="rectangular" height={48} sx={{ borderRadius: `${radius.md}px`, mb: `${spacing.md}px`, width: i % 2 === 0 ? '60%' : '45%', ml: i % 2 === 0 ? 0 : 'auto' }} />
+          ))
         ) : (
           messages.map((msg, i) => <MessageBubble key={i} {...msg} />)
         )}
+      </Box>
+
+      {/* Single non-repeating polite live region for controlled announcements */}
+      <Box
+        role="status"
+        aria-live="polite"
+        sx={{ position: 'absolute', width: 1, height: 1, p: 0, m: '-1px', overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap', border: 0 }}
+      >
+        {announcement ?? ''}
       </Box>
 
       {/* Draft attachment */}

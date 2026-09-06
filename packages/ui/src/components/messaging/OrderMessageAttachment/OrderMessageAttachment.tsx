@@ -48,7 +48,6 @@ export function OrderMessageAttachment({
             fontSize: tokens.typography.fontSizes.xs,
             fontWeight: tokens.typography.fontWeights.bold,
             color: tokens.colors.textSecondary,
-            fontFamily: tokens.typography.fontFamily,
             lineHeight: 1.2,
           }}
         >
@@ -59,7 +58,6 @@ export function OrderMessageAttachment({
             fontSize: tokens.typography.fontSizes.sm,
             fontWeight: tokens.typography.fontWeights.semibold,
             color: tokens.colors.textPrimary,
-            fontFamily: tokens.typography.fontFamily,
             lineHeight: 1.3,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -72,7 +70,6 @@ export function OrderMessageAttachment({
           sx={{
             fontSize: tokens.typography.fontSizes.xs,
             color: tokens.colors.textSecondary,
-            fontFamily: tokens.typography.fontFamily,
           }}
         >
           KES {amount.toLocaleString()} · {status}

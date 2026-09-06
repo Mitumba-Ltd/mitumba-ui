@@ -2,9 +2,15 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
-import { MitumbaThemeProvider } from '../../../theme'
+import { axe, toHaveNoViolations } from 'jest-axe'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme'
 import { OrderMessageAttachment } from './OrderMessageAttachment'
 import type { OrderMessageAttachmentProps } from './OrderMessageAttachment.types'
+
+expect.extend(toHaveNoViolations)
+
+const HOST_FONT = '"Comic Sans MS", cursive'
 
 afterEach(cleanup)
 
@@ -59,5 +65,30 @@ describe('OrderMessageAttachment', () => {
   it('renders without image when null', () => {
     renderAttachment({ listingImageUrl: null })
     expect(screen.queryByRole('img')).not.toBeInTheDocument()
+  })
+
+  it('inherits the host theme typography.fontFamily (no inline override)', () => {
+    const hostTheme = createTheme(mitumbaTheme, { typography: { fontFamily: HOST_FONT } })
+    render(
+      <ThemeProvider theme={hostTheme}>
+        <OrderMessageAttachment
+          orderId="ord_abc123"
+          orderShortId="a9331769"
+          listingTitle="Levi's 501 Straight"
+          listingImageUrl={null}
+          amount={1500}
+          status="Shipped"
+          createdAt="2024-01-15"
+        />
+      </ThemeProvider>,
+    )
+    expect(screen.getByText('Order #a9331769').style.fontFamily).toBe('')
+    expect(screen.getByText("Levi's 501 Straight").style.fontFamily).toBe('')
+  })
+
+  it('has no axe violations', async () => {
+    const { container } = renderAttachment()
+    const results = await axe(container)
+    expect(results).toHaveNoViolations()
   })
 })

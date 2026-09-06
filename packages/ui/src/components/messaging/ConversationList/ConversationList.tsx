@@ -14,12 +14,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 
 import { colors, spacing, radius } from '@mitumba/tokens';
+import { SemanticTitle } from '../../../internal/SemanticTitle';
 import type { ConversationListProps } from './ConversationList.types';
 
-function ConversationList({ conversations, activeId, onSelect, onSearch, onCompose, loading, emptyText, emptyHint }: ConversationListProps) {
+function ConversationList({ conversations, activeId, onSelect, onSearch, onCompose, loading, emptyText, emptyHint, emptyTitleLevel }: ConversationListProps) {
   if (loading) {
     return (
-      <Box sx={{ p: `${spacing.lg}px` }}>
+      <Box role="status" aria-busy aria-label="Loading conversations" sx={{ p: `${spacing.lg}px` }}>
         {Array.from({ length: 5 }).map((_, i) => (
           <Skeleton key={i} variant="rectangular" height={64} sx={{ borderRadius: `${radius.md}px`, mb: `${spacing.md}px` }} />
         ))}
@@ -48,9 +49,9 @@ function ConversationList({ conversations, activeId, onSelect, onSearch, onCompo
         {conversations.length === 0 && (
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', py: `${spacing.huge}px`, px: `${spacing.lg}px`, textAlign: 'center' }}>
             <ChatBubbleOutlineIcon sx={{ fontSize: 40, color: colors.textDisabled, mb: `${spacing.base}px` }} />
-            <Typography sx={{ fontSize: 14, fontWeight: 700, color: colors.textPrimary, mb: `${spacing.xs}px` }}>
+            <SemanticTitle titleLevel={emptyTitleLevel} sx={{ fontSize: 14, fontWeight: 700, color: colors.textPrimary, mb: `${spacing.xs}px` }}>
               {emptyText || 'No messages yet'}
-            </Typography>
+            </SemanticTitle>
             <Typography sx={{ fontSize: 12, color: colors.textSecondary, maxWidth: 240 }}>
               {emptyHint || 'Conversations with sellers and buyers show up here.'}
             </Typography>
@@ -65,49 +66,59 @@ function ConversationList({ conversations, activeId, onSelect, onSearch, onCompo
             )}
           </Box>
         )}
+        {conversations.length > 0 && (
+        <Box component="ul" aria-label="Conversations" sx={{ m: 0, p: 0, listStyle: 'none' }}>
         {conversations.map((conv) => (
           <Box
+            component="li"
             key={conv.id}
-            onClick={() => onSelect(conv.id)}
-            role="button"
-            tabIndex={0}
-            aria-label={`Conversation with ${conv.partnerName}`}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: `${spacing.base}px`,
-              px: `${spacing.lg}px`,
-              py: `${spacing.base}px`,
-              cursor: 'pointer',
-              bgcolor: activeId === conv.id ? colors.greenLight : 'transparent',
-              transition: 'all 150ms cubic-bezier(0.4, 0, 0.2, 1)',
-              '&:hover': { bgcolor: activeId === conv.id ? colors.greenLight : colors.background },
-            }}
+            aria-current={activeId === conv.id ? 'true' : undefined}
+            sx={{ listStyle: 'none' }}
           >
-            <Avatar src={conv.partnerAvatarUrl} alt={conv.partnerName} sx={{ width: 44, height: 44 }}>
-              {conv.partnerName[0]}
-            </Avatar>
-            <Box sx={{ flex: 1, minWidth: 0 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Typography variant="body2" sx={{ fontWeight: conv.unread ? 700 : 500, color: colors.textPrimary }} noWrap>
-                  {conv.partnerName}
-                </Typography>
-                <Typography variant="caption" sx={{ color: colors.textSecondary, flexShrink: 0, ml: `${spacing.md}px` }}>
-                  {conv.lastMessageAt}
-                </Typography>
+            <Box
+              onClick={() => onSelect(conv.id)}
+              role="button"
+              tabIndex={0}
+              aria-label={`Conversation with ${conv.partnerName}`}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: `${spacing.base}px`,
+                px: `${spacing.lg}px`,
+                py: `${spacing.base}px`,
+                cursor: 'pointer',
+                bgcolor: activeId === conv.id ? colors.greenLight : 'transparent',
+                transition: 'all 150ms cubic-bezier(0.4, 0, 0.2, 1)',
+                '&:hover': { bgcolor: activeId === conv.id ? colors.greenLight : colors.background },
+              }}
+            >
+              <Avatar src={conv.partnerAvatarUrl} alt={conv.partnerName} sx={{ width: 44, height: 44 }}>
+                {conv.partnerName[0]}
+              </Avatar>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography variant="body2" sx={{ fontWeight: conv.unread ? 700 : 500, color: colors.textPrimary }} noWrap>
+                    {conv.partnerName}
+                  </Typography>
+                  <Typography variant="caption" sx={{ color: colors.textSecondary, flexShrink: 0, ml: `${spacing.md}px` }}>
+                    {conv.lastMessageAt}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: `${spacing.xs}px` }}>
+                  {conv.unread && <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: colors.green, flexShrink: 0 }} />}
+                  <Typography variant="caption" sx={{ color: colors.textSecondary, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {conv.lastMessage}
+                  </Typography>
+                </Box>
+                {conv.listingTitle && (
+                  <Chip label={conv.listingTitle} size="small" sx={{ mt: `${spacing.xs}px`, height: 20, fontSize: 11, bgcolor: colors.background }} />
+                )}
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: `${spacing.xs}px` }}>
-                {conv.unread && <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: colors.green, flexShrink: 0 }} />}
-                <Typography variant="caption" sx={{ color: colors.textSecondary, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {conv.lastMessage}
-                </Typography>
-              </Box>
-              {conv.listingTitle && (
-                <Chip label={conv.listingTitle} size="small" sx={{ mt: `${spacing.xs}px`, height: 20, fontSize: 11, bgcolor: colors.background }} />
-              )}
             </Box>
           </Box>
         ))}
+        </Box>
+        )}
       </Box>
     </Box>
   );
