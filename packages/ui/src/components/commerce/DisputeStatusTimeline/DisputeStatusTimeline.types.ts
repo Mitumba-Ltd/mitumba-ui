@@ -1,3 +1,5 @@
+import type { HeadingLevel } from '../../../types/semantic'
+
 export type DisputeStatus = 'open' | 'seller_responded' | 'under_review' | 'resolved_refund' | 'resolved_release' | 'resolved_partial' | 'withdrawn'
 
 export interface DisputeEvent {
@@ -18,4 +20,16 @@ export interface DisputeStatusTimelineProps {
   status: DisputeStatus
   /** Array of dispute events */
   events: DisputeEvent[]
+  /**
+   * Emits h1-h6 for the timeline's section title when provided; omitting it
+   * preserves the current non-heading status chip markup. Visual styling of the
+   * chip is unaffected.
+   */
+  sectionTitleLevel?: HeadingLevel
+  /**
+   * Zero-based index of the event to mark as the programmatic current step via
+   * `aria-current="step"`. Defaults to the most recent (last) event. Pass a
+   * value out of range to mark no event as current.
+   */
+  currentEventIndex?: number
 }

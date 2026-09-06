@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { tokens } from '@mitumba/tokens'
+import { SemanticTitle } from '../../../internal/SemanticTitle'
 import type { DisputeStatus, DisputeEvent, DisputeStatusTimelineProps } from './DisputeStatusTimeline.types'
 
 const STATUS_COLORS: Record<DisputeStatus, string> = {
@@ -30,8 +31,14 @@ const ACTOR_COLORS: Record<DisputeEvent['actor_role'], string> = {
   system: tokens.colors.textDisabled,
 }
 
-export function DisputeStatusTimeline({ status, events }: DisputeStatusTimelineProps) {
+export function DisputeStatusTimeline({
+  status,
+  events,
+  sectionTitleLevel,
+  currentEventIndex,
+}: DisputeStatusTimelineProps) {
   const statusColor = STATUS_COLORS[status]
+  const currentIndex = currentEventIndex ?? events.length - 1
 
   return (
     <Box
@@ -43,8 +50,10 @@ export function DisputeStatusTimeline({ status, events }: DisputeStatusTimelineP
         border: `1px solid ${tokens.colors.divider}`,
       }}
     >
-      {/* Status chip */}
-      <Box
+      {/* Status chip (section title) */}
+      <SemanticTitle
+        titleLevel={sectionTitleLevel}
+        fallbackComponent="div"
         sx={{
           display: 'inline-block',
           px: `${tokens.spacing.sm}px`,
@@ -59,19 +68,26 @@ export function DisputeStatusTimeline({ status, events }: DisputeStatusTimelineP
           border: `1px solid ${statusColor}30`,
           mb: `${tokens.spacing.lg}px`,
         }}
-        data-testid="dispute-status-chip"
       >
-        {STATUS_LABELS[status]}
-      </Box>
+        <Box component="span" data-testid="dispute-status-chip">
+          {STATUS_LABELS[status]}
+        </Box>
+      </SemanticTitle>
 
       {/* Timeline */}
       <Box component="ol" role="list" aria-label="Dispute status timeline" sx={{ listStyle: 'none', p: 0, m: 0 }}>
         {events.map((event, index) => {
           const isLast = index === events.length - 1
           const actorColor = ACTOR_COLORS[event.actor_role]
+          const isCurrent = index === currentIndex
 
           return (
-            <Box component="li" key={`${event.created_at}-${event.action}-${event.actor_role}`} sx={{ display: 'flex', alignItems: 'flex-start' }}>
+            <Box
+              component="li"
+              key={`${event.created_at}-${event.action}-${event.actor_role}`}
+              aria-current={isCurrent ? 'step' : undefined}
+              sx={{ display: 'flex', alignItems: 'flex-start' }}
+            >
               {/* Node + connector */}
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mr: `${tokens.spacing.base}px` }}>
                 <Box
@@ -118,7 +134,6 @@ export function DisputeStatusTimeline({ status, events }: DisputeStatusTimelineP
                     fontWeight: tokens.typography.fontWeights.bold,
                     fontSize: tokens.typography.fontSizes.sm,
                     color: tokens.colors.textPrimary,
-                    fontFamily: tokens.typography.fontFamily,
                   }}
                 >
                   {event.action}
@@ -131,7 +146,6 @@ export function DisputeStatusTimeline({ status, events }: DisputeStatusTimelineP
                       fontSize: tokens.typography.fontSizes.xs,
                       color: tokens.colors.textSecondary,
                       fontStyle: 'italic',
-                      fontFamily: tokens.typography.fontFamily,
                       mt: '2px',
                     }}
                   >
@@ -144,7 +158,6 @@ export function DisputeStatusTimeline({ status, events }: DisputeStatusTimelineP
                   sx={{
                     fontSize: tokens.typography.fontSizes.xs,
                     color: tokens.colors.textSecondary,
-                    fontFamily: tokens.typography.fontFamily,
                     mt: '2px',
                   }}
                   data-testid="event-timestamp"
