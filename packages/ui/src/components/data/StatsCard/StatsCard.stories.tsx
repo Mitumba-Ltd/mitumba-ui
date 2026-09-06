@@ -105,3 +105,27 @@ export const Elevated: Story = {
     trend: { direction: 'up', percent: 24.8 },
   },
 }
+
+export const Mobile: Story = {
+  args: {
+    label: 'Total Sales',
+    value: '142,500',
+    unit: 'KES',
+    unitPosition: 'prefix',
+    icon: <PaymentsIcon />,
+    trend: { direction: 'up', percent: 12.5 },
+  },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+}
+
+export const Desktop: Story = {
+  args: {
+    label: 'Total Sales',
+    value: '142,500',
+    unit: 'KES',
+    unitPosition: 'prefix',
+    icon: <PaymentsIcon />,
+    trend: { direction: 'up', percent: 12.5 },
+  },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+}
