@@ -9,6 +9,7 @@ import WarningIcon from '@mui/icons-material/Warning'
 import InfoIcon from '@mui/icons-material/Info'
 import HelpIcon from '@mui/icons-material/Help'
 import { tokens } from '@mitumba/tokens'
+import { SemanticTitle } from '../../../internal/SemanticTitle'
 import type { MitumbaBannerProps, BannerSeverity } from './MitumbaBanner.types'
 
 /**
@@ -23,7 +24,11 @@ export function MitumbaBanner({
   onClose,
   action,
   sx,
+  titleLevel,
 }: MitumbaBannerProps) {
+  // Urgent severities announce immediately (assertive); the rest are polite status.
+  const isUrgent = severity === 'error' || severity === 'warning'
+  const role = isUrgent ? 'alert' : 'status'
   const config = useMemo(() => {
     const map: Record<BannerSeverity, { color: string; bgColor: string; icon: React.ReactNode }> = {
       success: { color: tokens.colors.green, bgColor: `${tokens.colors.green}12`, icon: <CheckCircleIcon /> },
@@ -37,6 +42,7 @@ export function MitumbaBanner({
 
   return (
     <Box
+      role={role}
       sx={[
         {
           width: '100%',
@@ -65,24 +71,23 @@ export function MitumbaBanner({
 
       {/* Text Content */}
       <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-        <Typography
+        <SemanticTitle
+          titleLevel={titleLevel}
           sx={{
             fontSize: tokens.typography.fontSizes.base,
             fontWeight: 800,
             color: tokens.colors.textPrimary,
-            fontFamily: tokens.typography.fontFamily,
             lineHeight: 1.2,
             mb: 0.5,
           }}
         >
           {title}
-        </Typography>
+        </SemanticTitle>
         {children && (
           <Typography
             sx={{
               fontSize: tokens.typography.fontSizes.sm,
               color: tokens.colors.textSecondary,
-              fontFamily: tokens.typography.fontFamily,
               lineHeight: 1.5,
             }}
           >
@@ -96,7 +101,7 @@ export function MitumbaBanner({
         {action}
         {onClose && (
           <IconButton
-            aria-label="Dismiss banner"
+            aria-label={`Dismiss ${title}`}
             onClick={onClose}
             size="small"
             sx={{

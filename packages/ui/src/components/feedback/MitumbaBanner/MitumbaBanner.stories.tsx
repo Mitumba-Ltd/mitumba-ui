@@ -62,3 +62,25 @@ export const WithAction: Story = {
     ),
   },
 }
+
+export const MobileWithHeading: Story = {
+  args: {
+    severity: 'info',
+    title: 'Update Available',
+    children: 'A new version is available. Update now to get the latest features.',
+    titleLevel: 2,
+    onClose: () => {},
+  },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+}
+
+export const DesktopWithHeading: Story = {
+  args: {
+    severity: 'error',
+    title: 'Payment failed',
+    children: 'We could not process your payment. Please try again.',
+    titleLevel: 2,
+    onClose: () => {},
+  },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+}

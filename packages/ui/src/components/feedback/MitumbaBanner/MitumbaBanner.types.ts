@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import type { SxProps, Theme } from '@mui/material/styles'
+import type { HeadingLevel } from '../../../types/semantic'
 
 export type BannerSeverity = 'success' | 'error' | 'warning' | 'info' | 'neutral'
 
@@ -18,4 +19,10 @@ export interface MitumbaBannerProps {
   action?: ReactNode
   /** Optional style overrides. */
   sx?: SxProps<Theme>
+  /**
+   * Emits an h1-h6 element for the banner title when provided. When omitted the
+   * title keeps its current non-heading paragraph element and unchanged visual
+   * size/weight.
+   */
+  titleLevel?: HeadingLevel
 }
