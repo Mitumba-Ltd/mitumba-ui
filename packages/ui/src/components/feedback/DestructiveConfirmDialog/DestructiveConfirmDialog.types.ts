@@ -1,3 +1,5 @@
+import type { HeadingLevel } from '../../../types/semantic'
+
 export interface DestructiveConfirmDialogProps {
   /** Whether the dialog is open */
   open: boolean
@@ -19,4 +21,10 @@ export interface DestructiveConfirmDialogProps {
   submitting?: boolean
   /** Confirm button label. @default "Delete" */
   confirmLabel?: string
+  /**
+   * Emits h1-h6 for the dialog title (via MitumbaModal) when provided; omitting
+   * it preserves the current styled, non-heading title element. Visual size and
+   * weight are unaffected.
+   */
+  titleLevel?: HeadingLevel
 }
