@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import { tokens } from '@mitumba/tokens';
 import type { EmptyStateProps } from './EmptyState.types';
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
+import { SemanticTitle } from '../../../internal/SemanticTitle';
 
 /**
  * Empty state — communicates absence of content and guides users to a next action.
@@ -16,6 +17,7 @@ export function EmptyState({
   subtitle,
   action,
   variant = 'standard',
+  titleLevel,
 }: EmptyStateProps): React.ReactElement {
   const isCompact = variant === 'compact';
   const isElevated = variant === 'elevated';
@@ -61,24 +63,23 @@ export function EmptyState({
 
       {/* Text content */}
       <Box sx={{ flex: isCompact ? 1 : undefined }}>
-        <Typography
+        <SemanticTitle
+          titleLevel={titleLevel}
           sx={{
             fontSize: isCompact ? tokens.typography.fontSizes.base : tokens.typography.fontSizes.lg,
             fontWeight: 700,
             color: tokens.colors.textPrimary,
-            fontFamily: tokens.typography.fontFamily,
             lineHeight: tokens.typography.lineHeights.tight,
             mb: `${tokens.spacing.xs}px`,
           }}
         >
           {title}
-        </Typography>
+        </SemanticTitle>
 
         <Typography
           sx={{
             fontSize: isCompact ? tokens.typography.fontSizes.sm : tokens.typography.fontSizes.base,
             color: tokens.colors.textSecondary,
-            fontFamily: tokens.typography.fontFamily,
             lineHeight: tokens.typography.lineHeights.normal,
             maxWidth: isCompact ? undefined : 320,
             mx: isCompact ? undefined : 'auto',

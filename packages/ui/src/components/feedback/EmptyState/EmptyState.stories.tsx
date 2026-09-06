@@ -108,3 +108,13 @@ export const Mobile: Story = {
   args: Cart.args,
   parameters: { viewport: { defaultViewport: 'mobile' } },
 };
+
+export const MobileWithHeading: Story = {
+  args: { ...Cart.args, titleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};
+
+export const DesktopWithHeading: Story = {
+  args: { ...Cart.args, titleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};
