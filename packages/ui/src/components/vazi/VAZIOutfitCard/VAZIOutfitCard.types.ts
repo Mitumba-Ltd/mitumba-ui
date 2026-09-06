@@ -1,3 +1,5 @@
+import type { HeadingLevel, SemanticDestinationProps } from '../../../types/semantic'
+
 export interface VAZIOutfitItem {
   /** Unique identifier for the listing. */
   listingId: string
@@ -11,7 +13,7 @@ export interface VAZIOutfitItem {
   sellerName: string
 }
 
-export interface VAZIOutfitCardProps {
+export interface VAZIOutfitCardProps extends SemanticDestinationProps {
   /** Name of the outfit (e.g. "Weekend Chill"). */
   outfitName: string
   /** Items that make up the outfit (2–4 items). */
@@ -26,4 +28,10 @@ export interface VAZIOutfitCardProps {
   onTap?: () => void
   /** Called when the "Buy this look" button is clicked. */
   onBuyAll?: () => void
+  /**
+   * Emits an h1-h6 element for the outfit name when provided. When omitted the
+   * name keeps its current non-heading paragraph element and unchanged visual
+   * size/weight.
+   */
+  titleLevel?: HeadingLevel
 }

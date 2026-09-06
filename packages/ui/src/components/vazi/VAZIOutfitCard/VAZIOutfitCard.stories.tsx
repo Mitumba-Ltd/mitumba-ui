@@ -134,3 +134,29 @@ export const Mobile: Story = {
     viewport: { defaultViewport: 'mobile' },
   },
 }
+
+export const AsLinkWithHeading: Story = {
+  args: {
+    outfitName: 'Weekend Chill',
+    items: defaultItems,
+    totalPriceKes: 7000,
+    sellersCount: 3,
+    href: '/vazi/weekend-chill',
+    titleLevel: 2,
+    onBuyAll: () => {},
+  },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+}
+
+export const MobileAsLink: Story = {
+  args: {
+    outfitName: 'Weekend Chill',
+    items: defaultItems,
+    totalPriceKes: 7000,
+    sellersCount: 3,
+    href: '/vazi/weekend-chill',
+    titleLevel: 2,
+    onBuyAll: () => {},
+  },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+}
