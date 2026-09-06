@@ -36,3 +36,23 @@ export const Mobile: Story = {
   args: Default.args,
   parameters: { viewport: { defaultViewport: 'mobile' } },
 }
+
+export const AsLinkWithHeading: Story = {
+  args: {
+    name: 'Nairobi Vintage',
+    subtitle: '56 listings · Vintage Fashion',
+    href: '/stores/nairobi-vintage',
+    titleLevel: 2,
+  },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+}
+
+export const MobileAsLink: Story = {
+  args: {
+    name: 'Nairobi Vintage',
+    subtitle: '56 listings · Vintage Fashion',
+    href: '/stores/nairobi-vintage',
+    titleLevel: 2,
+  },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+}

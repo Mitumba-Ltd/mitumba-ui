@@ -32,6 +32,11 @@ export const NoAction: Story = {
 }
 
 export const Mobile: Story = {
-  args: Default.args,
+  args: { ...Default.args, titleLevel: 2 },
   parameters: { viewport: { defaultViewport: 'mobile' } },
+}
+
+export const DesktopWithHeading: Story = {
+  args: { ...Default.args, titleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
 }

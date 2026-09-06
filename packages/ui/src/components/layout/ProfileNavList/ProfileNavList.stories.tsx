@@ -32,3 +32,21 @@ export const Mobile: Story = {
   args: Default.args,
   parameters: { viewport: { defaultViewport: 'mobile' } },
 }
+
+export const AsLinks: Story = {
+  args: {
+    ariaLabel: 'Account',
+    items: [
+      { label: 'My Orders', icon: <ReceiptLongIcon />, href: '/orders', active: true, badge: 2 },
+      { label: 'Saved Items', icon: <FavoriteBorderIcon />, href: '/saved' },
+      { label: 'Following', icon: <PeopleAltIcon />, href: '/following' },
+      { label: 'Account Settings', icon: <SettingsIcon />, href: '/settings' },
+    ],
+  },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+}
+
+export const AsLinksMobile: Story = {
+  args: AsLinks.args,
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+}

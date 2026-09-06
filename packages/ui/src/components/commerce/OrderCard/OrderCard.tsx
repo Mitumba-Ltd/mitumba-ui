@@ -6,6 +6,8 @@ import { tokens } from '@mitumba/tokens'
 import { MitumbaChip } from '../../foundation/MitumbaChip'
 import type { ChipStatus } from '../../foundation/MitumbaChip/MitumbaChip.types'
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
+import { SemanticSurface } from '../../../internal/SemanticSurface'
+import { SemanticTitle } from '../../../internal/SemanticTitle'
 import type { OrderCardProps, OrderCardStatus } from './OrderCard.types'
 
 const STATUS_CONFIG: Record<OrderCardStatus, { label: string; chipStatus: ChipStatus }> = {
@@ -32,16 +34,24 @@ export function OrderCard({
   status,
   createdAt,
   onClick,
+  onTrack,
   sx,
+  titleLevel,
+  href,
+  linkComponent,
 }: OrderCardProps) {
   const config = STATUS_CONFIG[status]
   const [imageLoaded, setImageLoaded] = React.useState(false)
+  const isInteractive = Boolean(href) || Boolean(onClick)
+  const accessibleName = `Order #${orderShortId}, ${title}`
 
   return (
     <Box
-      onClick={onClick}
+      component="article"
+      aria-label={accessibleName}
       sx={[
         {
+          position: 'relative',
           display: 'flex',
           width: '100%',
           overflow: 'hidden',
@@ -50,9 +60,8 @@ export function OrderCard({
           p: `${tokens.spacing.lg}px`,
           boxShadow: tokens.shadows.card,
           border: `1px solid ${tokens.colors.divider}`,
-          cursor: onClick ? 'pointer' : 'default',
           transition: tokens.motion.transitions.interaction,
-          '&:hover': onClick ? {
+          '&:hover': isInteractive ? {
             transform: 'translateY(-2px)',
             boxShadow: tokens.shadows.elevated,
           } : {},
@@ -60,6 +69,35 @@ export function OrderCard({
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
+      {/*
+        Stretched primary surface (anchor/button/none). Rendered as a sibling
+        overlay so the nested Track action stays a valid, non-nested control.
+      */}
+      {isInteractive && (
+        <SemanticSurface
+          href={href}
+          linkComponent={linkComponent}
+          onClick={onClick}
+          aria-label={accessibleName}
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 1,
+            display: 'block',
+            width: '100%',
+            height: '100%',
+            p: 0,
+            m: 0,
+            border: 'none',
+            background: 'transparent',
+            cursor: 'pointer',
+            appearance: 'none',
+            color: 'inherit',
+            textDecoration: 'none',
+          }}
+        />
+      )}
+
       {/* Image */}
       {imageUrl && (
         <Box
@@ -113,7 +151,6 @@ export function OrderCard({
               fontSize: tokens.typography.fontSizes.xs,
               fontWeight: tokens.typography.fontWeights.bold,
               color: tokens.colors.textSecondary,
-              fontFamily: tokens.typography.fontFamily,
               textTransform: 'uppercase',
               letterSpacing: '0.03em',
             }}
@@ -130,12 +167,12 @@ export function OrderCard({
         </Box>
 
         {/* Title */}
-        <Typography
+        <SemanticTitle
+          titleLevel={titleLevel}
           sx={{
             fontSize: tokens.typography.fontSizes.base,
             fontWeight: tokens.typography.fontWeights.bold,
             color: tokens.colors.textPrimary,
-            fontFamily: tokens.typography.fontFamily,
             lineHeight: 1.2,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -144,14 +181,13 @@ export function OrderCard({
           }}
         >
           {title}
-        </Typography>
+        </SemanticTitle>
 
         {/* Date */}
         <Typography
           sx={{
             fontSize: tokens.typography.fontSizes.xs,
             color: tokens.colors.textSecondary,
-            fontFamily: tokens.typography.fontFamily,
           }}
         >
           {createdAt}
@@ -172,7 +208,6 @@ export function OrderCard({
               fontSize: tokens.typography.fontSizes.md,
               fontWeight: 900,
               color: tokens.colors.textPrimary,
-              fontFamily: tokens.typography.fontFamily,
             }}
           >
             KES {totalKes.toLocaleString()}
@@ -183,21 +218,24 @@ export function OrderCard({
               sx={{
                 fontSize: tokens.typography.fontSizes.xs,
                 color: tokens.colors.textSecondary,
-                fontFamily: tokens.typography.fontFamily,
               }}
             >
               +KES {deliveryFeeKes.toLocaleString()} delivery
             </Typography>
           )}
 
-          {onClick && (
-            <Box sx={{ ml: 'auto', display: 'flex', gap: 0 }}>
+          {isInteractive && (
+            <Box
+              onClick={(e) => { e.stopPropagation() }}
+              sx={{ ml: 'auto', display: 'flex', gap: 0, position: 'relative', zIndex: 2 }}
+            >
               <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                 <MitumbaPrimaryButton
                   label="Track"
                   size="small"
                   icon={<LocalShippingIcon sx={{ fontSize: 14 }} />}
                   iconPosition="right"
+                  onClick={onTrack}
                 />
               </Box>
               <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
@@ -206,6 +244,7 @@ export function OrderCard({
                   size="small"
                   icon={<LocalShippingIcon sx={{ fontSize: 14 }} />}
                   iconPosition="right"
+                  onClick={onTrack}
                 />
               </Box>
             </Box>

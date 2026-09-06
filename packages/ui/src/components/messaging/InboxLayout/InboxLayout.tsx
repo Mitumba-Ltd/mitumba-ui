@@ -1,4 +1,3 @@
-/* eslint-disable no-use-before-define */
 import React from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -9,7 +8,10 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { colors, spacing, radius } from '@mitumba/tokens';
 import type { InboxLayoutProps } from './InboxLayout.types';
 
-function InboxLayout({ conversationList, chatThread, title = 'Messages', showMobileBack, onMobileBack }: InboxLayoutProps) {
+function InboxLayout({ conversationList, chatThread, title = 'Messages', showMobileBack, onMobileBack, titleLevel }: InboxLayoutProps) {
+  // Preserve the existing <h6> element when no explicit level is supplied.
+  const titleComponent = (titleLevel ? `h${titleLevel}` : 'h6') as React.ElementType;
+
   return (
     <Paper
       elevation={0}
@@ -29,21 +31,29 @@ function InboxLayout({ conversationList, chatThread, title = 'Messages', showMob
             <ArrowBackIcon />
           </IconButton>
         )}
-        <Typography variant="h6" sx={{ fontWeight: 700, color: colors.textPrimary }}>{title}</Typography>
+        <Typography component={titleComponent} variant="h6" sx={{ fontWeight: 700, color: colors.textPrimary, m: 0 }}>{title}</Typography>
       </Box>
 
       <Box sx={{ display: 'flex', flex: 1, minHeight: 0 }}>
-        {/* Left panel */}
-        <Box sx={{ width: { xs: '100%', md: 340 }, borderRight: { md: `1px solid ${colors.divider}` }, display: { xs: showMobileBack ? 'none' : 'flex', md: 'flex' }, flexDirection: 'column', minHeight: 0 }}>
+        {/* Left panel — conversation list */}
+        <Box
+          component="section"
+          aria-label="Conversations"
+          sx={{ width: { xs: '100%', md: 340 }, borderRight: { md: `1px solid ${colors.divider}` }, display: { xs: showMobileBack ? 'none' : 'flex', md: 'flex' }, flexDirection: 'column', minHeight: 0 }}
+        >
           {/* Desktop title */}
           <Box sx={{ display: { xs: 'none', md: 'block' }, px: `${spacing.lg}px`, pt: `${spacing.lg}px` }}>
-            <Typography variant="h6" sx={{ fontWeight: 700, color: colors.textPrimary }}>{title}</Typography>
+            <Typography component={titleComponent} variant="h6" sx={{ fontWeight: 700, color: colors.textPrimary, m: 0 }}>{title}</Typography>
           </Box>
           {conversationList}
         </Box>
 
-        {/* Right panel */}
-        <Box sx={{ flex: 1, display: { xs: showMobileBack ? 'flex' : 'none', md: 'flex' }, flexDirection: 'column', minHeight: 0 }}>
+        {/* Right panel — active conversation */}
+        <Box
+          component="section"
+          aria-label="Conversation"
+          sx={{ flex: 1, display: { xs: showMobileBack ? 'flex' : 'none', md: 'flex' }, flexDirection: 'column', minHeight: 0 }}
+        >
           {chatThread}
         </Box>
       </Box>

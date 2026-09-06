@@ -10,6 +10,8 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { tokens } from '@mitumba/tokens';
 import { ConditionBadge } from '../ConditionBadge';
+import { SemanticSurface } from '../../../internal/SemanticSurface';
+import { SemanticTitle } from '../../../internal/SemanticTitle';
 import type { ListingCardProps } from './ListingCard.types';
 
 function isVideo(url: string): boolean {
@@ -33,6 +35,9 @@ export function ListingCard({
   onClick,
   onAddToCart,
   aspectRatio = '4/5',
+  titleLevel,
+  href,
+  linkComponent,
 }: ListingCardProps): React.ReactElement {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [cartAdded, setCartAdded] = React.useState(false);
@@ -74,16 +79,19 @@ export function ListingCard({
   };
 
   const hasMultiple = media.length > 1;
+  const isInteractive = Boolean(href) || Boolean(onClick);
+  const handleActivate = onClick ? () => onClick(id) : undefined;
 
   return (
     <Box
-      onClick={() => onClick?.(id)}
+      component="article"
+      aria-label={title}
       sx={{
+        position: 'relative',
         width: '100%',
         borderRadius: `${tokens.radius.lg}px`,
         border: `1px solid ${tokens.colors.border}`,
         overflow: 'hidden',
-        cursor: onClick ? 'pointer' : 'default',
         bgcolor: tokens.colors.surface,
         transition: tokens.motion.transitions.interaction,
         '@keyframes tickPop': {
@@ -95,12 +103,42 @@ export function ListingCard({
           '0%': { backgroundPosition: '-200% 0' },
           '100%': { backgroundPosition: '200% 0' },
         },
-        '&:hover': onClick ? {
+        '&:hover': isInteractive ? {
           borderColor: tokens.colors.green,
           transform: 'translateY(-2px)',
         } : {},
       }}
     >
+      {/*
+        Stretched primary surface. It is an anchor (href), a button (callback
+        only), or nothing (noninteractive). Rendered as a sibling overlay so the
+        nested save/cart/carousel controls stay valid, non-nested interactives.
+      */}
+      {isInteractive && (
+        <SemanticSurface
+          href={href}
+          linkComponent={linkComponent}
+          onClick={handleActivate}
+          aria-label={title}
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 1,
+            display: 'block',
+            width: '100%',
+            height: '100%',
+            p: 0,
+            m: 0,
+            border: 'none',
+            background: 'transparent',
+            cursor: 'pointer',
+            appearance: 'none',
+            color: 'inherit',
+            textDecoration: 'none',
+          }}
+        />
+      )}
+
       {/* Media — reserved aspect ratio with shimmer, natural height after load */}
       <Box sx={{ position: 'relative', width: '100%', ...(!imageLoaded && !isVideo(currentMedia) ? { aspectRatio } : {}), overflow: 'hidden', bgcolor: tokens.colors.background }}>
         {/* Shimmer placeholder — visible until image loads */}
@@ -152,6 +190,7 @@ export function ListingCard({
               size="small"
               sx={{
                 position: 'absolute',
+                zIndex: 2,
                 top: '50%',
                 left: `${tokens.spacing.xs}px`,
                 transform: 'translateY(-50%)',
@@ -173,6 +212,7 @@ export function ListingCard({
               size="small"
               sx={{
                 position: 'absolute',
+                zIndex: 2,
                 top: '50%',
                 right: `${tokens.spacing.xs}px`,
                 transform: 'translateY(-50%)',
@@ -193,7 +233,7 @@ export function ListingCard({
 
         {/* Carousel dots */}
         {hasMultiple && (
-          <Box sx={{ position: 'absolute', bottom: `${tokens.spacing.sm}px`, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '4px' }}>
+          <Box sx={{ position: 'absolute', zIndex: 2, bottom: `${tokens.spacing.sm}px`, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '4px' }}>
             {media.map((_, idx) => (
               <Box
                 key={`dot-${String(idx)}`}
@@ -221,6 +261,7 @@ export function ListingCard({
             size="small"
             sx={{
               position: 'absolute',
+              zIndex: 2,
               top: `${tokens.spacing.sm}px`,
               right: `${tokens.spacing.sm}px`,
               bgcolor: 'rgba(255,255,255,0.92)',
@@ -248,13 +289,13 @@ export function ListingCard({
       </Box>
 
       {/* Content */}
-      <Box sx={{ p: `${tokens.spacing.base}px` }}>
-        <Typography
+      <Box sx={{ p: `${tokens.spacing.base}px`, position: 'relative', zIndex: 0 }}>
+        <SemanticTitle
+          titleLevel={titleLevel}
           sx={{
             fontSize: tokens.typography.fontSizes.base,
             fontWeight: 600,
             color: tokens.colors.textPrimary,
-            fontFamily: tokens.typography.fontFamily,
             lineHeight: tokens.typography.lineHeights.snug,
             display: '-webkit-box',
             WebkitLineClamp: 2,
@@ -264,7 +305,7 @@ export function ListingCard({
           }}
         >
           {title}
-        </Typography>
+        </SemanticTitle>
 
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Box>
@@ -273,7 +314,6 @@ export function ListingCard({
                 fontSize: tokens.typography.fontSizes.md,
                 fontWeight: 800,
                 color: tokens.colors.textPrimary,
-                fontFamily: tokens.typography.fontFamily,
               }}
             >
               KES {price.toLocaleString()}
@@ -283,7 +323,6 @@ export function ListingCard({
                 sx={{
                   fontSize: tokens.typography.fontSizes.xs,
                   color: tokens.colors.textSecondary,
-                  fontFamily: tokens.typography.fontFamily,
                   mt: '2px',
                 }}
               >
@@ -299,6 +338,8 @@ export function ListingCard({
               onClick={handleCart}
               size="small"
               sx={{
+                position: 'relative',
+                zIndex: 2,
                 bgcolor: cartAdded ? tokens.colors.green : tokens.colors.green,
                 color: tokens.colors.white,
                 width: 32,

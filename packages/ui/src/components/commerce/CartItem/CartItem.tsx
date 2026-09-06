@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import { tokens } from '@mitumba/tokens'
 import type { CartItemProps } from './CartItem.types'
 import { MitumbaSelect } from '../../foundation/MitumbaSelect'
+import { SemanticTitle } from '../../../internal/SemanticTitle'
 
 /**
  * Cart Item — responsive, overflow-safe at any container width.
@@ -25,6 +26,7 @@ export function CartItem({
   onQuantityChange,
   onSizeChange,
   sx,
+  titleLevel,
 }: CartItemProps) {
   return (
     <Box
@@ -70,12 +72,12 @@ export function CartItem({
       {/* Content */}
       <Box sx={{ flex: 1, minWidth: 0, ml: `${tokens.spacing.base}px` }}>
         {/* Title row */}
-        <Typography
+        <SemanticTitle
+          titleLevel={titleLevel}
           sx={{
             fontSize: tokens.typography.fontSizes.base,
             fontWeight: tokens.typography.fontWeights.bold,
             color: tokens.colors.textPrimary,
-            fontFamily: tokens.typography.fontFamily,
             lineHeight: 1.2,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -84,14 +86,13 @@ export function CartItem({
           }}
         >
           {title}
-        </Typography>
+        </SemanticTitle>
 
         {subtitle && (
           <Typography
             sx={{
               fontSize: tokens.typography.fontSizes.xs,
               color: tokens.colors.textSecondary,
-              fontFamily: tokens.typography.fontFamily,
               mt: '2px',
             }}
           >
@@ -100,6 +101,7 @@ export function CartItem({
         )}
 
         <Typography
+          role="status"
           sx={{
             fontSize: 10,
             fontWeight: tokens.typography.fontWeights.bold,
@@ -122,12 +124,10 @@ export function CartItem({
             mt: `${tokens.spacing.base}px`,
           }}
         >
-          {/* Size */}
-          <Box>
-            <Typography sx={{ fontSize: 10, fontWeight: 700, color: tokens.colors.textDisabled, mb: '2px' }}>
-              SIZE
-            </Typography>
+          {/* Size — labelled group; MitumbaSelect renders the "SIZE" field label. */}
+          <Box role="group" aria-label={`Size for ${title}`}>
             <MitumbaSelect
+              label="SIZE"
               value={size}
               size="small"
               onChange={(val) => onSizeChange?.(val as string)}
@@ -137,12 +137,10 @@ export function CartItem({
             />
           </Box>
 
-          {/* Qty */}
-          <Box>
-            <Typography sx={{ fontSize: 10, fontWeight: 700, color: tokens.colors.textDisabled, mb: '2px' }}>
-              QTY
-            </Typography>
+          {/* Qty — labelled group; MitumbaSelect renders the "QTY" field label. */}
+          <Box role="group" aria-label={`Quantity for ${title}`}>
             <MitumbaSelect
+              label="QTY"
               value={quantity}
               size="small"
               onChange={(val) => onQuantityChange?.(Number(val))}
@@ -154,7 +152,7 @@ export function CartItem({
 
           {/* Price — pushed right */}
           <Box sx={{ ml: 'auto', textAlign: 'right' }}>
-            <Typography sx={{ fontSize: tokens.typography.fontSizes.md, fontWeight: 900, color: tokens.colors.textPrimary, fontFamily: tokens.typography.fontFamily }}>
+            <Typography aria-label={`Price: KES ${priceKes.toLocaleString()}`} sx={{ fontSize: tokens.typography.fontSizes.md, fontWeight: 900, color: tokens.colors.textPrimary }}>
               KES {priceKes.toLocaleString()}
             </Typography>
           </Box>
@@ -163,7 +161,7 @@ export function CartItem({
 
       {/* Remove */}
       <IconButton
-        aria-label="Remove item from cart"
+        aria-label={`Remove ${title} from cart`}
         onClick={onRemove}
         size="small"
         sx={{

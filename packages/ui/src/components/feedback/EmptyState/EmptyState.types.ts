@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { HeadingLevel } from '../../../types/semantic';
 
 export interface EmptyStateProps {
   /** Icon or illustration element displayed above/beside the text */
@@ -17,4 +18,10 @@ export interface EmptyStateProps {
   };
   /** Layout variant — standard (centered), compact (inline row), elevated (card with shadow) */
   variant?: 'standard' | 'compact' | 'elevated';
+  /**
+   * Emits an h1-h6 element for the title when provided. When omitted the title
+   * keeps its current non-heading paragraph element, so existing markup and the
+   * visual size/weight are unchanged across all three variants.
+   */
+  titleLevel?: HeadingLevel;
 }

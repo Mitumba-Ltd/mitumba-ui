@@ -37,3 +37,27 @@ export const WithoutBackupOption: Story = {
     onSubmit: () => {},
   },
 };
+
+export const Mobile: Story = {
+  args: {
+    onSubmit: () => {},
+    onUseBackupCode: () => {},
+    titleLevel: 1,
+  },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};
+
+export const DesktopWithHeading: Story = {
+  args: {
+    onSubmit: () => {},
+    onUseBackupCode: () => {},
+    titleLevel: 1,
+    methods: [
+      { id: 'totp', type: 'totp', label: 'Authenticator' },
+      { id: 'sms', type: 'sms', label: 'SMS' },
+    ],
+    activeMethodId: 'totp',
+    onMethodChange: () => {},
+  },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};

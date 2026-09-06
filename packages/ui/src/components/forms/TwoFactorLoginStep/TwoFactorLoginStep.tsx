@@ -12,6 +12,7 @@ import FingerprintIcon from '@mui/icons-material/Fingerprint';
 import { tokens } from '@mitumba/tokens';
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
 import { MitumbaTextField } from '../../foundation/MitumbaTextField';
+import { SemanticTitle } from '../../../internal/SemanticTitle';
 import type { TwoFactorLoginStepProps, TwoFactorLoginMethod } from './TwoFactorLoginStep.types';
 import type { TwoFactorMethodType } from '../TwoFactorMethodList/TwoFactorMethodList.types';
 
@@ -54,6 +55,7 @@ export function TwoFactorLoginStep({
   onMethodChange,
   onSendCode,
   onUsePasskey,
+  titleLevel,
 }: TwoFactorLoginStepProps): React.ReactElement {
   const [code, setCode] = useState('');
   const [codeSent, setCodeSent] = useState(false);
@@ -99,18 +101,22 @@ export function TwoFactorLoginStep({
         </Box>
 
         {/* Title */}
-        <Typography sx={{ fontSize: tokens.typography.fontSizes.xl, fontWeight: 800, color: tokens.colors.textPrimary, fontFamily: tokens.typography.fontFamily, mb: `${tokens.spacing.sm}px` }}>
+        <SemanticTitle titleLevel={titleLevel} sx={{ fontSize: tokens.typography.fontSizes.xl, fontWeight: 800, color: tokens.colors.textPrimary, mb: `${tokens.spacing.sm}px` }}>
           Two-Factor Authentication
-        </Typography>
+        </SemanticTitle>
 
         {/* Subtitle */}
-        <Typography sx={{ fontSize: tokens.typography.fontSizes.base, color: tokens.colors.textSecondary, fontFamily: tokens.typography.fontFamily, mb: `${tokens.spacing.xxl}px`, maxWidth: 320, mx: 'auto' }}>
+        <Typography sx={{ fontSize: tokens.typography.fontSizes.base, color: tokens.colors.textSecondary, mb: `${tokens.spacing.xxl}px`, maxWidth: 320, mx: 'auto' }}>
           {getSubtitle(activeMethod)}
         </Typography>
 
-        {/* Method chooser */}
+        {/* Method chooser — a labelled group of toggleable method options */}
         {hasMultipleMethods && (
-          <Box sx={{ display: 'flex', gap: `${tokens.spacing.xs}px`, justifyContent: 'center', mb: `${tokens.spacing.xl}px`, flexWrap: 'wrap' }}>
+          <Box
+            role="group"
+            aria-label="Choose a verification method"
+            sx={{ display: 'flex', gap: `${tokens.spacing.xs}px`, justifyContent: 'center', mb: `${tokens.spacing.xl}px`, flexWrap: 'wrap' }}
+          >
             {methods.map((m) => {
               const isActive = m.id === (activeMethod?.id ?? '');
               return (
@@ -118,10 +124,10 @@ export function TwoFactorLoginStep({
                   key={m.id}
                   onClick={() => handleMethodSwitch(m)}
                   startIcon={TYPE_ICONS[m.type]}
+                  aria-pressed={isActive}
                   sx={{
                     textTransform: 'none',
                     borderRadius: `${tokens.radius.full}px`,
-                    fontFamily: tokens.typography.fontFamily,
                     fontSize: tokens.typography.fontSizes.sm,
                     fontWeight: isActive ? 700 : 500,
                     px: 2,
@@ -162,7 +168,7 @@ export function TwoFactorLoginStep({
               fullWidth
             />
             {error && (
-              <Typography sx={{ color: tokens.colors.error, fontSize: tokens.typography.fontSizes.xs, mt: `${tokens.spacing.sm}px`, textAlign: 'center' }}>
+              <Typography role="alert" sx={{ color: tokens.colors.error, fontSize: tokens.typography.fontSizes.xs, mt: `${tokens.spacing.sm}px`, textAlign: 'center' }}>
                 {error}
               </Typography>
             )}
@@ -198,7 +204,7 @@ export function TwoFactorLoginStep({
         {onUseBackupCode && (
           <ButtonBase
             onClick={onUseBackupCode}
-            sx={{ mt: `${tokens.spacing.xl}px`, color: tokens.colors.green, fontSize: tokens.typography.fontSizes.sm, fontWeight: 600, fontFamily: tokens.typography.fontFamily, cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
+            sx={{ mt: `${tokens.spacing.xl}px`, color: tokens.colors.green, fontSize: tokens.typography.fontSizes.sm, fontWeight: 600, cursor: 'pointer', '&:hover': { textDecoration: 'underline' } }}
           >
             Use a backup code instead
           </ButtonBase>

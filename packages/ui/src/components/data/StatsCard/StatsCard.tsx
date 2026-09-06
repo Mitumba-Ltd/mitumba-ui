@@ -78,21 +78,50 @@ export function StatsCard({
   const cardContent = (
     <Box sx={{ width: '100%' }}>
       <Stack direction="row" justifyContent="space-between" alignItems="flex-start" sx={{ mb: 2 }}>
-        <Typography
-          sx={{
-            fontSize: 10,
-            color: tokens.colors.textSecondary,
-            fontWeight: 800,
-            textTransform: 'uppercase',
-            letterSpacing: '0.08em',
-            fontFamily: tokens.typography.fontFamily,
-          }}
-        >
-          {label}
-        </Typography>
-        
+        {/* dl holds only dt/dd so the term/value semantics stay valid */}
+        <Box component="dl" sx={{ m: 0 }}>
+          <Typography
+            component="dt"
+            sx={{
+              fontSize: 10,
+              color: tokens.colors.textSecondary,
+              fontWeight: 800,
+              textTransform: 'uppercase',
+              letterSpacing: '0.08em',
+            }}
+          >
+            {label}
+          </Typography>
+
+          <Box component="dd" sx={{ display: 'flex', alignItems: 'baseline', gap: 0.5, m: 0, mt: 2 }}>
+            {unit && unitPosition === 'prefix' && (
+              <Typography component="span" sx={{ fontSize: 12, fontWeight: 900, color: tokens.colors.textSecondary, mr: 0.2 }}>
+                {unit}
+              </Typography>
+            )}
+            <Typography
+              component="span"
+              sx={{
+                fontSize: tokens.typography.fontSizes.xxxl,
+                fontWeight: 900,
+                color: tokens.colors.textPrimary,
+                lineHeight: 1,
+                letterSpacing: '-0.02em',
+              }}
+            >
+              {value}
+            </Typography>
+            {unit && unitPosition === 'suffix' && (
+              <Typography component="span" sx={{ fontSize: tokens.typography.fontSizes.sm, fontWeight: 800, color: tokens.colors.textSecondary, ml: 0.2 }}>
+                {unit}
+              </Typography>
+            )}
+          </Box>
+        </Box>
+
         {icon && (
           <Box
+            aria-hidden
             sx={{
               width: 32,
               height: 32,
@@ -103,38 +132,13 @@ export function StatsCard({
               backgroundColor: `${themeColor}15`,
               color: themeColor,
               transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-              '& svg': { fontSize: 18 }
+              '& svg': { fontSize: 18 },
             }}
           >
             {icon}
           </Box>
         )}
       </Stack>
-
-      <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 0.5 }}>
-        {unit && unitPosition === 'prefix' && (
-          <Typography sx={{ fontSize: 12, fontWeight: 900, color: tokens.colors.textSecondary, mr: 0.2 }}>
-            {unit}
-          </Typography>
-        )}
-        <Typography
-          sx={{
-            fontSize: tokens.typography.fontSizes.xxxl,
-            fontWeight: 900,
-            color: tokens.colors.textPrimary,
-            fontFamily: tokens.typography.fontFamily,
-            lineHeight: 1,
-            letterSpacing: '-0.02em',
-          }}
-        >
-          {value}
-        </Typography>
-        {unit && unitPosition === 'suffix' && (
-          <Typography sx={{ fontSize: tokens.typography.fontSizes.sm, fontWeight: 800, color: tokens.colors.textSecondary, ml: 0.2 }}>
-            {unit}
-          </Typography>
-        )}
-      </Box>
 
       {renderTrend()}
     </Box>
@@ -155,10 +159,12 @@ export function StatsCard({
   if (isCompact) {
     return (
       <Box
+        component="dl"
         sx={[
           {
             p: `${tokens.spacing.lg}px`,
             width: '100%',
+            m: 0,
             textAlign: 'center',
             backgroundColor: tokens.colors.surface,
             borderRadius: `${tokens.radius.lg}px`,
@@ -171,23 +177,24 @@ export function StatsCard({
         ]}
       >
         <Typography
+          component="dd"
           sx={{
             fontSize: tokens.typography.fontSizes.display,
             fontWeight: tokens.typography.fontWeights.extrabold,
             color: tokens.colors.textPrimary,
-            fontFamily: tokens.typography.fontFamily,
             lineHeight: 1,
+            m: 0,
             mb: '4px',
           }}
         >
           {unit && unitPosition === 'prefix' ? `${unit} ` : ''}{value}{unit && unitPosition === 'suffix' ? ` ${unit}` : ''}
         </Typography>
         <Typography
+          component="dt"
           sx={{
             fontSize: tokens.typography.fontSizes.xs,
             fontWeight: tokens.typography.fontWeights.semibold,
             color: tokens.colors.textSecondary,
-            fontFamily: tokens.typography.fontFamily,
             textTransform: 'uppercase',
             letterSpacing: '0.04em',
           }}

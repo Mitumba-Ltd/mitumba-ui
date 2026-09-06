@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Alert,
+  Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, FormHelperText, Alert,
   Backdrop, CircularProgress, InputAdornment,
 } from '@mui/material';
 import { tokens } from '@mitumba/tokens';
@@ -26,8 +26,14 @@ export function BuyerOnboardingPage({
   heroImageUrl,
   counties,
   initialData,
+  titleLevel,
+  sectionTitleLevel,
 }: BuyerOnboardingPageProps): React.ReactElement {
   const countyList = counties ?? KENYA_COUNTIES;
+  // Preserve existing heading elements when no explicit level is supplied.
+  const heroTitleComponent = (titleLevel ? `h${titleLevel}` : 'h4') as React.ElementType;
+  const mobileSectionComponent = (sectionTitleLevel ? `h${sectionTitleLevel}` : 'h4') as React.ElementType;
+  const desktopSectionComponent = (sectionTitleLevel ? `h${sectionTitleLevel}` : 'h5') as React.ElementType;
   const [displayName, setDisplayName] = React.useState(initialData?.display_name ?? '');
   const [county, setCounty] = React.useState(initialData?.county ?? '');
   const [phone, setPhone] = React.useState(initialData?.phone ?? '');
@@ -62,7 +68,7 @@ export function BuyerOnboardingPage({
 
         {/* Hero panel — desktop only */}
         <Box sx={{ display: { xs: 'none', md: 'flex' }, flexShrink: 0, width: '45%', background: panelBg, backgroundSize: 'cover', backgroundPosition: 'center', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', p: `${tokens.spacing.giant}px`, color: tokens.colors.white }}>
-          <Typography variant="h4" fontWeight="bold" sx={{ color: tokens.colors.white, mb: `${tokens.spacing.lg}px` }}>
+          <Typography component={heroTitleComponent} variant="h4" fontWeight="bold" sx={{ color: tokens.colors.white, mb: `${tokens.spacing.lg}px` }}>
             Welcome to Mitumba
           </Typography>
           <Typography variant="body1" sx={{ color: tokens.colors.white, opacity: 0.9, mb: `${tokens.spacing.xxxl}px` }}>
@@ -87,7 +93,7 @@ export function BuyerOnboardingPage({
 
           {/* Mobile heading */}
           <Box sx={{ display: { xs: 'block', md: 'none' }, mb: `${tokens.spacing.xxl}px` }}>
-            <Typography variant="h4" fontWeight="bold" color={tokens.colors.textPrimary} gutterBottom>
+            <Typography component={mobileSectionComponent} variant="h4" fontWeight="bold" color={tokens.colors.textPrimary} gutterBottom>
               Welcome to Mitumba
             </Typography>
             <Typography variant="body2" color={tokens.colors.textSecondary}>
@@ -97,7 +103,7 @@ export function BuyerOnboardingPage({
 
           {/* Desktop heading */}
           <Box sx={{ display: { xs: 'none', md: 'block' }, mb: `${tokens.spacing.xxl}px` }}>
-            <Typography variant="h5" fontWeight="bold" color={tokens.colors.textPrimary} gutterBottom>
+            <Typography component={desktopSectionComponent} variant="h5" fontWeight="bold" color={tokens.colors.textPrimary} gutterBottom>
               Complete your profile
             </Typography>
             <Typography variant="body2" color={tokens.colors.textSecondary}>
@@ -122,18 +128,23 @@ export function BuyerOnboardingPage({
                 error={!!touched.displayName && !!errors.displayName}
               />
 
-              <FormControl fullWidth required>
-                <InputLabel>County</InputLabel>
+              <FormControl fullWidth required error={!!touched.county && !!errors.county}>
+                <InputLabel id="buyer-onboarding-county-label">County</InputLabel>
                 <Select
                   sx={tfSx}
+                  labelId="buyer-onboarding-county-label"
                   value={county}
                   label="County"
                   onChange={(e) => setCounty(e.target.value)}
+                  onBlur={() => handleBlur('county')}
                 >
                   {countyList.map((c) => (
                     <MenuItem key={c} value={c}>{c}</MenuItem>
                   ))}
                 </Select>
+                <FormHelperText>
+                  {touched.county && errors.county ? errors.county : 'Where should sellers ship to?'}
+                </FormHelperText>
               </FormControl>
 
               <TextField

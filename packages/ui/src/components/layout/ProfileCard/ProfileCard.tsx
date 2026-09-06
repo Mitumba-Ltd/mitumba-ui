@@ -5,6 +5,7 @@ import Avatar from '@mui/material/Avatar'
 import { tokens } from '@mitumba/tokens'
 import { MitumbaChip } from '../../foundation/MitumbaChip'
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
+import { SemanticTitle } from '../../../internal/SemanticTitle'
 import type { ProfileCardProps } from './ProfileCard.types'
 
 /**
@@ -19,6 +20,7 @@ export function ProfileCard({
   onAction,
   subtitle,
   sx,
+  titleLevel,
 }: ProfileCardProps) {
   return (
     <Box
@@ -38,10 +40,11 @@ export function ProfileCard({
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
-      {/* Avatar */}
+      {/* Avatar — the initials fallback carries an accessible name for the image role */}
       <Avatar
         src={avatarUrl}
         alt={name}
+        aria-label={name}
         sx={{
           width: 96,
           height: 96,
@@ -50,24 +53,23 @@ export function ProfileCard({
           bgcolor: tokens.colors.green,
           fontSize: 36,
           fontWeight: tokens.typography.fontWeights.extrabold,
-          fontFamily: tokens.typography.fontFamily,
         }}
       >
         {name[0]?.toUpperCase()}
       </Avatar>
 
       {/* Name */}
-      <Typography
+      <SemanticTitle
+        titleLevel={titleLevel}
         sx={{
           fontSize: tokens.typography.fontSizes.xl,
           fontWeight: tokens.typography.fontWeights.extrabold,
           color: tokens.colors.textPrimary,
-          fontFamily: tokens.typography.fontFamily,
           lineHeight: 1.2,
         }}
       >
         {name}
-      </Typography>
+      </SemanticTitle>
 
       {/* Subtitle */}
       {subtitle && (
@@ -75,7 +77,6 @@ export function ProfileCard({
           sx={{
             fontSize: tokens.typography.fontSizes.sm,
             color: tokens.colors.textSecondary,
-            fontFamily: tokens.typography.fontFamily,
             mt: '4px',
           }}
         >

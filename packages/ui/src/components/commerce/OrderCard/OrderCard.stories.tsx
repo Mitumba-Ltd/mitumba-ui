@@ -44,3 +44,25 @@ export const Mobile: Story = {
   args: Default.args,
   parameters: { viewport: { defaultViewport: 'mobile' } },
 }
+
+export const AsLinkWithHeading: Story = {
+  args: {
+    ...Default.args,
+    onClick: undefined,
+    href: '/orders/a9331769',
+    titleLevel: 2,
+    onTrack: () => {},
+  },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+}
+
+export const MobileAsLink: Story = {
+  args: {
+    ...Default.args,
+    onClick: undefined,
+    href: '/orders/a9331769',
+    titleLevel: 2,
+    onTrack: () => {},
+  },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+}

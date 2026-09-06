@@ -1,4 +1,6 @@
-export interface SellerCardProps {
+import type { HeadingLevel, SemanticDestinationProps } from '../../../types/semantic'
+
+export interface SellerCardProps extends SemanticDestinationProps {
   /** Unique identifier for the seller. */
   sellerId: string
   /** Display name of the seller. */
@@ -19,4 +21,10 @@ export interface SellerCardProps {
   actionLabel?: string
   /** Called when the action button is clicked. Does NOT fire onTap. */
   onAction?: () => void
+  /**
+   * Emits an h1-h6 element for the seller name when provided. When omitted the
+   * name keeps its current non-heading paragraph element and unchanged visual
+   * size/weight/truncation.
+   */
+  titleLevel?: HeadingLevel
 }

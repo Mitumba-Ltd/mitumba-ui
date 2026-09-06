@@ -1,3 +1,5 @@
+import type { HeadingLevel } from '../../../types/semantic';
+
 export interface BuyerOnboardingData {
   /** Buyer's display name */
   display_name: string;
@@ -10,6 +12,18 @@ export interface BuyerOnboardingData {
 export interface BuyerOnboardingPageProps {
   /** Called when the form is submitted with all fields */
   onComplete: (data: BuyerOnboardingData) => void;
+  /**
+   * Emits an h1-h6 element for the page/welcome title when provided. When
+   * omitted the title keeps its current `<h4>` element and unchanged visual
+   * size.
+   */
+  titleLevel?: HeadingLevel;
+  /**
+   * Emits an h1-h6 element for the form section title ("Complete your profile"
+   * / mobile welcome heading) when provided. When omitted it keeps its current
+   * heading element and unchanged visual size.
+   */
+  sectionTitleLevel?: HeadingLevel;
   /** Whether submission is in progress */
   loading?: boolean;
   /** Error message to display */

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
@@ -8,6 +8,8 @@ import { tokens } from '@mitumba/tokens'
 import { MitumbaGlass } from '../../foundation/MitumbaGlass'
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
 import { VAZIBadge } from '../VAZIBadge'
+import { SemanticSurface } from '../../../internal/SemanticSurface'
+import { SemanticTitle } from '../../../internal/SemanticTitle'
 import type { VAZIOutfitCardProps } from './VAZIOutfitCard.types'
 
 /**
@@ -22,27 +24,21 @@ export function VAZIOutfitCard({
   isMultiCity = false,
   onTap,
   onBuyAll,
+  titleLevel,
+  href,
+  linkComponent,
 }: VAZIOutfitCardProps) {
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault()
-        onTap?.()
-      }
-    },
-    [onTap],
-  )
+  const isInteractive = Boolean(href) || Boolean(onTap)
+  const accessibleName = `${outfitName}, KES ${totalPriceKes.toLocaleString()}`
+  const priceLabelId = React.useId()
 
   return (
     <Box
-      onClick={onTap}
-      onKeyDown={handleKeyDown}
-      role="button"
-      tabIndex={onTap ? 0 : -1}
+      component="article"
+      aria-label={accessibleName}
       sx={{
         width: '100%',
         position: 'relative',
-        cursor: onTap ? 'pointer' : 'default',
         borderRadius: `${tokens.radius.lg}px`,
         overflow: 'hidden',
         backgroundColor: tokens.colors.surface,
@@ -51,14 +47,44 @@ export function VAZIOutfitCard({
           0 12px 32px 0 rgba(31, 38, 135, 0.1)
         `,
         transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
-        '&:hover': {
+        '&:hover': isInteractive ? {
           transform: 'translateY(-8px) scale(1.01)',
           boxShadow: tokens.shadows.deep,
           '& .collage-image-2': { transform: 'rotate(4deg) translate(8px, -4px)' },
           '& .collage-image-3': { transform: 'rotate(-4deg) translate(-8px, -4px)' },
-        },
+        } : {},
       }}
     >
+      {/*
+        Stretched primary surface (anchor/button/none). Rendered as a sibling
+        overlay so the nested "Buy entire look" action stays a valid,
+        non-nested control.
+      */}
+      {isInteractive && (
+        <SemanticSurface
+          href={href}
+          linkComponent={linkComponent}
+          onClick={onTap}
+          aria-label={accessibleName}
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 1,
+            display: 'block',
+            width: '100%',
+            height: '100%',
+            p: 0,
+            m: 0,
+            border: 'none',
+            background: 'transparent',
+            cursor: 'pointer',
+            appearance: 'none',
+            color: 'inherit',
+            textDecoration: 'none',
+          }}
+        />
+      )}
+
       {/* VAZI Floating Header */}
       <Box
         sx={{
@@ -162,20 +188,20 @@ export function VAZIOutfitCard({
       </Box>
 
       {/* Content Section */}
-      <Box sx={{ p: 2.5 }}>
-        <Typography
+      <Box sx={{ p: 2.5, position: 'relative', zIndex: 0 }}>
+        <SemanticTitle
+          titleLevel={titleLevel}
           sx={{
             fontSize: tokens.typography.fontSizes.lg,
             fontWeight: 900,
             color: tokens.colors.textPrimary,
-            fontFamily: tokens.typography.fontFamily,
             lineHeight: 1.1,
             mb: 1,
             letterSpacing: '-0.01em',
           }}
         >
           {outfitName}
-        </Typography>
+        </SemanticTitle>
 
         <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2.5 }}>
           <Typography
@@ -212,10 +238,13 @@ export function VAZIOutfitCard({
         {/* Footer Action Row */}
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Box>
-             <Typography sx={{ fontSize: 10, fontWeight: 800, color: tokens.colors.textDisabled, textTransform: 'uppercase', mb: 0.2 }}>
+             <Typography id={priceLabelId} sx={{ fontSize: 10, fontWeight: 800, color: tokens.colors.textDisabled, textTransform: 'uppercase', mb: 0.2 }}>
                Total Look
              </Typography>
-             <Typography sx={{ fontSize: tokens.typography.fontSizes.xl, fontWeight: 900, color: tokens.colors.textPrimary, fontFamily: tokens.typography.fontFamily }}>
+             <Typography
+               aria-labelledby={priceLabelId}
+               sx={{ fontSize: tokens.typography.fontSizes.xl, fontWeight: 900, color: tokens.colors.textPrimary }}
+             >
                KES {totalPriceKes.toLocaleString()}
              </Typography>
           </Box>
@@ -228,7 +257,7 @@ export function VAZIOutfitCard({
               icon={<AutoAwesomeIcon sx={{ fontSize: 16 }} />}
               iconPosition="right"
               onClick={(e) => { e.stopPropagation(); onBuyAll(); }}
-              sx={{ borderRadius: tokens.radius.full, height: 36, px: 3 }}
+              sx={{ borderRadius: tokens.radius.full, height: 36, px: 3, position: 'relative', zIndex: 2 }}
             />
           )}
         </Stack>

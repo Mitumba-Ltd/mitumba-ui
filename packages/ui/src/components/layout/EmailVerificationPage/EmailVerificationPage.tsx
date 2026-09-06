@@ -8,6 +8,7 @@ import MarkEmailReadOutlinedIcon from '@mui/icons-material/MarkEmailReadOutlined
 import { tokens } from '@mitumba/tokens';
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
 import { MitumbaTextField } from '../../foundation/MitumbaTextField';
+import { SemanticTitle } from '../../../internal/SemanticTitle';
 import type { EmailVerificationPageProps } from './EmailVerificationPage.types';
 
 /**
@@ -24,6 +25,7 @@ export function EmailVerificationPage({
   resendSuccess,
   heroImageUrl,
   onGoBack,
+  titleLevel,
 }: EmailVerificationPageProps): React.ReactElement {
   const [code, setCode] = React.useState('');
   const [countdown, setCountdown] = React.useState(0);
@@ -71,16 +73,16 @@ export function EmailVerificationPage({
           </Box>
 
           {/* Title */}
-          <Typography sx={{ fontSize: tokens.typography.fontSizes.xl, fontWeight: 800, color: tokens.colors.textPrimary, fontFamily: tokens.typography.fontFamily, mb: `${tokens.spacing.sm}px` }}>
+          <SemanticTitle titleLevel={titleLevel} sx={{ fontSize: tokens.typography.fontSizes.xl, fontWeight: 800, color: tokens.colors.textPrimary, mb: `${tokens.spacing.sm}px` }}>
             Verify your email
-          </Typography>
+          </SemanticTitle>
 
           {/* Subtitle */}
-          <Typography sx={{ fontSize: tokens.typography.fontSizes.base, color: tokens.colors.textSecondary, fontFamily: tokens.typography.fontFamily, mb: `${tokens.spacing.xxxl}px`, maxWidth: 340, mx: 'auto' }}>
+          <Typography sx={{ fontSize: tokens.typography.fontSizes.base, color: tokens.colors.textSecondary, mb: `${tokens.spacing.xxxl}px`, maxWidth: 340, mx: 'auto' }}>
             We sent a 6-digit code to <strong>{email}</strong>
           </Typography>
 
-          {/* Code input */}
+          {/* Code input — documented monospace exception retained */}
           <MitumbaTextField
             label="Verification code"
             value={code}
@@ -95,8 +97,8 @@ export function EmailVerificationPage({
             }}
           />
 
-          {/* Resend success */}
-          {resendSuccess && <Alert severity="success" sx={{ mb: `${tokens.spacing.lg}px`, maxWidth: 280, mx: 'auto' }}>Code resent!</Alert>}
+          {/* Resend success — announced politely */}
+          {resendSuccess && <Alert severity="success" role="status" sx={{ mb: `${tokens.spacing.lg}px`, maxWidth: 280, mx: 'auto' }}>Code resent!</Alert>}
 
           {/* Verify button */}
           <Box sx={{ maxWidth: 280, mx: 'auto', width: '100%', mb: `${tokens.spacing.xl}px` }}>
@@ -113,7 +115,7 @@ export function EmailVerificationPage({
           <ButtonBase
             onClick={countdown > 0 ? undefined : handleResend}
             disabled={countdown > 0}
-            sx={{ color: countdown > 0 ? tokens.colors.textDisabled : tokens.colors.green, fontSize: tokens.typography.fontSizes.sm, fontWeight: 600, fontFamily: tokens.typography.fontFamily, cursor: countdown > 0 ? 'default' : 'pointer', '&:hover': countdown > 0 ? {} : { textDecoration: 'underline' } }}
+            sx={{ color: countdown > 0 ? tokens.colors.textDisabled : tokens.colors.green, fontSize: tokens.typography.fontSizes.sm, fontWeight: 600, cursor: countdown > 0 ? 'default' : 'pointer', '&:hover': countdown > 0 ? {} : { textDecoration: 'underline' } }}
           >
             {countdown > 0 ? `Resend available in ${countdown}s` : "Didn\u0027t receive it? Resend"}
           </ButtonBase>
@@ -122,7 +124,7 @@ export function EmailVerificationPage({
           {onGoBack && (
             <ButtonBase
               onClick={onGoBack}
-              sx={{ mt: `${tokens.spacing.lg}px`, color: tokens.colors.textSecondary, fontSize: tokens.typography.fontSizes.sm, fontFamily: tokens.typography.fontFamily, cursor: 'pointer', '&:hover': { color: tokens.colors.textPrimary } }}
+              sx={{ mt: `${tokens.spacing.lg}px`, color: tokens.colors.textSecondary, fontSize: tokens.typography.fontSizes.sm, cursor: 'pointer', '&:hover': { color: tokens.colors.textPrimary } }}
             >
               Wrong email? Go back
             </ButtonBase>

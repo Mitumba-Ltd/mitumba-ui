@@ -24,7 +24,10 @@ export function AuthPage({
   illustrationUrl,
   heroImageUrl,
   footerActions,
+  titleLevel,
 }: AuthPageProps): React.ReactElement {
+  // Preserve the existing <h4> heading element when no explicit level is set.
+  const headingComponent = (titleLevel ? `h${titleLevel}` : 'h4') as React.ElementType;
   const [currentView, setCurrentView] = React.useState<'signin' | 'signup' | 'forgot' | 'reset'>(view);
   const [isTransitioning, setIsTransitioning] = React.useState(false);
   const [email, setEmail] = React.useState('');
@@ -139,14 +142,14 @@ export function AuthPage({
         <Box sx={{ display: { xs: 'none', md: 'flex' }, position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: heroImageUrl ? `linear-gradient(135deg, ${tokens.colors.green}cc, ${tokens.colors.earth}99), url(${heroImageUrl})` : `linear-gradient(135deg, ${tokens.colors.green}, ${tokens.colors.earth})`, backgroundSize: 'cover', backgroundPosition: 'center', clipPath: gradientClipPath, transition: 'clip-path 0.8s cubic-bezier(0.65, 0, 0.35, 1)', flexDirection: 'column', alignItems: gradientLeft ? 'flex-start' : 'flex-end', justifyContent: 'center', color: tokens.colors.white, p: `${tokens.spacing.giant}px`, pl: gradientLeft ? `${tokens.spacing.xxxl}px` : `${tokens.spacing.giant}px`, pr: gradientLeft ? `${tokens.spacing.giant}px` : `${tokens.spacing.xxxl}px`, zIndex: 10 }}>
           <Box sx={{ opacity: isTransitioning ? 0 : 1, transition: 'opacity 0.3s', textAlign: 'center', maxWidth: 400 }}>
             <Typography variant="h3" fontWeight="bold" gutterBottom sx={{ color: tokens.colors.white }}>Mitumba</Typography>
-            <Typography variant="h6" sx={{ opacity: 0.9, mt: `${tokens.spacing.lg}px`, color: tokens.colors.white }}>Your ultimate marketplace for sustainable fashion.</Typography>
+            <Typography component="p" variant="h6" sx={{ opacity: 0.9, mt: `${tokens.spacing.lg}px`, color: tokens.colors.white }}>Your ultimate marketplace for sustainable fashion.</Typography>
             {illustrationUrl && <Box component="img" src={illustrationUrl} alt="Mitumba Illustration" sx={{ mt: `${tokens.spacing.xxxl}px`, maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }} />}
           </Box>
         </Box>
 
         {/* Sign In — left */}
         <Box sx={{ position: 'absolute', left: 0, top: 0, width: { xs: '100%', md: '50%' }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', p: formPadding, ...panelContentSx, ...panelSx(currentView === 'signin') }}>
-          <Typography variant="h4" fontWeight="bold" gutterBottom color={textColor}>Sign In</Typography>
+          <Typography component={headingComponent} variant="h4" fontWeight="bold" gutterBottom color={textColor}>Sign In</Typography>
           <Typography variant="body2" sx={{ mb: `${tokens.spacing.xxxl}px`, color: subtitleColor }}>Welcome back! Please login to your account.</Typography>
           <Box component="form" aria-label="sign-in-form" onSubmit={handleLoginSubmit}>
             <TextField sx={tfSx} fullWidth label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
@@ -169,7 +172,7 @@ export function AuthPage({
 
         {/* Sign Up — right */}
         <Box sx={{ position: 'absolute', right: 0, top: 0, width: { xs: '100%', md: '50%' }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', p: formPadding, ...panelContentSx, transitionDelay: currentView === 'signup' ? '0.3s' : '0s', ...panelSx(currentView === 'signup') }}>
-          <Typography variant="h4" fontWeight="bold" gutterBottom color={textColor}>Sign Up</Typography>
+          <Typography component={headingComponent} variant="h4" fontWeight="bold" gutterBottom color={textColor}>Sign Up</Typography>
           <Typography variant="body2" sx={{ mb: `${tokens.spacing.xxxl}px`, color: subtitleColor }}>Create your account to get started.</Typography>
           <Box component="form" onSubmit={handleSignUpSubmit}>
             <TextField sx={tfSx} fullWidth label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
@@ -187,7 +190,7 @@ export function AuthPage({
 
         {/* Forgot Password — right */}
         <Box sx={{ position: 'absolute', right: 0, top: 0, width: { xs: '100%', md: '50%' }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', p: formPadding, ...panelContentSx, transitionDelay: currentView === 'forgot' ? '0.3s' : '0s', ...panelSx(currentView === 'forgot') }}>
-          <Typography variant="h4" fontWeight="bold" gutterBottom color={textColor}>Forgot Password</Typography>
+          <Typography component={headingComponent} variant="h4" fontWeight="bold" gutterBottom color={textColor}>Forgot Password</Typography>
           <Typography variant="body2" sx={{ mb: `${tokens.spacing.xxxl}px`, color: subtitleColor }}>Enter your email and we&apos;ll send you a reset link.</Typography>
           <Box component="form" onSubmit={handleForgotPasswordSubmit}>
             <TextField sx={tfSx} fullWidth label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
@@ -203,7 +206,7 @@ export function AuthPage({
 
         {/* Reset Password — left */}
         <Box sx={{ position: 'absolute', left: 0, top: 0, width: { xs: '100%', md: '50%' }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', p: formPadding, ...panelContentSx, ...panelSx(currentView === 'reset') }}>
-          <Typography variant="h4" fontWeight="bold" gutterBottom color={textColor}>Reset Password</Typography>
+          <Typography component={headingComponent} variant="h4" fontWeight="bold" gutterBottom color={textColor}>Reset Password</Typography>
           <Typography variant="body2" sx={{ mb: `${tokens.spacing.xxxl}px`, color: subtitleColor }}>Enter your new password below.</Typography>
           <Box component="form" onSubmit={handleResetPasswordSubmit}>
             <TextField sx={tfSx} fullWidth label="New Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
@@ -221,7 +224,10 @@ export function AuthPage({
       </Box>
 
       <Snackbar open={!!(error || success || info || warning)} autoHideDuration={6000} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-        <Alert severity={snackbarSeverity}>
+        <Alert
+          severity={snackbarSeverity}
+          role={snackbarSeverity === 'error' || snackbarSeverity === 'warning' ? 'alert' : 'status'}
+        >
           {error || success || info || warning}
         </Alert>
       </Snackbar>

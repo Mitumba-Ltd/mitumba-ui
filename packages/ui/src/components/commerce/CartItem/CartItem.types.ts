@@ -1,4 +1,5 @@
 import type { SxProps, Theme } from '@mui/material/styles'
+import type { HeadingLevel } from '../../../types/semantic'
 
 export interface CartItemProps {
   /** Technical ID of the item. */
@@ -32,4 +33,10 @@ export interface CartItemProps {
   
   /** Optional style overrides. */
   sx?: SxProps<Theme>
+  /**
+   * Emits an h1-h6 element for the item title when provided. When omitted the
+   * title keeps its current non-heading paragraph element and unchanged visual
+   * size/weight/truncation.
+   */
+  titleLevel?: HeadingLevel
 }

@@ -4,6 +4,8 @@ import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { tokens } from '@mitumba/tokens'
+import { SemanticSurface } from '../../../internal/SemanticSurface'
+import { SemanticTitle } from '../../../internal/SemanticTitle'
 import type { StoreCardProps } from './StoreCard.types'
 
 /**
@@ -17,6 +19,9 @@ export function StoreCard({
   subtitle,
   onClick,
   sx,
+  titleLevel,
+  href,
+  linkComponent,
 }: StoreCardProps) {
   const initials = name
     .split(' ')
@@ -25,25 +30,35 @@ export function StoreCard({
     .slice(0, 2)
     .toUpperCase()
 
+  const isInteractive = Boolean(href) || Boolean(onClick)
+  // Unique accessible name so multiple StoreCards are distinguishable.
+  const accessibleName = subtitle ? `${name}, ${subtitle}` : name
+
   return (
-    <Box
+    <SemanticSurface
+      href={href}
+      linkComponent={linkComponent}
       onClick={onClick}
-      role={onClick ? 'button' : undefined}
-      tabIndex={onClick ? 0 : undefined}
-      onKeyDown={(e) => { if (onClick && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onClick() } }}
+      aria-label={isInteractive ? accessibleName : undefined}
       sx={[
         {
           display: 'flex',
           alignItems: 'center',
           gap: `${tokens.spacing.base}px`,
           p: `${tokens.spacing.lg}px`,
+          width: '100%',
+          textAlign: 'left',
+          boxSizing: 'border-box',
           bgcolor: tokens.colors.surface,
           borderRadius: `${tokens.radius.lg}px`,
           border: `1px solid ${tokens.colors.divider}`,
           boxShadow: tokens.shadows.card,
-          cursor: onClick ? 'pointer' : 'default',
+          color: 'inherit',
+          textDecoration: 'none',
+          appearance: 'none',
+          cursor: isInteractive ? 'pointer' : 'default',
           transition: tokens.motion.transitions.interaction,
-          '&:hover': onClick ? {
+          '&:hover': isInteractive ? {
             transform: 'translateY(-2px)',
             boxShadow: tokens.shadows.elevated,
             borderColor: tokens.colors.green,
@@ -62,7 +77,6 @@ export function StoreCard({
           bgcolor: tokens.colors.green,
           fontWeight: tokens.typography.fontWeights.bold,
           fontSize: tokens.typography.fontSizes.base,
-          fontFamily: tokens.typography.fontFamily,
         }}
       >
         {initials}
@@ -70,12 +84,12 @@ export function StoreCard({
 
       {/* Info */}
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography
+        <SemanticTitle
+          titleLevel={titleLevel}
           sx={{
             fontSize: tokens.typography.fontSizes.base,
             fontWeight: tokens.typography.fontWeights.bold,
             color: tokens.colors.textPrimary,
-            fontFamily: tokens.typography.fontFamily,
             lineHeight: 1.2,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -83,13 +97,12 @@ export function StoreCard({
           }}
         >
           {name}
-        </Typography>
+        </SemanticTitle>
         {subtitle && (
           <Typography
             sx={{
               fontSize: tokens.typography.fontSizes.xs,
               color: tokens.colors.textSecondary,
-              fontFamily: tokens.typography.fontFamily,
               mt: '2px',
             }}
           >
@@ -99,10 +112,10 @@ export function StoreCard({
       </Box>
 
       {/* Chevron */}
-      {onClick && (
+      {isInteractive && (
         <ChevronRightIcon sx={{ fontSize: 20, color: tokens.colors.textDisabled }} />
       )}
-    </Box>
+    </SemanticSurface>
   )
 }
 

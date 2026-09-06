@@ -40,3 +40,13 @@ export const Mobile: Story = {
   args: { email: 'mobile@user.ke' },
   parameters: { viewport: { defaultViewport: 'mobile' } },
 };
+
+export const MobileWithHeading: Story = {
+  args: { email: 'mobile@user.ke', titleLevel: 1 },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};
+
+export const DesktopWithHeading: Story = {
+  args: { email: 'amina.odhiambo@gmail.com', titleLevel: 1 },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};

@@ -19,6 +19,17 @@ function MockThread() { return <Box sx={{ p: 2 }}><Typography>Chat thread goes h
 
 export const Desktop: Story = {
   args: { conversationList: <MockList />, chatThread: <MockThread /> },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};
+
+export const DesktopWithHeadingLevel: Story = {
+  args: { conversationList: <MockList />, chatThread: <MockThread />, titleLevel: 1 },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};
+
+export const MobileWithHeadingLevel: Story = {
+  args: { conversationList: <MockList />, chatThread: <MockThread />, titleLevel: 1 },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
 };
 
 export const MobileList: Story = {

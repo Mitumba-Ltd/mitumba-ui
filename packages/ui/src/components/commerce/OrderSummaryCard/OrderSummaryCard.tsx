@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography'
 import ShieldOutlinedIcon from '@mui/icons-material/ShieldOutlined'
 import { tokens } from '@mitumba/tokens'
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
+import { SemanticTitle } from '../../../internal/SemanticTitle'
 import type { OrderSummaryCardProps } from './OrderSummaryCard.types'
 
 /**
@@ -19,9 +20,13 @@ export function OrderSummaryCard({
   disabled = false,
   trustLine,
   sx,
+  titleLevel,
 }: OrderSummaryCardProps) {
+  const titleId = React.useId()
   return (
     <Box
+      component="section"
+      aria-labelledby={titleId}
       sx={[
         {
           bgcolor: tokens.colors.surface,
@@ -38,38 +43,43 @@ export function OrderSummaryCard({
       ]}
     >
       {/* Title */}
-      <Typography
+      <SemanticTitle
+        titleLevel={titleLevel}
+        id={titleId}
         sx={{
           fontSize: tokens.typography.fontSizes.lg,
           fontWeight: tokens.typography.fontWeights.bold,
           color: tokens.colors.textPrimary,
-          fontFamily: tokens.typography.fontFamily,
           mb: `${tokens.spacing.xl}px`,
         }}
       >
         Order Summary
-      </Typography>
+      </SemanticTitle>
 
-      {/* Line items */}
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.base}px`, mb: `${tokens.spacing.xl}px` }}>
+      {/* Line items as a description list of monetary label/value pairs */}
+      <Box
+        component="dl"
+        sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.base}px`, m: 0, mb: `${tokens.spacing.xl}px` }}
+      >
         {items.map((item) => (
           <Box key={item.label} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <Typography
+              component="dt"
               sx={{
                 fontSize: tokens.typography.fontSizes.sm,
                 color: tokens.colors.textSecondary,
-                fontFamily: tokens.typography.fontFamily,
                 fontWeight: tokens.typography.fontWeights.medium,
               }}
             >
               {item.label}
             </Typography>
             <Typography
+              component="dd"
               sx={{
+                m: 0,
                 fontSize: tokens.typography.fontSizes.sm,
                 fontWeight: tokens.typography.fontWeights.bold,
                 color: item.isDiscount ? tokens.colors.green : tokens.colors.textPrimary,
-                fontFamily: tokens.typography.fontFamily,
               }}
             >
               {item.isDiscount ? '−' : ''}KES {item.amountKes.toLocaleString()}
@@ -81,24 +91,28 @@ export function OrderSummaryCard({
       {/* Divider */}
       <Box sx={{ height: '1px', bgcolor: tokens.colors.divider, mb: `${tokens.spacing.xl}px` }} />
 
-      {/* Total */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: `${tokens.spacing.xxl}px` }}>
+      {/* Total as its own label/value pair */}
+      <Box
+        component="dl"
+        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', m: 0, mb: `${tokens.spacing.xxl}px` }}
+      >
         <Typography
+          component="dt"
           sx={{
             fontSize: tokens.typography.fontSizes.lg,
             fontWeight: tokens.typography.fontWeights.extrabold,
             color: tokens.colors.textPrimary,
-            fontFamily: tokens.typography.fontFamily,
           }}
         >
           Total
         </Typography>
         <Typography
+          component="dd"
           sx={{
+            m: 0,
             fontSize: tokens.typography.fontSizes.xl,
             fontWeight: tokens.typography.fontWeights.extrabold,
             color: tokens.colors.green,
-            fontFamily: tokens.typography.fontFamily,
           }}
         >
           KES {totalKes.toLocaleString()}
@@ -125,7 +139,6 @@ export function OrderSummaryCard({
             sx={{
               fontSize: tokens.typography.fontSizes.xs,
               color: tokens.colors.textSecondary,
-              fontFamily: tokens.typography.fontFamily,
               fontWeight: tokens.typography.fontWeights.semibold,
             }}
           >
