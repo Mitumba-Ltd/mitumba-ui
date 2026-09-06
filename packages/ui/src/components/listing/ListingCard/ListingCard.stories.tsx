@@ -105,3 +105,26 @@ export const Mobile: Story = {
   parameters: { viewport: { defaultViewport: 'mobile' } },
   decorators: [(Story) => <Box sx={{ maxWidth: 170 }}><Story /></Box>],
 };
+
+export const AsLinkWithHeading: Story = {
+  args: {
+    ...Default.args,
+    href: '/listings/abc123',
+    titleLevel: 2,
+    onSaveToggle: () => {},
+    onAddToCart: () => {},
+  },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};
+
+export const MobileAsLink: Story = {
+  args: {
+    ...Default.args,
+    href: '/listings/abc123',
+    titleLevel: 2,
+    onSaveToggle: () => {},
+    onAddToCart: () => {},
+  },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+  decorators: [(Story) => <Box sx={{ maxWidth: 170 }}><Story /></Box>],
+};

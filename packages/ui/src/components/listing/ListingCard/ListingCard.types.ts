@@ -1,4 +1,6 @@
-export interface ListingCardProps {
+import type { HeadingLevel, SemanticDestinationProps } from '../../../types/semantic';
+
+export interface ListingCardProps extends SemanticDestinationProps {
   /** Unique listing identifier */
   id: string;
   /** Listing title — truncated to 2 lines */
@@ -21,4 +23,10 @@ export interface ListingCardProps {
   onAddToCart?: (id: string) => void;
   /** Aspect ratio for the image area while loading (CSS value). @default '4/5' */
   aspectRatio?: string;
+  /**
+   * Emits an h1-h6 element for the listing title when provided. When omitted the
+   * title keeps its current non-heading paragraph element and unchanged visual
+   * size/weight/truncation.
+   */
+  titleLevel?: HeadingLevel;
 }
