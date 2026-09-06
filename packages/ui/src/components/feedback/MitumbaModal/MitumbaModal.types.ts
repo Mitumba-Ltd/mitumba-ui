@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import type { HeadingLevel } from '../../../types/semantic'
 
 /**
  * Props for the MitumbaModal universal base component.
@@ -24,4 +25,6 @@ export interface MitumbaModalProps {
   closeOnBackdrop?: boolean
   /** Loading state — disables actions and shows overlay spinner. @default false */
   loading?: boolean
+  /** Emits h1-h6 for the modal title when provided; omitted preserves current styled title element. */
+  titleLevel?: HeadingLevel
 }

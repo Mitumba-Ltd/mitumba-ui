@@ -1,5 +1,6 @@
 import React from 'react'
 import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
@@ -10,7 +11,10 @@ import CloseIcon from '@mui/icons-material/Close'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
 import { tokens } from '@mitumba/tokens'
+import { SemanticTitle } from '../../../internal/SemanticTitle'
 import type { MitumbaModalProps } from './MitumbaModal.types'
+
+let modalIdCounter = 0
 
 // eslint-disable-next-line prefer-arrow-callback
 const SlideUp = React.forwardRef(function SlideUp(
@@ -37,15 +41,24 @@ export function MitumbaModal({
   showClose = true,
   closeOnBackdrop = true,
   loading = false,
+  titleLevel,
 }: MitumbaModalProps) {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const baseId = React.useMemo(() => {
+    modalIdCounter += 1
+    return `mitumba-modal-${modalIdCounter}`
+  }, [])
+  const titleId = `${baseId}-title`
+  const descriptionId = `${baseId}-description`
 
   return (
     <Dialog
       open={open}
       onClose={closeOnBackdrop ? onClose : undefined}
       fullScreen={isMobile}
+      aria-labelledby={titleId}
+      aria-describedby={subtitle ? descriptionId : undefined}
       TransitionComponent={isMobile ? SlideUp : undefined}
       slotProps={{
         backdrop: {
@@ -95,7 +108,8 @@ export function MitumbaModal({
       )}
 
       {/* Header */}
-      <Box
+      <DialogTitle
+        component="div"
         sx={{
           display: 'flex',
           alignItems: 'flex-start',
@@ -106,23 +120,25 @@ export function MitumbaModal({
         }}
       >
         <Box sx={{ flex: 1, mr: showClose ? 1 : 0 }}>
-          <Typography
+          <SemanticTitle
+            titleLevel={titleLevel}
+            id={titleId}
             sx={{
               fontSize: tokens.typography.fontSizes.lg,
               fontWeight: tokens.typography.fontWeights.bold,
               color: tokens.colors.textPrimary,
-              fontFamily: tokens.typography.fontFamily,
               lineHeight: 1.2,
+              m: 0,
             }}
           >
             {title}
-          </Typography>
+          </SemanticTitle>
           {subtitle && (
             <Typography
+              id={descriptionId}
               sx={{
                 fontSize: tokens.typography.fontSizes.sm,
                 color: tokens.colors.textSecondary,
-                fontFamily: tokens.typography.fontFamily,
                 mt: '4px',
               }}
             >
@@ -149,7 +165,7 @@ export function MitumbaModal({
             <CloseIcon sx={{ fontSize: 18 }} />
           </IconButton>
         )}
-      </Box>
+      </DialogTitle>
 
       {/* Body — scrollable */}
       <Box
