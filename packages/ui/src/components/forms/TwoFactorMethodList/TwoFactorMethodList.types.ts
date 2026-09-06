@@ -1,3 +1,5 @@
+import type { HeadingLevel } from '../../../types/semantic'
+
 export type TwoFactorMethodType = 'totp' | 'sms' | 'email' | 'passkey'
 
 export interface TwoFactorMethodView {
@@ -34,4 +36,10 @@ export interface TwoFactorMethodListProps {
   onSetPrimary: (id: string) => void
   /** Called to resume verifying a pending method */
   onVerifyPending?: (id: string) => void
+  /**
+   * Emits h1-h6 for the "Two-Factor Methods" section title when provided;
+   * omitting it preserves the current non-heading title element. Visual
+   * size/weight are unaffected.
+   */
+  titleLevel?: HeadingLevel
 }

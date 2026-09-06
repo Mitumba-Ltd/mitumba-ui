@@ -20,6 +20,7 @@ import AddIcon from '@mui/icons-material/Add'
 import { tokens } from '@mitumba/tokens'
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
 import { MitumbaChip } from '../../foundation/MitumbaChip'
+import { SemanticTitle } from '../../../internal/SemanticTitle'
 import type { TwoFactorMethodListProps, TwoFactorMethodView, TwoFactorMethodType } from './TwoFactorMethodList.types'
 
 const TYPE_ICONS: Record<TwoFactorMethodType, React.ReactNode> = {
@@ -36,6 +37,60 @@ const TYPE_LABELS: Record<TwoFactorMethodType, string> = {
   passkey: 'Passkey',
 }
 
+/** A single 2FA method row rendered as a semantic list item with accessible state. */
+function MethodRow({ method, onMenuOpen, onVerifyPending }: { method: TwoFactorMethodView; onMenuOpen: (e: React.MouseEvent<HTMLElement>, id: string) => void; onVerifyPending?: (id: string) => void }) {
+  const name = method.label || TYPE_LABELS[method.type]
+  const stateText = method.enabled ? 'Enabled' : 'Disabled'
+  return (
+    <Box
+      component="li"
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: `${tokens.spacing.base}px`,
+        p: `${tokens.spacing.base}px`,
+        borderRadius: `${tokens.radius.lg}px`,
+        border: `1px solid ${tokens.colors.divider}`,
+        bgcolor: tokens.colors.surface,
+        listStyle: 'none',
+      }}
+    >
+      {/* Icon (decorative — state is conveyed textually) */}
+      <Box aria-hidden sx={{ color: method.enabled ? tokens.colors.green : tokens.colors.textDisabled, fontSize: 24, display: 'flex' }}>
+        {TYPE_ICONS[method.type]}
+      </Box>
+
+      {/* Info */}
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Typography sx={{ fontSize: tokens.typography.fontSizes.sm, fontWeight: tokens.typography.fontWeights.bold, color: tokens.colors.textPrimary }}>
+          {name}
+        </Typography>
+        {method.lastUsedAt && (
+          <Typography sx={{ fontSize: tokens.typography.fontSizes.xs, color: tokens.colors.textSecondary }}>
+            Last used {method.lastUsedAt}
+          </Typography>
+        )}
+        {/* Screen-reader-only enabled/disabled state */}
+        <Typography sx={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap' }}>
+          {stateText}
+        </Typography>
+      </Box>
+
+      {/* Status chips */}
+      {method.isPrimary && <MitumbaChip label="Primary" status="active" size="small" variant="solid" rounding="pill" />}
+      {method.pending && (
+        <MitumbaChip label="Pending" status="incomplete" size="small" variant="solid" rounding="pill" onClick={onVerifyPending ? () => onVerifyPending(method.id) : undefined} />
+      )}
+      {!method.enabled && !method.pending && <MitumbaChip label="Off" status="common" size="small" variant="solid" rounding="pill" />}
+
+      {/* Menu trigger */}
+      <IconButton aria-label={`Options for ${name}`} onClick={(e) => onMenuOpen(e, method.id)} size="small">
+        <MoreVertIcon sx={{ fontSize: 18 }} />
+      </IconButton>
+    </Box>
+  )
+}
+
 /**
  * TwoFactorMethodList — displays and manages 2FA methods.
  */
@@ -48,9 +103,11 @@ export function TwoFactorMethodList({
   onDelete,
   onSetPrimary,
   onVerifyPending,
+  titleLevel,
 }: TwoFactorMethodListProps) {
   const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
   const [menuMethodId, setMenuMethodId] = useState<string | null>(null)
+  const titleId = React.useId()
 
   const openMenu = (e: React.MouseEvent<HTMLElement>, id: string) => {
     setMenuAnchor(e.currentTarget)
@@ -75,31 +132,36 @@ export function TwoFactorMethodList({
   }
 
   return (
-    <Box>
+    <Box component="section" aria-labelledby={titleId}>
       {/* Header */}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: `${tokens.spacing.lg}px` }}>
-        <Typography sx={{ fontSize: tokens.typography.fontSizes.md, fontWeight: tokens.typography.fontWeights.bold, color: tokens.colors.textPrimary, fontFamily: tokens.typography.fontFamily }}>
+        <SemanticTitle
+          titleLevel={titleLevel}
+          id={titleId}
+          sx={{ fontSize: tokens.typography.fontSizes.md, fontWeight: tokens.typography.fontWeights.bold, color: tokens.colors.textPrimary }}
+        >
           Two-Factor Methods
-        </Typography>
+        </SemanticTitle>
         <MitumbaPrimaryButton label="Add method" size="small" icon={<AddIcon sx={{ fontSize: 16 }} />} onClick={onAdd} />
       </Box>
 
       {/* Empty state */}
       {methods.length === 0 && (
         <Box sx={{ textAlign: 'center', py: `${tokens.spacing.xxl}px`, px: `${tokens.spacing.lg}px`, bgcolor: tokens.colors.background, borderRadius: `${tokens.radius.lg}px` }}>
-          <Typography sx={{ color: tokens.colors.textSecondary, fontSize: tokens.typography.fontSizes.sm, fontFamily: tokens.typography.fontFamily }}>
+          <Typography sx={{ color: tokens.colors.textSecondary, fontSize: tokens.typography.fontSizes.sm }}>
             No 2FA methods yet. Add one to protect your account.
           </Typography>
         </Box>
       )}
 
       {/* Method rows */}
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.sm}px` }}>
-        {methods.map((method) => (
-          // eslint-disable-next-line @typescript-eslint/no-use-before-define
-          <MethodRow key={method.id} method={method} onMenuOpen={openMenu} onVerifyPending={onVerifyPending} />
-        ))}
-      </Box>
+      {methods.length > 0 && (
+        <Box component="ul" sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.sm}px`, listStyle: 'none', p: 0, m: 0 }}>
+          {methods.map((method) => (
+            <MethodRow key={method.id} method={method} onMenuOpen={openMenu} onVerifyPending={onVerifyPending} />
+          ))}
+        </Box>
+      )}
 
       {/* Overflow menu */}
       <Menu anchorEl={menuAnchor} open={Boolean(menuAnchor)} onClose={closeMenu}>
@@ -126,51 +188,6 @@ export function TwoFactorMethodList({
           <ListItemText>Remove</ListItemText>
         </MenuItem>
       </Menu>
-    </Box>
-  )
-}
-
-function MethodRow({ method, onMenuOpen, onVerifyPending }: { method: TwoFactorMethodView; onMenuOpen: (e: React.MouseEvent<HTMLElement>, id: string) => void; onVerifyPending?: (id: string) => void }) {
-  return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: `${tokens.spacing.base}px`,
-        p: `${tokens.spacing.base}px`,
-        borderRadius: `${tokens.radius.lg}px`,
-        border: `1px solid ${tokens.colors.divider}`,
-        bgcolor: tokens.colors.surface,
-      }}
-    >
-      {/* Icon */}
-      <Box sx={{ color: method.enabled ? tokens.colors.green : tokens.colors.textDisabled, fontSize: 24, display: 'flex' }}>
-        {TYPE_ICONS[method.type]}
-      </Box>
-
-      {/* Info */}
-      <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography sx={{ fontSize: tokens.typography.fontSizes.sm, fontWeight: tokens.typography.fontWeights.bold, color: tokens.colors.textPrimary, fontFamily: tokens.typography.fontFamily }}>
-          {method.label || TYPE_LABELS[method.type]}
-        </Typography>
-        {method.lastUsedAt && (
-          <Typography sx={{ fontSize: tokens.typography.fontSizes.xs, color: tokens.colors.textSecondary }}>
-            Last used {method.lastUsedAt}
-          </Typography>
-        )}
-      </Box>
-
-      {/* Status chips */}
-      {method.isPrimary && <MitumbaChip label="Primary" status="active" size="small" variant="solid" rounding="pill" />}
-      {method.pending && (
-        <MitumbaChip label="Pending" status="incomplete" size="small" variant="solid" rounding="pill" onClick={onVerifyPending ? () => onVerifyPending(method.id) : undefined} />
-      )}
-      {!method.enabled && !method.pending && <MitumbaChip label="Off" status="common" size="small" variant="solid" rounding="pill" />}
-
-      {/* Menu trigger */}
-      <IconButton aria-label={`Options for ${method.label || TYPE_LABELS[method.type]}`} onClick={(e) => onMenuOpen(e, method.id)} size="small">
-        <MoreVertIcon sx={{ fontSize: 18 }} />
-      </IconButton>
     </Box>
   )
 }
