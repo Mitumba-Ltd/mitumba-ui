@@ -56,7 +56,6 @@ function MitumbaStepIcon(props: { active?: boolean; completed?: boolean; icon: R
         zIndex: 1,
         fontWeight: 800,
         fontSize: 14,
-        fontFamily: tokens.typography.fontFamily,
         ...(active && {
            backgroundColor: tokens.colors.info,
            transform: 'scale(1.1)',
@@ -100,7 +99,6 @@ export function MitumbaStepper({
                   <Typography
                     sx={{
                       fontWeight: active ? 800 : 600,
-                      fontFamily: tokens.typography.fontFamily,
                       color: active ? tokens.colors.textPrimary : tokens.colors.textSecondary,
                       fontSize: 12,
                     }}

@@ -52,7 +52,6 @@ export function VAZIFeedSection({ outfits, loading = false, onSeeAll }: VAZIFeed
             component="h2"
             sx={{
               color: tokens.colors.textPrimary,
-              fontFamily: tokens.typography.fontFamily,
               fontSize: tokens.typography.fontSizes.xxl,
               fontWeight: 900,
               lineHeight: 1,

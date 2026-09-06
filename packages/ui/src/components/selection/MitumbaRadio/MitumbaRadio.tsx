@@ -87,7 +87,6 @@ export function MitumbaRadio({
         '& .MuiFormControlLabel-label': {
           fontSize: tokens.typography.fontSizes.base,
           fontWeight: 600,
-          fontFamily: tokens.typography.fontFamily,
           color: disabled ? tokens.colors.textDisabled : tokens.colors.textPrimary,
           userSelect: 'none',
         },

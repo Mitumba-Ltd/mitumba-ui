@@ -4,12 +4,20 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { tokens } from '@mitumba/tokens';
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
+import { SemanticTitle } from '../../../internal/SemanticTitle';
+import type { HeadingLevel } from '../../../types/semantic';
 import type { VAZIShowcaseProps, VAZIShowcaseOutfit, VAZIShowcaseItem } from './VAZIShowcase.types';
 
 /**
  * VAZIShowcase — the VAZI AI stylist feed.
  * Desktop: 3D perspective runway carousel with glassmorphism outfit panel.
  * Mobile: Vertical swipe feed with bottom sheet outfit overlay.
+ *
+ * Accessibility: the feed is a keyboard-focusable region; ArrowUp/ArrowDown
+ * (and Left/Right) move between looks. Carousel models and item rows are native
+ * `<button>`s, and the mobile sheet toggle is a native button that reports its
+ * expanded state. Typography is inherited from the host theme (no local
+ * font-family override).
  */
 export function VAZIShowcase({
   outfits,
@@ -17,6 +25,8 @@ export function VAZIShowcase({
   onIndexChange,
   onItemClick,
   onShopAll,
+  titleLevel,
+  sectionTitleLevel,
 }: VAZIShowcaseProps): React.ReactElement {
   const [current, setCurrent] = React.useState(activeIndex);
   const [isAnimating, setIsAnimating] = React.useState(false);
@@ -53,14 +63,29 @@ export function VAZIShowcase({
     else navigateTo(current - 1); // swipe down = prev
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+      e.preventDefault();
+      navigateTo(current + 1);
+    } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      e.preventDefault();
+      navigateTo(current - 1);
+    }
+  };
+
   const activeOutfit = outfits[current];
   if (!activeOutfit) return <Box />;
 
   return (
     <Box
+      role="region"
+      aria-label="VAZI outfit showcase"
+      aria-roledescription="carousel"
+      tabIndex={0}
       onWheel={handleWheel}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
+      onKeyDown={handleKeyDown}
       sx={{
         width: '100%',
         height: '100vh',
@@ -68,7 +93,7 @@ export function VAZIShowcase({
         background: '#e8f0f2',
         overflow: 'hidden',
         position: 'relative',
-        fontFamily: tokens.typography.fontFamily,
+        '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: -2 },
       }}
     >
       {/* ═══ DESKTOP LAYOUT ═══ */}
@@ -85,9 +110,9 @@ export function VAZIShowcase({
             </Typography>
           </Box>
           <Box>
-            <Typography sx={{ fontSize: 48, fontWeight: 300, letterSpacing: '4px', color: '#333' }}>
+            <SemanticTitle titleLevel={titleLevel} sx={{ fontSize: 48, fontWeight: 300, letterSpacing: '4px', color: '#333' }}>
               LOOK {String(current + 1).padStart(2, '0')}
-            </Typography>
+            </SemanticTitle>
             <Typography sx={{ fontSize: 10, letterSpacing: '3px', color: '#aaa', textTransform: 'uppercase' }}>
               {current + 1} of {outfits.length}
             </Typography>
@@ -98,14 +123,14 @@ export function VAZIShowcase({
         <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', perspective: '1200px', perspectiveOrigin: 'center center' }}>
           <Box sx={{ position: 'relative', width: '100%', height: '100vh', transformStyle: 'preserve-3d' }}>
             {outfits.map((outfit, i) => (
-              <DesktopModelItem key={outfit.id} outfit={outfit} diff={i - current} onClick={() => navigateTo(i)} />
+              <DesktopModelItem key={outfit.id} outfit={outfit} diff={i - current} lookNumber={i + 1} onClick={() => navigateTo(i)} />
             ))}
           </Box>
         </Box>
 
         {/* Right — Outfit panel */}
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', py: '80px', pr: '60px', zIndex: 10 }}>
-          <DesktopOutfitPanel outfit={activeOutfit} onItemClick={onItemClick} onShopAll={onShopAll} />
+          <DesktopOutfitPanel outfit={activeOutfit} sectionTitleLevel={sectionTitleLevel} onItemClick={onItemClick} onShopAll={onShopAll} />
         </Box>
       </Box>
 
@@ -156,7 +181,8 @@ export function VAZIShowcase({
 
         {/* Bottom sheet — outfit items */}
         <Box
-          onClick={() => setSheetExpanded(!sheetExpanded)}
+          component="section"
+          aria-label={`This look — ${activeOutfit.items.length} items (mobile)`}
           sx={{
             position: 'absolute',
             bottom: 0,
@@ -177,16 +203,32 @@ export function VAZIShowcase({
             overflowY: sheetExpanded ? 'auto' : 'hidden',
           }}
         >
-          {/* Handle */}
-          <Box sx={{ width: 36, height: 4, borderRadius: 2, bgcolor: 'rgba(0,0,0,0.15)', mx: 'auto', mb: `${tokens.spacing.md}px` }} />
+          {/* Sheet toggle — native button covering the handle + header */}
+          <Box
+            component="button"
+            type="button"
+            onClick={() => setSheetExpanded(!sheetExpanded)}
+            aria-expanded={sheetExpanded}
+            aria-label={sheetExpanded ? 'Collapse outfit details' : 'Expand outfit details'}
+            sx={{
+              all: 'unset',
+              display: 'block',
+              width: '100%',
+              cursor: 'pointer',
+              '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2, borderRadius: `${tokens.radius.sm}px` },
+            }}
+          >
+            {/* Handle */}
+            <Box sx={{ width: 36, height: 4, borderRadius: 2, bgcolor: 'rgba(0,0,0,0.15)', mx: 'auto', mb: `${tokens.spacing.md}px` }} />
 
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: `${tokens.spacing.md}px` }}>
-            <Typography sx={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.5px', color: '#555', textTransform: 'uppercase' }}>
-              This look · {activeOutfit.items.length} items
-            </Typography>
-            <Typography sx={{ fontSize: 14, fontWeight: 800, color: '#222' }}>
-              KES {activeOutfit.totalPrice.toLocaleString()}
-            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: `${tokens.spacing.md}px` }}>
+              <SemanticTitle titleLevel={sectionTitleLevel} sx={{ fontSize: 11, fontWeight: 700, letterSpacing: '1.5px', color: '#555', textTransform: 'uppercase' }}>
+                This look · {activeOutfit.items.length} items
+              </SemanticTitle>
+              <Typography component="span" sx={{ fontSize: 14, fontWeight: 800, color: '#222' }}>
+                KES {activeOutfit.totalPrice.toLocaleString()}
+              </Typography>
+            </Box>
           </Box>
 
           {/* Items horizontal scroll (collapsed) / vertical list (expanded) */}
@@ -194,24 +236,30 @@ export function VAZIShowcase({
             {activeOutfit.items.map((item: VAZIShowcaseItem) => (
               <Box
                 key={item.id}
+                component="button"
+                type="button"
                 onClick={(e) => { e.stopPropagation(); onItemClick?.(item.id); }}
+                aria-label={`View ${item.title}`}
                 sx={{
+                  all: 'unset',
                   display: 'flex',
                   alignItems: 'center',
                   gap: `${tokens.spacing.sm}px`,
                   flexShrink: 0,
+                  cursor: 'pointer',
                   minWidth: sheetExpanded ? undefined : 140,
                   p: `${tokens.spacing.xs}px`,
                   borderRadius: `${tokens.radius.sm}px`,
                   '&:active': { bgcolor: 'rgba(0,0,0,0.04)' },
+                  '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2 },
                 }}
               >
                 <Box component="img" src={item.imageUrl} alt={item.title} sx={{ width: 40, height: 40, borderRadius: `${tokens.radius.sm}px`, objectFit: 'cover', flexShrink: 0, border: '1px solid rgba(0,0,0,0.06)' }} />
-                <Box sx={{ minWidth: 0 }}>
-                  <Typography sx={{ fontSize: 11, fontWeight: 600, color: '#333', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: sheetExpanded ? 200 : 80 }}>
+                <Box sx={{ minWidth: 0, textAlign: 'left' }}>
+                  <Typography component="span" sx={{ display: 'block', fontSize: 11, fontWeight: 600, color: '#333', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: sheetExpanded ? 200 : 80 }}>
                     {item.title}
                   </Typography>
-                  <Typography sx={{ fontSize: 10, color: '#888' }}>
+                  <Typography component="span" sx={{ display: 'block', fontSize: 10, color: '#888' }}>
                     KES {item.price.toLocaleString()}
                   </Typography>
                 </Box>
@@ -239,7 +287,7 @@ export function VAZIShowcase({
 
 // ═══ DESKTOP SUBCOMPONENTS ═══
 
-function DesktopModelItem({ outfit, diff, onClick }: { outfit: VAZIShowcaseOutfit; diff: number; onClick: () => void }): React.ReactElement {
+function DesktopModelItem({ outfit, diff, lookNumber, onClick }: { outfit: VAZIShowcaseOutfit; diff: number; lookNumber: number; onClick: () => void }): React.ReactElement {
   const isActive = diff === 0;
   const absDiff = Math.abs(diff);
 
@@ -253,35 +301,49 @@ function DesktopModelItem({ outfit, diff, onClick }: { outfit: VAZIShowcaseOutfi
     return `translate(calc(-50% + ${xShift}%), -50%) translateZ(${z}px) scale(${scale})`;
   };
 
+  const sharedSx = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transformOrigin: 'center bottom',
+    transform: getTransform(),
+    opacity: isActive ? 1 : Math.max(0.1, 0.6 - (absDiff - 1) * 0.25),
+    filter: `blur(${isActive ? 0 : Math.min(10, absDiff * 3)}px) saturate(${isActive ? 1 : 0.7})`,
+    zIndex: isActive ? 100 : Math.max(1, 50 - absDiff * 10),
+    transition: 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+    pointerEvents: absDiff > 2 ? 'none' : 'auto',
+  } as const;
+
+  const media = outfit.modelMediaType === 'video' ? (
+    <Box component="video" src={outfit.modelMediaUrl} autoPlay muted loop playsInline sx={{ height: '85vh', width: 'auto', objectFit: 'contain', display: 'block', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.08))' }} />
+  ) : (
+    <Box component="img" src={outfit.modelMediaUrl} alt={outfit.modelAlt} sx={{ height: '85vh', width: 'auto', objectFit: 'contain', display: 'block', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.08))' }} />
+  );
+
+  // Active model is presentational; inactive models are native buttons that
+  // move the carousel to that look.
+  if (isActive) {
+    return <Box sx={{ ...sharedSx, cursor: 'default' }}>{media}</Box>;
+  }
+
   return (
     <Box
-      onClick={!isActive ? onClick : undefined}
-      sx={{
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transformOrigin: 'center bottom',
-        transform: getTransform(),
-        opacity: isActive ? 1 : Math.max(0.1, 0.6 - (absDiff - 1) * 0.25),
-        filter: `blur(${isActive ? 0 : Math.min(10, absDiff * 3)}px) saturate(${isActive ? 1 : 0.7})`,
-        zIndex: isActive ? 100 : Math.max(1, 50 - absDiff * 10),
-        transition: 'all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-        cursor: isActive ? 'default' : 'pointer',
-        pointerEvents: absDiff > 2 ? 'none' : 'auto',
-      }}
+      component="button"
+      type="button"
+      onClick={onClick}
+      aria-label={`Go to look ${String(lookNumber).padStart(2, '0')}`}
+      sx={{ ...sharedSx, all: 'unset', cursor: 'pointer', '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2 } }}
     >
-      {outfit.modelMediaType === 'video' ? (
-        <Box component="video" src={outfit.modelMediaUrl} autoPlay muted loop playsInline sx={{ height: '85vh', width: 'auto', objectFit: 'contain', display: 'block', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.08))' }} />
-      ) : (
-        <Box component="img" src={outfit.modelMediaUrl} alt={outfit.modelAlt} sx={{ height: '85vh', width: 'auto', objectFit: 'contain', display: 'block', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.08))' }} />
-      )}
+      {media}
     </Box>
   );
 }
 
-function DesktopOutfitPanel({ outfit, onItemClick, onShopAll }: { outfit: VAZIShowcaseOutfit; onItemClick?: (id: string) => void; onShopAll?: (outfitId: string) => void }): React.ReactElement {
+function DesktopOutfitPanel({ outfit, sectionTitleLevel, onItemClick, onShopAll }: { outfit: VAZIShowcaseOutfit; sectionTitleLevel?: HeadingLevel; onItemClick?: (id: string) => void; onShopAll?: (outfitId: string) => void }): React.ReactElement {
   return (
     <Box
+      component="section"
+      aria-label={`This look — ${outfit.items.length} items (desktop)`}
       sx={{
         position: 'relative',
         width: 300,
@@ -308,21 +370,24 @@ function DesktopOutfitPanel({ outfit, onItemClick, onShopAll }: { outfit: VAZISh
         },
       }}
     >
-      <Typography sx={{ fontSize: 10, fontWeight: 600, letterSpacing: '2px', color: '#666', textTransform: 'uppercase', position: 'relative', zIndex: 1 }}>
+      <SemanticTitle titleLevel={sectionTitleLevel} sx={{ fontSize: 10, fontWeight: 600, letterSpacing: '2px', color: '#666', textTransform: 'uppercase', position: 'relative', zIndex: 1 }}>
         This look · {outfit.items.length} items
-      </Typography>
+      </SemanticTitle>
 
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.md}px`, flex: 1, position: 'relative', zIndex: 1 }}>
         {outfit.items.map((item: VAZIShowcaseItem) => (
           <Box
             key={item.id}
+            component="button"
+            type="button"
             onClick={() => onItemClick?.(item.id)}
-            sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.md}px`, p: `${tokens.spacing.sm}px`, borderRadius: `${tokens.radius.sm}px`, cursor: onItemClick ? 'pointer' : 'default', transition: tokens.motion.transitions.interaction, '&:hover': onItemClick ? { bgcolor: 'rgba(0,0,0,0.04)' } : {} }}
+            aria-label={`View ${item.title}`}
+            sx={{ all: 'unset', display: 'flex', alignItems: 'center', gap: `${tokens.spacing.md}px`, p: `${tokens.spacing.sm}px`, borderRadius: `${tokens.radius.sm}px`, cursor: onItemClick ? 'pointer' : 'default', transition: tokens.motion.transitions.interaction, '&:hover': onItemClick ? { bgcolor: 'rgba(0,0,0,0.04)' } : {}, '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2 } }}
           >
             <Box component="img" src={item.imageUrl} alt={item.title} sx={{ width: 44, height: 44, borderRadius: `${tokens.radius.sm}px`, objectFit: 'cover', flexShrink: 0, border: '1px solid rgba(0,0,0,0.06)' }} />
-            <Box sx={{ flex: 1, minWidth: 0 }}>
-              <Typography sx={{ fontSize: 12, color: '#333', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</Typography>
-              <Typography sx={{ fontSize: 11, color: '#888' }}>KES {item.price.toLocaleString()}</Typography>
+            <Box sx={{ flex: 1, minWidth: 0, textAlign: 'left' }}>
+              <Typography component="span" sx={{ display: 'block', fontSize: 12, color: '#333', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</Typography>
+              <Typography component="span" sx={{ display: 'block', fontSize: 11, color: '#888' }}>KES {item.price.toLocaleString()}</Typography>
             </Box>
           </Box>
         ))}

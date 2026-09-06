@@ -71,7 +71,6 @@ export function OrderStatusTimeline({
               fontWeight: tokens.typography.fontWeights.bold,
               fontSize: tokens.typography.fontSizes.md,
               color: tokens.colors.textPrimary,
-              fontFamily: tokens.typography.fontFamily,
             }}
           >
             {title}
@@ -233,7 +232,6 @@ export function OrderStatusTimeline({
                   sx={{
                     fontWeight: isCurrent ? tokens.typography.fontWeights.bold : tokens.typography.fontWeights.medium,
                     fontSize: compact ? tokens.typography.fontSizes.xs : tokens.typography.fontSizes.sm,
-                    fontFamily: tokens.typography.fontFamily,
                     color: isPending ? tokens.colors.textDisabled : tokens.colors.textPrimary,
                     lineHeight: 1.2,
                     transition: `color ${tokens.motion.durations.fast} ${tokens.motion.easings.standard}`,
@@ -247,7 +245,6 @@ export function OrderStatusTimeline({
                     sx={{
                       color: tokens.colors.textSecondary,
                       fontSize: tokens.typography.fontSizes.xs,
-                      fontFamily: tokens.typography.fontFamily,
                       mt: '2px',
                     }}
                   >
@@ -269,7 +266,6 @@ export function OrderStatusTimeline({
                     <Typography
                       sx={{
                         fontSize: tokens.typography.fontSizes.xs,
-                        fontFamily: tokens.typography.fontFamily,
                         color: tokens.colors.textSecondary,
                         fontStyle: 'italic',
                       }}

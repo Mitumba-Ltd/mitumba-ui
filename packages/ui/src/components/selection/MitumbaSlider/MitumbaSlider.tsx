@@ -32,7 +32,6 @@ export function MitumbaSlider({
             color: tokens.colors.textSecondary,
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
-            fontFamily: tokens.typography.fontFamily,
           }}
         >
           {label}

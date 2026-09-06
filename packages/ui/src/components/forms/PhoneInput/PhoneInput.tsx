@@ -97,7 +97,6 @@ export function PhoneInput({ value, onChange, error, disabled = false }: PhoneIn
             outline: 'none',
             backgroundColor: 'transparent',
             fontSize: tokens.typography.fontSizes.base,
-            fontFamily: tokens.typography.fontFamily,
             color: tokens.colors.textPrimary,
             width: '100%',
             height: '24px',
@@ -115,7 +114,6 @@ export function PhoneInput({ value, onChange, error, disabled = false }: PhoneIn
           sx={{
             color: tokens.colors.error,
             fontSize: tokens.typography.fontSizes.sm,
-            fontFamily: tokens.typography.fontFamily,
             marginLeft: 0,
             marginTop: tokens.spacing.xs,
           }}

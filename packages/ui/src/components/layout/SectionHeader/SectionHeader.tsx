@@ -49,7 +49,6 @@ export function SectionHeader({
               color: tokens.colors.green,
               textTransform: 'uppercase',
               letterSpacing: '0.1em',
-              fontFamily: tokens.typography.fontFamily,
               mb: 0.5,
             }}
           >
@@ -64,7 +63,6 @@ export function SectionHeader({
             fontSize: isLarge ? tokens.typography.fontSizes.display : tokens.typography.fontSizes.xxl,
             fontWeight: 900,
             lineHeight: 1.1,
-            fontFamily: tokens.typography.fontFamily,
             letterSpacing: '-0.02em',
           }}
         >
@@ -77,7 +75,6 @@ export function SectionHeader({
               color: tokens.colors.textSecondary,
               fontSize: isLarge ? tokens.typography.fontSizes.md : tokens.typography.fontSizes.base,
               mt: 1,
-              fontFamily: tokens.typography.fontFamily,
               maxWidth: 560,
               marginInline: isCentered ? 'auto' : 'unset',
               lineHeight: 1.4,

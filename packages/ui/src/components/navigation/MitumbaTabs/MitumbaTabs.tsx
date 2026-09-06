@@ -51,7 +51,6 @@ export function MitumbaTabs({
               minHeight: 44,
               textTransform: 'none',
               fontWeight: 700,
-              fontFamily: tokens.typography.fontFamily,
               fontSize: tokens.typography.fontSizes.base,
               transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
               borderRadius: isPrimary ? `${tokens.radius.md}px` : 0,

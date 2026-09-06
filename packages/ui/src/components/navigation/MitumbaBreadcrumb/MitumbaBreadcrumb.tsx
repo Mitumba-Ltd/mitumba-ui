@@ -19,7 +19,6 @@ export function MitumbaBreadcrumb({ items }: MitumbaBreadcrumbProps) {
             mx: 0.5, 
             fontWeight: 400, 
             fontSize: 16,
-            fontFamily: tokens.typography.fontFamily 
           }}
         >
           /
@@ -42,7 +41,6 @@ export function MitumbaBreadcrumb({ items }: MitumbaBreadcrumbProps) {
                 color: tokens.colors.textPrimary,
                 fontSize: tokens.typography.fontSizes.sm,
                 fontWeight: 800,
-                fontFamily: tokens.typography.fontFamily,
                 whiteSpace: 'nowrap',
               }}
             >
@@ -59,7 +57,6 @@ export function MitumbaBreadcrumb({ items }: MitumbaBreadcrumbProps) {
               color: tokens.colors.textSecondary,
               fontSize: tokens.typography.fontSizes.sm,
               fontWeight: 600,
-              fontFamily: tokens.typography.fontFamily,
               textDecoration: 'none',
               transition: 'all 0.2s ease',
               whiteSpace: 'nowrap',

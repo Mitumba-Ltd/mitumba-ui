@@ -63,7 +63,6 @@ export function TopNav({
             textAlign: 'center',
             fontSize: 12,
             fontWeight: 700,
-            fontFamily: tokens.typography.fontFamily,
           }}
         >
           {announcement}
@@ -90,7 +89,6 @@ export function TopNav({
                 fontWeight: 900,
                 color: tokens.colors.green,
                 letterSpacing: '-0.02em',
-                fontFamily: tokens.typography.fontFamily,
               }}
             >
               MITUMBA
@@ -113,7 +111,6 @@ export function TopNav({
                 textDecoration: 'none',
                 fontWeight: 700,
                 fontSize: 14,
-                fontFamily: tokens.typography.fontFamily,
                 transition: 'all 0.2s ease',
                 '&:hover': {
                   color: tokens.colors.green,
