@@ -33,6 +33,7 @@ export function AddAddressModal({
   saving = false,
   error,
   isFirstAddress = false,
+  titleLevel,
 }: AddAddressModalProps) {
   const [form, setForm] = React.useState<AddressFormData>({
     label: '',
@@ -75,6 +76,7 @@ export function AddAddressModal({
       onClose={onClose}
       title="Add Delivery Address"
       subtitle="Where should we deliver your items?"
+      titleLevel={titleLevel}
       loading={saving}
       maxWidth={500}
       actions={
@@ -90,10 +92,10 @@ export function AddAddressModal({
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.base}px` }}>
         {error && (
           <Typography
+            role="alert"
             sx={{
               color: tokens.colors.error,
               fontSize: tokens.typography.fontSizes.sm,
-              fontFamily: tokens.typography.fontFamily,
               bgcolor: tokens.colors.errorLight,
               px: `${tokens.spacing.base}px`,
               py: `${tokens.spacing.sm}px`,
@@ -169,7 +171,7 @@ export function AddAddressModal({
             />
           }
           label={
-            <Typography sx={{ fontSize: tokens.typography.fontSizes.sm, color: tokens.colors.textSecondary, fontFamily: tokens.typography.fontFamily }}>
+            <Typography sx={{ fontSize: tokens.typography.fontSizes.sm, color: tokens.colors.textSecondary }}>
               Set as default delivery address
             </Typography>
           }

@@ -1,3 +1,5 @@
+import type { HeadingLevel } from '../../../types/semantic'
+
 export interface AddressFormData {
   /** Label like "Home", "Office" */
   label: string
@@ -30,4 +32,10 @@ export interface AddAddressModalProps {
   error?: string
   /** Whether this is the user's first address (defaults checkbox to checked). @default false */
   isFirstAddress?: boolean
+  /**
+   * Emits h1-h6 for the modal title (via MitumbaModal) when provided; omitting
+   * it preserves the current styled, non-heading title element. Visual size and
+   * weight are unaffected.
+   */
+  titleLevel?: HeadingLevel
 }
