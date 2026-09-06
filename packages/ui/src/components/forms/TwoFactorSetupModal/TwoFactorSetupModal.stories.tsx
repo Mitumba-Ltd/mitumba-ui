@@ -41,3 +41,19 @@ export const Verifying: Story = {
     verifying: true,
   },
 };
+
+export const WithHeadingDesktop: Story = {
+  args: {
+    ...Default.args,
+    titleLevel: 2,
+  },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};
+
+export const WithHeadingMobile: Story = {
+  args: {
+    ...Default.args,
+    titleLevel: 2,
+  },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};

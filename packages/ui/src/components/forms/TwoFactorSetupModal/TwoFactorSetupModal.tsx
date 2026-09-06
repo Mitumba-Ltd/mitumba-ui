@@ -14,6 +14,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { tokens } from '@mitumba/tokens';
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
 import { MitumbaTextField } from '../../foundation/MitumbaTextField';
+import { SemanticTitle } from '../../../internal/SemanticTitle';
 import type { TwoFactorSetupModalProps } from './TwoFactorSetupModal.types';
 
 const STEP_LABELS = ['Scan QR Code', 'Verify Code', 'Backup Codes'];
@@ -31,10 +32,12 @@ export function TwoFactorSetupModal({
   backupCodes,
   verifying,
   error,
+  titleLevel,
 }: TwoFactorSetupModalProps): React.ReactElement {
   const [activeStep, setActiveStep] = useState(0);
   const [showSecret, setShowSecret] = useState(false);
   const [code, setCode] = useState('');
+  const titleId = React.useId();
 
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(otpauthUri)}`;
 
@@ -62,12 +65,25 @@ export function TwoFactorSetupModal({
   };
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth={false} PaperProps={{ sx: { maxWidth: 480, width: '100%', borderRadius: `${tokens.radius.xl}px`, p: 0 } }}>
+    <Dialog open={open} onClose={onClose} maxWidth={false} aria-labelledby={titleId} PaperProps={{ sx: { maxWidth: 480, width: '100%', borderRadius: `${tokens.radius.xl}px`, p: 0 } }}>
       <DialogContent sx={{ p: { xs: `${tokens.spacing.xl}px`, md: `${tokens.spacing.xxxl}px` } }}>
 
         {/* Title */}
-        <Typography sx={{ fontSize: tokens.typography.fontSizes.lg, fontWeight: 800, color: tokens.colors.textPrimary, fontFamily: tokens.typography.fontFamily, mb: `${tokens.spacing.xxl}px`, textAlign: 'center' }}>
+        <SemanticTitle
+          titleLevel={titleLevel}
+          id={titleId}
+          sx={{ fontSize: tokens.typography.fontSizes.lg, fontWeight: 800, color: tokens.colors.textPrimary, mb: `${tokens.spacing.xxl}px`, textAlign: 'center' }}
+        >
           Set Up Two-Factor Authentication
+        </SemanticTitle>
+
+        {/* Announced progress */}
+        <Typography
+          role="status"
+          aria-live="polite"
+          sx={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)', whiteSpace: 'nowrap' }}
+        >
+          {`Step ${activeStep + 1} of ${STEP_LABELS.length}: ${STEP_LABELS[activeStep]}`}
         </Typography>
 
         {/* Step indicators */}
@@ -75,7 +91,7 @@ export function TwoFactorSetupModal({
           {STEP_LABELS.map((label, i) => (
             <Box key={label} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: `${tokens.spacing.xs}px` }}>
               <Box sx={{
-                width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 13, fontFamily: tokens.typography.fontFamily,
+                width: 32, height: 32, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 13,
                 bgcolor: (() => { if (activeStep > i) return tokens.colors.green; if (activeStep === i) return tokens.colors.greenLight; return tokens.colors.background; })(),
                 color: (() => { if (activeStep > i) return tokens.colors.white; if (activeStep === i) return tokens.colors.green; return tokens.colors.textDisabled; })(),
                 border: activeStep === i ? `2px solid ${tokens.colors.green}` : 'none',

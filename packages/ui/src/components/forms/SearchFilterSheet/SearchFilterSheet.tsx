@@ -13,6 +13,8 @@ import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { colors, spacing, typography, radius } from '@mitumba/tokens';
+import { SemanticTitle } from '../../../internal/SemanticTitle';
+import type { HeadingLevel } from '../../../types/semantic';
 import type { SearchFilterSheetProps, FilterState } from './SearchFilterSheet.types';
 
 const CATEGORIES = ['Tops', 'Bottoms', 'Dresses', 'Outerwear', 'Shoes', 'Bags', 'Accessories', 'Kids'];
@@ -25,9 +27,19 @@ const SORT_OPTIONS = [
   { value: 'price_desc', label: 'Price: High to Low' },
 ] as const;
 
-function SectionHeader({ children }: { children: React.ReactNode }): React.ReactElement {
+function SectionHeader({
+  children,
+  id,
+  titleLevel,
+}: {
+  children: React.ReactNode;
+  id?: string;
+  titleLevel?: HeadingLevel;
+}): React.ReactElement {
   return (
-    <Typography
+    <SemanticTitle
+      titleLevel={titleLevel}
+      id={id}
       sx={{
         fontWeight: 700,
         color: colors.textPrimary,
@@ -36,7 +48,7 @@ function SectionHeader({ children }: { children: React.ReactNode }): React.React
       }}
     >
       {children}
-    </Typography>
+    </SemanticTitle>
   );
 }
 
@@ -76,9 +88,19 @@ export function SearchFilterSheet({
   open,
   resultCount,
   showVaziFilter = true,
+  title,
+  titleLevel,
+  sectionTitleLevel,
 }: SearchFilterSheetProps): React.ReactElement {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+  const baseId = React.useId();
+  const regionLabel = title ?? 'Search filters';
+  const sortId = `${baseId}-sort`;
+  const categoriesId = `${baseId}-categories`;
+  const conditionId = `${baseId}-condition`;
+  const priceId = `${baseId}-price`;
+  const locationId = `${baseId}-location`;
 
   function handleChipToggle(key: 'categories' | 'conditions', value: string) {
     const current = filters[key];
@@ -108,9 +130,22 @@ export function SearchFilterSheet({
 
   const content = (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: `${String(spacing.xl)}px` }}>
+      {title && (
+        <SemanticTitle
+          titleLevel={titleLevel}
+          sx={{
+            fontWeight: 800,
+            color: colors.textPrimary,
+            fontSize: typography.fontSizes.lg,
+          }}
+        >
+          {title}
+        </SemanticTitle>
+      )}
+
       {/* Sort By */}
-      <Box>
-        <SectionHeader>Sort By</SectionHeader>
+      <Box role="group" aria-labelledby={sortId}>
+        <SectionHeader id={sortId} titleLevel={sectionTitleLevel}>Sort By</SectionHeader>
         <RadioGroup value={filters.sort} onChange={handleSortChange}>
           {SORT_OPTIONS.map(function renderRadio(opt) {
             return <FormControlLabel key={opt.value} value={opt.value} control={<Radio />} label={opt.label} />;
@@ -119,8 +154,8 @@ export function SearchFilterSheet({
       </Box>
 
       {/* Categories */}
-      <Box>
-        <SectionHeader>Categories</SectionHeader>
+      <Box role="group" aria-labelledby={categoriesId}>
+        <SectionHeader id={categoriesId} titleLevel={sectionTitleLevel}>Categories</SectionHeader>
         <ChipGroup
           options={CATEGORIES}
           selected={filters.categories}
@@ -129,8 +164,8 @@ export function SearchFilterSheet({
       </Box>
 
       {/* Condition */}
-      <Box>
-        <SectionHeader>Condition</SectionHeader>
+      <Box role="group" aria-labelledby={conditionId}>
+        <SectionHeader id={conditionId} titleLevel={sectionTitleLevel}>Condition</SectionHeader>
         <ChipGroup
           options={CONDITIONS}
           selected={filters.conditions}
@@ -139,8 +174,8 @@ export function SearchFilterSheet({
       </Box>
 
       {/* Price Range */}
-      <Box>
-        <SectionHeader>Price Range</SectionHeader>
+      <Box role="group" aria-labelledby={priceId}>
+        <SectionHeader id={priceId} titleLevel={sectionTitleLevel}>Price Range</SectionHeader>
         <Slider
           value={priceValue}
           onChange={handlePriceChange}
@@ -148,6 +183,7 @@ export function SearchFilterSheet({
           max={20000}
           step={100}
           valueLabelDisplay="auto"
+          getAriaLabel={(index) => (index === 0 ? 'Minimum price' : 'Maximum price')}
           sx={{ color: colors.green }}
         />
         <Typography variant="body2" sx={{ color: colors.textSecondary }}>
@@ -156,8 +192,8 @@ export function SearchFilterSheet({
       </Box>
 
       {/* Location */}
-      <Box>
-        <SectionHeader>Location</SectionHeader>
+      <Box role="group" aria-labelledby={locationId}>
+        <SectionHeader id={locationId} titleLevel={sectionTitleLevel}>Location</SectionHeader>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: `${String(spacing.sm)}px` }}>
           {CITIES.map(function renderCity(city) {
             const isSelected = city === 'All' ? filters.city === null : filters.city === city;
@@ -188,7 +224,7 @@ export function SearchFilterSheet({
 
   if (isDesktop) {
     return (
-      <Box sx={{ p: `${String(spacing.xl)}px` }}>
+      <Box component="section" role="region" aria-label={regionLabel} sx={{ p: `${String(spacing.xl)}px` }}>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: `${String(spacing.lg)}px` }}>
           <Button onClick={onClear} variant="text">Clear All</Button>
         </Box>
@@ -211,6 +247,7 @@ export function SearchFilterSheet({
       open={open}
       onClose={onClose}
       PaperProps={{
+        'aria-label': regionLabel,
         sx: {
           maxHeight: '85vh',
           borderTopLeftRadius: `${String(radius.xxl)}px`,
@@ -226,7 +263,12 @@ export function SearchFilterSheet({
       </Box>
 
       {/* Scrollable content */}
-      <Box sx={{ flex: 1, overflow: 'auto', px: `${String(spacing.lg)}px`, py: `${String(spacing.md)}px` }}>
+      <Box
+        component="section"
+        role="region"
+        aria-label={regionLabel}
+        sx={{ flex: 1, overflow: 'auto', px: `${String(spacing.lg)}px`, py: `${String(spacing.md)}px` }}
+      >
         {content}
       </Box>
 

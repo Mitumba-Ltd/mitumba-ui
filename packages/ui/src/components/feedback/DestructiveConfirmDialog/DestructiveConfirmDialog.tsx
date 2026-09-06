@@ -23,9 +23,11 @@ export function DestructiveConfirmDialog({
   onConfirm,
   submitting = false,
   confirmLabel = 'Delete',
+  titleLevel,
 }: DestructiveConfirmDialogProps) {
   const [phrase, setPhrase] = useState('')
   const [code, setCode] = useState('')
+  const blockersLabelId = React.useId()
 
   const hasBlockers = blockers.length > 0
   const phraseMatch = !confirmPhrase || phrase === confirmPhrase
@@ -42,6 +44,7 @@ export function DestructiveConfirmDialog({
       open={open}
       onClose={onClose}
       title={title}
+      titleLevel={titleLevel}
       maxWidth={440}
       actions={
         <Box sx={{ display: 'flex', gap: `${tokens.spacing.base}px`, width: '100%' }}>
@@ -71,7 +74,6 @@ export function DestructiveConfirmDialog({
             sx={{
               fontSize: tokens.typography.fontSizes.sm,
               color: tokens.colors.textSecondary,
-              fontFamily: tokens.typography.fontFamily,
               lineHeight: 1.5,
             }}
           >
@@ -82,6 +84,8 @@ export function DestructiveConfirmDialog({
         {/* Blockers */}
         {hasBlockers && (
           <Box
+            role="alert"
+            aria-labelledby={blockersLabelId}
             sx={{
               bgcolor: tokens.colors.errorLight,
               borderRadius: `${tokens.radius.md}px`,
@@ -90,6 +94,7 @@ export function DestructiveConfirmDialog({
             }}
           >
             <Typography
+              id={blockersLabelId}
               sx={{
                 fontSize: tokens.typography.fontSizes.sm,
                 fontWeight: tokens.typography.fontWeights.bold,
@@ -107,7 +112,6 @@ export function DestructiveConfirmDialog({
                   sx={{
                     fontSize: tokens.typography.fontSizes.sm,
                     color: tokens.colors.textPrimary,
-                    fontFamily: tokens.typography.fontFamily,
                     mb: '4px',
                   }}
                 >
@@ -125,11 +129,16 @@ export function DestructiveConfirmDialog({
               sx={{
                 fontSize: tokens.typography.fontSizes.sm,
                 color: tokens.colors.textSecondary,
-                fontFamily: tokens.typography.fontFamily,
                 mb: `${tokens.spacing.xs}px`,
               }}
             >
-              Type <strong>{confirmPhrase}</strong> to confirm:
+              {/* Documented monospace exception: the exact confirm phrase is shown
+                  monospaced so users can visually match it character-for-character. */}
+              Type{' '}
+              <Box component="strong" sx={{ fontFamily: 'monospace' }}>
+                {confirmPhrase}
+              </Box>{' '}
+              to confirm:
             </Typography>
             <TextField
               fullWidth
@@ -139,6 +148,8 @@ export function DestructiveConfirmDialog({
               placeholder={confirmPhrase}
               autoComplete="off"
               sx={{
+                // Documented monospace exception: the confirm-phrase input.
+                '& input': { fontFamily: 'monospace' },
                 '& .MuiOutlinedInput-root': {
                   borderRadius: `${tokens.radius.md}px`,
                   '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
@@ -158,7 +169,6 @@ export function DestructiveConfirmDialog({
               sx={{
                 fontSize: tokens.typography.fontSizes.sm,
                 color: tokens.colors.textSecondary,
-                fontFamily: tokens.typography.fontFamily,
                 mb: `${tokens.spacing.xs}px`,
               }}
             >

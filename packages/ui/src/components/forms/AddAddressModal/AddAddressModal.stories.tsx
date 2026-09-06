@@ -50,3 +50,13 @@ export const Mobile: Story = {
   args: Default.args,
   parameters: { viewport: { defaultViewport: 'mobile' } },
 }
+
+export const WithHeadingDesktop: Story = {
+  args: { ...Default.args, titleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+}
+
+export const WithHeadingMobile: Story = {
+  args: { ...Default.args, titleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+}

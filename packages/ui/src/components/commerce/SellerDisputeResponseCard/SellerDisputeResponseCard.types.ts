@@ -1,3 +1,5 @@
+import type { HeadingLevel } from '../../../types/semantic'
+
 export interface SellerDisputeResponseCardProps {
   /** The dispute reason filed by the buyer */
   reason: string
@@ -9,4 +11,10 @@ export interface SellerDisputeResponseCardProps {
   onContest: (message: string, files: File[]) => Promise<void>
   /** Whether an action is in progress */
   submitting?: boolean
+  /**
+   * Emits h1-h6 for the "Dispute Filed" card title when provided; omitting it
+   * preserves the current non-heading title element. Visual size/weight are
+   * unaffected.
+   */
+  titleLevel?: HeadingLevel
 }

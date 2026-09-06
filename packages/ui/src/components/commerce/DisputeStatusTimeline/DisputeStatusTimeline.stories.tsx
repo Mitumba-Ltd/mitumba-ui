@@ -44,3 +44,13 @@ export const Mobile: Story = {
   args: { status: 'open', events: openEvents },
   parameters: { viewport: { defaultViewport: 'mobile' } },
 }
+
+export const WithHeadingDesktop: Story = {
+  args: { status: 'resolved_refund', events: resolvedEvents, sectionTitleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+}
+
+export const WithHeadingMobile: Story = {
+  args: { status: 'resolved_refund', events: resolvedEvents, sectionTitleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+}

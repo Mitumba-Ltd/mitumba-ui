@@ -227,8 +227,18 @@ export function SellerOnboardingPage({
   onProfilePhotoUpload,
   onStoreLogoUpload,
   onStoreBannerUpload,
+  titleLevel,
+  stepTitleLevel,
+  sectionTitleLevel,
 }: SellerOnboardingPageProps): React.ReactElement {
   const isDark = theme === 'mitumba-dark';
+  const countyLabelId = React.useId();
+  // When a heading level is supplied we emit hN; otherwise we fall back to the
+  // element the MUI variant would render by default so markup is unchanged.
+  const stepHeadingComponent = (fallback: React.ElementType): React.ElementType =>
+    (stepTitleLevel ? (`h${stepTitleLevel}` as React.ElementType) : fallback);
+  const sectionHeadingComponent: React.ElementType = sectionTitleLevel ? (`h${sectionTitleLevel}` as React.ElementType) : 'p';
+  const titleComponent: React.ElementType = titleLevel ? (`h${titleLevel}` as React.ElementType) : 'h6';
 
   const [step, setStep] = React.useState(currentStep);
   const [data, setData] = React.useState<Partial<SellerOnboardingData>>(initialData ?? {});
@@ -315,7 +325,7 @@ export function SellerOnboardingPage({
 
         {/* Side panel — desktop only */}
         <Box sx={{ display: { xs: 'none', md: 'flex' }, flexShrink: 0, width: '38%', background: panelBg, backgroundSize: 'cover', backgroundPosition: 'center', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', p: `${tokens.spacing.xxxl}px`, color: tokens.colors.white, zIndex: 1 }}>
-          <Typography variant="subtitle1" fontWeight="bold" gutterBottom sx={{ color: tokens.colors.white }}>
+          <Typography variant="subtitle1" component={titleComponent} fontWeight="bold" gutterBottom sx={{ color: tokens.colors.white }}>
             {panelTitle}
           </Typography>
           <Typography variant="body1" sx={{ opacity: 0.9, color: tokens.colors.white, mb: `${tokens.spacing.xxxl}px` }}>
@@ -338,12 +348,12 @@ export function SellerOnboardingPage({
           {step >= 1 && step <= 4 && (
             <Box sx={{ width: '100%', mt: 'auto' }}>
               <Typography variant="caption" sx={{ color: tokens.colors.white, opacity: 0.8 }}>Step {step} of {TOTAL_STEPS}</Typography>
-              <LinearProgress variant="determinate" value={progressPct} sx={{ mt: 1, borderRadius: 4, bgcolor: 'rgba(255,255,255,0.2)', '& .MuiLinearProgress-bar': { bgcolor: tokens.colors.white } }} />
+              <LinearProgress variant="determinate" value={progressPct} aria-label={`Onboarding progress, step ${step} of ${TOTAL_STEPS}`} sx={{ mt: 1, borderRadius: 4, bgcolor: 'rgba(255,255,255,0.2)', '& .MuiLinearProgress-bar': { bgcolor: tokens.colors.white } }} />
             </Box>
           )}
           {step === 5 && (
             <Box sx={{ mt: `${tokens.spacing.xl}px`, bgcolor: 'rgba(255,255,255,0.15)', borderRadius: `${tokens.radius.lg}px`, p: `${tokens.spacing.xl}px` }}>
-              <Typography variant="h2" fontWeight="bold" sx={{ color: tokens.colors.white }}>{stiScore}</Typography>
+              <Typography variant="h2" component="p" fontWeight="bold" sx={{ color: tokens.colors.white }}>{stiScore}</Typography>
               <Typography variant="body2" sx={{ color: tokens.colors.white, opacity: 0.9 }}>Your starting STI score</Typography>
             </Box>
           )}
@@ -356,7 +366,7 @@ export function SellerOnboardingPage({
           {step >= 1 && step <= 4 && (
             <Box sx={{ display: { xs: 'block', md: 'none' }, mb: `${tokens.spacing.lg}px` }}>
               <Typography variant="caption" color={subtitleColor}>Step {step} of {TOTAL_STEPS}</Typography>
-              <LinearProgress variant="determinate" value={progressPct} sx={{ mt: 0.5, borderRadius: 4, bgcolor: tokens.colors.greenLight, '& .MuiLinearProgress-bar': { bgcolor: tokens.colors.green } }} />
+              <LinearProgress variant="determinate" value={progressPct} aria-label={`Onboarding progress, step ${step} of ${TOTAL_STEPS}`} sx={{ mt: 0.5, borderRadius: 4, bgcolor: tokens.colors.greenLight, '& .MuiLinearProgress-bar': { bgcolor: tokens.colors.green } }} />
             </Box>
           )}
 
@@ -365,7 +375,7 @@ export function SellerOnboardingPage({
           {/* ── Step 0: Welcome ── */}
           {step === 0 && (
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-              <Typography variant="h4" fontWeight="bold" color={textColor} gutterBottom>Start selling on Mitumba</Typography>
+              <Typography variant="h4" component={stepHeadingComponent('h4')} fontWeight="bold" color={textColor} gutterBottom>Start selling on Mitumba</Typography>
               <Typography variant="body1" color={subtitleColor} sx={{ mb: `${tokens.spacing.xxxl}px` }}>
                 Set up your seller profile in 5 quick steps. Your information builds your STI (Seller Trust Index) — the score that makes buyers confident to purchase from you.
               </Typography>
@@ -389,7 +399,7 @@ export function SellerOnboardingPage({
           {/* ── Step 1: Identity ── */}
           {step === 1 && (
             <Box>
-              <Typography variant="h5" fontWeight="bold" color={textColor} gutterBottom>Your identity</Typography>
+              <Typography variant="h5" component={stepHeadingComponent('h5')} fontWeight="bold" color={textColor} gutterBottom>Your identity</Typography>
               <Typography variant="body2" color={subtitleColor} sx={{ mb: `${tokens.spacing.xxl}px` }}>This information is used for KYC verification and is never shown publicly.</Typography>
 
               {/* Profile photo upload */}
@@ -408,8 +418,8 @@ export function SellerOnboardingPage({
                 <TextField sx={tfSx} fullWidth label="Phone number (M-Pesa)" type="tel" value={data.phone ?? ''} onChange={(e) => set({ phone: e.target.value })} required placeholder="e.g. 0712 345 678" />
                 <TextField sx={tfSx} fullWidth label="National ID / Passport number" value={data.idNumber ?? ''} onChange={(e) => set({ idNumber: e.target.value })} required />
                 <FormControl fullWidth required>
-                  <InputLabel>County</InputLabel>
-                  <Select sx={tfSx} value={data.county ?? ''} label="County" onChange={(e) => set({ county: e.target.value })}>
+                  <InputLabel id={countyLabelId}>County</InputLabel>
+                  <Select sx={tfSx} labelId={countyLabelId} value={data.county ?? ''} label="County" onChange={(e) => set({ county: e.target.value })}>
                     {COUNTIES.map((c) => <MenuItem key={c} value={c}>{c}</MenuItem>)}
                   </Select>
                 </FormControl>
@@ -421,11 +431,11 @@ export function SellerOnboardingPage({
           {/* ── Step 2: Business ── */}
           {step === 2 && (
             <Box>
-              <Typography variant="h5" fontWeight="bold" color={textColor} gutterBottom>Your business</Typography>
+              <Typography variant="h5" component={stepHeadingComponent('h5')} fontWeight="bold" color={textColor} gutterBottom>Your business</Typography>
               <Typography variant="body2" color={subtitleColor} sx={{ mb: `${tokens.spacing.xxl}px` }}>Tell buyers who they&apos;re buying from.</Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.lg}px` }}>
                 <Box>
-                  <Typography variant="body2" fontWeight={600} color={textColor} sx={{ mb: `${tokens.spacing.sm}px` }}>I am selling as *</Typography>
+                  <Typography variant="body2" component={sectionHeadingComponent} fontWeight={600} color={textColor} sx={{ mb: `${tokens.spacing.sm}px` }}>I am selling as *</Typography>
                   <RadioGroup row value={data.sellerType ?? 'individual'} onChange={(e) => set({ sellerType: e.target.value as 'individual' | 'business' })}>
                     <FormControlLabel value="individual" control={<Radio color="primary" />} label="Individual" />
                     <FormControlLabel value="business" control={<Radio color="primary" />} label="Registered business" />
@@ -443,11 +453,11 @@ export function SellerOnboardingPage({
           {/* ── Step 3: What you sell ── */}
           {step === 3 && (
             <Box>
-              <Typography variant="h5" fontWeight="bold" color={textColor} gutterBottom>What you sell</Typography>
+              <Typography variant="h5" component={stepHeadingComponent('h5')} fontWeight="bold" color={textColor} gutterBottom>What you sell</Typography>
               <Typography variant="body2" color={subtitleColor} sx={{ mb: `${tokens.spacing.xxl}px` }}>Helps buyers find you. Select everything that applies.</Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.xxl}px` }}>
                 <Box>
-                  <Typography variant="body2" fontWeight={600} color={textColor} sx={{ mb: `${tokens.spacing.md}px` }}>Categories *</Typography>
+                  <Typography variant="body2" component={sectionHeadingComponent} fontWeight={600} color={textColor} sx={{ mb: `${tokens.spacing.md}px` }}>Categories *</Typography>
                   <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: `${tokens.spacing.sm}px` }}>
                     {CATEGORIES.map((cat) => {
                       const selected = data.categories?.includes(cat);
@@ -458,7 +468,7 @@ export function SellerOnboardingPage({
                   </Box>
                 </Box>
                 <Box>
-                  <Typography variant="body2" fontWeight={600} color={textColor} sx={{ mb: `${tokens.spacing.md}px` }}>Condition grades you typically sell *</Typography>
+                  <Typography variant="body2" component={sectionHeadingComponent} fontWeight={600} color={textColor} sx={{ mb: `${tokens.spacing.md}px` }}>Condition grades you typically sell *</Typography>
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.sm}px` }}>
                     {(['A', 'B', 'C'] as const).map((grade) => {
                       const selected = data.conditionGrades?.includes(grade);
@@ -469,14 +479,14 @@ export function SellerOnboardingPage({
                   </Box>
                 </Box>
                 <Box>
-                  <Typography variant="body2" fontWeight={600} color={textColor} sx={{ mb: `${tokens.spacing.md}px` }}>Delivery method *</Typography>
+                  <Typography variant="body2" component={sectionHeadingComponent} fontWeight={600} color={textColor} sx={{ mb: `${tokens.spacing.md}px` }}>Delivery method *</Typography>
                   <RadioGroup value={data.deliveryMethod ?? 'self'} onChange={(e) => set({ deliveryMethod: e.target.value as 'self' | 'mitumba-logistics' })}>
                     <FormControlLabel value="self" control={<Radio color="primary" />} label="I arrange my own delivery" />
                     <FormControlLabel value="mitumba-logistics" disabled control={<Radio />} label="Mitumba Logistics (coming soon)" />
                   </RadioGroup>
                 </Box>
                 <Box>
-                  <Typography variant="body2" fontWeight={600} color={textColor} sx={{ mb: `${tokens.spacing.md}px` }}>Typical price range (KES) — optional</Typography>
+                  <Typography variant="body2" component={sectionHeadingComponent} fontWeight={600} color={textColor} sx={{ mb: `${tokens.spacing.md}px` }}>Typical price range (KES) — optional</Typography>
                   <Slider value={[data.priceRangeMin ?? 200, data.priceRangeMax ?? 5000]} onChange={(_, val) => { const [min, max] = val as number[]; set({ priceRangeMin: min, priceRangeMax: max }); }} min={0} max={50000} step={100} valueLabelDisplay="auto" valueLabelFormat={(v) => `KES ${v.toLocaleString()}`} sx={{ color: tokens.colors.green }} />
                   <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Typography variant="caption" color={subtitleColor}>KES {(data.priceRangeMin ?? 200).toLocaleString()}</Typography>
@@ -490,7 +500,7 @@ export function SellerOnboardingPage({
           {/* ── Step 4: Store setup ── */}
           {step === 4 && (
             <Box>
-              <Typography variant="h5" fontWeight="bold" color={textColor} gutterBottom>Your store</Typography>
+              <Typography variant="h5" component={stepHeadingComponent('h5')} fontWeight="bold" color={textColor} gutterBottom>Your store</Typography>
               <Typography variant="body2" color={subtitleColor} sx={{ mb: `${tokens.spacing.xxl}px` }}>This is your public face on Mitumba.</Typography>
 
               {/* Banner uploader */}
@@ -522,10 +532,10 @@ export function SellerOnboardingPage({
           {step === 5 && (
             <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
               <CheckCircleIcon sx={{ fontSize: 72, color: tokens.colors.green, mb: `${tokens.spacing.xl}px` }} />
-              <Typography variant="h4" fontWeight="bold" color={textColor} gutterBottom>You&apos;re all set!</Typography>
+              <Typography variant="h4" component={stepHeadingComponent('h4')} fontWeight="bold" color={textColor} gutterBottom>You&apos;re all set!</Typography>
               <Typography variant="body1" color={subtitleColor} sx={{ mb: `${tokens.spacing.xxxl}px` }}>Your seller profile is ready. Here&apos;s your starting STI score:</Typography>
               <Box sx={{ bgcolor: tokens.colors.greenLight, borderRadius: `${tokens.radius.xl}px`, p: `${tokens.spacing.xxxl}px`, mb: `${tokens.spacing.xxxl}px`, width: '100%', maxWidth: 280 }}>
-                <Typography variant="h2" fontWeight="bold" color={tokens.colors.green}>{stiScore}</Typography>
+                <Typography variant="h2" component="p" fontWeight="bold" color={tokens.colors.green}>{stiScore}</Typography>
                 <Typography variant="body2" color={tokens.colors.green} fontWeight={600}>/ 100 — Starting STI Score</Typography>
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.sm}px`, mb: `${tokens.spacing.xxxl}px`, width: '100%', maxWidth: 320, textAlign: 'left' }}>

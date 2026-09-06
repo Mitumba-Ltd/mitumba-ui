@@ -1,3 +1,5 @@
+import type { HeadingLevel } from '../../../types/semantic';
+
 export interface SellerOnboardingData {
   // Step 2 — Identity
   /** Seller's full legal name */
@@ -92,4 +94,25 @@ export interface SellerOnboardingPageProps {
    * Upload it to your CDN and return the public URL.
    */
   onStoreBannerUpload?: (file: File) => Promise<string>;
+
+  /**
+   * Emits h1-h6 for the primary page/side-panel title when provided; omitting it
+   * preserves the current MUI Typography title (a non-heading `p` element).
+   * Visual size/weight are unaffected.
+   */
+  titleLevel?: HeadingLevel;
+
+  /**
+   * Emits h1-h6 for each step's heading ("Your identity", "Your business", etc.)
+   * when provided; omitting it preserves the current MUI variant heading markup.
+   * Visual size/weight are unaffected.
+   */
+  stepTitleLevel?: HeadingLevel;
+
+  /**
+   * Emits h1-h6 for the in-step section labels ("Categories", "Delivery method",
+   * etc.) when provided; omitting it preserves the current non-heading labels.
+   * Visual size/weight are unaffected.
+   */
+  sectionTitleLevel?: HeadingLevel;
 }

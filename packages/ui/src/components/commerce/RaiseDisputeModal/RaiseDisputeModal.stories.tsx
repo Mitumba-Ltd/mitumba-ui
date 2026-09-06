@@ -46,6 +46,35 @@ export const Mobile: Story = {
     },
   },
   parameters: {
-    viewport: { defaultViewport: 'mobile1' },
+    viewport: { defaultViewport: 'mobile' },
+  },
+}
+
+export const WithHeadingDesktop: Story = {
+  args: {
+    open: true,
+    orderShortId: 'MTB-7X2K',
+    titleLevel: 2,
+    errorMessage: 'Something went wrong. Please try again.',
+    onSubmit: async () => {
+      await delay(1500)
+    },
+  },
+  parameters: {
+    viewport: { defaultViewport: 'desktop' },
+  },
+}
+
+export const WithHeadingMobile: Story = {
+  args: {
+    open: true,
+    orderShortId: 'MTB-7X2K',
+    titleLevel: 2,
+    onSubmit: async () => {
+      await delay(1500)
+    },
+  },
+  parameters: {
+    viewport: { defaultViewport: 'mobile' },
   },
 }

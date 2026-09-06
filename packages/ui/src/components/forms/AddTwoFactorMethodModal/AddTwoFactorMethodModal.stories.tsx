@@ -28,3 +28,13 @@ export const Mobile: Story = {
   args: AllAvailable.args,
   parameters: { viewport: { defaultViewport: 'mobile' } },
 }
+
+export const WithHeadingDesktop: Story = {
+  args: { ...AllAvailable.args, titleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+}
+
+export const WithHeadingMobile: Story = {
+  args: { ...AllAvailable.args, titleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+}
