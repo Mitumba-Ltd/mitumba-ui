@@ -5,6 +5,7 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber'
 import { tokens } from '@mitumba/tokens'
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
 import { MitumbaTextField } from '../../foundation/MitumbaTextField'
+import { SemanticTitle } from '../../../internal/SemanticTitle'
 import type { SellerDisputeResponseCardProps } from './SellerDisputeResponseCard.types'
 
 export function SellerDisputeResponseCard({
@@ -13,13 +14,17 @@ export function SellerDisputeResponseCard({
   onAccept,
   onContest,
   submitting = false,
+  titleLevel,
 }: SellerDisputeResponseCardProps) {
   const [contestMode, setContestMode] = useState(false)
   const [message, setMessage] = useState('')
   const [files, setFiles] = useState<File[]>([])
+  const titleId = React.useId()
 
   return (
     <Box
+      component="article"
+      aria-labelledby={titleId}
       sx={{
         border: `1px solid ${tokens.colors.border}`,
         borderRadius: `${tokens.radius.lg}px`,
@@ -29,11 +34,32 @@ export function SellerDisputeResponseCard({
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.md}px`, mb: `${tokens.spacing.lg}px` }}>
         <WarningAmberIcon sx={{ color: tokens.colors.warning }} />
-        <Typography sx={{ fontWeight: 700, fontSize: tokens.typography.fontSizes.lg }}>Dispute Filed</Typography>
+        <SemanticTitle
+          titleLevel={titleLevel}
+          id={titleId}
+          sx={{ fontWeight: 700, fontSize: tokens.typography.fontSizes.lg }}
+        >
+          Dispute Filed
+        </SemanticTitle>
       </Box>
 
       <Typography sx={{ fontWeight: 600, mb: `${tokens.spacing.xs}px` }}>{reason}</Typography>
       <Typography sx={{ color: tokens.colors.textSecondary, mb: `${tokens.spacing.xl}px` }}>{description}</Typography>
+
+      <Typography
+        role="status"
+        aria-live="polite"
+        sx={{
+          position: 'absolute',
+          width: 1,
+          height: 1,
+          overflow: 'hidden',
+          clip: 'rect(0 0 0 0)',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {submitting ? 'Submitting your response' : ''}
+      </Typography>
 
       {!contestMode ? (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: `${tokens.spacing.base}px` }}>

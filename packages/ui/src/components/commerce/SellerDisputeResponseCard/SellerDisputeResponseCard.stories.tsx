@@ -25,5 +25,15 @@ export const Submitting: Story = {
 }
 
 export const Mobile: Story = {
-  parameters: { viewport: { defaultViewport: 'mobile1' } },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+}
+
+export const WithHeadingDesktop: Story = {
+  args: { titleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+}
+
+export const WithHeadingMobile: Story = {
+  args: { titleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
 }
