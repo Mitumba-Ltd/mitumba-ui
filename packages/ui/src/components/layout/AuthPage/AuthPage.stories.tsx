@@ -88,3 +88,19 @@ export const WithError: Story = {
     error: 'Invalid email or password.',
   },
 };
+
+export const MobileSignIn: Story = {
+  args: {
+    view: 'signin',
+    titleLevel: 1,
+  },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};
+
+export const DesktopSignInWithHeading: Story = {
+  args: {
+    view: 'signin',
+    titleLevel: 1,
+  },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};

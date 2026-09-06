@@ -1,8 +1,15 @@
 import React from 'react';
+import type { HeadingLevel } from '../../../types/semantic';
 
 export interface AuthPageProps {
   /** Current active view/mode */
   view?: 'signin' | 'signup' | 'forgot' | 'reset';
+
+  /**
+   * Emits an h1-h6 element for each view's heading when provided. When omitted
+   * the headings keep their current `<h4>` element and unchanged visual size.
+   */
+  titleLevel?: HeadingLevel;
   
   /** Handler for login submission */
   onLogin?: (email: string, password: string, remember: boolean) => void;
