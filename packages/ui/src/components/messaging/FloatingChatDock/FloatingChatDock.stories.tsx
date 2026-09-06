@@ -56,3 +56,22 @@ export const NoUnread: Story = {
     unreadCount: 0,
   },
 }
+
+export const WithHeadingAndBack: Story = {
+  args: {
+    ...Expanded.args,
+    titleLevel: 2,
+    onBack: () => {},
+    announcement: '3 new messages',
+  },
+}
+
+export const Desktop1280: Story = {
+  args: { ...Expanded.args, titleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+}
+
+export const Mobile375: Story = {
+  args: { ...Expanded.args, titleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+}
