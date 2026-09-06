@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { HeadingLevel } from '../../../types/semantic';
 
 export interface StyleOption {
   /** Unique style identifier */
@@ -9,6 +10,8 @@ export interface StyleOption {
   description?: string;
   /** Live preview render — a miniature version of the component in this style */
   preview: ReactNode;
+  /** When true, the option is presented as a disabled radio and cannot be selected. */
+  disabled?: boolean;
 }
 
 export interface StylePickerProps {
@@ -24,4 +27,9 @@ export interface StylePickerProps {
   subtitle?: string;
   /** Grid columns on desktop — defaults to 2 */
   columns?: number;
+  /**
+   * Emits h1-h6 for the section title when provided; omitting it preserves the
+   * current non-heading title element. Visual size/weight are unaffected.
+   */
+  titleLevel?: HeadingLevel;
 }

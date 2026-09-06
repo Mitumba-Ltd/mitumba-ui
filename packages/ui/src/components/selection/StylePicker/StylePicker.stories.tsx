@@ -68,3 +68,30 @@ export const ThreeColumns: Story = {
 export const SingleColumn: Story = {
   render: () => <SingleColumnPicker />,
 };
+
+function HeadingPicker() {
+  const [selected, setSelected] = useState('indicator');
+  return (
+    <Box sx={{ maxWidth: 500 }}>
+      <StylePicker
+        title="Navigation Bar Style"
+        subtitle="Choose how the bottom navigation looks on mobile"
+        options={NAV_OPTIONS.map((o, i) => (i === 5 ? { ...o, disabled: true } : o))}
+        value={selected}
+        onChange={setSelected}
+        columns={2}
+        titleLevel={2}
+      />
+    </Box>
+  );
+}
+
+export const WithHeadingDesktop: Story = {
+  render: () => <HeadingPicker />,
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};
+
+export const WithHeadingMobile: Story = {
+  render: () => <HeadingPicker />,
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};
