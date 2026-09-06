@@ -72,7 +72,6 @@ export function MitumbaPrimaryButton({
           borderRadius: tokens.radius.md,
           fontSize: currentSize.fontSize,
           fontWeight: 600,
-          fontFamily: tokens.typography.fontFamily,
           textTransform: 'none',
           position: 'relative',
           overflow: 'hidden',

@@ -78,7 +78,6 @@ export function MitumbaChip({
     color: (variant === 'solid' || selected) ? tokens.colors.white : activeColor,
     border: activeBorder !== 'transparent' ? `1.5px solid ${activeBorder}` : 'none',
     transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-    fontFamily: tokens.typography.fontFamily,
     fontWeight: 800,
     textTransform: 'uppercase',
     letterSpacing: '0.02em',

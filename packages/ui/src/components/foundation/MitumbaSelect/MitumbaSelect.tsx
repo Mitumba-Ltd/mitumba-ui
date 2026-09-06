@@ -86,7 +86,6 @@ export function MitumbaSelect({
             color: error ? `${tokens.colors.error} !important` : `${tokens.colors.textSecondary} !important`,
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
-            fontFamily: tokens.typography.fontFamily,
           }}
         >
           {label}
@@ -154,7 +153,6 @@ export function MitumbaSelect({
             height: currentSize.height,
             borderRadius: `${borderRadius}px`,
             bgcolor: tokens.colors.surface,
-            fontFamily: tokens.typography.fontFamily,
             fontSize: currentSize.fontSize,
             fontWeight: 600,
             '& .MuiOutlinedInput-notchedOutline': {
@@ -237,7 +235,6 @@ export function MitumbaSelect({
                     textTransform: 'uppercase',
                     letterSpacing: '0.1em',
                     lineHeight: '32px',
-                    fontFamily: tokens.typography.fontFamily,
                   }}
                 >
                   {option.group}

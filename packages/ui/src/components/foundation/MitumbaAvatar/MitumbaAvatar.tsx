@@ -190,7 +190,6 @@ export function MitumbaAvatar({
             width: '100%',
             height: '100%',
             fontSize: fontSizeMap[size],
-            fontFamily: tokens.typography.fontFamily,
             fontWeight: tokens.typography.fontWeights.extrabold,
             bgcolor: imageUrl ? 'transparent' : tokens.colors.green,
             color: tokens.colors.textOnGreen,
@@ -391,7 +390,6 @@ export function MitumbaAvatar({
                 fontSize: tokens.typography.fontSizes.base,
                 color: tokens.colors.textPrimary,
                 lineHeight: 1.1,
-                fontFamily: tokens.typography.fontFamily,
                 whiteSpace: 'nowrap',
               }}
             >
@@ -405,7 +403,6 @@ export function MitumbaAvatar({
                 color: status === 'online' && textAlignment === 'side' ? tokens.colors.success : tokens.colors.textSecondary,
                 fontWeight: status === 'online' ? 'bold' : 'normal',
                 mt: '1px',
-                fontFamily: tokens.typography.fontFamily,
                 whiteSpace: 'nowrap',
               }}
             >
