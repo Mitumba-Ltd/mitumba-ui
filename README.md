@@ -92,6 +92,54 @@ import { colors, spacing } from '@mitumba/tokens'
 
 ---
 
+## Theming & typography
+
+The default look is `mitumbaTheme` (Nunito) and requires no configuration — `MitumbaThemeProvider` applies it for you.
+
+### Custom fonts
+
+Components no longer hardcode a font family; the host MUI theme supplies the heading vs body families. Override them by creating a theme with MUI `createTheme` (set `typography.fontFamily` for body text and `typography.h1`..`h6`.fontFamily for headings) and applying it with MUI's `ThemeProvider`. When no override is provided, the default appearance is preserved.
+
+```tsx
+import { ThemeProvider, createTheme } from '@mui/material/styles'
+import { mitumbaTheme } from '@mitumba/ui'
+
+const theme = createTheme(mitumbaTheme, {
+  typography: {
+    fontFamily: '"Inter", sans-serif',        // body / default
+    h1: { fontFamily: '"Sora", sans-serif' }, // headings
+    h2: { fontFamily: '"Sora", sans-serif' },
+    h3: { fontFamily: '"Sora", sans-serif' },
+    h4: { fontFamily: '"Sora", sans-serif' },
+    h5: { fontFamily: '"Sora", sans-serif' },
+    h6: { fontFamily: '"Sora", sans-serif' },
+  },
+})
+
+<ThemeProvider theme={theme}>{children}</ThemeProvider>
+```
+
+### Semantic headings
+
+Title-owning components accept an optional `titleLevel` (`HeadingLevel` = `1`–`6`) to emit the correct `h1`–`h6` for the document outline **without changing the visual size**. Components that own more than one title expose slot-specific `stepTitleLevel`, `sectionTitleLevel`, and `emptyTitleLevel`. Omitting these preserves the current markup.
+
+```tsx
+<CheckoutStepper titleLevel={2} stepTitleLevel={3} />
+```
+
+### Semantic links
+
+Interactive cards and nav items accept `href` (or `linkComponent` for a host router) to render real links: `href` renders a link, a callback-only renders a button, and neither renders a non-interactive surface.
+
+```tsx
+<ListingCard href="/listings/42" />
+<NavItem linkComponent={NextLink} href="/orders" />
+```
+
+See the full per-component reference in [docs/typography-semantic-matrix.md](./docs/typography-semantic-matrix.md).
+
+---
+
 ## Monorepo structure
 
 ```
