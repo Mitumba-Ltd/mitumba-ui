@@ -28,3 +28,13 @@ export const WithFileAttachment: Story = {
 export const WithImageAttachment: Story = {
   args: { body: "Here's another photo of the listing", timestamp: '11:05 AM', isMine: false, senderName: 'Ochieng Otieno', senderAvatarUrl: 'https://i.pravatar.cc/40?u=ochieng', attachment: { type: 'image', name: 'jacket-detail.jpg', url: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?auto=format&fit=crop&w=300&q=80' } },
 };
+
+export const Desktop1280: Story = {
+  args: { body: "Yes! It's in great condition. KES 1,800.", timestamp: '10:32 AM', isMine: false, senderName: 'Wanjiku Muthoni', senderAvatarUrl: 'https://i.pravatar.cc/40?u=wanjiku' },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};
+
+export const Mobile375: Story = {
+  args: { body: "Yes! It's in great condition. KES 1,800.", timestamp: '10:32 AM', isMine: false, senderName: 'Wanjiku Muthoni', senderAvatarUrl: 'https://i.pravatar.cc/40?u=wanjiku' },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};
