@@ -5,6 +5,8 @@ import Button from '@mui/material/Button';
 import { tokens } from '@mitumba/tokens';
 import { STIScoreChip } from '../STIScoreChip';
 import { MitumbaAvatar } from '../../foundation';
+import { SemanticSurface } from '../../../internal/SemanticSurface';
+import { SemanticTitle } from '../../../internal/SemanticTitle';
 import type { SellerCardProps } from './SellerCard.types';
 
 /**
@@ -22,20 +24,18 @@ export function SellerCard({
   onTap,
   actionLabel,
   onAction,
+  titleLevel,
+  href,
+  linkComponent,
 }: SellerCardProps): React.ReactElement {
+  const accessibleName = `${name} — ${city}, ${totalListings} listings`;
+  const isInteractive = Boolean(href) || Boolean(onTap);
   return (
     <Box
-      onClick={onTap}
-      onKeyDown={(e) => {
-        if ((e.key === 'Enter' || e.key === ' ') && onTap) {
-          e.preventDefault();
-          onTap();
-        }
-      }}
-      role={onTap ? 'button' : undefined}
-      tabIndex={onTap ? 0 : undefined}
-      aria-label={`${name} — ${city}, ${totalListings} listings`}
+      component="article"
+      aria-label={accessibleName}
       sx={{
+        position: 'relative',
         display: 'flex',
         alignItems: 'center',
         flexWrap: 'wrap',
@@ -44,24 +44,52 @@ export function SellerCard({
         borderRadius: `${tokens.radius.lg}px`,
         bgcolor: tokens.colors.surface,
         border: `1px solid ${tokens.colors.divider}`,
-        cursor: onTap ? 'pointer' : 'default',
         transition: tokens.motion.transitions.interaction,
-        '&:hover': onTap ? { borderColor: tokens.colors.green, transform: 'translateY(-1px)' } : {},
-        '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2 },
+        '&:hover': isInteractive ? { borderColor: tokens.colors.green, transform: 'translateY(-1px)' } : {},
+        '&:focus-within': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2 },
       }}
     >
+      {/*
+        Stretched primary surface (anchor/button/none). Rendered as a sibling
+        overlay so the nested action button stays a valid, non-nested control.
+      */}
+      {isInteractive && (
+        <SemanticSurface
+          href={href}
+          linkComponent={linkComponent}
+          onClick={onTap}
+          aria-label={accessibleName}
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: 1,
+            display: 'block',
+            width: '100%',
+            height: '100%',
+            p: 0,
+            m: 0,
+            border: 'none',
+            background: 'transparent',
+            cursor: 'pointer',
+            appearance: 'none',
+            color: 'inherit',
+            textDecoration: 'none',
+          }}
+        />
+      )}
+
       {/* Avatar */}
       <MitumbaAvatar name={name} imageUrl={avatarUrl} size="md" />
 
       {/* Info */}
       <Box sx={{ flex: 1, minWidth: 0 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.sm}px` }}>
-          <Typography
+          <SemanticTitle
+            titleLevel={titleLevel}
             sx={{
               fontWeight: 700,
               fontSize: tokens.typography.fontSizes.base,
               color: tokens.colors.textPrimary,
-              fontFamily: tokens.typography.fontFamily,
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
@@ -69,7 +97,7 @@ export function SellerCard({
             }}
           >
             {name}
-          </Typography>
+          </SemanticTitle>
           {isVaziFeatured && (
             <Box sx={{ bgcolor: tokens.colors.earthLight, color: tokens.colors.earth, fontSize: 10, fontWeight: 700, px: `${tokens.spacing.xs}px`, py: '2px', borderRadius: `${tokens.radius.sm}px`, lineHeight: 1, flexShrink: 0 }}>
               VAZI
@@ -82,7 +110,6 @@ export function SellerCard({
           sx={{
             fontSize: tokens.typography.fontSizes.sm,
             color: tokens.colors.textSecondary,
-            fontFamily: tokens.typography.fontFamily,
             mt: '2px',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -104,6 +131,8 @@ export function SellerCard({
           onClick={(e) => { e.stopPropagation(); onAction?.(); }}
           sx={{
             mt: `${tokens.spacing.md}px`,
+            position: 'relative',
+            zIndex: 2,
             width: '100%',
             borderColor: tokens.colors.border,
             color: tokens.colors.textPrimary,

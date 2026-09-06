@@ -85,3 +85,25 @@ export const Mobile: Story = {
   args: Trusted.args,
   parameters: { viewport: { defaultViewport: 'mobile' } },
 };
+
+export const AsLinkWithHeading: Story = {
+  args: {
+    ...Trusted.args,
+    href: '/sellers/seller-1',
+    titleLevel: 2,
+    actionLabel: 'Visit Store',
+    onAction: () => {},
+  },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};
+
+export const MobileAsLink: Story = {
+  args: {
+    ...Trusted.args,
+    href: '/sellers/seller-1',
+    titleLevel: 2,
+    actionLabel: 'Visit Store',
+    onAction: () => {},
+  },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};
