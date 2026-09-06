@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { HeadingLevel } from '../../../types/semantic';
 
 export interface UnauthenticatedStateProps {
   /** Page-specific title, e.g. "Sign in to view your orders" */
@@ -16,4 +17,9 @@ export interface UnauthenticatedStateProps {
     label: string;
     onClick: () => void;
   };
+  /**
+   * Emits an h1-h6 element for the title when provided. When omitted the title
+   * keeps its current non-heading paragraph element and unchanged visual size.
+   */
+  titleLevel?: HeadingLevel;
 }

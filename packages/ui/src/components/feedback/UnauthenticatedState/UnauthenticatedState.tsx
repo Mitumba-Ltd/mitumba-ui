@@ -5,6 +5,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { tokens } from '@mitumba/tokens';
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
+import { SemanticTitle } from '../../../internal/SemanticTitle';
 import type { UnauthenticatedStateProps } from './UnauthenticatedState.types';
 
 /**
@@ -19,6 +20,7 @@ export function UnauthenticatedState({
   signInLabel = 'Sign In',
   onSignIn,
   secondaryAction,
+  titleLevel,
 }: UnauthenticatedStateProps): React.ReactElement {
   const displayIcon = icon || <LockOutlinedIcon />;
 
@@ -54,25 +56,24 @@ export function UnauthenticatedState({
       </Box>
 
       {/* Title */}
-      <Typography
+      <SemanticTitle
+        titleLevel={titleLevel}
         sx={{
           fontSize: tokens.typography.fontSizes.lg,
           fontWeight: 800,
           color: tokens.colors.textPrimary,
-          fontFamily: tokens.typography.fontFamily,
           lineHeight: tokens.typography.lineHeights.tight,
           mb: `${tokens.spacing.sm}px`,
         }}
       >
         {title}
-      </Typography>
+      </SemanticTitle>
 
       {/* Subtitle */}
       <Typography
         sx={{
           fontSize: tokens.typography.fontSizes.base,
           color: tokens.colors.textSecondary,
-          fontFamily: tokens.typography.fontFamily,
           lineHeight: tokens.typography.lineHeights.normal,
           maxWidth: 400,
           mb: `${tokens.spacing.xxl}px`,
@@ -94,7 +95,6 @@ export function UnauthenticatedState({
             color: tokens.colors.green,
             fontSize: tokens.typography.fontSizes.base,
             fontWeight: 600,
-            fontFamily: tokens.typography.fontFamily,
             cursor: 'pointer',
             '&:hover': { textDecoration: 'underline' },
           }}

@@ -89,3 +89,13 @@ export const Mobile: Story = {
   args: Orders.args,
   parameters: { viewport: { defaultViewport: 'mobile' } },
 };
+
+export const MobileWithHeading: Story = {
+  args: { ...Orders.args, titleLevel: 1 },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};
+
+export const DesktopWithHeading: Story = {
+  args: { ...Orders.args, titleLevel: 1 },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};
