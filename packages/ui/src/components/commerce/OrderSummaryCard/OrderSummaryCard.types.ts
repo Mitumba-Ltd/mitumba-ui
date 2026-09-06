@@ -1,4 +1,5 @@
 import type { SxProps, Theme } from '@mui/material/styles'
+import type { HeadingLevel } from '../../../types/semantic'
 
 export interface OrderSummaryLineItem {
   /** Label (e.g. "Subtotal", "Delivery", "Discount") */
@@ -26,4 +27,10 @@ export interface OrderSummaryCardProps {
   trustLine?: string
   /** Optional sx override */
   sx?: SxProps<Theme>
+  /**
+   * Emits an h1-h6 element for the "Order Summary" heading when provided. When
+   * omitted the heading keeps its current non-heading paragraph element and
+   * unchanged visual size/weight.
+   */
+  titleLevel?: HeadingLevel
 }
