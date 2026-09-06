@@ -2,8 +2,11 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
-import { MitumbaThemeProvider } from '../../../theme'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme'
 import { STIScoreChip } from './STIScoreChip'
+
+const HOST_FONT = '"Comic Sans MS", cursive'
 
 function renderChip(score: number, compact?: boolean, showLabel?: boolean) {
   return render(
@@ -81,5 +84,17 @@ describe('STIScoreChip', () => {
   it('has accessible aria-label', () => {
     renderChip(92)
     expect(screen.getByLabelText('STI Score: 92, Trusted')).toBeInTheDocument()
+  })
+
+  it('inherits the host theme typography.fontFamily (no inline override)', () => {
+    const hostTheme = createTheme(mitumbaTheme, { typography: { fontFamily: HOST_FONT } })
+    render(
+      <ThemeProvider theme={hostTheme}>
+        <STIScoreChip score={92} />
+      </ThemeProvider>,
+    )
+
+    expect(screen.getByText('92').style.fontFamily).toBe('')
+    expect(screen.getByText('Trusted').style.fontFamily).toBe('')
   })
 })

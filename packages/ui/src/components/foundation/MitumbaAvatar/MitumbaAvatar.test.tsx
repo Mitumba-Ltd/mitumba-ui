@@ -2,9 +2,12 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
-import { MitumbaThemeProvider } from '../../../theme'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme'
 import { MitumbaAvatar, MitumbaAvatarGroup } from './MitumbaAvatar'
 import type { MitumbaAvatarProps } from './MitumbaAvatar.types'
+
+const HOST_FONT = '"Comic Sans MS", cursive'
 
 function renderAvatar(props: MitumbaAvatarProps) {
   return render(
@@ -89,6 +92,29 @@ describe('MitumbaAvatar', () => {
     const { container } = renderAvatar({ name: 'Selected', selected: true })
     // Tick is an SVG
     expect(container.querySelector('svg')).toBeInTheDocument()
+  })
+
+  it('inherits the host theme typography.fontFamily on the initials (no inline override)', () => {
+    const hostTheme = createTheme(mitumbaTheme, { typography: { fontFamily: HOST_FONT } })
+    render(
+      <ThemeProvider theme={hostTheme}>
+        <MitumbaAvatar name="John Doe" />
+      </ThemeProvider>,
+    )
+
+    expect(screen.getByText('JD').style.fontFamily).toBe('')
+  })
+
+  it('inherits the host theme typography.fontFamily on the side-alignment name (no inline override)', () => {
+    const hostTheme = createTheme(mitumbaTheme, { typography: { fontFamily: HOST_FONT } })
+    render(
+      <ThemeProvider theme={hostTheme}>
+        <MitumbaAvatar name="Isaac" subtitle="Leading..." textAlignment="side" />
+      </ThemeProvider>,
+    )
+
+    expect(screen.getByText('Isaac').style.fontFamily).toBe('')
+    expect(screen.getByText('Leading...').style.fontFamily).toBe('')
   })
 })
 

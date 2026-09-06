@@ -2,9 +2,12 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup, render, screen, fireEvent } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { MitumbaThemeProvider } from '../../../theme'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme'
 import { MitumbaTextField } from './MitumbaTextField'
 import type { MitumbaTextFieldProps } from './MitumbaTextField.types'
+
+const HOST_FONT = '"Comic Sans MS", cursive'
 
 function renderTextField(props: Partial<MitumbaTextFieldProps> = {}) {
   const textFieldProps: MitumbaTextFieldProps = {
@@ -94,5 +97,18 @@ describe('MitumbaTextField', () => {
 
     expect(screen.getByTestId('prefix')).toBeInTheDocument()
     expect(screen.getByTestId('suffix')).toBeInTheDocument()
+  })
+
+  it('inherits the host theme typography.fontFamily on the input (no inline override)', () => {
+    const hostTheme = createTheme(mitumbaTheme, { typography: { fontFamily: HOST_FONT } })
+    render(
+      <ThemeProvider theme={hostTheme}>
+        <MitumbaTextField value="" onChange={vi.fn()} hint="Your name" />
+      </ThemeProvider>,
+    )
+
+    const inputRoot = screen.getByRole('textbox').closest('.MuiOutlinedInput-root') as HTMLElement
+    expect(inputRoot).not.toBeNull()
+    expect(inputRoot.style.fontFamily).toBe('')
   })
 })
