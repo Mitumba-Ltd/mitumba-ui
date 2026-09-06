@@ -2,9 +2,12 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup, render, screen, fireEvent, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { MitumbaThemeProvider } from '../../../theme'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme'
 import { MitumbaSelect } from './MitumbaSelect'
 import type { MitumbaSelectProps } from './MitumbaSelect.types'
+
+const HOST_FONT = '"Comic Sans MS", cursive'
 
 const defaultCities = [
   { value: 'nairobi', label: 'Nairobi' },
@@ -86,5 +89,18 @@ describe('MitumbaSelect', () => {
     renderSelect({ value: 'mombasa' })
 
     expect(screen.getByLabelText('City')).toHaveTextContent('Mombasa')
+  })
+
+  it('inherits the host theme typography.fontFamily on the select (no inline override)', () => {
+    const hostTheme = createTheme(mitumbaTheme, { typography: { fontFamily: HOST_FONT } })
+    render(
+      <ThemeProvider theme={hostTheme}>
+        <MitumbaSelect label="City" value="mombasa" onChange={vi.fn()} options={defaultCities} />
+      </ThemeProvider>,
+    )
+
+    const selectRoot = screen.getByLabelText('City').closest('.MuiOutlinedInput-root') as HTMLElement
+    expect(selectRoot).not.toBeNull()
+    expect(selectRoot.style.fontFamily).toBe('')
   })
 })

@@ -30,7 +30,6 @@ export function AuthSubmitButton({
           borderRadius: tokens.radius.md,
           fontSize: tokens.typography.fontSizes.base,
           fontWeight: 600,
-          fontFamily: tokens.typography.fontFamily,
           textTransform: 'none',
           transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           '&:hover': { transform: 'translateY(-2px) scale(1.02)' },

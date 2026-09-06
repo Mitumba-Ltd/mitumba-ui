@@ -114,7 +114,6 @@ export function MitumbaTextField({
         bgcolor: tokens.colors.surface,
         fontSize: currentSize.fontSize,
         fontWeight: 600,
-        fontFamily: tokens.typography.fontFamily,
         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         
         // Issue Fix: Square corners if integrated button is present
@@ -174,7 +173,6 @@ export function MitumbaTextField({
             color: currentStatus ? statusConfig[currentStatus].color : tokens.colors.textSecondary,
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
-            fontFamily: tokens.typography.fontFamily,
             ml: rounding === 'pill' ? 2 : 1,
           }}
         >
@@ -239,7 +237,6 @@ export function MitumbaTextField({
             display: 'block',
             fontWeight: 600,
             color: currentStatus ? statusConfig[currentStatus].color : tokens.colors.textSecondary,
-            fontFamily: tokens.typography.fontFamily,
           }}
         >
           {error || helperText}

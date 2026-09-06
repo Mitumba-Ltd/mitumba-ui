@@ -50,7 +50,6 @@ export function STIScoreChip({
           fontWeight: 700,
           color,
           lineHeight: 1,
-          fontFamily: tokens.typography.fontFamily,
         }}
       >
         {clamped}
@@ -65,7 +64,6 @@ export function STIScoreChip({
             fontWeight: 600,
             color: tokens.colors.textSecondary,
             lineHeight: 1,
-            fontFamily: tokens.typography.fontFamily,
           }}
         >
           {label}

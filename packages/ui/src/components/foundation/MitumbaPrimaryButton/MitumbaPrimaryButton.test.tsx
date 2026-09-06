@@ -2,9 +2,15 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup, render, screen, fireEvent } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { MitumbaThemeProvider } from '../../../theme'
+import { axe, toHaveNoViolations } from 'jest-axe'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme'
 import { MitumbaPrimaryButton } from './MitumbaPrimaryButton'
 import type { MitumbaPrimaryButtonProps } from './MitumbaPrimaryButton.types'
+
+expect.extend(toHaveNoViolations)
+
+const HOST_FONT = '"Comic Sans MS", cursive'
 
 function renderButton(props: Partial<MitumbaPrimaryButtonProps> = {}) {
   const buttonProps = {
@@ -89,5 +95,24 @@ describe('MitumbaPrimaryButton', () => {
     renderButton({ fullWidth: false })
 
     expect(screen.getByRole('button', { name: 'Sell now' })).toBeInTheDocument()
+  })
+
+  it('inherits the host theme typography.fontFamily (no inline override)', () => {
+    const hostTheme = createTheme(mitumbaTheme, { typography: { fontFamily: HOST_FONT } })
+    render(
+      <ThemeProvider theme={hostTheme}>
+        <MitumbaPrimaryButton label="Sell now" />
+      </ThemeProvider>,
+    )
+
+    expect(screen.getByRole('button', { name: 'Sell now' }).style.fontFamily).toBe('')
+  })
+
+  it('has no axe violations', async () => {
+    const { container } = renderButton()
+
+    const results = await axe(container)
+
+    expect(results).toHaveNoViolations()
   })
 })

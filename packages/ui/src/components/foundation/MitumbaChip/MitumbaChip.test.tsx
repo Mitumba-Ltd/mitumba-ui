@@ -2,9 +2,12 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup, render, screen, fireEvent } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { MitumbaThemeProvider } from '../../../theme'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme'
 import { MitumbaChip } from './MitumbaChip'
 import type { MitumbaChipProps } from './MitumbaChip.types'
+
+const HOST_FONT = '"Comic Sans MS", cursive'
 
 function renderChip(props: Partial<MitumbaChipProps> = {}) {
   const chipProps: MitumbaChipProps = {
@@ -89,5 +92,18 @@ describe('MitumbaChip', () => {
     renderChip({ onClick: undefined })
 
     expect(screen.getByText('Verified')).not.toHaveAttribute('role', 'button')
+  })
+
+  it('inherits the host theme typography.fontFamily (no inline override)', () => {
+    const hostTheme = createTheme(mitumbaTheme, { typography: { fontFamily: HOST_FONT } })
+    render(
+      <ThemeProvider theme={hostTheme}>
+        <MitumbaChip label="Verified" />
+      </ThemeProvider>,
+    )
+
+    const chipRoot = screen.getByText('Verified').closest('.MuiChip-root') as HTMLElement
+    expect(chipRoot).not.toBeNull()
+    expect(chipRoot.style.fontFamily).toBe('')
   })
 })
