@@ -3,8 +3,15 @@ import '@testing-library/jest-dom/vitest'
 import React from 'react';
 import { cleanup, render, screen, fireEvent } from '@testing-library/react';
 import { afterEach, describe, it, expect, vi } from 'vitest';
-import { MitumbaThemeProvider } from '../../../theme';
+import { axe, toHaveNoViolations } from 'jest-axe';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme';
 import { SellerOnboardingPage } from './SellerOnboardingPage';
+import type { HeadingLevel } from '../../../types/semantic';
+
+expect.extend(toHaveNoViolations);
+
+const HOST_FONT = '"Comic Sans MS", cursive';
 
 afterEach(() => { cleanup(); });
 
@@ -52,5 +59,66 @@ describe('SellerOnboardingPage', () => {
     );
     expect(screen.getAllByText(/You're all set/i)[0]).toBeInTheDocument();
     expect(screen.getAllByText(/Starting STI Score/i)[0]).toBeInTheDocument();
+  });
+
+  it.each([1, 2, 3, 4, 5, 6] as HeadingLevel[])(
+    'emits an h%s step title when stepTitleLevel is set',
+    (level) => {
+      render(<MitumbaThemeProvider><SellerOnboardingPage currentStep={1} stepTitleLevel={level} /></MitumbaThemeProvider>);
+      expect(screen.getByText('Your identity').tagName).toBe(`H${level}`);
+    }
+  );
+
+  it('defaults the step title to its MUI variant heading (h5) when stepTitleLevel omitted', () => {
+    render(<MitumbaThemeProvider><SellerOnboardingPage currentStep={1} /></MitumbaThemeProvider>);
+    expect(screen.getByText('Your identity').tagName).toBe('H5');
+  });
+
+  it.each([1, 2, 3, 4, 5, 6] as HeadingLevel[])(
+    'emits h%s section labels when sectionTitleLevel is set',
+    (level) => {
+      render(<MitumbaThemeProvider><SellerOnboardingPage currentStep={3} sectionTitleLevel={level} /></MitumbaThemeProvider>);
+      expect(screen.getByText('Categories *').tagName).toBe(`H${level}`);
+      expect(screen.getByText('Delivery method *').tagName).toBe(`H${level}`);
+    }
+  );
+
+  it('keeps section labels as non-heading text when sectionTitleLevel omitted', () => {
+    render(<MitumbaThemeProvider><SellerOnboardingPage currentStep={3} /></MitumbaThemeProvider>);
+    expect(screen.getByText('Categories *').tagName).toBe('P');
+  });
+
+  it('renders the STI score as non-heading text (never a heading)', () => {
+    render(
+      <MitumbaThemeProvider>
+        <SellerOnboardingPage
+          currentStep={5}
+          stepTitleLevel={2}
+          initialData={{ fullName: 'Test', phone: '0712345678', idNumber: 'A123', storeName: 'TestStore' }}
+        />
+      </MitumbaThemeProvider>
+    );
+    const headings = screen.getAllByRole('heading');
+    headings.forEach((h) => expect(h.textContent).not.toMatch(/^\d+$/));
+  });
+
+  it('inherits host theme fontFamily on the step title (no inline override)', () => {
+    const hostTheme = createTheme(mitumbaTheme, { typography: { fontFamily: HOST_FONT } });
+    render(
+      <ThemeProvider theme={hostTheme}>
+        <SellerOnboardingPage currentStep={1} stepTitleLevel={2} />
+      </ThemeProvider>
+    );
+    expect(screen.getByText('Your identity').style.fontFamily).toBe('');
+  });
+
+  it('has no axe violations on the identity step', async () => {
+    const { container } = render(
+      <MitumbaThemeProvider>
+        <SellerOnboardingPage currentStep={1} stepTitleLevel={2} sectionTitleLevel={3} />
+      </MitumbaThemeProvider>
+    );
+    const results = await axe(container);
+    expect(results).toHaveNoViolations();
   });
 });

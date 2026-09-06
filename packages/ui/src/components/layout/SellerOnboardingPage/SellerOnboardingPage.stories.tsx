@@ -104,3 +104,25 @@ export const DarkMode: Story = {
   args: { currentStep: 0, theme: 'mitumba-dark' },
   parameters: { backgrounds: { default: 'dark' } },
 };
+
+export const WithHeadingsDesktop: Story = {
+  args: {
+    currentStep: 3,
+    titleLevel: 1,
+    stepTitleLevel: 2,
+    sectionTitleLevel: 3,
+    initialData: { categories: ["Women's Wear", 'Shoes'], conditionGrades: ['A', 'B'], deliveryMethod: 'self' },
+  },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};
+
+export const WithHeadingsMobile: Story = {
+  args: {
+    currentStep: 3,
+    titleLevel: 1,
+    stepTitleLevel: 2,
+    sectionTitleLevel: 3,
+    initialData: { categories: ["Women's Wear", 'Shoes'], conditionGrades: ['A', 'B'], deliveryMethod: 'self' },
+  },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};
