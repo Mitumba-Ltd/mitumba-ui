@@ -34,3 +34,17 @@ export const Loading: Story = {
 export const Sending: Story = {
   args: { messages: MESSAGES, partnerName: 'Wanjiku Muthoni', partnerAvatarUrl: 'https://i.pravatar.cc/40?u=wanjiku', sending: true },
 };
+
+export const WithHeadingLevel: Story = {
+  args: { messages: MESSAGES, partnerName: 'Wanjiku Muthoni', partnerAvatarUrl: 'https://i.pravatar.cc/40?u=wanjiku', partnerStatus: 'online', titleLevel: 2, announcement: 'New message from Wanjiku', onAttach: () => {} },
+};
+
+export const Desktop1280: Story = {
+  args: { messages: MESSAGES, partnerName: 'Wanjiku Muthoni', partnerAvatarUrl: 'https://i.pravatar.cc/40?u=wanjiku', partnerStatus: 'online', titleLevel: 2, onAttach: () => {} },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};
+
+export const Mobile375: Story = {
+  args: { messages: MESSAGES, partnerName: 'Wanjiku Muthoni', partnerAvatarUrl: 'https://i.pravatar.cc/40?u=wanjiku', partnerStatus: 'online', titleLevel: 2, onAttach: () => {} },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};
