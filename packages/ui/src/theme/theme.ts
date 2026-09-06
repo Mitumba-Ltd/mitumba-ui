@@ -115,6 +115,13 @@ export const mitumbaTheme: Theme = createTheme({
   ],
 
   typography: {
+    // `fontFamily` is the body/default family. createTheme() inherits it into
+    // every variant (h1..h6, body1, body2, ...), so the default appearance is
+    // preserved automatically once components stop setting a local
+    // `fontFamily` override. A host wanting distinct heading vs body families
+    // overrides `theme.typography.h1..h6.fontFamily` (headings) independently
+    // of `theme.typography.fontFamily` (body); that is the supported override
+    // surface. No default value below is changed.
     fontFamily: tokens.typography.fontFamily,
     fontWeightRegular: tokens.typography.fontWeights.regular,
     fontWeightMedium: tokens.typography.fontWeights.medium,
