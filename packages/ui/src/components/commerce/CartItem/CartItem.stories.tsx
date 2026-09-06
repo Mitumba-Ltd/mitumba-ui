@@ -77,3 +77,37 @@ export const MobileView: Story = {
     </Stack>
   )
 }
+
+export const Mobile: Story = {
+  args: {
+    id: '1',
+    imageUrl: sampleItem.imageUrl,
+    title: sampleItem.title,
+    subtitle: sampleItem.subtitle,
+    priceKes: sampleItem.priceKes,
+    size: 'XL',
+    quantity: 1,
+    titleLevel: 3,
+    onRemove: () => {},
+    onQuantityChange: () => {},
+    onSizeChange: () => {},
+  },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+}
+
+export const Desktop: Story = {
+  args: {
+    id: '1',
+    imageUrl: sampleItem.imageUrl,
+    title: sampleItem.title,
+    subtitle: sampleItem.subtitle,
+    priceKes: sampleItem.priceKes,
+    size: 'XL',
+    quantity: 1,
+    titleLevel: 3,
+    onRemove: () => {},
+    onQuantityChange: () => {},
+    onSizeChange: () => {},
+  },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+}
