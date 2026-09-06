@@ -34,3 +34,21 @@ export const WithActive: Story = {
 export const Loading: Story = {
   args: { conversations: [], loading: true },
 };
+
+export const Empty: Story = {
+  args: { conversations: [], onCompose: () => {} },
+};
+
+export const EmptyWithHeadingLevel: Story = {
+  args: { conversations: [], emptyTitleLevel: 2, onCompose: () => {} },
+};
+
+export const Desktop1280: Story = {
+  args: { conversations: CONVERSATIONS, activeId: '2', onCompose: () => {} },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};
+
+export const Mobile375: Story = {
+  args: { conversations: CONVERSATIONS, activeId: '2', onCompose: () => {} },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};
