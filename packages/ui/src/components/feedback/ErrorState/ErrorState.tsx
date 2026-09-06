@@ -81,7 +81,6 @@ export function ErrorState({
             fontSize: isCompact ? tokens.typography.fontSizes.base : tokens.typography.fontSizes.lg,
             fontWeight: 700,
             color: tokens.colors.textPrimary,
-            fontFamily: tokens.typography.fontFamily,
             lineHeight: tokens.typography.lineHeights.tight,
             mb: `${tokens.spacing.xs}px`,
           }}
@@ -93,7 +92,6 @@ export function ErrorState({
           sx={{
             fontSize: isCompact ? tokens.typography.fontSizes.sm : tokens.typography.fontSizes.base,
             color: tokens.colors.textSecondary,
-            fontFamily: tokens.typography.fontFamily,
             lineHeight: tokens.typography.lineHeights.normal,
             maxWidth: isCompact ? undefined : 360,
             mx: isCompact ? undefined : 'auto',

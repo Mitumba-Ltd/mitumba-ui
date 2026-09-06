@@ -37,7 +37,6 @@ export function FormCard({
               fontSize: tokens.typography.fontSizes.xl,
               fontWeight: tokens.typography.fontWeights.extrabold,
               color: tokens.colors.textPrimary,
-              fontFamily: tokens.typography.fontFamily,
               lineHeight: 1.2,
             }}
           >
@@ -48,7 +47,6 @@ export function FormCard({
               sx={{
                 fontSize: tokens.typography.fontSizes.sm,
                 color: tokens.colors.textSecondary,
-                fontFamily: tokens.typography.fontFamily,
                 mt: '2px',
               }}
             >
@@ -73,7 +71,6 @@ export function FormCard({
             sx={{
               fontSize: tokens.typography.fontSizes.sm,
               color: tokens.colors.error,
-              fontFamily: tokens.typography.fontFamily,
               fontWeight: tokens.typography.fontWeights.medium,
             }}
           >

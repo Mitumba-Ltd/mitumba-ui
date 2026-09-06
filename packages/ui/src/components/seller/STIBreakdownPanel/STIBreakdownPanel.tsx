@@ -75,13 +75,13 @@ export function STIBreakdownPanel({
           />
           {/* Center text */}
           <Box sx={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-            <Typography sx={{ fontSize: 20, fontWeight: 800, color: scoreColor, lineHeight: 1, fontFamily: tokens.typography.fontFamily }}>{score}</Typography>
+            <Typography sx={{ fontSize: 20, fontWeight: 800, color: scoreColor, lineHeight: 1 }}>{score}</Typography>
             <Typography sx={{ fontSize: 9, fontWeight: 600, color: tokens.colors.textSecondary, textTransform: 'uppercase', letterSpacing: 0.5 }}>/ 100</Typography>
           </Box>
         </Box>
 
         <Box>
-          <Typography sx={{ fontSize: tokens.typography.fontSizes.lg, fontWeight: 700, color: tokens.colors.textPrimary, fontFamily: tokens.typography.fontFamily }}>
+          <Typography sx={{ fontSize: tokens.typography.fontSizes.lg, fontWeight: 700, color: tokens.colors.textPrimary }}>
             Seller Trust Index
           </Typography>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.xs}px`, mt: '2px' }}>
@@ -98,10 +98,10 @@ export function STIBreakdownPanel({
         {factors.map((factor) => (
           <Box key={factor.label} sx={{ mb: `${tokens.spacing.md}px`, '&:last-child': { mb: 0 } }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: `${tokens.spacing.xs}px` }}>
-              <Typography sx={{ fontSize: tokens.typography.fontSizes.sm, color: tokens.colors.textSecondary, fontFamily: tokens.typography.fontFamily }}>
+              <Typography sx={{ fontSize: tokens.typography.fontSizes.sm, color: tokens.colors.textSecondary }}>
                 {factor.label}
               </Typography>
-              <Typography sx={{ fontSize: tokens.typography.fontSizes.sm, fontWeight: 700, color: tokens.colors.textPrimary, fontFamily: tokens.typography.fontFamily }}>
+              <Typography sx={{ fontSize: tokens.typography.fontSizes.sm, fontWeight: 700, color: tokens.colors.textPrimary }}>
                 {factor.display}
               </Typography>
             </Box>
@@ -125,7 +125,7 @@ export function STIBreakdownPanel({
       {/* Recent events */}
       {recentEvents.length > 0 && (
         <Box sx={{ borderTop: `1px solid ${tokens.colors.divider}`, px: `${tokens.spacing.xl}px`, py: `${tokens.spacing.lg}px` }}>
-          <Typography sx={{ fontSize: tokens.typography.fontSizes.sm, fontWeight: 700, color: tokens.colors.textPrimary, fontFamily: tokens.typography.fontFamily, mb: `${tokens.spacing.md}px` }}>
+          <Typography sx={{ fontSize: tokens.typography.fontSizes.sm, fontWeight: 700, color: tokens.colors.textPrimary, mb: `${tokens.spacing.md}px` }}>
             Recent activity
           </Typography>
           {recentEvents.map((event) => (

@@ -115,7 +115,6 @@ export function OTPInput({ value, onChange, onComplete, error = false, loading =
             height: 48,
             textAlign: 'center',
             fontSize: tokens.typography.fontSizes.xl,
-            fontFamily: tokens.typography.fontFamily,
             fontWeight: tokens.typography.fontWeights.bold,
             border: '1px solid',
             borderColor: error ? tokens.colors.error : tokens.colors.border,

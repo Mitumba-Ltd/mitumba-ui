@@ -46,7 +46,6 @@ export function CompleteThisLookPanel({ outfits, loading = false }: CompleteThis
           component="h2"
           sx={{
             color: tokens.colors.textPrimary,
-            fontFamily: tokens.typography.fontFamily,
             fontSize: tokens.typography.fontSizes.xl,
             fontWeight: 900,
             lineHeight: 1,

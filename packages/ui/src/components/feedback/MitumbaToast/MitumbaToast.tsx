@@ -95,7 +95,6 @@ export function MitumbaToast({
             borderRadius: tokens.radius.md,
             boxShadow: tokens.shadows.deep,
             fontWeight: 700,
-            fontFamily: tokens.typography.fontFamily,
             minWidth: { xs: 'calc(100vw - 32px)', sm: 380 },
             maxWidth: { xs: 'calc(100vw - 32px)', sm: 560 },
             backgroundColor: baseColor,

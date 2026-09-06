@@ -110,7 +110,7 @@ export function MitumbaDatePicker({
         {/* Header */}
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
           <IconButton aria-label="Previous month" size="small" onClick={handlePrevMonth}><ChevronLeftIcon /></IconButton>
-          <Typography sx={{ fontWeight: 800, fontSize: 14, fontFamily: tokens.typography.fontFamily }}>
+          <Typography sx={{ fontWeight: 800, fontSize: 14 }}>
             {months[currentMonth.getMonth()]} {currentMonth.getFullYear()}
           </Typography>
           <IconButton aria-label="Next month" size="small" onClick={handleNextMonth}><ChevronRightIcon /></IconButton>
@@ -146,7 +146,6 @@ export function MitumbaDatePicker({
                   cursor: 'pointer',
                   borderRadius: tokens.radius.full,
                   fontSize: 12,
-                  fontFamily: tokens.typography.fontFamily,
                   fontWeight: today || selected ? 800 : 500,
                   transition: 'all 0.2s ease',
                   

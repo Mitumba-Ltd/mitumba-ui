@@ -32,7 +32,6 @@ export function VAZIBadge({ size = 'small' }: VAZIBadgeProps) {
           fontSize: isLarge ? 11 : 9,
           fontWeight: tokens.typography.fontWeights.extrabold,
           color: tokens.colors.earth,
-          fontFamily: tokens.typography.fontFamily,
           textTransform: 'uppercase',
           letterSpacing: '0.06em',
           lineHeight: 1,

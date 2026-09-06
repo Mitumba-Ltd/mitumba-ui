@@ -69,7 +69,6 @@ export function MitumbaSearchBar({
             outline: 'none',
             backgroundColor: 'transparent',
             fontSize: tokens.typography.fontSizes.base,
-            fontFamily: tokens.typography.fontFamily,
             color: tokens.colors.textPrimary,
             width: '100%',
             height: '24px',
@@ -147,7 +146,6 @@ export function MitumbaSearchBar({
               <Typography
                 sx={{
                   fontSize: tokens.typography.fontSizes.base,
-                  fontFamily: tokens.typography.fontFamily,
                   color: tokens.colors.textPrimary,
                 }}
               >

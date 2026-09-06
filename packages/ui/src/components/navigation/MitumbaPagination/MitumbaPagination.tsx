@@ -40,7 +40,6 @@ export function MitumbaPagination({
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...item}
             sx={{
-              fontFamily: tokens.typography.fontFamily,
               fontWeight: 700,
               fontSize: tokens.typography.fontSizes.sm,
               transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',

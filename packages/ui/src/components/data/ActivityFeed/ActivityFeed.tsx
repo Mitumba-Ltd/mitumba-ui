@@ -122,7 +122,6 @@ export function ActivityFeed({
                       fontSize: tokens.typography.fontSizes.base,
                       fontWeight: 800,
                       color: tokens.colors.textPrimary,
-                      fontFamily: tokens.typography.fontFamily,
                       lineHeight: 1.2,
                     }}
                   >
@@ -147,7 +146,6 @@ export function ActivityFeed({
                     sx={{
                       fontSize: tokens.typography.fontSizes.sm,
                       color: tokens.colors.textSecondary,
-                      fontFamily: tokens.typography.fontFamily,
                       mt: 0.5,
                       display: '-webkit-box',
                       WebkitLineClamp: 2,
