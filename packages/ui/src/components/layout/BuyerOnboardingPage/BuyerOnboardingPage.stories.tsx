@@ -41,3 +41,13 @@ export const Mobile: Story = {
   args: {},
   parameters: { viewport: { defaultViewport: 'mobile' } },
 };
+
+export const MobileWithHeadings: Story = {
+  args: { titleLevel: 1, sectionTitleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+};
+
+export const DesktopWithHeadings: Story = {
+  args: { titleLevel: 1, sectionTitleLevel: 2 },
+  parameters: { viewport: { defaultViewport: 'desktop' } },
+};
