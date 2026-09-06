@@ -70,3 +70,19 @@ export const Desktop: Story = {
     chromatic: { viewports: [1280] },
   },
 };
+
+export const WithHeadingDesktop: Story = {
+  args: { ...Default.args, title: 'Refine results', titleLevel: 2, sectionTitleLevel: 3 },
+  parameters: {
+    viewport: { defaultViewport: 'desktop' },
+    chromatic: { viewports: [1280] },
+  },
+};
+
+export const WithHeadingMobile: Story = {
+  args: { ...Default.args, title: 'Refine results', titleLevel: 2, sectionTitleLevel: 3 },
+  parameters: {
+    viewport: { defaultViewport: 'mobile' },
+    chromatic: { viewports: [375] },
+  },
+};

@@ -2,11 +2,15 @@
 // @vitest-environment jsdom
 import '@testing-library/jest-dom/vitest';
 import React from 'react';
-import { cleanup, render, screen, fireEvent } from '@testing-library/react';
+import { cleanup, render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { afterEach, beforeAll, describe, it, expect, vi } from 'vitest';
+import { axe, toHaveNoViolations } from 'jest-axe';
 import { MitumbaThemeProvider } from '../../../theme';
 import { SearchFilterSheet } from './SearchFilterSheet';
 import type { FilterState } from './SearchFilterSheet.types';
+import type { HeadingLevel } from '../../../types/semantic';
+
+expect.extend(toHaveNoViolations);
 
 beforeAll(() => {
   Object.defineProperty(window, 'matchMedia', {
@@ -85,5 +89,103 @@ describe('SearchFilterSheet', () => {
   it('hides the VAZI toggle when showVaziFilter is false', () => {
     render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} showVaziFilter={false} /></MitumbaThemeProvider>);
     expect(screen.queryByText('VAZI Eligible Only')).not.toBeInTheDocument();
+  });
+
+  it('keeps the showVaziFilter contract unchanged (default renders, false hides, no behavior change)', () => {
+    // Default (prop omitted) -> toggle shown
+    const { unmount } = render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} /></MitumbaThemeProvider>);
+    expect(screen.getByText('VAZI Eligible Only')).toBeInTheDocument();
+    unmount();
+    cleanup();
+    // Explicit true -> toggle shown
+    const { unmount: unmount2 } = render(
+      <MitumbaThemeProvider><SearchFilterSheet {...baseProps} showVaziFilter /></MitumbaThemeProvider>
+    );
+    expect(screen.getByText('VAZI Eligible Only')).toBeInTheDocument();
+    unmount2();
+    cleanup();
+    // Explicit false -> toggle hidden, and toggling still calls onFiltersChange when present
+    render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} showVaziFilter={false} /></MitumbaThemeProvider>);
+    expect(screen.queryByText('VAZI Eligible Only')).not.toBeInTheDocument();
+  });
+
+  it('toggling the VAZI switch updates filters (contract behavior preserved)', () => {
+    const onFiltersChange = vi.fn();
+    render(
+      <MitumbaThemeProvider>
+        <SearchFilterSheet {...baseProps} onFiltersChange={onFiltersChange} />
+      </MitumbaThemeProvider>
+    );
+    const label = screen.getByText('VAZI Eligible Only');
+    const toggle = label.closest('label')?.querySelector('input[type="checkbox"]') as HTMLElement;
+    fireEvent.click(toggle);
+    expect(onFiltersChange).toHaveBeenCalledWith({ ...defaultFilters, vaziOnly: true });
+  });
+
+  it('exposes a named region for the sheet', () => {
+    render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} /></MitumbaThemeProvider>);
+    // Mobile drawer is a dialog labelled by the region label
+    expect(screen.getByRole('dialog')).toHaveAccessibleName('Search filters');
+  });
+
+  it('uses the title as the accessible region name when provided', () => {
+    render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} title="Refine results" /></MitumbaThemeProvider>);
+    expect(screen.getByRole('dialog')).toHaveAccessibleName('Refine results');
+  });
+
+  it('omits sectionTitleLevel by default (non-heading section labels)', () => {
+    render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} /></MitumbaThemeProvider>);
+    expect(screen.getByText('Sort By').tagName).toBe('P');
+  });
+
+  it.each([1, 2, 3, 4, 5, 6] as HeadingLevel[])(
+    'emits h%s section labels when sectionTitleLevel is set',
+    (level) => {
+      render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} sectionTitleLevel={level} /></MitumbaThemeProvider>);
+      expect(screen.getByText('Sort By').tagName).toBe(`H${level}`);
+      expect(screen.getByText('Categories').tagName).toBe(`H${level}`);
+    }
+  );
+
+  it('emits the sheet title heading with titleLevel', () => {
+    render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} title="Refine results" titleLevel={2} /></MitumbaThemeProvider>);
+    expect(screen.getByText('Refine results').tagName).toBe('H2');
+  });
+
+  it('closes on Escape and calls onClose', () => {
+    const onClose = vi.fn();
+    render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} onClose={onClose} /></MitumbaThemeProvider>);
+    fireEvent.keyDown(screen.getByRole('dialog'), { key: 'Escape', code: 'Escape' });
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it('restores focus to the trigger after the drawer closes', async () => {
+    const trigger = document.createElement('button');
+    document.body.appendChild(trigger);
+    trigger.focus();
+
+    function Wrapper({ open }: { open: boolean }) {
+      return (
+        <MitumbaThemeProvider>
+          <SearchFilterSheet {...baseProps} open={open} />
+        </MitumbaThemeProvider>
+      );
+    }
+
+    const { rerender } = render(<Wrapper open />);
+    await waitFor(() => expect(document.activeElement).not.toBe(trigger));
+    rerender(<Wrapper open={false} />);
+    await waitFor(() => expect(document.activeElement).toBe(trigger));
+    trigger.remove();
+  });
+
+  it('has no axe violations', async () => {
+    const { baseElement } = render(
+      <MitumbaThemeProvider>
+        <SearchFilterSheet {...baseProps} title="Refine results" titleLevel={2} sectionTitleLevel={3} />
+      </MitumbaThemeProvider>
+    );
+    const results = await axe(baseElement);
+    expect(results).toHaveNoViolations();
   });
 });
