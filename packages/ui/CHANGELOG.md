@@ -1,5 +1,19 @@
 # @mitumba/ui
 
+## 0.35.0
+
+### Minor Changes
+
+- e06ffaa: feat(dispute-evidence-gallery): comprehensive overhaul — click-to-expand image/video lightbox (built on MitumbaModal with prev/next), responsive thumbnail grid, "no dead ends" empty state, uploader-role color + avatar cues, per-group item counts and friendly timestamp formatting, and widened evidence types to support `file` (downloadable link) and `video` (inline player) alongside `image` and `text`.
+
+  New optional API is additive and backward compatible: added optional `emptyText?` (gallery) and `fileName?` (item); the `DisputeEvidenceItem['type']` union is widened to `'image' | 'text' | 'file' | 'video'`. No required prop added, none removed; existing `image`/`text` usage is unaffected.
+
+  Rationale for minor (not patch): adds new optional props and widens a public type union — additive, backward compatible.
+
+### Patch Changes
+
+- 0b67d8d: docs(readme): add a Theming & typography section covering host font overrides (body vs heading families via the MUI theme), the optional titleLevel/stepTitleLevel/sectionTitleLevel/emptyTitleLevel semantic-title API, and href/linkComponent semantic links, with a link to docs/typography-semantic-matrix.md.
+
 ## 0.34.0
 
 ### Minor Changes
