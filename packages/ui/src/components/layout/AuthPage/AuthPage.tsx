@@ -34,8 +34,20 @@ export function AuthPage({
   const [password, setPassword] = React.useState('');
   const [confirmPassword, setConfirmPassword] = React.useState('');
   const [remember, setRemember] = React.useState(false);
+  const activePanelRef = React.useRef<HTMLDivElement>(null);
+  const previousViewRef = React.useRef(currentView);
 
   React.useEffect(() => { setCurrentView(view); }, [view]);
+
+  React.useEffect(() => {
+    if (isTransitioning || previousViewRef.current === currentView) return;
+
+    previousViewRef.current = currentView;
+    const focusTarget = activePanelRef.current?.querySelector<HTMLElement>(
+      'input:not([disabled]), button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])',
+    );
+    focusTarget?.focus();
+  }, [currentView, isTransitioning]);
 
   const handleViewChange = (newView: 'signin' | 'signup' | 'forgot' | 'reset') => {
     setIsTransitioning(true);
@@ -69,12 +81,6 @@ export function AuthPage({
     e?.preventDefault();
     onResetPassword?.(password, confirmPassword);
   };
-
-  const panelSx = (active: boolean) => ({
-    opacity: active ? 1 : 0,
-    pointerEvents: active ? 'auto' : 'none',
-    transition: 'opacity 0.3s',
-  } as const);
 
   // Gradient panel side logic — no nested ternary
   const gradientLeft = isSignUp || isForgot;
@@ -148,7 +154,8 @@ export function AuthPage({
         </Box>
 
         {/* Sign In — left */}
-        <Box sx={{ position: 'absolute', left: 0, top: 0, width: { xs: '100%', md: '50%' }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', p: formPadding, ...panelContentSx, ...panelSx(currentView === 'signin') }}>
+        {currentView === 'signin' && (
+          <Box ref={activePanelRef} sx={{ position: 'absolute', left: 0, top: 0, width: { xs: '100%', md: '50%' }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', p: formPadding, ...panelContentSx }}>
           <Typography component={headingComponent} variant="h4" fontWeight="bold" gutterBottom color={textColor}>Sign In</Typography>
           <Typography variant="body2" sx={{ mb: `${tokens.spacing.xxxl}px`, color: subtitleColor }}>Welcome back! Please login to your account.</Typography>
           <Box component="form" aria-label="sign-in-form" onSubmit={handleLoginSubmit}>
@@ -168,13 +175,15 @@ export function AuthPage({
             </Box>
             {footerActions && <Box sx={{ textAlign: 'center', mt: `${tokens.spacing.lg}px` }}>{footerActions}</Box>}
           </Box>
-        </Box>
+          </Box>
+        )}
 
         {/* Sign Up — right */}
-        <Box sx={{ position: 'absolute', right: 0, top: 0, width: { xs: '100%', md: '50%' }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', p: formPadding, ...panelContentSx, transitionDelay: currentView === 'signup' ? '0.3s' : '0s', ...panelSx(currentView === 'signup') }}>
+        {currentView === 'signup' && (
+          <Box ref={activePanelRef} sx={{ position: 'absolute', right: 0, top: 0, width: { xs: '100%', md: '50%' }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', p: formPadding, ...panelContentSx }}>
           <Typography component={headingComponent} variant="h4" fontWeight="bold" gutterBottom color={textColor}>Sign Up</Typography>
           <Typography variant="body2" sx={{ mb: `${tokens.spacing.xxxl}px`, color: subtitleColor }}>Create your account to get started.</Typography>
-          <Box component="form" onSubmit={handleSignUpSubmit}>
+          <Box component="form" aria-label="sign-up-form" onSubmit={handleSignUpSubmit}>
             <TextField sx={tfSx} fullWidth label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
             <TextField sx={tfSx} fullWidth label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
             <AuthSubmitButton fullWidth loading={loading} label={loading ? 'Creating account...' : 'Sign Up'} sx={{ py: 1.5, mt: `${tokens.spacing.xl}px`, mb: `${tokens.spacing.lg}px` }} />
@@ -186,13 +195,15 @@ export function AuthPage({
               </Typography>
             </Box>
           </Box>
-        </Box>
+          </Box>
+        )}
 
         {/* Forgot Password — right */}
-        <Box sx={{ position: 'absolute', right: 0, top: 0, width: { xs: '100%', md: '50%' }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', p: formPadding, ...panelContentSx, transitionDelay: currentView === 'forgot' ? '0.3s' : '0s', ...panelSx(currentView === 'forgot') }}>
+        {currentView === 'forgot' && (
+          <Box ref={activePanelRef} sx={{ position: 'absolute', right: 0, top: 0, width: { xs: '100%', md: '50%' }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', p: formPadding, ...panelContentSx }}>
           <Typography component={headingComponent} variant="h4" fontWeight="bold" gutterBottom color={textColor}>Forgot Password</Typography>
           <Typography variant="body2" sx={{ mb: `${tokens.spacing.xxxl}px`, color: subtitleColor }}>Enter your email and we&apos;ll send you a reset link.</Typography>
-          <Box component="form" onSubmit={handleForgotPasswordSubmit}>
+          <Box component="form" aria-label="forgot-password-form" onSubmit={handleForgotPasswordSubmit}>
             <TextField sx={tfSx} fullWidth label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} margin="normal" required />
             <AuthSubmitButton fullWidth loading={loading} label={loading ? 'Sending...' : 'Send Reset Link'} sx={{ py: 1.5, mt: `${tokens.spacing.xl}px`, mb: `${tokens.spacing.lg}px` }} />
             <Box sx={{ textAlign: 'center', mt: `${tokens.spacing.lg}px` }}>
@@ -202,13 +213,15 @@ export function AuthPage({
               </Typography>
             </Box>
           </Box>
-        </Box>
+          </Box>
+        )}
 
         {/* Reset Password — left */}
-        <Box sx={{ position: 'absolute', left: 0, top: 0, width: { xs: '100%', md: '50%' }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', p: formPadding, ...panelContentSx, ...panelSx(currentView === 'reset') }}>
+        {currentView === 'reset' && (
+          <Box ref={activePanelRef} sx={{ position: 'absolute', left: 0, top: 0, width: { xs: '100%', md: '50%' }, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', p: formPadding, ...panelContentSx }}>
           <Typography component={headingComponent} variant="h4" fontWeight="bold" gutterBottom color={textColor}>Reset Password</Typography>
           <Typography variant="body2" sx={{ mb: `${tokens.spacing.xxxl}px`, color: subtitleColor }}>Enter your new password below.</Typography>
-          <Box component="form" onSubmit={handleResetPasswordSubmit}>
+          <Box component="form" aria-label="reset-password-form" onSubmit={handleResetPasswordSubmit}>
             <TextField sx={tfSx} fullWidth label="New Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} margin="normal" required />
             <TextField sx={tfSx} fullWidth label="Confirm Password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} margin="normal" required />
             <AuthSubmitButton fullWidth loading={loading} label={loading ? 'Resetting...' : 'Reset Password'} sx={{ py: 1.5, mt: `${tokens.spacing.xl}px`, mb: `${tokens.spacing.lg}px` }} />
@@ -219,7 +232,8 @@ export function AuthPage({
               </Typography>
             </Box>
           </Box>
-        </Box>
+          </Box>
+        )}
 
       </Box>
 

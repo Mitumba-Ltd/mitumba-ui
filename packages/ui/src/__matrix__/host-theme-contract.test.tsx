@@ -96,8 +96,12 @@ describe('host-theme contract: distinct heading vs body families', () => {
         />
       </ThemeProvider>,
     );
-    expect(screen.getByRole('heading', { level: 1, name: /LOOK 01/ }).style.fontFamily).toBe('');
-    expect(screen.getAllByRole('heading', { level: 2, name: /This look/ })[0].style.fontFamily).toBe('');
+    screen.getAllByRole('heading', { level: 1, name: /LOOK 01/ }).forEach((heading) => {
+      expect(heading.style.fontFamily).toBe('');
+    });
+    screen.getAllByRole('heading', { level: 2, name: /This look/ }).forEach((heading) => {
+      expect(heading.style.fontFamily).toBe('');
+    });
   });
 
   it('VAZIHeroSpotlight emits its title heading under the host theme', () => {

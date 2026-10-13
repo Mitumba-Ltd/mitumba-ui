@@ -137,6 +137,25 @@ export function VAZIShowcase({
       {/* ═══ MOBILE LAYOUT ═══ */}
       <Box sx={{ display: { xs: 'flex', md: 'none' }, flexDirection: 'column', width: '100%', height: '100vh', position: 'relative' }}>
 
+        {titleLevel && (
+          <SemanticTitle
+            titleLevel={titleLevel}
+            sx={{
+              position: 'absolute',
+              width: 1,
+              height: 1,
+              p: 0,
+              m: '-1px',
+              overflow: 'hidden',
+              clip: 'rect(0 0 0 0)',
+              whiteSpace: 'nowrap',
+              border: 0,
+            }}
+          >
+            LOOK {String(current + 1).padStart(2, '0')}
+          </SemanticTitle>
+        )}
+
         {/* Look counter pill */}
         <Box sx={{ position: 'absolute', top: `${tokens.spacing.lg}px`, left: `${tokens.spacing.lg}px`, zIndex: 20, bgcolor: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(8px)', borderRadius: `${tokens.radius.full}px`, px: `${tokens.spacing.md}px`, py: `${tokens.spacing.xs}px` }}>
           <Typography sx={{ fontSize: 11, fontWeight: 700, color: '#444' }}>
@@ -203,21 +222,25 @@ export function VAZIShowcase({
             overflowY: sheetExpanded ? 'auto' : 'hidden',
           }}
         >
-          {/* Sheet toggle — native button covering the handle + header */}
-          <Box
-            component="button"
-            type="button"
-            onClick={() => setSheetExpanded(!sheetExpanded)}
-            aria-expanded={sheetExpanded}
-            aria-label={sheetExpanded ? 'Collapse outfit details' : 'Expand outfit details'}
-            sx={{
-              all: 'unset',
-              display: 'block',
-              width: '100%',
-              cursor: 'pointer',
-              '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2, borderRadius: `${tokens.radius.sm}px` },
-            }}
-          >
+          {/* Sheet toggle — native button overlays the visual handle + header */}
+          <Box sx={{ position: 'relative' }}>
+            <Box
+              component="button"
+              type="button"
+              onClick={() => setSheetExpanded(!sheetExpanded)}
+              aria-expanded={sheetExpanded}
+              aria-label={sheetExpanded ? 'Collapse outfit details' : 'Expand outfit details'}
+              sx={{
+                all: 'unset',
+                position: 'absolute',
+                inset: 0,
+                zIndex: 1,
+                width: '100%',
+                cursor: 'pointer',
+                '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2, borderRadius: `${tokens.radius.sm}px` },
+              }}
+            />
+
             {/* Handle */}
             <Box sx={{ width: 36, height: 4, borderRadius: 2, bgcolor: 'rgba(0,0,0,0.15)', mx: 'auto', mb: `${tokens.spacing.md}px` }} />
 

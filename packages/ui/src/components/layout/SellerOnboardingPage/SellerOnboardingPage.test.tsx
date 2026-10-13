@@ -61,6 +61,16 @@ describe('SellerOnboardingPage', () => {
     expect(screen.getAllByText(/Starting STI Score/i)[0]).toBeInTheDocument();
   });
 
+  it('exposes a primary title before the active step heading in both responsive branches', () => {
+    render(
+      <MitumbaThemeProvider>
+        <SellerOnboardingPage currentStep={1} titleLevel={1} stepTitleLevel={2} />
+      </MitumbaThemeProvider>,
+    );
+    expect(screen.getAllByRole('heading', { name: 'Almost there', level: 1 })).toHaveLength(2);
+    expect(screen.getByRole('heading', { name: 'Your identity', level: 2 })).toBeInTheDocument();
+  });
+
   it.each([1, 2, 3, 4, 5, 6] as HeadingLevel[])(
     'emits an h%s step title when stepTitleLevel is set',
     (level) => {

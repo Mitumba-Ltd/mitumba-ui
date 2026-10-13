@@ -65,10 +65,20 @@ describe('BuyerOnboardingPage', () => {
     expect(screen.getByRole('heading', { name: 'Complete your profile', level: 5 })).toBeInTheDocument();
   });
 
-  it.each([1, 2, 3, 4, 5, 6] as HeadingLevel[])('applies titleLevel=%s to the page/welcome title', (level) => {
+  it.each([1, 2, 3, 4, 5, 6] as HeadingLevel[])('applies titleLevel=%s to both responsive page titles', (level) => {
     render(<MitumbaThemeProvider><BuyerOnboardingPage onComplete={vi.fn()} titleLevel={level} /></MitumbaThemeProvider>);
-    // The hero welcome heading picks up the requested level
-    expect(screen.getAllByRole('heading', { name: 'Welcome to Mitumba', level }).length).toBeGreaterThan(0);
+    const responsiveTitles = screen.getAllByRole('heading', { name: 'Welcome to Mitumba', level });
+    expect(responsiveTitles).toHaveLength(2);
+  });
+
+  it('keeps the primary title ahead of the subordinate form heading in both responsive branches', () => {
+    render(
+      <MitumbaThemeProvider>
+        <BuyerOnboardingPage onComplete={vi.fn()} titleLevel={1} sectionTitleLevel={2} />
+      </MitumbaThemeProvider>,
+    );
+    expect(screen.getAllByRole('heading', { name: 'Welcome to Mitumba', level: 1 })).toHaveLength(2);
+    expect(screen.getAllByRole('heading', { name: 'Complete your profile', level: 2 })).toHaveLength(2);
   });
 
   it.each([1, 2, 3, 4, 5, 6] as HeadingLevel[])('applies sectionTitleLevel=%s to the form section headings', (level) => {
@@ -83,7 +93,9 @@ describe('BuyerOnboardingPage', () => {
         <BuyerOnboardingPage onComplete={vi.fn()} titleLevel={1} sectionTitleLevel={2} />
       </ThemeProvider>,
     );
-    expect(screen.getByRole('heading', { name: 'Complete your profile' })).toHaveStyle({ fontFamily: '' });
+    screen.getAllByRole('heading', { name: 'Complete your profile' }).forEach((heading) => {
+      expect(heading).toHaveStyle({ fontFamily: '' });
+    });
   });
 
   it('has no axe violations', async () => {

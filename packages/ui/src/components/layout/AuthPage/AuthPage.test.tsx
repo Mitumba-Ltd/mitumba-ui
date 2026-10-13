@@ -25,7 +25,7 @@ describe('AuthPage', () => {
     const onLogin = vi.fn();
     render(<MitumbaThemeProvider><AuthPage onLogin={onLogin} /></MitumbaThemeProvider>);
 
-    const form = screen.getAllByRole('form', { name: 'sign-in-form' })[0];
+    const form = screen.getByRole('form', { name: 'sign-in-form' });
     fireEvent.change(within(form).getByLabelText(/Email/i), { target: { value: 'test@example.com' } });
     fireEvent.change(within(form).getByLabelText(/^Password/i), { target: { value: 'password123' } });
     fireEvent.click(within(form).getByRole('button', { name: /Sign In/i }));
@@ -33,15 +33,22 @@ describe('AuthPage', () => {
     expect(onLogin).toHaveBeenCalledWith('test@example.com', 'password123', false);
   });
 
-  it('switches to signup view when Sign Up link is clicked', async () => {
+  it('switches views, unmounts inactive forms, and moves focus into the active form', async () => {
     const onViewChange = vi.fn();
-    render(<MitumbaThemeProvider><AuthPage onViewChange={onViewChange} /></MitumbaThemeProvider>);
+    render(<MitumbaThemeProvider><AuthPage onViewChange={onViewChange} titleLevel={1} /></MitumbaThemeProvider>);
 
-    const form = screen.getAllByRole('form', { name: 'sign-in-form' })[0];
+    const form = screen.getByRole('form', { name: 'sign-in-form' });
     fireEvent.click(within(form).getByRole('button', { name: 'Sign Up' }));
 
     await waitFor(() => {
       expect(onViewChange).toHaveBeenCalledWith('signup');
+      expect(screen.getByRole('heading', { name: 'Sign Up', level: 1 })).toBeInTheDocument();
+    }, { timeout: 2000 });
+
+    expect(screen.queryByRole('heading', { name: 'Sign In' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('form', { name: 'sign-in-form' })).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByLabelText(/Email/i)).toHaveFocus();
     }, { timeout: 2000 });
   });
 
@@ -66,18 +73,26 @@ describe('AuthPage', () => {
     expect(screen.getByRole('heading', { name: 'Sign In', level: 4 })).toBeInTheDocument();
   });
 
-  it.each([1, 2, 3, 4, 5, 6] as HeadingLevel[])('emits an h%s element for view headings when titleLevel is set', (level) => {
+  it.each([1, 2, 3, 4, 5, 6] as HeadingLevel[])('emits one active h%s view heading when titleLevel is set', (level) => {
     render(<MitumbaThemeProvider><AuthPage titleLevel={level} /></MitumbaThemeProvider>);
+    expect(screen.getAllByRole('heading', { name: 'Sign In', level })).toHaveLength(1);
     expect(screen.getByRole('heading', { name: 'Sign In', level })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Sign Up', level })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Sign Up' })).not.toBeInTheDocument();
   });
 
-  it('preserves the sign-in / sign-up / forgot / reset views', () => {
-    render(<MitumbaThemeProvider><AuthPage /></MitumbaThemeProvider>);
-    expect(screen.getByRole('heading', { name: 'Sign In' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Sign Up' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Forgot Password' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Reset Password' })).toBeInTheDocument();
+  it.each([
+    ['signin', 'Sign In', 'sign-in-form'],
+    ['signup', 'Sign Up', 'sign-up-form'],
+    ['forgot', 'Forgot Password', 'forgot-password-form'],
+    ['reset', 'Reset Password', 'reset-password-form'],
+  ] as const)('mounts only the active %s view', (view, heading, formName) => {
+    render(
+      <MitumbaThemeProvider><AuthPage view={view} titleLevel={1} /></MitumbaThemeProvider>,
+    );
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+    expect(screen.getByRole('heading', { name: heading, level: 1 })).toBeInTheDocument();
+    expect(screen.getAllByRole('form')).toHaveLength(1);
+    expect(screen.getByRole('form', { name: formName })).toBeInTheDocument();
   });
 
   it('inherits the host theme typography.fontFamily on headings (no inline override)', () => {
@@ -90,10 +105,10 @@ describe('AuthPage', () => {
     expect(screen.getByRole('heading', { name: 'Sign In' })).toHaveStyle({ fontFamily: '' });
   });
 
-  it('has no axe violations in the signin view', async () => {
+  it.each(['signin', 'signup', 'forgot', 'reset'] as const)('has no axe violations in the %s view', async (view) => {
     const { container } = render(
       <MitumbaThemeProvider>
-        <AuthPage titleLevel={2} onLogin={vi.fn()} onSocialAuth={vi.fn()} />
+        <AuthPage view={view} titleLevel={2} onLogin={vi.fn()} onSocialAuth={vi.fn()} />
       </MitumbaThemeProvider>,
     );
     const results = await axe(container);
