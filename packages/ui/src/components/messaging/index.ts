@@ -16,6 +16,12 @@ export type { ConversationThreadListProps } from './ConversationThreadList';
 export { MessagingWorkspaceLayout } from './MessagingWorkspaceLayout';
 export type { MessagingWorkspaceLayoutProps } from './MessagingWorkspaceLayout';
 
+export { MessageBubbleV2 } from './MessageBubbleV2';
+export type { MessageBubbleV2Props } from './MessageBubbleV2';
+
+export { ChatThreadV2 } from './ChatThreadV2';
+export type { ChatThreadV2Props, ChatThreadV2SendInput } from './ChatThreadV2';
+
 export { MessageBubble } from './MessageBubble';
 export type { MessageBubbleProps, MessageAttachment } from './MessageBubble';
 
