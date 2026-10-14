@@ -7,6 +7,12 @@ export type { ConversationActorLabelProps } from './ConversationActorLabel';
 export { ConversationListV2 } from './ConversationListV2';
 export type { ConversationListV2Props } from './ConversationListV2';
 
+export { ThreadSubjectHeader } from './ThreadSubjectHeader';
+export type { ThreadSubjectHeaderProps } from './ThreadSubjectHeader';
+
+export { ConversationThreadList } from './ConversationThreadList';
+export type { ConversationThreadListProps } from './ConversationThreadList';
+
 export { MessageBubble } from './MessageBubble';
 export type { MessageBubbleProps, MessageAttachment } from './MessageBubble';
 
