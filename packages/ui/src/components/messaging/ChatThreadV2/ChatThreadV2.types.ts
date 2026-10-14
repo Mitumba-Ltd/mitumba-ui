@@ -13,8 +13,10 @@ export interface ChatThreadV2SendInput {
 }
 
 export interface ChatThreadV2Props {
-  /** Stable parent conversation ID. */
+  /** Stable parent conversation ID currently selected by the workspace. */
   conversationId: string;
+  /** Conversation ID carried by the supplied active thread record. */
+  threadConversationId: string;
   /** Stable active thread ID. */
   threadId: string;
   /** General, Listing, or Order thread context. */

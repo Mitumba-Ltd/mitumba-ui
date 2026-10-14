@@ -6,17 +6,19 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { MitumbaThemeProvider } from '../../../theme';
 import { MessagingWorkspaceLayout } from './MessagingWorkspaceLayout';
+import type { MessagingWorkspaceLayoutProps } from './MessagingWorkspaceLayout.types';
 
 expect.extend(toHaveNoViolations);
 afterEach(cleanup);
 
-function workspace(props: Partial<React.ComponentProps<typeof MessagingWorkspaceLayout>> = {}) {
-  return (
-    <MitumbaThemeProvider>
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <MessagingWorkspaceLayout conversationPane={<div>Conversation rail</div>} threadPane={<div>Thread cards</div>} messagePane={<div>Message stream</div>} {...props} />
-    </MitumbaThemeProvider>
-  );
+function workspace(props: Partial<MessagingWorkspaceLayoutProps> = {}) {
+  const merged = {
+    conversationPane: <div>Conversation rail</div>,
+    threadPane: <div>Thread cards</div>,
+    messagePane: <div>Message stream</div>,
+    ...props,
+  } as MessagingWorkspaceLayoutProps;
+  return <MitumbaThemeProvider>{React.createElement(MessagingWorkspaceLayout, merged)}</MitumbaThemeProvider>;
 }
 
 describe('MessagingWorkspaceLayout', () => {
@@ -29,7 +31,7 @@ describe('MessagingWorkspaceLayout', () => {
   });
 
   it('records the controlled active mobile pane', () => {
-    const { container } = render(workspace({ activePane: 'threads' }));
+    const { container } = render(workspace({ activePane: 'threads', onBackToConversations: () => {} }));
     expect(container.querySelector('[data-active-pane="threads"]')).toBeInTheDocument();
   });
 
@@ -48,6 +50,14 @@ describe('MessagingWorkspaceLayout', () => {
     expect(screen.getByRole('heading', { name: 'Threads' })).toHaveFocus();
     rerender(workspace({ focusRequest: { pane: 'messages', key: 2 } }));
     expect(screen.getByRole('heading', { name: 'Messages' })).toHaveFocus();
+  });
+
+  it('does not replay the same focus key on ordinary rerenders', () => {
+    const { rerender } = render(workspace({ activePane: 'messages', onBackToThreads: () => {}, focusRequest: { pane: 'messages', key: 1 } }));
+    const backButton = screen.getByRole('button', { name: 'Back to threads' });
+    backButton.focus();
+    rerender(workspace({ activePane: 'messages', onBackToThreads: () => {}, focusRequest: { pane: 'messages', key: 1 } }));
+    expect(backButton).toHaveFocus();
   });
 
   it('emits configured heading levels', () => {

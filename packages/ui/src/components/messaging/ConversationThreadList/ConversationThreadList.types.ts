@@ -33,8 +33,10 @@ export interface ConversationThreadListProps {
   loadingNextPage?: boolean;
   /** Loads the next cursor page. */
   onLoadNextPage?: () => void;
-  /** Thread card to focus when this value changes. */
+  /** Thread card to focus when a new restoration request is made. */
   restoreFocusThreadId?: string;
+  /** Request identity; change it to repeat restoration for the same thread. */
+  restoreFocusRequestKey?: string | number;
   /** Accessible list label. @default 'Conversation threads' */
   ariaLabel?: string;
 }

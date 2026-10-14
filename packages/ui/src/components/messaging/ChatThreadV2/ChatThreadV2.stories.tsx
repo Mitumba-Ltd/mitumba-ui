@@ -18,7 +18,7 @@ function Interactive(args: React.ComponentProps<typeof ChatThreadV2>) {
   return <ChatThreadV2 {...args} draft={draft} onDraftChange={setDraft} />;
 }
 
-const meta: Meta<typeof ChatThreadV2> = { title: 'Messaging/ChatThreadV2', component: ChatThreadV2, tags: ['autodocs'], parameters: { layout: 'fullscreen' }, render: (args) => <Interactive {...args} />, args: { conversationId: 'c1', threadId: 't1', subject: { kind: 'listing', id: 'l1', title: 'Vintage Levi’s Jacket', status: 'Sold' }, actingAs: buyer, counterparty: store, timeline, draft: '', onDraftChange: () => {}, onSend: () => {} } };
+const meta: Meta<typeof ChatThreadV2> = { title: 'Messaging/ChatThreadV2', component: ChatThreadV2, tags: ['autodocs'], parameters: { layout: 'fullscreen' }, render: (args) => <Interactive {...args} />, args: { conversationId: 'c1', threadConversationId: 'c1', threadId: 't1', subject: { kind: 'listing', id: 'l1', title: 'Vintage Levi’s Jacket', status: 'Sold' }, actingAs: buyer, counterparty: store, timeline, draft: '', onDraftChange: () => {}, onSend: () => {} } };
 export default meta;
 type Story = StoryObj<typeof ChatThreadV2>;
 
@@ -33,6 +33,6 @@ export const Archived: Story = { args: { policyState: 'archived' } };
 export const Resolved: Story = { args: { policyState: 'resolved' } };
 export const Blocked: Story = { args: { policyState: 'blocked' } };
 export const LoadingOlder: Story = { args: { hasOlder: true, loadingOlder: true } };
-export const PendingSend: Story = { args: { timeline: [...timeline, { kind: 'message', message: { id: 'm3', threadId: 't1', author: buyer, direction: 'outgoing', body: 'Thank you', createdAt: 'Now', deliveryStatus: 'pending' } }] } };
+export const PendingSend: Story = { args: { timeline: [...timeline, { kind: 'message', message: { id: 'm3', threadId: 't1', author: buyer, direction: 'outgoing', body: 'Thank you', createdAt: 'Now', deliveryStatus: 'pending', clientMessageId: 'client-pending' } }] } };
 export const Mobile375: Story = { parameters: { viewport: { defaultViewport: 'mobile' }, chromatic: { viewports: [375] } } };
 export const Desktop1280: Story = { parameters: { viewport: { defaultViewport: 'desktop' }, chromatic: { viewports: [1280] } } };

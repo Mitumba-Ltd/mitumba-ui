@@ -74,9 +74,18 @@ describe('ConversationListV2', () => {
     expect(onLoad).toHaveBeenCalledOnce();
   });
 
-  it('restores focus to a requested row', () => {
-    renderList({ restoreFocusConversationId: 'c2' });
+  it('restores focus after asynchronous rows arrive', () => {
+    const { rerender } = render(<MitumbaThemeProvider><ConversationListV2 conversations={[]} state="loading" restoreFocusConversationId="c2" /></MitumbaThemeProvider>);
+    rerender(<MitumbaThemeProvider><ConversationListV2 conversations={conversations} restoreFocusConversationId="c2" /></MitumbaThemeProvider>);
     expect(screen.getAllByRole('button', { name: /Conversation with Urban Thrift/ })[1]).toHaveFocus();
+  });
+
+  it('does not replay a consumed focus request during pagination', () => {
+    const { rerender } = render(<MitumbaThemeProvider><ConversationListV2 conversations={conversations} restoreFocusConversationId="c1" restoreFocusRequestKey={1} /></MitumbaThemeProvider>);
+    const second = screen.getAllByRole('button', { name: /Conversation with Urban Thrift/ })[1];
+    second.focus();
+    rerender(<MitumbaThemeProvider><ConversationListV2 conversations={[...conversations, { ...conversations[0], id: 'c3' }]} restoreFocusConversationId="c1" restoreFocusRequestKey={1} /></MitumbaThemeProvider>);
+    expect(second).toHaveFocus();
   });
 
   it('has no axe violations', async () => {

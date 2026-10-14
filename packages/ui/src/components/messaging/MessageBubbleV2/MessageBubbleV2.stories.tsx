@@ -14,7 +14,7 @@ export const UserIncoming: Story = { args: { message: { ...base, direction: 'inc
 export const StoreOutgoing: Story = { args: { message: { ...base, author: store } } };
 export const StoreIncoming: Story = { args: { message: { ...base, direction: 'incoming', author: store, body: 'Yes, it is available.' } } };
 export const QuotedReply: Story = { args: { message: { ...base, quotedReply: { messageId: 'm0', authorName: 'Urban Thrift', excerpt: 'It fits a 32-inch waist.' } } } };
-export const Pending: Story = { args: { message: { ...base, deliveryStatus: 'pending' } } };
-export const FailedWithRetry: Story = { args: { message: { ...base, deliveryStatus: 'failed' }, onRetry: () => {} } };
+export const Pending: Story = { args: { message: { ...base, deliveryStatus: 'pending', clientMessageId: 'client-pending' } } };
+export const FailedWithRetry: Story = { args: { message: { ...base, deliveryStatus: 'failed', clientMessageId: 'client-failed' }, onRetry: () => {} } };
 export const Attachment: Story = { args: { message: { ...base, attachments: [{ kind: 'file', id: 'a1', name: 'Receipt.pdf', url: '/receipt.pdf', size: '2 MB' }] } } };
 export const LongContent: Story = { args: { message: { ...base, body: 'A-very-long-unbroken-message-value-that-demonstrates-wrapping-without-breaking-the-message-layout-or-overflowing-the-thread-pane.' } } };

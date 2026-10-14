@@ -18,7 +18,7 @@ export function ConversationActorLabel({ actor, prefix, secondaryText, size = 'm
       </Avatar>
       <Box sx={{ minWidth: 0, flex: 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.xs}px`, minWidth: 0 }}>
-          <Typography variant={compact ? 'caption' : 'body2'} sx={{ color: tokens.colors.textPrimary, fontWeight: 600 }} noWrap>
+          <Typography variant={compact ? 'caption' : 'body2'} sx={{ color: tokens.colors.textPrimary, fontWeight: tokens.typography.fontWeights.semibold }} noWrap>
             {prefix ? `${prefix} ${actor.displayName}` : actor.displayName}
           </Typography>
           {actor.kind === 'store' && (

@@ -61,13 +61,21 @@ export function ConversationThreadList({
   loadingNextPage = false,
   onLoadNextPage,
   restoreFocusThreadId,
+  restoreFocusRequestKey,
   ariaLabel = 'Conversation threads',
 }: ConversationThreadListProps): React.ReactElement {
   const rowRefs = React.useRef(new Map<string, HTMLElement>());
+  const handledFocusRequest = React.useRef<string | number | undefined>(undefined);
+  const focusRequest = restoreFocusRequestKey ?? restoreFocusThreadId;
 
   React.useEffect(() => {
-    if (restoreFocusThreadId) rowRefs.current.get(restoreFocusThreadId)?.focus();
-  }, [restoreFocusThreadId]);
+    if (state !== 'ready' || !restoreFocusThreadId || focusRequest === undefined || handledFocusRequest.current === focusRequest) return;
+    const row = rowRefs.current.get(restoreFocusThreadId);
+    if (row) {
+      row.focus();
+      handledFocusRequest.current = focusRequest;
+    }
+  });
 
   const setRowRef = (id: string) => (node: HTMLElement | null) => {
     if (node) rowRefs.current.set(id, node);
@@ -99,6 +107,11 @@ export function ConversationThreadList({
   }
 
   const LinkComponent = linkComponent ?? 'a';
+  const mismatchedThread = threads.find((thread) => thread.conversationId !== conversationId);
+
+  if (mismatchedThread) {
+    return <ErrorState title="Conversation data mismatch" subtitle="Refresh this conversation before selecting a thread." type="network" variant="compact" onRetry={onRetry} />;
+  }
 
   return (
     <Box data-conversation-id={conversationId} sx={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
@@ -115,7 +128,7 @@ export function ConversationThreadList({
                 </Typography>
               )}
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: `${tokens.spacing.md}px` }}>
-                {thread.unreadCount > 0 ? <Chip label={`${thread.unreadCount} unread`} size="small" sx={{ bgcolor: tokens.colors.greenLight, color: tokens.colors.greenDark, fontWeight: 700 }} /> : <Box />}
+                {thread.unreadCount > 0 ? <Chip label={`${thread.unreadCount} unread`} size="small" sx={{ bgcolor: tokens.colors.greenLight, color: tokens.colors.greenDark, fontWeight: tokens.typography.fontWeights.bold }} /> : <Box />}
                 <Typography variant="caption" sx={{ color: tokens.colors.textSecondary, flexShrink: 0 }}>{thread.lastActivityAt}</Typography>
               </Box>
             </>

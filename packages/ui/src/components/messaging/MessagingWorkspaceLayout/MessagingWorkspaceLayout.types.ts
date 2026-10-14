@@ -1,16 +1,14 @@
 import type React from 'react';
 import type { HeadingLevel } from '../../../types/semantic';
-import type { MessagingWorkspaceFocusRequest, MessagingWorkspacePane } from '../../../types/messaging-v2';
+import type { MessagingWorkspaceFocusRequest } from '../../../types/messaging-v2';
 
-export interface MessagingWorkspaceLayoutProps {
+interface MessagingWorkspaceLayoutBaseProps {
   /** Controlled conversation-rail content. */
   conversationPane: React.ReactNode;
   /** Controlled thread-card content. */
   threadPane: React.ReactNode;
   /** Controlled selected-thread content. */
   messagePane: React.ReactNode;
-  /** Pane exposed at mobile widths. @default 'conversations' */
-  activePane?: MessagingWorkspacePane;
   /** Conversation-pane heading. @default 'Conversations' */
   conversationTitle?: string;
   /** Thread-pane heading. @default 'Threads' */
@@ -23,10 +21,6 @@ export interface MessagingWorkspaceLayoutProps {
   threadTitleLevel?: HeadingLevel;
   /** Message heading element. */
   messageTitleLevel?: HeadingLevel;
-  /** Handles mobile Threads → Conversations navigation. */
-  onBackToConversations?: () => void;
-  /** Handles mobile Messages → Threads navigation. */
-  onBackToThreads?: () => void;
   /** Explicit pane-heading focus request. */
   focusRequest?: MessagingWorkspaceFocusRequest;
   /** Accessible conversation region label. @default 'Conversations' */
@@ -36,3 +30,31 @@ export interface MessagingWorkspaceLayoutProps {
   /** Accessible message region label. @default 'Messages' */
   messageAriaLabel?: string;
 }
+
+/** Controlled workspace props that require every exposed mobile back path. */
+export type MessagingWorkspaceLayoutProps = MessagingWorkspaceLayoutBaseProps & (
+  | {
+      /** Conversation rail is exposed at mobile widths. */
+      activePane?: 'conversations';
+      /** Not available from the root mobile pane. */
+      onBackToConversations?: never;
+      /** Not available from the root mobile pane. */
+      onBackToThreads?: never;
+    }
+  | {
+      /** Thread cards are exposed at mobile widths. */
+      activePane: 'threads';
+      /** Handles mobile Threads → Conversations navigation. */
+      onBackToConversations: () => void;
+      /** Not available from the thread-card pane. */
+      onBackToThreads?: never;
+    }
+  | {
+      /** Selected-thread messages are exposed at mobile widths. */
+      activePane: 'messages';
+      /** Optional direct return to conversations in host navigation. */
+      onBackToConversations?: () => void;
+      /** Handles mobile Messages → Threads navigation. */
+      onBackToThreads: () => void;
+    }
+);

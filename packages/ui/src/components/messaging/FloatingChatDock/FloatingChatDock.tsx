@@ -52,8 +52,14 @@ export function FloatingChatDock({
   }, [open, returnFocusRef])
 
   React.useEffect(() => {
-    if (focusOnThreadChange && open && !minimized && previousThreadId.current !== threadId) titleRef.current?.focus()
-    previousThreadId.current = threadId
+    if (!focusOnThreadChange) {
+      previousThreadId.current = threadId
+      return
+    }
+    if (open && !minimized && previousThreadId.current !== threadId) {
+      titleRef.current?.focus()
+      previousThreadId.current = threadId
+    }
   }, [focusOnThreadChange, minimized, open, threadId])
 
   if (!open || isMobile) return null
@@ -82,6 +88,7 @@ export function FloatingChatDock({
     >
       {/* Header */}
       <Box
+        onClick={minimized ? onToggleMinimize : undefined}
         sx={{
           display: 'flex',
           alignItems: 'center',
@@ -89,7 +96,7 @@ export function FloatingChatDock({
           px: `${tokens.spacing.base}px`,
           py: `${tokens.spacing.md}px`,
           bgcolor: tokens.colors.green,
-          cursor: 'default',
+          cursor: minimized ? 'pointer' : 'default',
           flexShrink: 0,
         }}
       >

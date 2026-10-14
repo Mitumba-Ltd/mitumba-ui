@@ -161,29 +161,50 @@ export type ThreadMessageAttachmentV2 =
       size?: string
     }
 
-/** Normalized human message rendered in a v2 thread. */
-export interface ThreadMessageViewModel {
+/** Shared fields for normalized human messages. */
+export interface ThreadMessageViewModelBase {
   /** Stable message identifier. */
   id: string
   /** Stable parent thread identifier. */
   threadId: string
   /** Recipient-safe author identity. */
   author: ConversationActor
-  /** Direction derived by the application, never inferred from owner IDs. */
-  direction: ThreadMessageDirection
   /** Display-safe body. */
   body: string
   /** Display-ready timestamp. */
   createdAt: string
-  /** Optional optimistic delivery state. */
-  deliveryStatus?: ThreadMessageDeliveryStatus
-  /** Optional caller-owned optimistic identifier. */
-  clientMessageId?: string
   /** Optional quoted reply within the same thread. */
   quotedReply?: ThreadQuotedReply
   /** Optional authorized attachments. */
   attachments?: ThreadMessageAttachmentV2[]
 }
+
+/** Normalized human message rendered in a v2 thread. */
+export type ThreadMessageViewModel =
+  | (ThreadMessageViewModelBase & {
+      /** Incoming messages never expose local delivery state. */
+      direction: 'incoming'
+      /** Incoming messages cannot be retried locally. */
+      deliveryStatus?: never
+      /** Incoming messages do not carry a local client identity. */
+      clientMessageId?: never
+    })
+  | (ThreadMessageViewModelBase & {
+      /** Accepted outgoing message. */
+      direction: 'outgoing'
+      /** Accepted state. @default 'sent' */
+      deliveryStatus?: 'sent'
+      /** Optional original optimistic identifier. */
+      clientMessageId?: string
+    })
+  | (ThreadMessageViewModelBase & {
+      /** Optimistic or failed outgoing message. */
+      direction: 'outgoing'
+      /** Pending and failed messages require a retry identity. */
+      deliveryStatus: 'pending' | 'failed'
+      /** Caller-owned identity retained across retries. */
+      clientMessageId: string
+    })
 
 /** Cross-thread link emitted as a system timeline item. */
 export interface ThreadLinkedEventViewModel {
@@ -204,8 +225,8 @@ export interface ThreadLinkedEventViewModel {
     /** Related thread subject. */
     subject: ConversationSubject
   }
-  /** Optional semantic destination. */
-  href?: string
+  /** Canonical semantic destination for the related thread. */
+  href: string
 }
 
 /** Stable timeline item rendered by ChatThreadV2. */

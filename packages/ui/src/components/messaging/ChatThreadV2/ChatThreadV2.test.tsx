@@ -16,11 +16,11 @@ const store = { kind: 'store' as const, id: 's1', displayName: 'Urban Thrift' };
 const buyer = { kind: 'user' as const, id: 'u1', displayName: 'Amina' };
 const timeline: ThreadTimelineItem[] = [
   { kind: 'message', message: { id: 'm1', threadId: 't1', author: buyer, direction: 'outgoing', body: 'Has this shipped?', createdAt: '10:00' } },
-  { kind: 'system', event: { id: 'e1', threadId: 't1', kind: 'thread-linked', label: 'Order #MTB-1 was created from this inquiry', createdAt: '10:10', relatedThread: { id: 't-order', subject: { kind: 'order', id: 'o1', shortId: '#MTB-1', title: 'Jacket' } } } },
+  { kind: 'system', event: { id: 'e1', threadId: 't1', kind: 'thread-linked', label: 'Order #MTB-1 was created from this inquiry', createdAt: '10:10', href: '/inbox/c/c1/t/t-order', relatedThread: { id: 't-order', subject: { kind: 'order', id: 'o1', shortId: '#MTB-1', title: 'Jacket' } } } },
   { kind: 'message', message: { id: 'm2', threadId: 't1', author: store, direction: 'incoming', body: 'Yes, this morning.', createdAt: '10:30' } },
 ];
 
-const required = { conversationId: 'c1', threadId: 't1', subject: { kind: 'listing' as const, id: 'l1', title: 'Jacket' }, actingAs: buyer, counterparty: store, timeline, draft: '', onDraftChange: () => {}, onSend: () => {} };
+const required = { conversationId: 'c1', threadConversationId: 'c1', threadId: 't1', subject: { kind: 'listing' as const, id: 'l1', title: 'Jacket' }, actingAs: buyer, counterparty: store, timeline, draft: '', onDraftChange: () => {}, onSend: () => {} };
 
 function renderThread(props: Partial<React.ComponentProps<typeof ChatThreadV2>> = {}) {
   return render(
@@ -48,6 +48,20 @@ describe('ChatThreadV2', () => {
     expect(onDraftChange).toHaveBeenCalledWith('');
   });
 
+  it('never forwards a missing or cross-thread quoted message ID', () => {
+    const onSend = vi.fn();
+    renderThread({ draft: 'Hello', quotedMessageId: 'missing-message', onSend });
+    fireEvent.click(screen.getByRole('button', { name: 'Send message' }));
+    expect(onSend).toHaveBeenCalledWith({ conversationId: 'c1', threadId: 't1', body: 'Hello', quotedMessageId: undefined });
+  });
+
+  it('does not send while an IME composition is active', () => {
+    const onSend = vi.fn();
+    renderThread({ draft: '入力', onSend });
+    fireEvent.keyDown(screen.getByLabelText('Message input'), { key: 'Enter', isComposing: true });
+    expect(onSend).not.toHaveBeenCalled();
+  });
+
   it('emits typing false for the old thread when switching IDs', async () => {
     const onTyping = vi.fn();
     const { rerender, container } = renderThread({ draft: 'H', onTyping, onDraftChange: () => {} });
@@ -65,11 +79,29 @@ describe('ChatThreadV2', () => {
     expect(screen.queryByText('Has this shipped?')).not.toBeInTheDocument();
   });
 
-  it('opens linked threads from system items', () => {
-    const onOpen = vi.fn();
-    renderThread({ onOpenLinkedThread: onOpen });
-    fireEvent.click(screen.getByRole('button', { name: /Order #MTB-1 was created/ }));
-    expect(onOpen).toHaveBeenCalledWith('t-order');
+  it('rejects a stale thread record from another selected conversation', () => {
+    const onSend = vi.fn();
+    renderThread({ conversationId: 'c2', draft: 'Stale draft', quotedMessageId: 'm2', onSend });
+    expect(screen.getByText('Thread data mismatch')).toBeInTheDocument();
+    expect(screen.getByLabelText('Message input')).toHaveValue('');
+    expect(screen.getByRole('button', { name: 'Send message' })).toBeDisabled();
+    expect(onSend).not.toHaveBeenCalled();
+  });
+
+  it('disables sending and hides stale draft, quote, and typing outside a ready matching thread', () => {
+    const onSend = vi.fn();
+    renderThread({ state: 'forbidden', draft: 'Stale draft', quotedMessageId: 'm2', typingActors: [store], onSend });
+    expect(screen.getByLabelText('Message input')).toHaveValue('');
+    expect(screen.queryByText('Replying to Urban Thrift')).not.toBeInTheDocument();
+    expect(screen.queryByText('Urban Thrift typing…')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Send message' })).toBeDisabled();
+    fireEvent.click(screen.getByRole('button', { name: 'Send message' }));
+    expect(onSend).not.toHaveBeenCalled();
+  });
+
+  it('renders linked system items as semantic destinations', () => {
+    renderThread();
+    expect(screen.getByRole('link', { name: /Order #MTB-1 was created/ })).toHaveAttribute('href', '/inbox/c/c1/t/t-order');
   });
 
   it('loads older timeline pages', () => {

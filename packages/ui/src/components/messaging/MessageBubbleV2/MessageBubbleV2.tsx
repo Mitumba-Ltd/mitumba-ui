@@ -24,12 +24,12 @@ export function MessageBubbleV2({ message, onRetry, onReply, onAttachmentClick }
 
   const renderAttachment = (attachment: ThreadMessageAttachmentV2) => {
     const content = attachment.kind === 'image' ? (
-      <Box component="img" src={attachment.url} alt={attachment.name} loading="lazy" sx={{ display: 'block', width: '100%', maxWidth: 220, maxHeight: 180, objectFit: 'cover', borderRadius: `${tokens.radius.md}px` }} />
+      <Box component="img" src={attachment.url} alt={attachment.name} loading="lazy" sx={{ display: 'block', width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', borderRadius: `${tokens.radius.md}px` }} />
     ) : (
       <Box sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.sm}px`, minWidth: 0 }}>
         <AttachFileIcon aria-hidden sx={{ color: tokens.colors.green }} />
         <Box sx={{ minWidth: 0, textAlign: 'left' }}>
-          <Typography variant="caption" sx={{ display: 'block', color: tokens.colors.textPrimary, fontWeight: 600 }} noWrap>{attachment.name}</Typography>
+          <Typography variant="caption" sx={{ display: 'block', color: tokens.colors.textPrimary, fontWeight: tokens.typography.fontWeights.semibold }} noWrap>{attachment.name}</Typography>
           {attachment.size && <Typography variant="caption" sx={{ color: tokens.colors.textSecondary }}>{attachment.size}</Typography>}
         </Box>
       </Box>
@@ -54,9 +54,9 @@ export function MessageBubbleV2({ message, onRetry, onReply, onAttachmentClick }
     <Box role="group" aria-label={`${authorLabel}, ${message.createdAt}`} data-message-id={message.id} sx={{ display: 'flex', flexDirection: 'column', alignItems: outgoing ? 'flex-end' : 'flex-start', mb: `${tokens.spacing.lg}px` }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.xs}px`, mb: `${tokens.spacing.xs}px`, maxWidth: '82%' }}>
         {outgoing && message.author.kind === 'user' ? (
-          <Typography variant="caption" sx={{ color: tokens.colors.textSecondary, fontWeight: 600 }}>You</Typography>
+          <Typography variant="caption" sx={{ color: tokens.colors.textSecondary, fontWeight: tokens.typography.fontWeights.semibold }}>You</Typography>
         ) : (
-          <ConversationActorLabel actor={message.author} prefix={outgoing && message.author.kind === 'store' ? 'Sent as' : undefined} size="small" />
+          <ConversationActorLabel actor={message.author} prefix={message.author.kind === 'store' ? 'Sent as' : undefined} size="small" />
         )}
         <Typography variant="caption" sx={{ color: tokens.colors.textSecondary }}>{message.createdAt}</Typography>
       </Box>
@@ -64,7 +64,7 @@ export function MessageBubbleV2({ message, onRetry, onReply, onAttachmentClick }
       <Box sx={{ maxWidth: '82%', minWidth: 0, p: `${tokens.spacing.base}px`, borderRadius: `${tokens.radius.lg}px`, bgcolor: outgoing ? tokens.colors.green : tokens.colors.background, color: outgoing ? tokens.colors.textOnGreen : tokens.colors.textPrimary, border: status === 'failed' ? `1px solid ${tokens.colors.error}` : 'none' }}>
         {message.quotedReply && (
           <Box sx={{ mb: `${tokens.spacing.sm}px`, pl: `${tokens.spacing.sm}px`, borderLeft: `3px solid ${outgoing ? tokens.colors.textOnGreen : tokens.colors.green}` }}>
-            <Typography variant="caption" sx={{ display: 'block', color: 'inherit', fontWeight: 700 }}>{message.quotedReply.authorName}</Typography>
+            <Typography variant="caption" sx={{ display: 'block', color: 'inherit', fontWeight: tokens.typography.fontWeights.bold }}>{message.quotedReply.authorName}</Typography>
             <Typography variant="caption" sx={{ display: 'block', color: 'inherit', opacity: 0.85, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{message.quotedReply.excerpt}</Typography>
           </Box>
         )}

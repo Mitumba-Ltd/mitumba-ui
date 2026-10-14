@@ -29,8 +29,10 @@ export interface ConversationListV2Props {
   loadingNextPage?: boolean;
   /** Loads the next cursor page. */
   onLoadNextPage?: () => void;
-  /** Conversation row to focus when this value changes. */
+  /** Conversation row to focus when a new restoration request is made. */
   restoreFocusConversationId?: string;
+  /** Request identity; change it to repeat restoration for the same conversation. */
+  restoreFocusRequestKey?: string | number;
   /** Accessible list label. @default 'Conversations' */
   ariaLabel?: string;
 }

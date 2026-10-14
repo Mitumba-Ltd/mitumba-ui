@@ -44,7 +44,7 @@ export function ThreadSubjectHeader({
       <Box sx={{ flex: 1, minWidth: 0 }}>
         <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: `${tokens.spacing.md}px` }}>
           <Box sx={{ minWidth: 0 }}>
-            <SemanticTitle titleLevel={titleLevel} variant={compact ? 'body2' : 'subtitle1'} sx={{ color: tokens.colors.textPrimary, fontWeight: 700, m: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            <SemanticTitle titleLevel={titleLevel} variant={compact ? 'body2' : 'subtitle1'} sx={{ color: tokens.colors.textPrimary, fontWeight: tokens.typography.fontWeights.bold, m: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {content.title}
             </SemanticTitle>
             <Typography variant="caption" sx={{ display: 'block', color: tokens.colors.textSecondary }} noWrap>
@@ -52,7 +52,7 @@ export function ThreadSubjectHeader({
             </Typography>
           </Box>
           {href && subject.kind !== 'general' && (
-            <Box component={LinkComponent} href={href} sx={{ color: tokens.colors.green, fontSize: tokens.typography.fontSizes.sm, fontWeight: 600, textDecoration: 'none', flexShrink: 0, '&:hover': { textDecoration: 'underline' }, '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2 } }}>
+            <Box component={LinkComponent} href={href} sx={{ color: tokens.colors.green, fontSize: tokens.typography.fontSizes.sm, fontWeight: tokens.typography.fontWeights.semibold, textDecoration: 'none', flexShrink: 0, '&:hover': { textDecoration: 'underline' }, '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2 } }}>
               {actionLabel}
             </Box>
           )}

@@ -26,6 +26,7 @@ function getItemId(item: ThreadTimelineItem): string {
 /** Controlled thread timeline with stable identity, composer, paging, and policy states. */
 export function ChatThreadV2({
   conversationId,
+  threadConversationId,
   threadId,
   subject,
   actingAs,
@@ -78,7 +79,7 @@ export function ChatThreadV2({
     typingActive.current = false;
   }, []);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const previous = previousThreadId.current;
     if (previous !== threadId) {
       stopTyping(previous);
@@ -109,12 +110,17 @@ export function ChatThreadV2({
     previousScrollHeight.current = container.scrollHeight;
   }, [threadId, timeline]);
 
-  const canSend = policyState === 'active' && connectionState === 'online';
+  const mismatchedItem = timeline.find((item) => (item.kind === 'message' ? item.message.threadId : item.event.threadId) !== threadId);
+  const conversationMismatch = threadConversationId !== conversationId;
+  const identityMismatch = Boolean(mismatchedItem) || conversationMismatch;
+  const threadReady = state === 'ready' && !identityMismatch;
+  const canSend = threadReady && policyState === 'active' && connectionState === 'online';
   const LinkComponent = linkComponent ?? 'a';
-  const quotedMessage = quotedMessageId
+  const quotedMessage = threadReady && quotedMessageId
     ? timeline.find((item) => item.kind === 'message' && item.message.id === quotedMessageId)
     : undefined;
-  const mismatchedItem = timeline.find((item) => (item.kind === 'message' ? item.message.threadId : item.event.threadId) !== threadId);
+  const activeQuotedMessageId = quotedMessage?.kind === 'message' ? quotedMessage.message.id : undefined;
+  const visibleDraft = threadReady ? draft : '';
 
   const handleScroll = () => {
     const container = messagesRef.current;
@@ -141,7 +147,7 @@ export function ChatThreadV2({
   const handleSend = () => {
     const body = draft.trim();
     if (!body || sending || !canSend) return;
-    onSend({ conversationId, threadId, body, quotedMessageId });
+    onSend({ conversationId, threadId, body, quotedMessageId: activeQuotedMessageId });
     onDraftChange('');
     onClearQuote?.();
     stopTyping(threadId);
@@ -156,20 +162,18 @@ export function ChatThreadV2({
   })();
 
   const failureState = (() => {
-    if (mismatchedItem) return { title: 'Thread data mismatch', text: 'Refresh this thread before continuing.', type: 'network' as const, retry: onRetry };
+    if (identityMismatch) return { title: 'Thread data mismatch', text: 'Refresh this thread before continuing.', type: 'network' as const, retry: onRetry };
     if (state === 'forbidden') return { title: 'Thread unavailable', text: 'You no longer have access to this thread.', type: 'forbidden' as const, retry: undefined };
     return { title: errorTitle, text: errorText, type: 'network' as const, retry: onRetry };
   })();
 
   const renderSystemEvent = (item: Extract<ThreadTimelineItem, { kind: 'system' }>): React.ReactElement => {
-    const eventContent = <Typography variant="caption" sx={{ color: tokens.colors.textSecondary, fontWeight: 600 }}>{item.event.label}</Typography>;
-    let eventSurface: React.ReactNode = eventContent;
-    if (item.event.href) {
-      eventSurface = <Box component={LinkComponent} href={item.event.href} sx={{ p: `${tokens.spacing.sm}px ${tokens.spacing.base}px`, bgcolor: tokens.colors.background, borderRadius: `${tokens.radius.full}px`, textDecoration: 'none', '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2 } }}>{eventContent}</Box>;
-    } else if (onOpenLinkedThread) {
-      eventSurface = <Box component="button" type="button" onClick={() => onOpenLinkedThread(item.event.relatedThread.id)} sx={{ p: `${tokens.spacing.sm}px ${tokens.spacing.base}px`, border: 0, bgcolor: tokens.colors.background, borderRadius: `${tokens.radius.full}px`, cursor: 'pointer', '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2 } }}>{eventContent}</Box>;
-    }
-    return <Box key={item.event.id} role="note" aria-label={`System update: ${item.event.label}`} sx={{ display: 'flex', justifyContent: 'center', my: `${tokens.spacing.lg}px` }}>{eventSurface}</Box>;
+    const eventContent = <Typography variant="caption" sx={{ color: tokens.colors.textSecondary, fontWeight: tokens.typography.fontWeights.semibold }}>{item.event.label}</Typography>;
+    return (
+      <Box key={item.event.id} role="note" aria-label={`System update: ${item.event.label}`} sx={{ display: 'flex', justifyContent: 'center', my: `${tokens.spacing.lg}px` }}>
+        <Box component={LinkComponent} href={item.event.href} onClick={() => onOpenLinkedThread?.(item.event.relatedThread.id)} sx={{ p: `${tokens.spacing.sm}px ${tokens.spacing.base}px`, bgcolor: tokens.colors.background, borderRadius: `${tokens.radius.full}px`, textDecoration: 'none', '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2 } }}>{eventContent}</Box>
+      </Box>
+    );
   };
 
   return (
@@ -188,16 +192,16 @@ export function ChatThreadV2({
 
       <Box ref={messagesRef} onScroll={handleScroll} role="log" aria-label="Thread messages" aria-busy={state === 'loading' || undefined} sx={{ flex: 1, minHeight: 0, overflowY: 'auto', p: `${tokens.spacing.lg}px` }}>
         {state === 'loading' && [1, 2, 3, 4].map((item) => <Skeleton key={item} aria-hidden variant="rectangular" height={56} sx={{ borderRadius: `${tokens.radius.md}px`, mb: `${tokens.spacing.md}px` }} />)}
-        {(state === 'error' || state === 'forbidden' || mismatchedItem) && (
+        {(state === 'error' || state === 'forbidden' || identityMismatch) && (
           <ErrorState
             title={failureState.title}
             subtitle={failureState.text}
             type={failureState.type}
             variant="compact"
-            onRetry={state === 'error' || mismatchedItem ? failureState.retry : undefined}
+            onRetry={state === 'error' || identityMismatch ? failureState.retry : undefined}
           />
         )}
-        {state === 'ready' && !mismatchedItem && (
+        {threadReady && (
           <>
             {hasOlder && (
               <Box sx={{ display: 'flex', justifyContent: 'center', mb: `${tokens.spacing.lg}px` }}>
@@ -218,12 +222,12 @@ export function ChatThreadV2({
         )}
       </Box>
 
-      {typingActors.length > 0 && <Typography role="status" variant="caption" sx={{ px: `${tokens.spacing.lg}px`, py: `${tokens.spacing.xs}px`, color: tokens.colors.textSecondary }}>{typingActors.map((actor) => actor.displayName).join(', ')} typing…</Typography>}
+      {threadReady && typingActors.length > 0 && <Typography role="status" variant="caption" sx={{ px: `${tokens.spacing.lg}px`, py: `${tokens.spacing.xs}px`, color: tokens.colors.textSecondary }}>{typingActors.map((actor) => actor.displayName).join(', ')} typing…</Typography>}
 
       {quotedMessage?.kind === 'message' && (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.md}px`, px: `${tokens.spacing.lg}px`, py: `${tokens.spacing.sm}px`, bgcolor: tokens.colors.background, borderTop: `1px solid ${tokens.colors.divider}` }}>
           <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Typography variant="caption" sx={{ display: 'block', color: tokens.colors.textPrimary, fontWeight: 700 }}>Replying to {quotedMessage.message.author.displayName}</Typography>
+            <Typography variant="caption" sx={{ display: 'block', color: tokens.colors.textPrimary, fontWeight: tokens.typography.fontWeights.bold }}>Replying to {quotedMessage.message.author.displayName}</Typography>
             <Typography variant="caption" sx={{ display: 'block', color: tokens.colors.textSecondary }} noWrap>{quotedMessage.message.body}</Typography>
           </Box>
           <IconButton type="button" size="small" aria-label="Clear quoted reply" onClick={onClearQuote}><CloseIcon aria-hidden fontSize="small" /></IconButton>
@@ -232,8 +236,8 @@ export function ChatThreadV2({
 
       <Box sx={{ display: 'flex', alignItems: 'flex-end', gap: `${tokens.spacing.md}px`, px: `${tokens.spacing.lg}px`, py: `${tokens.spacing.base}px`, borderTop: `1px solid ${tokens.colors.divider}` }}>
         {onAttach && <IconButton type="button" aria-label="Attach file" onClick={onAttach} disabled={!canSend}><AttachFileIcon aria-hidden /></IconButton>}
-        <TextField multiline maxRows={4} fullWidth size="small" value={draft} onChange={(event) => handleDraftChange(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); handleSend(); } }} disabled={!canSend} placeholder="Write a message" slotProps={{ htmlInput: { 'aria-label': 'Message input' } }} sx={{ '& .MuiOutlinedInput-root': { borderRadius: `${tokens.radius.lg}px` } }} />
-        <IconButton type="button" aria-label="Send message" onClick={handleSend} disabled={!draft.trim() || sending || !canSend} sx={{ bgcolor: draft.trim() && canSend ? tokens.colors.green : 'transparent', color: draft.trim() && canSend ? tokens.colors.textOnGreen : tokens.colors.textSecondary, '&:hover': { bgcolor: draft.trim() && canSend ? tokens.colors.greenDark : undefined } }}>
+        <TextField multiline maxRows={4} fullWidth size="small" value={visibleDraft} onChange={(event) => handleDraftChange(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); handleSend(); } }} disabled={!canSend} placeholder="Write a message" slotProps={{ htmlInput: { 'aria-label': 'Message input' } }} sx={{ '& .MuiOutlinedInput-root': { borderRadius: `${tokens.radius.lg}px` } }} />
+        <IconButton type="button" aria-label="Send message" onClick={handleSend} disabled={!visibleDraft.trim() || sending || !canSend} sx={{ bgcolor: visibleDraft.trim() && canSend ? tokens.colors.green : 'transparent', color: visibleDraft.trim() && canSend ? tokens.colors.textOnGreen : tokens.colors.textSecondary, '&:hover': { bgcolor: visibleDraft.trim() && canSend ? tokens.colors.greenDark : undefined } }}>
           {sending ? <CircularProgress size={18} color="inherit" /> : <ArrowUpwardIcon aria-hidden />}
         </IconButton>
       </Box>

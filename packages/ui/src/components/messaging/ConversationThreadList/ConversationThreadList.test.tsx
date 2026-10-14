@@ -47,6 +47,14 @@ describe('ConversationThreadList', () => {
     expect(screen.getAllByRole('listitem')[1]).toHaveAttribute('aria-current', 'true');
   });
 
+  it('rejects stale cards from another conversation', () => {
+    const onSelect = vi.fn();
+    renderList({ conversationId: 'c2', onSelectThread: onSelect });
+    expect(screen.getByText('Conversation data mismatch')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Order #MTB-1/ })).not.toBeInTheDocument();
+    expect(onSelect).not.toHaveBeenCalled();
+  });
+
   it('keeps subject, support, and private states distinct', () => {
     renderList();
     expect(screen.getByText('Listing · Sold')).toBeInTheDocument();
@@ -74,9 +82,18 @@ describe('ConversationThreadList', () => {
     expect(onLoad).toHaveBeenCalledOnce();
   });
 
-  it('restores focus to a requested thread card', () => {
-    renderList({ restoreFocusThreadId: 't-order' });
+  it('restores focus after asynchronous thread cards arrive', () => {
+    const { rerender } = render(<MitumbaThemeProvider><ConversationThreadList conversationId="c1" threads={[]} state="loading" restoreFocusThreadId="t-order" /></MitumbaThemeProvider>);
+    rerender(<MitumbaThemeProvider><ConversationThreadList conversationId="c1" threads={threads} restoreFocusThreadId="t-order" /></MitumbaThemeProvider>);
     expect(screen.getByRole('button', { name: /Order #MTB-1/ })).toHaveFocus();
+  });
+
+  it('does not replay a consumed focus request during pagination', () => {
+    const { rerender } = render(<MitumbaThemeProvider><ConversationThreadList conversationId="c1" threads={threads} restoreFocusThreadId="t-general" restoreFocusRequestKey={1} /></MitumbaThemeProvider>);
+    const order = screen.getByRole('button', { name: /Order #MTB-1/ });
+    order.focus();
+    rerender(<MitumbaThemeProvider><ConversationThreadList conversationId="c1" threads={[...threads, { ...threads[0], id: 't-general-2' }]} restoreFocusThreadId="t-general" restoreFocusRequestKey={1} /></MitumbaThemeProvider>);
+    expect(order).toHaveFocus();
   });
 
   it('has no axe violations', async () => {

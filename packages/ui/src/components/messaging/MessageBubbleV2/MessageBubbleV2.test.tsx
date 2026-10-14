@@ -20,6 +20,11 @@ describe('MessageBubbleV2', () => {
     expect(screen.queryByText('You')).not.toBeInTheDocument();
   });
 
+  it('shows incoming store identity as sent by the store', () => {
+    render(<MitumbaThemeProvider><MessageBubbleV2 message={{ id: 'm2', threadId: 't1', author: { kind: 'store', id: 's1', displayName: 'Urban Thrift' }, direction: 'incoming', body: 'Your order shipped.', createdAt: '10:30' }} /></MitumbaThemeProvider>);
+    expect(screen.getByText('Sent as Urban Thrift')).toBeInTheDocument();
+  });
+
   it('renders a quoted reply in the same message', () => {
     render(<MitumbaThemeProvider><MessageBubbleV2 message={{ ...storeMessage, quotedReply: { messageId: 'm0', authorName: 'Amina', excerpt: 'Has this shipped?' } }} /></MitumbaThemeProvider>);
     expect(screen.getByText('Amina')).toBeInTheDocument();

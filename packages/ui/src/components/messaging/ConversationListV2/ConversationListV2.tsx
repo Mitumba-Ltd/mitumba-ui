@@ -53,13 +53,21 @@ export function ConversationListV2({
   loadingNextPage = false,
   onLoadNextPage,
   restoreFocusConversationId,
+  restoreFocusRequestKey,
   ariaLabel = 'Conversations',
 }: ConversationListV2Props): React.ReactElement {
   const rowRefs = React.useRef(new Map<string, HTMLElement>());
+  const handledFocusRequest = React.useRef<string | number | undefined>(undefined);
+  const focusRequest = restoreFocusRequestKey ?? restoreFocusConversationId;
 
   React.useEffect(() => {
-    if (restoreFocusConversationId) rowRefs.current.get(restoreFocusConversationId)?.focus();
-  }, [restoreFocusConversationId]);
+    if (state !== 'ready' || !restoreFocusConversationId || focusRequest === undefined || handledFocusRequest.current === focusRequest) return;
+    const row = rowRefs.current.get(restoreFocusConversationId);
+    if (row) {
+      row.focus();
+      handledFocusRequest.current = focusRequest;
+    }
+  });
 
   const setRowRef = (id: string) => (node: HTMLElement | null) => {
     if (node) rowRefs.current.set(id, node);
@@ -114,7 +122,7 @@ export function ConversationListV2({
                 </Typography>
               )}
               <Box sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.xs}px`, flexWrap: 'wrap' }}>
-                {conversation.unreadCount > 0 && <Chip label={`${conversation.unreadCount} unread`} size="small" sx={{ bgcolor: tokens.colors.greenLight, color: tokens.colors.greenDark, fontWeight: 700 }} />}
+                {conversation.unreadCount > 0 && <Chip label={`${conversation.unreadCount} unread`} size="small" sx={{ bgcolor: tokens.colors.greenLight, color: tokens.colors.greenDark, fontWeight: tokens.typography.fontWeights.bold }} />}
                 {conversation.archived && <Chip label="Archived" size="small" variant="outlined" />}
                 {conversation.muted && <Chip label="Muted" size="small" variant="outlined" />}
               </Box>

@@ -101,6 +101,12 @@ describe('FloatingChatDock', () => {
     expect(onToggleMinimize).toHaveBeenCalled()
   })
 
+  it('preserves minimized header click expansion', () => {
+    const { onToggleMinimize } = renderDock({ minimized: true })
+    fireEvent.click(screen.getByText('KisumuKicks'))
+    expect(onToggleMinimize).toHaveBeenCalled()
+  })
+
   it('renders a named back control and fires onBack', () => {
     const onBack = vi.fn()
     renderDock({ onBack })
@@ -157,6 +163,26 @@ describe('FloatingChatDock', () => {
 
   it('focuses the title when opted in and the thread changes', () => {
     const { rerender } = renderDock({ threadId: 'thread-a', focusOnThreadChange: true })
+    rerender(
+      <MitumbaThemeProvider>
+        <FloatingChatDock open title="KisumuKicks" minimized={false} onToggleMinimize={vi.fn()} onClose={vi.fn()} threadId="thread-b" focusOnThreadChange>
+          <div>Chat content</div>
+        </FloatingChatDock>
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('KisumuKicks')).toHaveFocus()
+  })
+
+  it('keeps a pending thread-focus request until the dock expands', () => {
+    const { rerender } = renderDock({ threadId: 'thread-a', minimized: true, focusOnThreadChange: true })
+    rerender(
+      <MitumbaThemeProvider>
+        <FloatingChatDock open title="KisumuKicks" minimized onToggleMinimize={vi.fn()} onClose={vi.fn()} threadId="thread-b" focusOnThreadChange>
+          <div>Chat content</div>
+        </FloatingChatDock>
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('KisumuKicks')).not.toHaveFocus()
     rerender(
       <MitumbaThemeProvider>
         <FloatingChatDock open title="KisumuKicks" minimized={false} onToggleMinimize={vi.fn()} onClose={vi.fn()} threadId="thread-b" focusOnThreadChange>

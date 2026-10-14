@@ -27,4 +27,4 @@ export const MobileThreads: Story = { args: { activePane: 'threads', onBackToCon
 export const MobileMessages: Story = { args: { activePane: 'messages', onBackToThreads: () => {} }, parameters: { viewport: { defaultViewport: 'mobile' }, chromatic: { viewports: [375] } } };
 export const NoConversationSelection: Story = { args: { threadPane: pane('Select a conversation'), messagePane: pane('No thread selected') } };
 export const NoThreadSelection: Story = { args: { messagePane: pane('Select a thread') } };
-export const DeepLinkedThread: Story = { args: { activePane: 'messages', messageTitle: 'Order #MTB-4821', focusRequest: { pane: 'messages', key: 1 } } };
+export const DeepLinkedThread: Story = { args: { activePane: 'messages', onBackToThreads: () => {}, messageTitle: 'Order #MTB-4821', focusRequest: { pane: 'messages', key: 1 } } };
