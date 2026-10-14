@@ -16,6 +16,9 @@ import { ConditionBadge } from '../components/listing/ConditionBadge';
 import { STIScoreChip } from '../components/seller/STIScoreChip';
 import { MitumbaModal } from '../components/feedback/MitumbaModal';
 import { MessageBubble } from '../components/messaging/MessageBubble';
+import { MessageBubbleV2 } from '../components/messaging/MessageBubbleV2';
+import { ConversationActorLabel } from '../components/messaging/ConversationActorLabel';
+import { ThreadSubjectHeader } from '../components/messaging/ThreadSubjectHeader';
 import { OrderMessageAttachment } from '../components/messaging/OrderMessageAttachment';
 
 /**
@@ -172,6 +175,27 @@ describe('typography/semantic dependency matrix', () => {
       expect(renderWithHostFont(
         <OrderMessageAttachment orderId="ord_1" orderShortId="a9331769" listingTitle="Denim Jacket" listingImageUrl={null} amount={2500} status="shipped" createdAt="2026-01-01" />,
         'Denim Jacket',
+      ).style.fontFamily).toBe('');
+    });
+
+    it('ConversationActorLabel v2', () => {
+      expect(renderWithHostFont(
+        <ConversationActorLabel actor={{ kind: 'store', id: 's1', displayName: 'Urban Thrift' }} />,
+        'Urban Thrift',
+      ).style.fontFamily).toBe('');
+    });
+
+    it('ThreadSubjectHeader v2', () => {
+      expect(renderWithHostFont(
+        <ThreadSubjectHeader subject={{ kind: 'listing', id: 'l1', title: 'Vintage Jacket' }} />,
+        'Vintage Jacket',
+      ).style.fontFamily).toBe('');
+    });
+
+    it('MessageBubbleV2', () => {
+      expect(renderWithHostFont(
+        <MessageBubbleV2 message={{ id: 'm1', threadId: 't1', author: { kind: 'store', id: 's1', displayName: 'Urban Thrift' }, direction: 'incoming', body: 'Still available', createdAt: '10:30' }} />,
+        'Still available',
       ).style.fontFamily).toBe('');
     });
   });
