@@ -13,6 +13,9 @@ export type { ThreadSubjectHeaderProps } from './ThreadSubjectHeader';
 export { ConversationThreadList } from './ConversationThreadList';
 export type { ConversationThreadListProps } from './ConversationThreadList';
 
+export { MessagingWorkspaceLayout } from './MessagingWorkspaceLayout';
+export type { MessagingWorkspaceLayoutProps } from './MessagingWorkspaceLayout';
+
 export { MessageBubble } from './MessageBubble';
 export type { MessageBubbleProps, MessageAttachment } from './MessageBubble';
 

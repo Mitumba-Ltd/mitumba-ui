@@ -43,8 +43,8 @@ export { MitumbaBanner, MitumbaSkeleton, MitumbaToast, MitumbaModal, EmptyState,
 export type { MitumbaBannerProps, BannerSeverity, MitumbaSkeletonProps, MitumbaToastProps, MitumbaModalProps, EmptyStateProps, ErrorStateProps, OfflineBannerProps, UnauthenticatedStateProps, DestructiveConfirmDialogProps } from './components'
 
 // Messaging
-export { ConversationList, ConversationActorLabel, ConversationListV2, ThreadSubjectHeader, ConversationThreadList, MessageBubble, ChatThread, InboxLayout, OrderMessageAttachment, FloatingChatDock } from './components'
-export type { ConversationListProps, Conversation, ConversationActorLabelProps, ConversationListV2Props, ThreadSubjectHeaderProps, ConversationThreadListProps, MessageBubbleProps, MessageAttachment, ChatThreadProps, ChatThreadDraftAttachment, InboxLayoutProps, OrderMessageAttachmentProps, FloatingChatDockProps } from './components'
+export { ConversationList, ConversationActorLabel, ConversationListV2, ThreadSubjectHeader, ConversationThreadList, MessagingWorkspaceLayout, MessageBubble, ChatThread, InboxLayout, OrderMessageAttachment, FloatingChatDock } from './components'
+export type { ConversationListProps, Conversation, ConversationActorLabelProps, ConversationListV2Props, ThreadSubjectHeaderProps, ConversationThreadListProps, MessagingWorkspaceLayoutProps, MessageBubbleProps, MessageAttachment, ChatThreadProps, ChatThreadDraftAttachment, InboxLayoutProps, OrderMessageAttachmentProps, FloatingChatDockProps } from './components'
 export type { ConversationActor, UserConversationActor, StoreConversationActor, ConversationSubject, GeneralConversationSubject, ListingConversationSubject, OrderConversationSubject, ConversationMessagePreview, ConversationSummaryV2, ConversationThreadCard, ThreadMessageDirection, ThreadMessageDeliveryStatus, ThreadQuotedReply, ThreadMessageAttachmentV2, ThreadMessageViewModel, ThreadLinkedEventViewModel, ThreadTimelineItem, MessagingLoadState, MessagingConnectionState, ThreadPolicyState, MessagingWorkspacePane, MessagingWorkspaceFocusRequest, MessagingLinkComponent } from './types/messaging-v2'
 
 // Theme
