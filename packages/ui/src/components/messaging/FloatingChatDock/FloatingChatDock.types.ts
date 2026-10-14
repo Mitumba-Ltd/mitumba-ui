@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, RefObject } from 'react'
 import type { HeadingLevel } from '../../../types/semantic'
 
 export interface FloatingChatDockProps {
@@ -32,6 +32,14 @@ export interface FloatingChatDockProps {
   unreadCount?: number
   /** When set, shows a back chevron in the header */
   onBack?: () => void
+  /** When set, remounts expanded content as the selected thread changes. */
+  threadId?: string
+  /** Accessible dialog label override. */
+  dialogLabel?: string
+  /** Trigger that regains focus after the controlled dock closes. */
+  returnFocusRef?: RefObject<HTMLElement | null>
+  /** Focuses the dock title when threadId changes. @default false */
+  focusOnThreadChange?: boolean
   /** The chat UI (e.g. ChatThread) rendered in the expanded body */
   children: ReactNode
 }
