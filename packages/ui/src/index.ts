@@ -45,6 +45,7 @@ export type { MitumbaBannerProps, BannerSeverity, MitumbaSkeletonProps, MitumbaT
 // Messaging
 export { ConversationList, MessageBubble, ChatThread, InboxLayout, OrderMessageAttachment, FloatingChatDock } from './components'
 export type { ConversationListProps, Conversation, MessageBubbleProps, MessageAttachment, ChatThreadProps, ChatThreadDraftAttachment, InboxLayoutProps, OrderMessageAttachmentProps, FloatingChatDockProps } from './components'
+export type { ConversationActor, UserConversationActor, StoreConversationActor, ConversationSubject, GeneralConversationSubject, ListingConversationSubject, OrderConversationSubject, ConversationMessagePreview, ConversationSummaryV2, ConversationThreadCard, ThreadMessageDirection, ThreadMessageDeliveryStatus, ThreadQuotedReply, ThreadMessageAttachmentV2, ThreadMessageViewModel, ThreadLinkedEventViewModel, ThreadTimelineItem, MessagingLoadState, MessagingConnectionState, ThreadPolicyState, MessagingWorkspacePane, MessagingWorkspaceFocusRequest, MessagingLinkComponent } from './types/messaging-v2'
 
 // Theme
 export { MitumbaThemeProvider, mitumbaTheme } from './theme'
