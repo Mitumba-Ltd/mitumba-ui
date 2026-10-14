@@ -6,8 +6,9 @@ export interface AuthPageProps {
   view?: 'signin' | 'signup' | 'forgot' | 'reset';
 
   /**
-   * Emits an h1-h6 element for each view's heading when provided. When omitted
-   * the headings keep their current `<h4>` element and unchanged visual size.
+   * Emits an h1-h6 element for the active view heading when provided. Inactive
+   * views are unmounted. When omitted, the active heading keeps its existing
+   * `<h4>` element and unchanged visual size.
    */
   titleLevel?: HeadingLevel;
   

@@ -362,6 +362,27 @@ export function SellerOnboardingPage({
         {/* Main content */}
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', overflowY: 'auto', p: { xs: `${tokens.spacing.xl}px`, md: `${tokens.spacing.giant}px` } }}>
 
+          {titleLevel && (
+            <Typography
+              variant="subtitle1"
+              component={titleComponent}
+              sx={{
+                display: { xs: 'block', md: 'none' },
+                position: 'absolute',
+                width: 1,
+                height: 1,
+                p: 0,
+                m: '-1px',
+                overflow: 'hidden',
+                clip: 'rect(0 0 0 0)',
+                whiteSpace: 'nowrap',
+                border: 0,
+              }}
+            >
+              {panelTitle}
+            </Typography>
+          )}
+
           {/* Mobile progress */}
           {step >= 1 && step <= 4 && (
             <Box sx={{ display: { xs: 'block', md: 'none' }, mb: `${tokens.spacing.lg}px` }}>

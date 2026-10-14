@@ -19,9 +19,9 @@ export interface BuyerOnboardingPageProps {
    */
   titleLevel?: HeadingLevel;
   /**
-   * Emits an h1-h6 element for the form section title ("Complete your profile"
-   * / mobile welcome heading) when provided. When omitted it keeps its current
-   * heading element and unchanged visual size.
+   * Emits an h1-h6 element for the form section title when provided. On mobile,
+   * the section title remains visually hidden when `titleLevel` supplies the
+   * visible welcome heading. When omitted, existing markup and sizing remain.
    */
   sectionTitleLevel?: HeadingLevel;
   /** Whether submission is in progress */

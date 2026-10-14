@@ -75,10 +75,12 @@ describe('VAZIShowcase', () => {
     expect(screen.getByRole('button', { name: 'Collapse outfit details' })).toHaveAttribute('aria-expanded', 'true');
   });
 
-  it('emits an h1 primary title and h2 section title when levels are set', () => {
+  it('emits a primary title before subordinate section titles in both responsive branches', () => {
     render(<MitumbaThemeProvider><VAZIShowcase outfits={outfits} titleLevel={1} sectionTitleLevel={2} /></MitumbaThemeProvider>);
-    expect(screen.getByRole('heading', { level: 1, name: /LOOK 01/ })).toBeInTheDocument();
-    expect(screen.getAllByRole('heading', { level: 2, name: /This look/ }).length).toBeGreaterThan(0);
+    expect(screen.getAllByRole('heading', { level: 1, name: /LOOK 01/ })).toHaveLength(2);
+    const sectionTitles = screen.getAllByRole('heading', { level: 2, name: /This look/ });
+    expect(sectionTitles).toHaveLength(2);
+    sectionTitles.forEach((title) => expect(title.closest('button')).toBeNull());
   });
 
   it('keeps titles as non-headings when levels are omitted (backward compatible)', () => {
@@ -98,7 +100,7 @@ describe('VAZIShowcase', () => {
 
   it('has no axe violations', async () => {
     const { container } = render(
-      <MitumbaThemeProvider><VAZIShowcase outfits={outfits} onItemClick={() => {}} onShopAll={() => {}} /></MitumbaThemeProvider>,
+      <MitumbaThemeProvider><VAZIShowcase outfits={outfits} titleLevel={1} sectionTitleLevel={2} onItemClick={() => {}} onShopAll={() => {}} /></MitumbaThemeProvider>,
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();

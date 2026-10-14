@@ -33,6 +33,7 @@ export function BuyerOnboardingPage({
   // Preserve existing heading elements when no explicit level is supplied.
   const heroTitleComponent = (titleLevel ? `h${titleLevel}` : 'h4') as React.ElementType;
   const mobileSectionComponent = (sectionTitleLevel ? `h${sectionTitleLevel}` : 'h4') as React.ElementType;
+  const mobileTitleComponent = titleLevel ? heroTitleComponent : mobileSectionComponent;
   const desktopSectionComponent = (sectionTitleLevel ? `h${sectionTitleLevel}` : 'h5') as React.ElementType;
   const [displayName, setDisplayName] = React.useState(initialData?.display_name ?? '');
   const [county, setCounty] = React.useState(initialData?.county ?? '');
@@ -93,13 +94,34 @@ export function BuyerOnboardingPage({
 
           {/* Mobile heading */}
           <Box sx={{ display: { xs: 'block', md: 'none' }, mb: `${tokens.spacing.xxl}px` }}>
-            <Typography component={mobileSectionComponent} variant="h4" fontWeight="bold" color={tokens.colors.textPrimary} gutterBottom>
+            <Typography component={mobileTitleComponent} variant="h4" fontWeight="bold" color={tokens.colors.textPrimary} gutterBottom>
               Welcome to Mitumba
             </Typography>
             <Typography variant="body2" color={tokens.colors.textSecondary}>
               Tell us a bit about yourself to get started.
             </Typography>
           </Box>
+
+          {titleLevel && sectionTitleLevel && (
+            <Typography
+              component={mobileSectionComponent}
+              variant="h5"
+              sx={{
+                display: { xs: 'block', md: 'none' },
+                position: 'absolute',
+                width: 1,
+                height: 1,
+                p: 0,
+                m: '-1px',
+                overflow: 'hidden',
+                clip: 'rect(0 0 0 0)',
+                whiteSpace: 'nowrap',
+                border: 0,
+              }}
+            >
+              Complete your profile
+            </Typography>
+          )}
 
           {/* Desktop heading */}
           <Box sx={{ display: { xs: 'none', md: 'block' }, mb: `${tokens.spacing.xxl}px` }}>
