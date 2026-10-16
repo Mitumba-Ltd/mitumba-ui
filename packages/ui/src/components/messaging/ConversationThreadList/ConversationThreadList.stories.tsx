@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import Box from '@mui/material/Box';
+import { tokens } from '@mitumba/tokens';
 import { ConversationThreadList } from './ConversationThreadList';
 import type { ConversationThreadCard } from '../../../types/messaging-v2';
 
@@ -8,7 +10,13 @@ const THREADS: ConversationThreadCard[] = [
   { id: 'to', conversationId: 'c1', subject: { kind: 'order', id: 'o1', shortId: '#MTB-4821', title: 'Vintage Levi’s Jacket', status: 'Shipped' }, supportStatus: 'open', archived: false, pinned: false, muted: false, unreadCount: 1, lastActivityAt: 'Now' },
 ];
 
-const meta: Meta<typeof ConversationThreadList> = { title: 'Messaging/ConversationThreadList', component: ConversationThreadList, tags: ['autodocs'], args: { conversationId: 'c1', threads: THREADS, contextActor: { kind: 'store', id: 's1', displayName: 'Urban Thrift' } } };
+const meta: Meta<typeof ConversationThreadList> = {
+  title: 'Messaging/ConversationThreadList',
+  component: ConversationThreadList,
+  tags: ['autodocs'],
+  args: { conversationId: 'c1', threads: THREADS, contextActor: { kind: 'store', id: 's1', displayName: 'Urban Thrift' } },
+  decorators: [(Story) => <Box sx={{ width: 400, height: 620, bgcolor: tokens.colors.surface }}><Story /></Box>],
+};
 export default meta;
 type Story = StoryObj<typeof ConversationThreadList>;
 

@@ -1,6 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
+import Box from '@mui/material/Box';
+import { tokens } from '@mitumba/tokens';
 import { ChatThreadV2 } from './ChatThreadV2';
 import type { ThreadTimelineItem } from '../../../types/messaging-v2';
 
@@ -18,7 +20,7 @@ function Interactive(args: React.ComponentProps<typeof ChatThreadV2>) {
   return <ChatThreadV2 {...args} draft={draft} onDraftChange={setDraft} />;
 }
 
-const meta: Meta<typeof ChatThreadV2> = { title: 'Messaging/ChatThreadV2', component: ChatThreadV2, tags: ['autodocs'], parameters: { layout: 'fullscreen' }, render: (args) => <Interactive {...args} />, args: { conversationId: 'c1', threadConversationId: 'c1', threadId: 't1', subject: { kind: 'listing', id: 'l1', title: 'Vintage Levi’s Jacket', status: 'Sold' }, actingAs: buyer, counterparty: store, timeline, draft: '', onDraftChange: () => {}, onSend: () => {} } };
+const meta: Meta<typeof ChatThreadV2> = { title: 'Messaging/ChatThreadV2', component: ChatThreadV2, tags: ['autodocs'], parameters: { layout: 'fullscreen' }, decorators: [(Story) => <Box sx={{ height: 640, bgcolor: tokens.colors.surface }}><Story /></Box>], render: (args) => <Interactive {...args} />, args: { conversationId: 'c1', threadConversationId: 'c1', threadId: 't1', subject: { kind: 'listing', id: 'l1', title: 'Vintage Levi’s Jacket', status: 'Sold' }, actingAs: buyer, counterparty: store, timeline, draft: '', onDraftChange: () => {}, onSend: () => {} } };
 export default meta;
 type Story = StoryObj<typeof ChatThreadV2>;
 

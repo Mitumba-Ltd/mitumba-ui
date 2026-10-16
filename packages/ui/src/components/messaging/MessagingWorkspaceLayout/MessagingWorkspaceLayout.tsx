@@ -53,14 +53,14 @@ export function MessagingWorkspaceLayout({
 
   const sharedPaneSx = { flexDirection: 'column', minWidth: 0, minHeight: 0, bgcolor: tokens.colors.surface } as const;
   const headerSx = { display: 'flex', alignItems: 'center', gap: `${tokens.spacing.md}px`, px: `${tokens.spacing.lg}px`, py: `${tokens.spacing.base}px`, borderBottom: `1px solid ${tokens.colors.divider}`, minHeight: 56 } as const;
-  const headingSx = { m: 0, color: tokens.colors.textPrimary, fontWeight: tokens.typography.fontWeights.bold, fontSize: tokens.typography.fontSizes.md, '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2 } } as const;
+  const headingSx = { m: 0, color: tokens.colors.textPrimary, fontWeight: tokens.typography.fontWeights.semibold, fontSize: tokens.typography.fontSizes.base, letterSpacing: tokens.typography.letterSpacings.normal, '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2 } } as const;
 
   return (
-    <Paper elevation={0} data-active-pane={activePane} sx={{ display: 'flex', width: '100%', height: '100%', minHeight: 0, overflow: 'hidden', border: `1px solid ${tokens.colors.divider}`, borderRadius: `${tokens.radius.lg}px` }}>
+    <Paper elevation={0} data-active-pane={activePane} sx={{ display: 'flex', width: '100%', height: '100%', minHeight: 0, overflow: 'hidden', bgcolor: tokens.colors.surface, border: `1px solid ${tokens.colors.divider}`, borderRadius: `${tokens.radius.xl}px` }}>
       <Box
         component="section"
         aria-label={conversationAriaLabel}
-        sx={{ ...sharedPaneSx, display: { xs: activePane === 'conversations' ? 'flex' : 'none', md: 'flex' }, width: { xs: '100%', md: 280, lg: 320 }, flexShrink: 0, borderRight: { md: `1px solid ${tokens.colors.divider}` } }}
+        sx={{ ...sharedPaneSx, bgcolor: tokens.colors.background, display: { xs: activePane === 'conversations' ? 'flex' : 'none', md: 'flex' }, width: { xs: '100%', md: 300, lg: 320 }, flexShrink: 0, borderRight: { md: `1px solid ${tokens.colors.divider}` } }}
       >
         <Box sx={headerSx}>
           <Typography ref={conversationHeadingRef} tabIndex={-1} component={conversationComponent} sx={headingSx}>{conversationTitle}</Typography>
@@ -71,7 +71,7 @@ export function MessagingWorkspaceLayout({
       <Box
         component="section"
         aria-label={threadAriaLabel}
-        sx={{ ...sharedPaneSx, display: { xs: activePane === 'threads' ? 'flex' : 'none', md: 'flex' }, width: { xs: '100%', md: 320, lg: 380 }, flexShrink: 0, borderRight: { md: `1px solid ${tokens.colors.divider}` } }}
+        sx={{ ...sharedPaneSx, display: { xs: activePane === 'threads' ? 'flex' : 'none', md: 'flex' }, width: { xs: '100%', md: 340, lg: 380 }, flexShrink: 0, borderRight: { md: `1px solid ${tokens.colors.divider}` } }}
       >
         <Box sx={headerSx}>
           {onBackToConversations && (

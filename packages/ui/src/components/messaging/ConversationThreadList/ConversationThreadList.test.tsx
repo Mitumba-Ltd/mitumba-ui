@@ -58,10 +58,8 @@ describe('ConversationThreadList', () => {
   it('keeps subject, support, and private states distinct', () => {
     renderList();
     expect(screen.getByText('Listing · Sold')).toBeInTheDocument();
-    expect(screen.getByText('Resolved')).toBeInTheDocument();
-    expect(screen.getByText('Archived')).toBeInTheDocument();
-    expect(screen.getByText('Muted')).toBeInTheDocument();
-    expect(screen.getByText('3 unread')).toBeInTheDocument();
+    expect(screen.getByText('Resolved · Archived · Muted')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Listing, Denim Jacket.*3 unread/ })).toBeInTheDocument();
   });
 
   it('renders loading, empty, error, and forbidden states', () => {
@@ -78,7 +76,7 @@ describe('ConversationThreadList', () => {
   it('loads another cursor page', () => {
     const onLoad = vi.fn();
     renderList({ hasNextPage: true, onLoadNextPage: onLoad });
-    fireEvent.click(screen.getByRole('button', { name: 'Load more threads' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Load more' }));
     expect(onLoad).toHaveBeenCalledOnce();
   });
 

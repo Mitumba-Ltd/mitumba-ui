@@ -20,9 +20,10 @@ describe('MessageBubbleV2', () => {
     expect(screen.queryByText('You')).not.toBeInTheDocument();
   });
 
-  it('shows incoming store identity as sent by the store', () => {
+  it('exposes incoming store identity without adding visual noise', () => {
     render(<MitumbaThemeProvider><MessageBubbleV2 message={{ id: 'm2', threadId: 't1', author: { kind: 'store', id: 's1', displayName: 'Urban Thrift' }, direction: 'incoming', body: 'Your order shipped.', createdAt: '10:30' }} /></MitumbaThemeProvider>);
-    expect(screen.getByText('Sent as Urban Thrift')).toBeInTheDocument();
+    expect(screen.getByText('Urban Thrift')).toBeInTheDocument();
+    expect(screen.getByRole('group', { name: /Sent as Urban Thrift/ })).toBeInTheDocument();
   });
 
   it('renders a quoted reply in the same message', () => {
@@ -43,7 +44,7 @@ describe('MessageBubbleV2', () => {
   it('selects a message to quote', () => {
     const onReply = vi.fn();
     render(<MitumbaThemeProvider><MessageBubbleV2 message={storeMessage} onReply={onReply} /></MitumbaThemeProvider>);
-    fireEvent.click(screen.getByRole('button', { name: 'Reply to message from Urban Thrift' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Reply to message from Sent as Urban Thrift' }));
     expect(onReply).toHaveBeenCalledWith('m1');
   });
 

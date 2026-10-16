@@ -75,6 +75,8 @@ export interface ChatThreadV2Props {
   onAttach?: () => void;
   /** Activates an authorized attachment. */
   onAttachmentClick?: (attachment: ThreadMessageAttachmentV2) => void;
+  /** Whether to render the built-in subject/acting-identity header. @default true */
+  showHeader?: boolean;
   /** Emits an h1-h6 thread title without changing visual size. */
   titleLevel?: HeadingLevel;
   /** Changing this key explicitly focuses the thread header. */

@@ -1,4 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import Box from '@mui/material/Box';
+import { tokens } from '@mitumba/tokens';
 import { ConversationListV2 } from './ConversationListV2';
 import type { ConversationSummaryV2 } from '../../../types/messaging-v2';
 
@@ -7,7 +9,13 @@ const DATA: ConversationSummaryV2[] = [
   { id: 'c2', actingAs: { kind: 'user', id: 'u1', displayName: 'Amina' }, counterparty: { kind: 'store', id: 's2', displayName: 'Nairobi Vintage House with a long store name' }, unreadCount: 0, lastActivityAt: 'Yesterday', muted: true },
 ];
 
-const meta: Meta<typeof ConversationListV2> = { title: 'Messaging/ConversationListV2', component: ConversationListV2, tags: ['autodocs'], args: { conversations: DATA } };
+const meta: Meta<typeof ConversationListV2> = {
+  title: 'Messaging/ConversationListV2',
+  component: ConversationListV2,
+  tags: ['autodocs'],
+  args: { conversations: DATA },
+  decorators: [(Story) => <Box sx={{ width: 360, height: 560, bgcolor: tokens.colors.surface }}><Story /></Box>],
+};
 export default meta;
 type Story = StoryObj<typeof ConversationListV2>;
 

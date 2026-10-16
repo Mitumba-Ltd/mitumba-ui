@@ -52,7 +52,7 @@ describe('ConversationListV2', () => {
 
   it('shows exact unread count and selected state', () => {
     renderList({ activeConversationId: 'c1' });
-    expect(screen.getByText('12 unread')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Conversation with Urban Thrift.*12 unread/ })).toBeInTheDocument();
     expect(screen.getAllByRole('listitem')[0]).toHaveAttribute('aria-current', 'true');
   });
 
@@ -70,7 +70,7 @@ describe('ConversationListV2', () => {
   it('loads another cursor page', () => {
     const onLoad = vi.fn();
     renderList({ hasNextPage: true, onLoadNextPage: onLoad });
-    fireEvent.click(screen.getByRole('button', { name: 'Load more conversations' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Load more' }));
     expect(onLoad).toHaveBeenCalledOnce();
   });
 

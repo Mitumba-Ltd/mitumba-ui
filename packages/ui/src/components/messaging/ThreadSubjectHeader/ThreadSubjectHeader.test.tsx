@@ -24,15 +24,12 @@ describe('ThreadSubjectHeader', () => {
   it('keeps support and private states separate', () => {
     render(<MitumbaThemeProvider><ThreadSubjectHeader subject={{ kind: 'listing', id: 'l1', title: 'Jacket', status: 'Sold' }} supportStatus="resolved" archived pinned muted /></MitumbaThemeProvider>);
     expect(screen.getByText('Listing · Sold')).toBeInTheDocument();
-    expect(screen.getByText('Resolved')).toBeInTheDocument();
-    expect(screen.getByText('Archived')).toBeInTheDocument();
-    expect(screen.getByText('Pinned')).toBeInTheDocument();
-    expect(screen.getByText('Muted')).toBeInTheDocument();
+    expect(screen.getByText('Resolved · Archived · Pinned · Muted')).toBeInTheDocument();
   });
 
   it('renders a semantic canonical destination', () => {
     render(<MitumbaThemeProvider><ThreadSubjectHeader subject={{ kind: 'order', id: 'o1', shortId: '#1', title: 'Jacket' }} href="/orders/o1" /></MitumbaThemeProvider>);
-    expect(screen.getByRole('link', { name: 'View details' })).toHaveAttribute('href', '/orders/o1');
+    expect(screen.getByRole('link', { name: 'Open' })).toHaveAttribute('href', '/orders/o1');
   });
 
   it('emits the requested heading level', () => {

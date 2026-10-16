@@ -7,14 +7,18 @@ import ButtonBase from '@mui/material/ButtonBase';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { tokens } from '@mitumba/tokens';
-import { ConversationActorLabel } from '../ConversationActorLabel';
 import type { ThreadMessageAttachmentV2 } from '../../../types/messaging-v2';
 import type { MessageBubbleV2Props } from './MessageBubbleV2.types';
 
 /** Renders one stable v2 message with explicit actor, quote, and delivery state. */
 export function MessageBubbleV2({ message, onRetry, onReply, onAttachmentClick }: MessageBubbleV2Props): React.ReactElement {
   const outgoing = message.direction === 'outgoing';
-  const authorLabel = outgoing && message.author.kind === 'user' ? 'You' : message.author.displayName;
+  const visibleAuthor = (() => {
+    if (!outgoing) return message.author.displayName;
+    if (message.author.kind === 'store') return `Sent as ${message.author.displayName}`;
+    return 'You';
+  })();
+  const accessibleAuthor = message.author.kind === 'store' ? `Sent as ${message.author.displayName}` : visibleAuthor;
   const status = message.deliveryStatus ?? 'sent';
   const deliveryLabel = (() => {
     if (status === 'pending') return 'Sending…';
@@ -51,19 +55,16 @@ export function MessageBubbleV2({ message, onRetry, onReply, onAttachmentClick }
   };
 
   return (
-    <Box role="group" aria-label={`${authorLabel}, ${message.createdAt}`} data-message-id={message.id} sx={{ display: 'flex', flexDirection: 'column', alignItems: outgoing ? 'flex-end' : 'flex-start', mb: `${tokens.spacing.lg}px` }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.xs}px`, mb: `${tokens.spacing.xs}px`, maxWidth: '82%' }}>
-        {outgoing && message.author.kind === 'user' ? (
-          <Typography variant="caption" sx={{ color: tokens.colors.textSecondary, fontWeight: tokens.typography.fontWeights.semibold }}>You</Typography>
-        ) : (
-          <ConversationActorLabel actor={message.author} prefix={message.author.kind === 'store' ? 'Sent as' : undefined} size="small" />
-        )}
-        <Typography variant="caption" sx={{ color: tokens.colors.textSecondary }}>{message.createdAt}</Typography>
+    <Box role="group" aria-label={`${accessibleAuthor}, ${message.createdAt}`} data-message-id={message.id} sx={{ display: 'flex', flexDirection: 'column', alignItems: outgoing ? 'flex-end' : 'flex-start', mb: `${tokens.spacing.base}px` }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.sm}px`, mb: `${tokens.spacing.xs}px`, maxWidth: { xs: '86%', md: '72%' } }}>
+        <Typography variant="caption" sx={{ color: tokens.colors.textSecondary, fontWeight: tokens.typography.fontWeights.semibold }}>{visibleAuthor}</Typography>
+        {message.author.kind === 'store' && <Typography variant="caption" sx={{ color: tokens.colors.textDisabled }}>Store</Typography>}
+        <Typography variant="caption" sx={{ color: tokens.colors.textDisabled }}>{message.createdAt}</Typography>
       </Box>
 
-      <Box sx={{ maxWidth: '82%', minWidth: 0, p: `${tokens.spacing.base}px`, borderRadius: `${tokens.radius.lg}px`, bgcolor: outgoing ? tokens.colors.green : tokens.colors.background, color: outgoing ? tokens.colors.textOnGreen : tokens.colors.textPrimary, border: status === 'failed' ? `1px solid ${tokens.colors.error}` : 'none' }}>
+      <Box sx={{ maxWidth: { xs: '86%', md: '72%' }, minWidth: 0, px: `${tokens.spacing.base}px`, py: `${tokens.spacing.md}px`, borderRadius: `${tokens.radius.xl}px`, bgcolor: outgoing ? tokens.colors.greenLight : tokens.colors.background, color: tokens.colors.textPrimary, border: status === 'failed' ? `1px solid ${tokens.colors.error}` : 'none' }}>
         {message.quotedReply && (
-          <Box sx={{ mb: `${tokens.spacing.sm}px`, pl: `${tokens.spacing.sm}px`, borderLeft: `3px solid ${outgoing ? tokens.colors.textOnGreen : tokens.colors.green}` }}>
+          <Box sx={{ mb: `${tokens.spacing.sm}px`, pl: `${tokens.spacing.sm}px`, borderLeft: `3px solid ${tokens.colors.green}` }}>
             <Typography variant="caption" sx={{ display: 'block', color: 'inherit', fontWeight: tokens.typography.fontWeights.bold }}>{message.quotedReply.authorName}</Typography>
             <Typography variant="caption" sx={{ display: 'block', color: 'inherit', opacity: 0.85, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{message.quotedReply.excerpt}</Typography>
           </Box>
@@ -76,11 +77,11 @@ export function MessageBubbleV2({ message, onRetry, onReply, onAttachmentClick }
         )}
       </Box>
 
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.xs}px`, mt: `${tokens.spacing.xs}px`, maxWidth: '82%' }}>
-        {outgoing && <Typography variant="caption" role={status === 'failed' ? 'alert' : undefined} sx={{ color: status === 'failed' ? tokens.colors.error : tokens.colors.textSecondary }}>{deliveryLabel}</Typography>}
-        {status === 'failed' && onRetry && <Button type="button" size="small" onClick={() => onRetry(message)} sx={{ minWidth: 0, color: tokens.colors.error }}>Retry</Button>}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.xs}px`, mt: `${tokens.spacing.xxs}px`, maxWidth: { xs: '86%', md: '72%' } }}>
+        {outgoing && status !== 'sent' && <Typography variant="caption" role={status === 'failed' ? 'alert' : undefined} sx={{ color: status === 'failed' ? tokens.colors.error : tokens.colors.textSecondary }}>{deliveryLabel}</Typography>}
+        {status === 'failed' && onRetry && <Button type="button" size="small" onClick={() => onRetry(message)} sx={{ minWidth: 0, color: tokens.colors.error, textTransform: 'none' }}>Retry</Button>}
         {onReply && status !== 'pending' && (
-          <IconButton type="button" size="small" aria-label={`Reply to message from ${authorLabel}`} onClick={() => onReply(message.id)}>
+          <IconButton type="button" size="small" aria-label={`Reply to message from ${accessibleAuthor}`} onClick={() => onReply(message.id)} sx={{ color: tokens.colors.textSecondary }}>
             <ReplyOutlinedIcon aria-hidden fontSize="small" />
           </IconButton>
         )}

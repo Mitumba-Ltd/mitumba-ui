@@ -56,6 +56,7 @@ export function ChatThreadV2({
   linkComponent,
   onAttach,
   onAttachmentClick,
+  showHeader = true,
   titleLevel,
   focusRequestKey,
   ariaLabel,
@@ -170,18 +171,22 @@ export function ChatThreadV2({
   const renderSystemEvent = (item: Extract<ThreadTimelineItem, { kind: 'system' }>): React.ReactElement => {
     const eventContent = <Typography variant="caption" sx={{ color: tokens.colors.textSecondary, fontWeight: tokens.typography.fontWeights.semibold }}>{item.event.label}</Typography>;
     return (
-      <Box key={item.event.id} role="note" aria-label={`System update: ${item.event.label}`} sx={{ display: 'flex', justifyContent: 'center', my: `${tokens.spacing.lg}px` }}>
-        <Box component={LinkComponent} href={item.event.href} onClick={() => onOpenLinkedThread?.(item.event.relatedThread.id)} sx={{ p: `${tokens.spacing.sm}px ${tokens.spacing.base}px`, bgcolor: tokens.colors.background, borderRadius: `${tokens.radius.full}px`, textDecoration: 'none', '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2 } }}>{eventContent}</Box>
+      <Box key={item.event.id} role="note" aria-label={`System update: ${item.event.label}`} sx={{ display: 'flex', alignItems: 'center', gap: `${tokens.spacing.base}px`, my: `${tokens.spacing.xl}px` }}>
+        <Box aria-hidden sx={{ flex: 1, height: 1, bgcolor: tokens.colors.divider }} />
+        <Box component={LinkComponent} href={item.event.href} onClick={() => onOpenLinkedThread?.(item.event.relatedThread.id)} sx={{ color: tokens.colors.textSecondary, textDecoration: 'none', '&:hover': { color: tokens.colors.greenDark, textDecoration: 'underline' }, '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: 2 } }}>{eventContent}</Box>
+        <Box aria-hidden sx={{ flex: 1, height: 1, bgcolor: tokens.colors.divider }} />
       </Box>
     );
   };
 
   return (
     <Box component="section" aria-label={ariaLabel ?? `Thread with ${counterparty.displayName}`} data-conversation-id={conversationId} data-thread-id={threadId} sx={{ position: 'relative', display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0, bgcolor: tokens.colors.surface }}>
+      {showHeader && (
       <Box ref={headerRef} tabIndex={-1} role="group" aria-label="Thread header" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: `${tokens.spacing.lg}px`, px: `${tokens.spacing.lg}px`, py: `${tokens.spacing.base}px`, borderBottom: `1px solid ${tokens.colors.divider}`, '&:focus-visible': { outline: `2px solid ${tokens.colors.green}`, outlineOffset: -2 } }}>
         <ThreadSubjectHeader subject={subject} contextActor={counterparty} titleLevel={titleLevel} size="small" />
-        <ConversationActorLabel actor={actingAs} prefix="Acting as" size="small" />
+        {actingAs.kind === 'store' && <ConversationActorLabel actor={actingAs} prefix="Sending as" size="small" />}
       </Box>
+      )}
 
       {connectionState !== 'online' && (
         <Alert severity={connectionState === 'offline' ? 'warning' : 'info'} sx={{ borderRadius: 0 }}>
@@ -191,6 +196,7 @@ export function ChatThreadV2({
       {policyMessage && <Alert severity={policyState === 'blocked' ? 'error' : 'info'} sx={{ borderRadius: 0 }}>{policyMessage}</Alert>}
 
       <Box ref={messagesRef} onScroll={handleScroll} role="log" aria-label="Thread messages" aria-busy={state === 'loading' || undefined} sx={{ flex: 1, minHeight: 0, overflowY: 'auto', p: `${tokens.spacing.lg}px` }}>
+        <Box sx={{ width: '100%', maxWidth: 960, mx: 'auto' }}>
         {state === 'loading' && [1, 2, 3, 4].map((item) => <Skeleton key={item} aria-hidden variant="rectangular" height={56} sx={{ borderRadius: `${tokens.radius.md}px`, mb: `${tokens.spacing.md}px` }} />)}
         {(state === 'error' || state === 'forbidden' || identityMismatch) && (
           <ErrorState
@@ -220,6 +226,7 @@ export function ChatThreadV2({
             })}
           </>
         )}
+        </Box>
       </Box>
 
       {threadReady && typingActors.length > 0 && <Typography role="status" variant="caption" sx={{ px: `${tokens.spacing.lg}px`, py: `${tokens.spacing.xs}px`, color: tokens.colors.textSecondary }}>{typingActors.map((actor) => actor.displayName).join(', ')} typing…</Typography>}
@@ -234,10 +241,10 @@ export function ChatThreadV2({
         </Box>
       )}
 
-      <Box sx={{ display: 'flex', alignItems: 'flex-end', gap: `${tokens.spacing.md}px`, px: `${tokens.spacing.lg}px`, py: `${tokens.spacing.base}px`, borderTop: `1px solid ${tokens.colors.divider}` }}>
+      <Box sx={{ display: 'flex', alignItems: 'flex-end', gap: `${tokens.spacing.md}px`, width: '100%', maxWidth: 960, mx: 'auto', px: `${tokens.spacing.lg}px`, py: `${tokens.spacing.base}px`, borderTop: `1px solid ${tokens.colors.divider}` }}>
         {onAttach && <IconButton type="button" aria-label="Attach file" onClick={onAttach} disabled={!canSend}><AttachFileIcon aria-hidden /></IconButton>}
-        <TextField multiline maxRows={4} fullWidth size="small" value={visibleDraft} onChange={(event) => handleDraftChange(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); handleSend(); } }} disabled={!canSend} placeholder="Write a message" slotProps={{ htmlInput: { 'aria-label': 'Message input' } }} sx={{ '& .MuiOutlinedInput-root': { borderRadius: `${tokens.radius.lg}px` } }} />
-        <IconButton type="button" aria-label="Send message" onClick={handleSend} disabled={!visibleDraft.trim() || sending || !canSend} sx={{ bgcolor: visibleDraft.trim() && canSend ? tokens.colors.green : 'transparent', color: visibleDraft.trim() && canSend ? tokens.colors.textOnGreen : tokens.colors.textSecondary, '&:hover': { bgcolor: visibleDraft.trim() && canSend ? tokens.colors.greenDark : undefined } }}>
+        <TextField multiline maxRows={4} fullWidth size="small" value={visibleDraft} onChange={(event) => handleDraftChange(event.target.value)} onKeyDown={(event) => { if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing) { event.preventDefault(); handleSend(); } }} disabled={!canSend} placeholder="Write a message" slotProps={{ htmlInput: { 'aria-label': 'Message input' } }} sx={{ '& .MuiOutlinedInput-root': { borderRadius: `${tokens.radius.full}px`, bgcolor: tokens.colors.background, '& fieldset': { borderColor: 'transparent' }, '&:hover fieldset': { borderColor: tokens.colors.divider }, '&.Mui-focused fieldset': { borderColor: tokens.colors.green } } }} />
+        <IconButton type="button" aria-label="Send message" onClick={handleSend} disabled={!visibleDraft.trim() || sending || !canSend} sx={{ width: 40, height: 40, bgcolor: visibleDraft.trim() && canSend ? tokens.colors.green : 'transparent', color: visibleDraft.trim() && canSend ? tokens.colors.textOnGreen : tokens.colors.textSecondary, '&:hover': { bgcolor: visibleDraft.trim() && canSend ? tokens.colors.greenDark : undefined } }}>
           {sending ? <CircularProgress size={18} color="inherit" /> : <ArrowUpwardIcon aria-hidden />}
         </IconButton>
       </Box>

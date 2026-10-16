@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import Box from '@mui/material/Box';
+import { tokens } from '@mitumba/tokens';
 import { MessageBubbleV2 } from './MessageBubbleV2';
 
-const meta: Meta<typeof MessageBubbleV2> = { title: 'Messaging/MessageBubbleV2', component: MessageBubbleV2, tags: ['autodocs'] };
+const meta: Meta<typeof MessageBubbleV2> = { title: 'Messaging/MessageBubbleV2', component: MessageBubbleV2, tags: ['autodocs'], decorators: [(Story) => <Box sx={{ width: 720, p: `${tokens.spacing.xl}px`, bgcolor: tokens.colors.surface }}><Story /></Box>] };
 export default meta;
 type Story = StoryObj<typeof MessageBubbleV2>;
 
