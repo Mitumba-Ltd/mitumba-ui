@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.36.0
+
+### Minor Changes
+
+- c844c82: feat(messaging): add backend-independent messaging v2 view models and controlled UI primitives for perspective-safe conversation rails, General/Listing/Order thread cards, three-pane desktop and progressive mobile workspaces, stable message/system timelines, controlled composers, and keyed floating-dock focus behavior. Existing messaging APIs remain backward compatible.
+
 ## 0.35.1
 
 ### Patch Changes
