@@ -66,6 +66,25 @@ export const WithHeadingAndBack: Story = {
   },
 }
 
+export const ThreadContext: Story = {
+  args: {
+    ...Expanded.args,
+    threadId: 'order-thread-4821',
+    dialogLabel: 'Order #MTB-4821 with KisumuKicks',
+    subtitle: 'Order #MTB-4821',
+    titleLevel: 2,
+  },
+}
+
+export const ThreadSwitchReset: Story = {
+  args: {
+    ...Expanded.args,
+    threadId: 'listing-thread-jacket',
+    focusOnThreadChange: true,
+    subtitle: 'Vintage Levi’s Jacket',
+  },
+}
+
 export const Desktop1280: Story = {
   args: { ...Expanded.args, titleLevel: 2 },
   parameters: { viewport: { defaultViewport: 'desktop' } },

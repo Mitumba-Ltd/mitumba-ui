@@ -44,6 +44,10 @@ function renderDock(props: Partial<Parameters<typeof FloatingChatDock>[0]> = {})
           onBack={merged.onBack}
           titleLevel={merged.titleLevel}
           announcement={merged.announcement}
+          threadId={merged.threadId}
+          dialogLabel={merged.dialogLabel}
+          returnFocusRef={merged.returnFocusRef}
+          focusOnThreadChange={merged.focusOnThreadChange}
         >
           {merged.children}
         </FloatingChatDock>
@@ -97,6 +101,12 @@ describe('FloatingChatDock', () => {
     expect(onToggleMinimize).toHaveBeenCalled()
   })
 
+  it('preserves minimized header click expansion', () => {
+    const { onToggleMinimize } = renderDock({ minimized: true })
+    fireEvent.click(screen.getByText('KisumuKicks'))
+    expect(onToggleMinimize).toHaveBeenCalled()
+  })
+
   it('renders a named back control and fires onBack', () => {
     const onBack = vi.fn()
     renderDock({ onBack })
@@ -131,6 +141,78 @@ describe('FloatingChatDock', () => {
       </MitumbaThemeProvider>,
     )
     expect(screen.getAllByRole('status')).toHaveLength(1)
+  })
+
+  it('uses an explicit dialog label when supplied', () => {
+    renderDock({ dialogLabel: 'Order #MTB-1 with KisumuKicks' })
+    expect(screen.getByRole('dialog', { name: 'Order #MTB-1 with KisumuKicks' })).toBeInTheDocument()
+  })
+
+  it('remounts expanded content when the stable thread ID changes', () => {
+    const { rerender } = renderDock({ threadId: 'thread-a' })
+    const firstContent = screen.getByText('Chat content')
+    rerender(
+      <MitumbaThemeProvider>
+        <FloatingChatDock open title="KisumuKicks" minimized={false} onToggleMinimize={vi.fn()} onClose={vi.fn()} threadId="thread-b">
+          <div>Chat content</div>
+        </FloatingChatDock>
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('Chat content')).not.toBe(firstContent)
+  })
+
+  it('focuses the title when opted in and the thread changes', () => {
+    const { rerender } = renderDock({ threadId: 'thread-a', focusOnThreadChange: true })
+    rerender(
+      <MitumbaThemeProvider>
+        <FloatingChatDock open title="KisumuKicks" minimized={false} onToggleMinimize={vi.fn()} onClose={vi.fn()} threadId="thread-b" focusOnThreadChange>
+          <div>Chat content</div>
+        </FloatingChatDock>
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('KisumuKicks')).toHaveFocus()
+  })
+
+  it('keeps a pending thread-focus request until the dock expands', () => {
+    const { rerender } = renderDock({ threadId: 'thread-a', minimized: true, focusOnThreadChange: true })
+    rerender(
+      <MitumbaThemeProvider>
+        <FloatingChatDock open title="KisumuKicks" minimized onToggleMinimize={vi.fn()} onClose={vi.fn()} threadId="thread-b" focusOnThreadChange>
+          <div>Chat content</div>
+        </FloatingChatDock>
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('KisumuKicks')).not.toHaveFocus()
+    rerender(
+      <MitumbaThemeProvider>
+        <FloatingChatDock open title="KisumuKicks" minimized={false} onToggleMinimize={vi.fn()} onClose={vi.fn()} threadId="thread-b" focusOnThreadChange>
+          <div>Chat content</div>
+        </FloatingChatDock>
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('KisumuKicks')).toHaveFocus()
+  })
+
+  it('restores focus to the supplied trigger after controlled close', () => {
+    const trigger = document.createElement('button')
+    document.body.appendChild(trigger)
+    const returnFocusRef = { current: trigger }
+    const { rerender } = render(
+      <MitumbaThemeProvider>
+        <FloatingChatDock open title="KisumuKicks" minimized={false} onToggleMinimize={vi.fn()} onClose={vi.fn()} returnFocusRef={returnFocusRef}>
+          <div>Chat content</div>
+        </FloatingChatDock>
+      </MitumbaThemeProvider>,
+    )
+    rerender(
+      <MitumbaThemeProvider>
+        <FloatingChatDock open={false} title="KisumuKicks" minimized={false} onToggleMinimize={vi.fn()} onClose={vi.fn()} returnFocusRef={returnFocusRef}>
+          <div>Chat content</div>
+        </FloatingChatDock>
+      </MitumbaThemeProvider>,
+    )
+    expect(trigger).toHaveFocus()
+    trigger.remove()
   })
 
   it('omits titleLevel by default, rendering a non-heading title element', () => {

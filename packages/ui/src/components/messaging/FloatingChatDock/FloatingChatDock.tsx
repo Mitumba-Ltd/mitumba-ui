@@ -11,7 +11,6 @@ import OpenInFullIcon from '@mui/icons-material/OpenInFull'
 import CloseIcon from '@mui/icons-material/Close'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import { tokens } from '@mitumba/tokens'
-import { SemanticTitle } from '../../../internal/SemanticTitle'
 import type { FloatingChatDockProps } from './FloatingChatDock.types'
 
 const DOCK_WIDTH = 360
@@ -34,10 +33,34 @@ export function FloatingChatDock({
   onBack,
   titleLevel,
   announcement,
+  threadId,
+  dialogLabel,
+  returnFocusRef,
+  focusOnThreadChange = false,
   children,
 }: FloatingChatDockProps) {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const titleRef = React.useRef<HTMLElement>(null)
+  const previousOpen = React.useRef(open)
+  const previousThreadId = React.useRef(threadId)
+  const titleComponent = (titleLevel ? `h${titleLevel}` : 'p') as React.ElementType
+
+  React.useEffect(() => {
+    if (previousOpen.current && !open) returnFocusRef?.current?.focus()
+    previousOpen.current = open
+  }, [open, returnFocusRef])
+
+  React.useEffect(() => {
+    if (!focusOnThreadChange) {
+      previousThreadId.current = threadId
+      return
+    }
+    if (open && !minimized && previousThreadId.current !== threadId) {
+      titleRef.current?.focus()
+      previousThreadId.current = threadId
+    }
+  }, [focusOnThreadChange, minimized, open, threadId])
 
   if (!open || isMobile) return null
 
@@ -45,7 +68,7 @@ export function FloatingChatDock({
     <Box
       role="dialog"
       aria-modal="false"
-      aria-label={`Chat with ${title}`}
+      aria-label={dialogLabel ?? `Chat with ${title}`}
       sx={{
         position: 'fixed',
         bottom: `${tokens.spacing.lg}px`,
@@ -99,8 +122,10 @@ export function FloatingChatDock({
         </Badge>
 
         <Box sx={{ flex: 1, minWidth: 0 }}>
-          <SemanticTitle
-            titleLevel={titleLevel}
+          <Typography
+            ref={titleRef}
+            tabIndex={-1}
+            component={titleComponent}
             sx={{
               fontSize: tokens.typography.fontSizes.sm,
               fontWeight: tokens.typography.fontWeights.bold,
@@ -109,10 +134,11 @@ export function FloatingChatDock({
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
+              '&:focus-visible': { outline: `2px solid ${tokens.colors.textOnGreen}`, outlineOffset: 2 },
             }}
           >
             {title}
-          </SemanticTitle>
+          </Typography>
           {subtitle && (
             <Typography
               sx={{
@@ -149,7 +175,7 @@ export function FloatingChatDock({
 
       {/* Body — expanded only */}
       {!minimized && (
-        <Box sx={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+        <Box key={threadId ?? 'legacy-thread'} sx={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
           {children}
         </Box>
       )}

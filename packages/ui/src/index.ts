@@ -43,8 +43,9 @@ export { MitumbaBanner, MitumbaSkeleton, MitumbaToast, MitumbaModal, EmptyState,
 export type { MitumbaBannerProps, BannerSeverity, MitumbaSkeletonProps, MitumbaToastProps, MitumbaModalProps, EmptyStateProps, ErrorStateProps, OfflineBannerProps, UnauthenticatedStateProps, DestructiveConfirmDialogProps } from './components'
 
 // Messaging
-export { ConversationList, MessageBubble, ChatThread, InboxLayout, OrderMessageAttachment, FloatingChatDock } from './components'
-export type { ConversationListProps, Conversation, MessageBubbleProps, MessageAttachment, ChatThreadProps, ChatThreadDraftAttachment, InboxLayoutProps, OrderMessageAttachmentProps, FloatingChatDockProps } from './components'
+export { ConversationList, ConversationActorLabel, ConversationListV2, ThreadSubjectHeader, ConversationThreadList, MessagingWorkspaceLayout, MessageBubbleV2, ChatThreadV2, MessageBubble, ChatThread, InboxLayout, OrderMessageAttachment, FloatingChatDock } from './components'
+export type { ConversationListProps, Conversation, ConversationActorLabelProps, ConversationListV2Props, ThreadSubjectHeaderProps, ConversationThreadListProps, MessagingWorkspaceLayoutProps, MessageBubbleV2Props, ChatThreadV2Props, ChatThreadV2SendInput, MessageBubbleProps, MessageAttachment, ChatThreadProps, ChatThreadDraftAttachment, InboxLayoutProps, OrderMessageAttachmentProps, FloatingChatDockProps } from './components'
+export type { ConversationActor, UserConversationActor, StoreConversationActor, ConversationSubject, GeneralConversationSubject, ListingConversationSubject, OrderConversationSubject, ConversationMessagePreview, ConversationSummaryV2, ConversationThreadCard, ThreadMessageDirection, ThreadMessageDeliveryStatus, ThreadQuotedReply, ThreadMessageAttachmentV2, ThreadMessageViewModelBase, ThreadMessageViewModel, ThreadLinkedEventViewModel, ThreadTimelineItem, MessagingLoadState, MessagingConnectionState, ThreadPolicyState, MessagingWorkspacePane, MessagingWorkspaceFocusRequest, MessagingLinkComponent } from './types/messaging-v2'
 
 // Theme
 export { MitumbaThemeProvider, mitumbaTheme } from './theme'
