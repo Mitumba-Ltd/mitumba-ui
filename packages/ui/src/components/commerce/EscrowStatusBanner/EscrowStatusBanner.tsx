@@ -5,21 +5,23 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
 import HistoryIcon from '@mui/icons-material/History'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 import { MitumbaBanner } from '../../feedback/MitumbaBanner'
+import { formatMoney, useMitumbaFormat } from '../../../format'
 import type { EscrowStatusBannerProps } from './EscrowStatusBanner.types'
 
 /**
  * Premium Escrow Status Banner.
  * Redefined using the high-fidelity 'Passive Alert' primitive for absolute benchmark consistency.
  */
-export function EscrowStatusBanner({ status, amountKes = 0, hoursRemaining, sx }: EscrowStatusBannerProps) {
-  const formattedAmount = (amountKes || 0).toLocaleString()
+export function EscrowStatusBanner({ status, amount, amountKes, hoursRemaining, sx }: EscrowStatusBannerProps) {
+  const { money } = useMitumbaFormat()
+  const formattedAmount = formatMoney((amount ?? amountKes) || 0, money)
   
   const config = {
     FUNDED: {
       severity: 'info' as const,
       icon: <SecurityIcon />,
       title: 'Payment in Escrow',
-      message: `KES ${formattedAmount} is securely held. We'll release it once you confirm delivery.`,
+      message: `${formattedAmount} is securely held. We'll release it once you confirm delivery.`,
     },
     SHIPPED: {
       severity: 'info' as const,
@@ -43,7 +45,7 @@ export function EscrowStatusBanner({ status, amountKes = 0, hoursRemaining, sx }
       severity: 'error' as const,
       icon: <ErrorOutlineIcon />,
       title: 'Payment Refunded',
-      message: `The escrow has been cancelled and KES ${formattedAmount} has been returned to your wallet.`,
+      message: `The escrow has been cancelled and ${formattedAmount} has been returned to your wallet.`,
     },
   }
 
