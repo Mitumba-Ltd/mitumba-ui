@@ -7,7 +7,7 @@ export interface OrderMessageAttachmentProps {
   listingTitle: string
   /** Thumbnail URL (48x48) */
   listingImageUrl: string | null
-  /** Amount in KES */
+  /** Amount in whole major units, shown in the `MitumbaFormatProvider` currency. */
   amount: number
   /** Current order status e.g. "shipped" */
   status: string

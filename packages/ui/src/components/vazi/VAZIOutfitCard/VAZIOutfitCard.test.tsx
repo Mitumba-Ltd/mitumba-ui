@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { axe, toHaveNoViolations } from 'jest-axe'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme'
+import { MitumbaFormatProvider } from '../../../format'
 import { VAZIOutfitCard } from './VAZIOutfitCard'
 import type { HeadingLevel } from '../../../types/semantic'
 
@@ -146,5 +147,32 @@ describe('VAZIOutfitCard', () => {
     const { container } = renderCard({ href: '/vazi/summer-vibes', titleLevel: 2, onBuyAll: vi.fn(), isMultiCity: true })
     const results = await axe(container)
     expect(results).toHaveNoViolations()
+  })
+
+  it('accepts the neutral price names and formats in the provider currency', () => {
+    render(
+      <MitumbaThemeProvider>
+        <MitumbaFormatProvider money={{ currencyCode: 'UGX', locale: 'en-UG' }}>
+          <VAZIOutfitCard
+            outfitName="Summer Vibes"
+            items={[{ listingId: 't1', sellerName: 'Ama Fashion', imageUrl: '/top.jpg', garmentType: 'top', price: 2000 }]}
+            totalPrice={7000}
+            sellersCount={1}
+          />
+        </MitumbaFormatProvider>
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('UGX 7,000')).toBeInTheDocument()
+    expect(screen.getByRole('article', { name: /Summer Vibes, UGX 7,000/ })).toBeInTheDocument()
+    expect(screen.queryByText(/KES/)).not.toBeInTheDocument()
+  })
+
+  it('prefers totalPrice over totalPriceKes', () => {
+    render(
+      <MitumbaThemeProvider>
+        <VAZIOutfitCard outfitName="Summer Vibes" items={sampleProps.items} totalPrice={8000} totalPriceKes={7000} sellersCount={3} />
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('KES 8,000')).toBeInTheDocument()
   })
 })

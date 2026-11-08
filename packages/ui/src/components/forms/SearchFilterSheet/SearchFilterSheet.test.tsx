@@ -6,6 +6,7 @@ import { cleanup, render, screen, fireEvent, waitFor } from '@testing-library/re
 import { afterEach, beforeAll, describe, it, expect, vi } from 'vitest';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { MitumbaThemeProvider } from '../../../theme';
+import { MitumbaFormatProvider } from '../../../format';
 import { SearchFilterSheet } from './SearchFilterSheet';
 import type { FilterState } from './SearchFilterSheet.types';
 import type { HeadingLevel } from '../../../types/semantic';
@@ -187,5 +188,36 @@ describe('SearchFilterSheet', () => {
     );
     const results = await axe(baseElement);
     expect(results).toHaveNoViolations();
+  });
+
+  it('keeps the default price range wording', () => {
+    render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} /></MitumbaThemeProvider>);
+    expect(screen.getByText('KES 0 – KES 20,000')).toBeInTheDocument();
+  });
+
+  it('shows the price range in the provider currency', () => {
+    render(
+      <MitumbaThemeProvider>
+        <MitumbaFormatProvider money={{ currencyCode: 'UGX', locale: 'en-UG' }}>
+          <SearchFilterSheet {...baseProps} filters={{ ...defaultFilters, priceRange: [1000, 50000] }} />
+        </MitumbaFormatProvider>
+      </MitumbaThemeProvider>,
+    );
+    expect(screen.getByText('UGX 1,000 – UGX 50,000')).toBeInTheDocument();
+  });
+
+  it('keeps the default city list with All last', () => {
+    render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} /></MitumbaThemeProvider>);
+    ['Nairobi', 'Mombasa', 'Kisumu', 'Eldoret', 'Nakuru', 'Kisii', 'All'].forEach((city) => {
+      expect(screen.getByText(city)).toBeInTheDocument();
+    });
+  });
+
+  it('offers the cities it is given, plus All', () => {
+    render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} cities={['Kampala', 'Gulu']} /></MitumbaThemeProvider>);
+    expect(screen.getByText('Kampala')).toBeInTheDocument();
+    expect(screen.getByText('Gulu')).toBeInTheDocument();
+    expect(screen.getByText('All')).toBeInTheDocument();
+    expect(screen.queryByText('Nairobi')).not.toBeInTheDocument();
   });
 });

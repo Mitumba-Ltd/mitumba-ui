@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import { tokens } from '@mitumba/tokens'
+import { formatMoney, useMitumbaFormat } from '../../../format'
 import type { CartItemProps } from './CartItem.types'
 import { MitumbaSelect } from '../../foundation/MitumbaSelect'
 import { SemanticTitle } from '../../../internal/SemanticTitle'
@@ -17,6 +18,7 @@ export function CartItem({
   title,
   subtitle,
   status = 'IN STOCK',
+  price,
   priceKes,
   size = 'M',
   availableSizes,
@@ -28,6 +30,8 @@ export function CartItem({
   sx,
   titleLevel,
 }: CartItemProps) {
+  const { money } = useMitumbaFormat()
+  const formattedPrice = formatMoney(price ?? priceKes ?? 0, money)
   return (
     <Box
       sx={[
@@ -152,8 +156,8 @@ export function CartItem({
 
           {/* Price — pushed right */}
           <Box sx={{ ml: 'auto', textAlign: 'right' }}>
-            <Typography aria-label={`Price: KES ${priceKes.toLocaleString()}`} sx={{ fontSize: tokens.typography.fontSizes.md, fontWeight: 900, color: tokens.colors.textPrimary }}>
-              KES {priceKes.toLocaleString()}
+            <Typography aria-label={`Price: ${formattedPrice}`} sx={{ fontSize: tokens.typography.fontSizes.md, fontWeight: 900, color: tokens.colors.textPrimary }}>
+              {formattedPrice}
             </Typography>
           </Box>
         </Box>

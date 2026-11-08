@@ -1,10 +1,11 @@
 import Typography from '@mui/material/Typography'
 import { tokens } from '@mitumba/tokens'
+import { formatMoney, useMitumbaFormat } from '../../../format'
 import type { PriceTagProps } from './PriceTag.types'
 
-export function PriceTag({ priceKes, size = 'medium', color = 'default', strikethrough = false }: PriceTagProps) {
-  const formattedNumber = new Intl.NumberFormat('en-KE').format(priceKes)
-  const formatted = `KES ${formattedNumber}`
+export function PriceTag({ price, priceKes, size = 'medium', color = 'default', strikethrough = false }: PriceTagProps) {
+  const { money } = useMitumbaFormat()
+  const formatted = formatMoney(price ?? priceKes ?? 0, money)
 
   const sizeStyles = {
     small: {

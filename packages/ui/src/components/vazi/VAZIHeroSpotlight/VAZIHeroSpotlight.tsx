@@ -10,6 +10,7 @@ import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
 import { SemanticTitle } from '../../../internal/SemanticTitle';
 import type { VAZIHeroSpotlightProps, VAZIHeroOutfit } from './VAZIHeroSpotlight.types';
 import type { VAZIShowcaseItem } from '../VAZIShowcase/VAZIShowcase.types';
+import { formatMoney, useMitumbaFormat } from '../../../format';
 
 /**
  * VAZIHeroSpotlight — row of living models standing side by side.
@@ -195,6 +196,7 @@ function ModelFigure({ outfit, isActive, onClick }: { outfit: VAZIHeroOutfit; is
 
 /** Floating outfit popover — appears near the tapped model */
 function OutfitPopover({ outfit, titleId, onItemClick, onShopLook }: { outfit: VAZIHeroOutfit; titleId: string; onItemClick?: (id: string) => void; onShopLook?: (id: string) => void }): React.ReactElement {
+  const { money } = useMitumbaFormat();
   return (
     <Box
       sx={{
@@ -245,7 +247,7 @@ function OutfitPopover({ outfit, titleId, onItemClick, onShopLook }: { outfit: V
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Box>
           <Typography sx={{ fontSize: 11, color: tokens.colors.textSecondary }}>{outfit.items.length} items</Typography>
-          <Typography sx={{ fontSize: tokens.typography.fontSizes.md, fontWeight: 800, color: tokens.colors.textPrimary }}>KES {outfit.totalPrice.toLocaleString()}</Typography>
+          <Typography sx={{ fontSize: tokens.typography.fontSizes.md, fontWeight: 800, color: tokens.colors.textPrimary }}>{formatMoney(outfit.totalPrice, money)}</Typography>
         </Box>
         <MitumbaPrimaryButton label="Shop" onClick={() => onShopLook?.(outfit.id)} />
       </Box>

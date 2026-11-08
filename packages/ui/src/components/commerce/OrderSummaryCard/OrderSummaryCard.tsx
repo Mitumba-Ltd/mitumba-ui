@@ -6,6 +6,7 @@ import { tokens } from '@mitumba/tokens'
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
 import { SemanticTitle } from '../../../internal/SemanticTitle'
 import type { OrderSummaryCardProps } from './OrderSummaryCard.types'
+import { formatMoney, useMitumbaFormat } from '../../../format'
 
 /**
  * OrderSummaryCard — sticky sidebar card for cart/checkout.
@@ -13,6 +14,7 @@ import type { OrderSummaryCardProps } from './OrderSummaryCard.types'
  */
 export function OrderSummaryCard({
   items,
+  total,
   totalKes,
   actionLabel = 'Checkout',
   onAction,
@@ -22,6 +24,7 @@ export function OrderSummaryCard({
   sx,
   titleLevel,
 }: OrderSummaryCardProps) {
+  const { money } = useMitumbaFormat()
   const titleId = React.useId()
   return (
     <Box
@@ -82,7 +85,7 @@ export function OrderSummaryCard({
                 color: item.isDiscount ? tokens.colors.green : tokens.colors.textPrimary,
               }}
             >
-              {item.isDiscount ? '−' : ''}KES {item.amountKes.toLocaleString()}
+              {item.isDiscount ? '−' : ''}{formatMoney(item.amount ?? item.amountKes ?? 0, money)}
             </Typography>
           </Box>
         ))}
@@ -115,7 +118,7 @@ export function OrderSummaryCard({
             color: tokens.colors.green,
           }}
         >
-          KES {totalKes.toLocaleString()}
+          {formatMoney(total ?? totalKes ?? 0, money)}
         </Typography>
       </Box>
 

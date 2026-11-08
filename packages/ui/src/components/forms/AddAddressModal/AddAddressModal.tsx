@@ -9,18 +9,7 @@ import { MitumbaTextField } from '../../foundation/MitumbaTextField'
 import { MitumbaSelect } from '../../foundation/MitumbaSelect'
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
 import type { AddAddressModalProps, AddressFormData } from './AddAddressModal.types'
-
-const KENYA_COUNTIES = [
-  'Baringo','Bomet','Bungoma','Busia','Elgeyo-Marakwet','Embu','Garissa',
-  'Homa Bay','Isiolo','Kajiado','Kakamega','Kericho','Kiambu','Kilifi',
-  'Kirinyaga','Kisii','Kisumu','Kitui','Kwale','Laikipia','Lamu','Machakos',
-  'Makueni','Mandera','Marsabit','Meru','Migori','Mombasa',"Murang'a",
-  'Nairobi','Nakuru','Nandi','Narok','Nyamira','Nyandarua','Nyeri',
-  'Samburu','Siaya','Taita-Taveta','Tana River','Tharaka-Nithi','Trans Nzoia',
-  'Turkana','Uasin Gishu','Vihiga','Wajir','West Pokot',
-]
-
-const COUNTY_OPTIONS = KENYA_COUNTIES.map((c) => ({ label: c, value: c }))
+import { useMitumbaFormat } from '../../../format'
 
 /**
  * AddAddressModal — inline delivery address form built on MitumbaModal.
@@ -34,7 +23,18 @@ export function AddAddressModal({
   error,
   isFirstAddress = false,
   titleLevel,
+  region,
+  phone,
 }: AddAddressModalProps) {
+  const context = useMitumbaFormat()
+  const regionFormat = region ?? context.region
+  const phoneFormat = phone ?? context.phone
+  const regionOptions = React.useMemo(
+    () => regionFormat.options.map((option) => ({ label: option, value: option })),
+    [regionFormat.options],
+  )
+  const regionWord = regionFormat.label.toLowerCase()
+  const minPhoneDigits = Math.min(...phoneFormat.nationalLength)
   const [form, setForm] = React.useState<AddressFormData>({
     label: '',
     fullName: '',
@@ -55,10 +55,10 @@ export function AddAddressModal({
   const errors: Record<string, string> = {}
   if (!form.label.trim()) errors.label = 'Label is required'
   if (!form.fullName.trim()) errors.fullName = 'Full name is required'
-  if (!form.phone.trim() || form.phone.replace(/\D/g, '').length < 9) errors.phone = 'Enter a valid phone number'
+  if (!form.phone.trim() || form.phone.replace(/\D/g, '').length < minPhoneDigits) errors.phone = 'Enter a valid phone number'
   if (!form.line1.trim()) errors.line1 = 'Address line 1 is required'
   if (!form.city.trim()) errors.city = 'City is required'
-  if (!form.county) errors.county = 'Please select a county'
+  if (!form.county) errors.county = `Please select a ${regionWord}`
 
   const isValid = Object.keys(errors).length === 0
 
@@ -154,11 +154,11 @@ export function AddAddressModal({
         />
 
         <MitumbaSelect
-          label="County"
+          label={regionFormat.label}
           value={form.county}
           onChange={(val) => { set('county')(val as string); setTouched((p) => ({ ...p, county: true })) }}
-          options={COUNTY_OPTIONS}
-          placeholder="Select county"
+          options={regionOptions}
+          placeholder={`Select ${regionWord}`}
           error={touched.county ? errors.county : undefined}
         />
 

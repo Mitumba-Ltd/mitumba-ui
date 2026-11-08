@@ -1,4 +1,5 @@
 import type { HeadingLevel } from '../../../types/semantic';
+import type { RegionFormat } from '../../../format';
 
 export interface SellerOnboardingData {
   // Step 2 — Identity
@@ -10,7 +11,7 @@ export interface SellerOnboardingData {
   idNumber: string;
   /** Profile photo URL (R2 CDN) */
   profilePhotoUrl: string;
-  /** Kenya county (1 of 47) */
+  /** Region (e.g. county), one of the region options shown on the identity step */
   county: string;
   /** More specific town or area */
   town?: string;
@@ -32,9 +33,9 @@ export interface SellerOnboardingData {
   conditionGrades: ('A' | 'B' | 'C')[];
   /** How the seller handles delivery */
   deliveryMethod: 'self' | 'mitumba-logistics';
-  /** Typical listing price range lower bound (KES) */
+  /** Typical listing price range lower bound, whole major units of the provider currency */
   priceRangeMin?: number;
-  /** Typical listing price range upper bound (KES) */
+  /** Typical listing price range upper bound, whole major units of the provider currency */
   priceRangeMax?: number;
 
   // Step 5 — Store setup
@@ -115,4 +116,9 @@ export interface SellerOnboardingPageProps {
    * Visual size/weight are unaffected.
    */
   sectionTitleLevel?: HeadingLevel;
+  /**
+   * Region label and options for the identity step. Defaults to the nearest
+   * `MitumbaFormatProvider` region format (County and the built-in list when none is set).
+   */
+  region?: RegionFormat;
 }

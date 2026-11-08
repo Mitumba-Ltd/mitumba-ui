@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react'
+import { MitumbaFormatProvider } from '../../../format'
 import { PriceTag } from './PriceTag'
 
 const meta: Meta<typeof PriceTag> = {
@@ -16,7 +17,7 @@ type Story = StoryObj<typeof PriceTag>
 
 export const Default: Story = {
   args: {
-    priceKes: 2500,
+    price: 2500,
     size: 'medium',
     color: 'default',
     strikethrough: false,
@@ -25,7 +26,7 @@ export const Default: Story = {
 
 export const Green: Story = {
   args: {
-    priceKes: 2500,
+    price: 2500,
     size: 'medium',
     color: 'green',
     strikethrough: false,
@@ -34,7 +35,7 @@ export const Green: Story = {
 
 export const Earth: Story = {
   args: {
-    priceKes: 2500,
+    price: 2500,
     size: 'medium',
     color: 'earth',
     strikethrough: false,
@@ -43,7 +44,7 @@ export const Earth: Story = {
 
 export const Large: Story = {
   args: {
-    priceKes: 2500,
+    price: 2500,
     size: 'large',
     color: 'default',
     strikethrough: false,
@@ -52,7 +53,7 @@ export const Large: Story = {
 
 export const Small: Story = {
   args: {
-    priceKes: 2500,
+    price: 2500,
     size: 'small',
     color: 'default',
     strikethrough: false,
@@ -61,9 +62,25 @@ export const Small: Story = {
 
 export const Strikethrough: Story = {
   args: {
-    priceKes: 3500,
+    price: 3500,
     size: 'medium',
     color: 'default',
     strikethrough: true,
   },
+}
+
+/** Inside a MitumbaFormatProvider the same props render in that market's currency. */
+export const OtherCurrency: Story = {
+  args: {
+    price: 5000,
+    size: 'medium',
+    color: 'default',
+  },
+  decorators: [
+    (StoryComponent) => (
+      <MitumbaFormatProvider money={{ currencyCode: 'UGX', locale: 'en-UG' }}>
+        <StoryComponent />
+      </MitumbaFormatProvider>
+    ),
+  ],
 }

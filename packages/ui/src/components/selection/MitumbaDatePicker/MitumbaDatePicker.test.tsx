@@ -3,6 +3,7 @@ import '@testing-library/jest-dom/vitest'
 import { cleanup, render, screen, fireEvent } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { MitumbaThemeProvider } from '../../../theme'
+import { MitumbaFormatProvider } from '../../../format'
 import { MitumbaDatePicker } from './MitumbaDatePicker'
 import type { MitumbaDatePickerProps } from './MitumbaDatePicker.types'
 
@@ -34,6 +35,17 @@ describe('MitumbaDatePicker', () => {
     expect(screen.getByText('Birthday')).toBeInTheDocument()
     // Local date format for Kenya (DD/MM/YYYY)
     expect(screen.getByDisplayValue('15/11/2022')).toBeInTheDocument()
+  })
+
+  it('formats the date in the provider locale', () => {
+    render(
+      <MitumbaThemeProvider>
+        <MitumbaFormatProvider money={{ currencyCode: 'USD', locale: 'en-US' }}>
+          <MitumbaDatePicker label="Birthday" value={new Date(2022, 10, 15)} onChange={() => {}} />
+        </MitumbaFormatProvider>
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByDisplayValue('11/15/2022')).toBeInTheDocument()
   })
 
   it('opens calendar popover on click', () => {

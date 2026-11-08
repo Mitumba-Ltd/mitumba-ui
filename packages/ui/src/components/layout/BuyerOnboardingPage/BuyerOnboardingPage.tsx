@@ -6,16 +6,7 @@ import {
 import { tokens } from '@mitumba/tokens';
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
 import type { BuyerOnboardingPageProps } from './BuyerOnboardingPage.types';
-
-const KENYA_COUNTIES = [
-  'Baringo','Bomet','Bungoma','Busia','Elgeyo-Marakwet','Embu','Garissa',
-  'Homa Bay','Isiolo','Kajiado','Kakamega','Kericho','Kiambu','Kilifi',
-  'Kirinyaga','Kisii','Kisumu','Kitui','Kwale','Laikipia','Lamu','Machakos',
-  'Makueni','Mandera','Marsabit','Meru','Migori','Mombasa',"Murang'a",
-  'Nairobi','Nakuru','Nandi','Narok','Nyamira','Nyandarua','Nyeri',
-  'Samburu','Siaya','Taita-Taveta','Tana River','Tharaka-Nithi','Trans Nzoia',
-  'Turkana','Uasin Gishu','Vihiga','Wajir','West Pokot',
-];
+import { groupNationalDigits, useMitumbaFormat } from '../../../format';
 
 const tfSx = { '& .MuiInputBase-root': { bgcolor: tokens.colors.surface } };
 
@@ -25,11 +16,21 @@ export function BuyerOnboardingPage({
   error,
   heroImageUrl,
   counties,
+  region,
+  phone: phoneFormatProp,
   initialData,
   titleLevel,
   sectionTitleLevel,
 }: BuyerOnboardingPageProps): React.ReactElement {
-  const countyList = counties ?? KENYA_COUNTIES;
+  const context = useMitumbaFormat();
+  const regionFormat = region ?? context.region;
+  const phoneFormat = phoneFormatProp ?? context.phone;
+  // The legacy counties prop still wins, so existing callers keep their list.
+  const countyList = counties ?? regionFormat.options;
+  const regionWord = regionFormat.label.toLowerCase();
+  const minPhoneDigits = Math.min(...phoneFormat.nationalLength);
+  const callingDigits = phoneFormat.callingCode.replace(/\D/g, '');
+  const phonePlaceholder = groupNationalDigits(phoneFormat.example.replace(/\D/g, '').slice(callingDigits.length));
   // Preserve existing heading elements when no explicit level is supplied.
   const heroTitleComponent = (titleLevel ? `h${titleLevel}` : 'h4') as React.ElementType;
   const mobileSectionComponent = (sectionTitleLevel ? `h${sectionTitleLevel}` : 'h4') as React.ElementType;
@@ -42,8 +43,8 @@ export function BuyerOnboardingPage({
 
   const errors: Record<string, string> = {};
   if (!displayName.trim()) errors.displayName = 'Display name is required';
-  if (!county) errors.county = 'Please select a county';
-  if (!phone.trim() || phone.trim().length < 9) errors.phone = 'Enter a valid phone number (min 9 digits)';
+  if (!county) errors.county = `Please select a ${regionWord}`;
+  if (!phone.trim() || phone.trim().length < minPhoneDigits) errors.phone = `Enter a valid phone number (min ${minPhoneDigits} digits)`;
 
   const isValid = Object.keys(errors).length === 0;
 
@@ -151,12 +152,12 @@ export function BuyerOnboardingPage({
               />
 
               <FormControl fullWidth required error={!!touched.county && !!errors.county}>
-                <InputLabel id="buyer-onboarding-county-label">County</InputLabel>
+                <InputLabel id="buyer-onboarding-county-label">{regionFormat.label}</InputLabel>
                 <Select
                   sx={tfSx}
                   labelId="buyer-onboarding-county-label"
                   value={county}
-                  label="County"
+                  label={regionFormat.label}
                   onChange={(e) => setCounty(e.target.value)}
                   onBlur={() => handleBlur('county')}
                 >
@@ -178,11 +179,11 @@ export function BuyerOnboardingPage({
                 onChange={(e) => setPhone(e.target.value)}
                 onBlur={() => handleBlur('phone')}
                 required
-                placeholder="712 345 678"
+                placeholder={phonePlaceholder}
                 helperText={touched.phone && errors.phone ? errors.phone : 'For delivery updates and M-Pesa payments'}
                 error={!!touched.phone && !!errors.phone}
                 InputProps={{
-                  startAdornment: <InputAdornment position="start">+254</InputAdornment>,
+                  startAdornment: <InputAdornment position="start">{phoneFormat.callingCode}</InputAdornment>,
                 }}
               />
             </Box>

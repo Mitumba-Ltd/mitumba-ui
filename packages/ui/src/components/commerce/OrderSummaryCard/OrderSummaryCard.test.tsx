@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { axe, toHaveNoViolations } from 'jest-axe'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme'
+import { MitumbaFormatProvider } from '../../../format'
 import { OrderSummaryCard } from './OrderSummaryCard'
 import type { HeadingLevel } from '../../../types/semantic'
 
@@ -30,7 +31,7 @@ function renderCard(props: Partial<Parameters<typeof OrderSummaryCard>[0]> = {})
       <MitumbaThemeProvider>
         <OrderSummaryCard
           items={merged.items}
-          totalKes={merged.totalKes}
+          total={merged.total ?? merged.totalKes ?? 0}
           actionLabel={merged.actionLabel}
           onAction={merged.onAction}
           loading={merged.loading}
@@ -133,5 +134,40 @@ describe('OrderSummaryCard', () => {
     )
     const results = await axe(container)
     expect(results).toHaveNoViolations()
+  })
+
+  it('accepts the neutral amount and total props', () => {
+    render(
+      <MitumbaThemeProvider>
+        <OrderSummaryCard items={[{ label: 'Subtotal', amount: 4500 }, { label: 'Delivery', amount: 350 }]} total={4850} />
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('KES 4,500')).toBeInTheDocument()
+    expect(screen.getByText('KES 350')).toBeInTheDocument()
+    expect(screen.getByText('KES 4,850')).toBeInTheDocument()
+  })
+
+  it('prefers the neutral names when both are set', () => {
+    render(
+      <MitumbaThemeProvider>
+        <OrderSummaryCard items={[{ label: 'Subtotal', amount: 6000, amountKes: 4500 }]} total={6000} totalKes={4500} />
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getAllByText('KES 6,000')).toHaveLength(2)
+    expect(screen.queryByText('KES 4,500')).not.toBeInTheDocument()
+  })
+
+  it('formats every row and the total in the provider currency', () => {
+    render(
+      <MitumbaThemeProvider>
+        <MitumbaFormatProvider money={{ currencyCode: 'UGX', locale: 'en-UG' }}>
+          <OrderSummaryCard items={[{ label: 'Subtotal', amount: 4500 }, { label: 'Promo', amount: 500, isDiscount: true }]} total={4000} />
+        </MitumbaFormatProvider>
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('UGX 4,500')).toBeInTheDocument()
+    expect(screen.getByText(/UGX 500$/)).toBeInTheDocument()
+    expect(screen.getByText('UGX 4,000')).toBeInTheDocument()
+    expect(screen.queryByText(/KES/)).not.toBeInTheDocument()
   })
 })

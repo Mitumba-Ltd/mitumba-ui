@@ -44,4 +44,9 @@ export interface SearchFilterSheetProps {
    * Visual size/weight are unaffected.
    */
   sectionTitleLevel?: HeadingLevel;
+  /**
+   * Cities offered in the Location section, in display order. An "All" option is always appended.
+   * Defaults to Nairobi, Mombasa, Kisumu, Eldoret, Nakuru and Kisii.
+   */
+  cities?: string[];
 }

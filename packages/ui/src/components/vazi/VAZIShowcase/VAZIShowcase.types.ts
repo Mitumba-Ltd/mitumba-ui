@@ -5,7 +5,7 @@ export interface VAZIShowcaseItem {
   id: string;
   /** Item title */
   title: string;
-  /** Price in KES */
+  /** Price, whole major units of the `MitumbaFormatProvider` currency */
   price: number;
   /** Listing thumbnail URL */
   imageUrl: string;
@@ -22,7 +22,7 @@ export interface VAZIShowcaseOutfit {
   modelAlt: string;
   /** Items that make up this outfit */
   items: VAZIShowcaseItem[];
-  /** Total outfit price in KES */
+  /** Total outfit price, whole major units of the `MitumbaFormatProvider` currency */
   totalPrice: number;
 }
 

@@ -7,6 +7,7 @@ import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
 import { SemanticTitle } from '../../../internal/SemanticTitle';
 import type { HeadingLevel } from '../../../types/semantic';
 import type { VAZIShowcaseProps, VAZIShowcaseOutfit, VAZIShowcaseItem } from './VAZIShowcase.types';
+import { formatMoney, useMitumbaFormat } from '../../../format';
 
 /**
  * VAZIShowcase — the VAZI AI stylist feed.
@@ -28,6 +29,7 @@ export function VAZIShowcase({
   titleLevel,
   sectionTitleLevel,
 }: VAZIShowcaseProps): React.ReactElement {
+  const { money } = useMitumbaFormat();
   const [current, setCurrent] = React.useState(activeIndex);
   const [isAnimating, setIsAnimating] = React.useState(false);
   const [sheetExpanded, setSheetExpanded] = React.useState(false);
@@ -249,7 +251,7 @@ export function VAZIShowcase({
                 This look · {activeOutfit.items.length} items
               </SemanticTitle>
               <Typography component="span" sx={{ fontSize: 14, fontWeight: 800, color: '#222' }}>
-                KES {activeOutfit.totalPrice.toLocaleString()}
+                {formatMoney(activeOutfit.totalPrice, money)}
               </Typography>
             </Box>
           </Box>
@@ -283,7 +285,7 @@ export function VAZIShowcase({
                     {item.title}
                   </Typography>
                   <Typography component="span" sx={{ display: 'block', fontSize: 10, color: '#888' }}>
-                    KES {item.price.toLocaleString()}
+                    {formatMoney(item.price, money)}
                   </Typography>
                 </Box>
               </Box>
@@ -363,6 +365,7 @@ function DesktopModelItem({ outfit, diff, lookNumber, onClick }: { outfit: VAZIS
 }
 
 function DesktopOutfitPanel({ outfit, sectionTitleLevel, onItemClick, onShopAll }: { outfit: VAZIShowcaseOutfit; sectionTitleLevel?: HeadingLevel; onItemClick?: (id: string) => void; onShopAll?: (outfitId: string) => void }): React.ReactElement {
+  const { money } = useMitumbaFormat();
   return (
     <Box
       component="section"
@@ -410,7 +413,7 @@ function DesktopOutfitPanel({ outfit, sectionTitleLevel, onItemClick, onShopAll 
             <Box component="img" src={item.imageUrl} alt={item.title} sx={{ width: 44, height: 44, borderRadius: `${tokens.radius.sm}px`, objectFit: 'cover', flexShrink: 0, border: '1px solid rgba(0,0,0,0.06)' }} />
             <Box sx={{ flex: 1, minWidth: 0, textAlign: 'left' }}>
               <Typography component="span" sx={{ display: 'block', fontSize: 12, color: '#333', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.title}</Typography>
-              <Typography component="span" sx={{ display: 'block', fontSize: 11, color: '#888' }}>KES {item.price.toLocaleString()}</Typography>
+              <Typography component="span" sx={{ display: 'block', fontSize: 11, color: '#888' }}>{formatMoney(item.price, money)}</Typography>
             </Box>
           </Box>
         ))}
@@ -419,7 +422,7 @@ function DesktopOutfitPanel({ outfit, sectionTitleLevel, onItemClick, onShopAll 
       <Box sx={{ borderTop: '1px solid rgba(0,0,0,0.06)', pt: `${tokens.spacing.lg}px`, position: 'relative', zIndex: 1 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: `${tokens.spacing.md}px` }}>
           <Typography sx={{ fontSize: 11, color: '#888' }}>Total</Typography>
-          <Typography sx={{ fontSize: 16, fontWeight: 800, color: '#222' }}>KES {outfit.totalPrice.toLocaleString()}</Typography>
+          <Typography sx={{ fontSize: 16, fontWeight: 800, color: '#222' }}>{formatMoney(outfit.totalPrice, money)}</Typography>
         </Box>
         <MitumbaPrimaryButton fullWidth label="Shop this look" onClick={() => onShopAll?.(outfit.id)} />
       </Box>

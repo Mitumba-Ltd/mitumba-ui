@@ -51,5 +51,21 @@ export type { ConversationActor, UserConversationActor, StoreConversationActor, 
 export { MitumbaThemeProvider, mitumbaTheme } from './theme'
 export type { MitumbaThemeProviderProps } from './theme'
 
+// Formatting (currency, phone numbering, regions)
+export {
+  MitumbaFormatProvider,
+  useMitumbaFormat,
+  DEFAULT_FORMAT,
+  DEFAULT_MONEY_FORMAT,
+  DEFAULT_PHONE_FORMAT,
+  DEFAULT_REGION_FORMAT,
+  formatAmount,
+  formatMoney,
+  groupNationalDigits,
+  maxNationalDigits,
+  nationalPlaceholder,
+} from './format'
+export type { MitumbaFormatProviderProps, MitumbaFormat, MoneyFormat, PhoneFormat, RegionFormat } from './format'
+
 // Semantic
 export type { HeadingLevel, SemanticTitleProps, SemanticDestinationProps } from './types/semantic'

@@ -13,6 +13,7 @@ import { ConditionBadge } from '../ConditionBadge';
 import { SemanticSurface } from '../../../internal/SemanticSurface';
 import { SemanticTitle } from '../../../internal/SemanticTitle';
 import type { ListingCardProps } from './ListingCard.types';
+import { formatMoney, useMitumbaFormat } from '../../../format';
 
 function isVideo(url: string): boolean {
   return /\.(mp4|webm|mov)(\?|$)/i.test(url);
@@ -39,6 +40,7 @@ export function ListingCard({
   href,
   linkComponent,
 }: ListingCardProps): React.ReactElement {
+  const { money } = useMitumbaFormat();
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [cartAdded, setCartAdded] = React.useState(false);
   const [imageLoaded, setImageLoaded] = React.useState(false);
@@ -316,7 +318,7 @@ export function ListingCard({
                 color: tokens.colors.textPrimary,
               }}
             >
-              KES {price.toLocaleString()}
+              {formatMoney(price, money)}
             </Typography>
             {storeName && (
               <Typography

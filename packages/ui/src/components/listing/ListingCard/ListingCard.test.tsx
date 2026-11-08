@@ -7,6 +7,7 @@ import { afterEach, describe, it, expect, vi } from 'vitest';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme';
+import { MitumbaFormatProvider } from '../../../format';
 import { ListingCard } from './ListingCard';
 import type { HeadingLevel } from '../../../types/semantic';
 
@@ -154,5 +155,17 @@ describe('ListingCard', () => {
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
+  });
+
+  it('formats the price in the provider currency', () => {
+    render(
+      <MitumbaThemeProvider>
+        <MitumbaFormatProvider money={{ currencyCode: 'UGX', locale: 'en-UG' }}>
+          <ListingCard {...defaultProps} price={5000} />
+        </MitumbaFormatProvider>
+      </MitumbaThemeProvider>,
+    );
+    expect(screen.getAllByText('UGX 5,000').length).toBeGreaterThan(0);
+    expect(screen.queryByText(/KES/)).not.toBeInTheDocument();
   });
 });

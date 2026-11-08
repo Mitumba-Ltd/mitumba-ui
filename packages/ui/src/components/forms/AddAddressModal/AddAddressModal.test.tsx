@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { axe, toHaveNoViolations } from 'jest-axe'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme'
+import { MitumbaFormatProvider } from '../../../format'
 import { AddAddressModal } from './AddAddressModal'
 import type { HeadingLevel } from '../../../types/semantic'
 
@@ -131,5 +132,49 @@ describe('AddAddressModal', () => {
     renderModal({ onClose })
     fireEvent.click(screen.getByLabelText('Close modal'))
     expect(onClose).toHaveBeenCalled()
+  })
+
+  it('keeps the default County field and its validation wording', () => {
+    renderModal()
+    expect(screen.getAllByText('County').length).toBeGreaterThan(0)
+    fireEvent.click(screen.getByRole('button', { name: /save address/i }))
+    expect(screen.getByText('Please select a county')).toBeInTheDocument()
+  })
+
+  it('uses the provider region label and options', () => {
+    render(
+      <MitumbaThemeProvider>
+        <MitumbaFormatProvider region={{ label: 'District', options: ['Kampala', 'Wakiso'] }}>
+          <AddAddressModal open onClose={vi.fn()} onSave={vi.fn()} />
+        </MitumbaFormatProvider>
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getAllByText('District').length).toBeGreaterThan(0)
+    expect(screen.queryByText('County')).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: /save address/i }))
+    expect(screen.getByText('Please select a district')).toBeInTheDocument()
+  })
+
+  it('validates the phone length against the numbering plan', () => {
+    render(
+      <MitumbaThemeProvider>
+        <AddAddressModal
+          open
+          onClose={vi.fn()}
+          onSave={vi.fn()}
+          phone={{ callingCode: '+234', nationalLength: [10], example: '+2348031234567' }}
+        />
+      </MitumbaThemeProvider>,
+    )
+    fireEvent.change(screen.getByLabelText(/phone/i), { target: { value: '803123456' } })
+    fireEvent.click(screen.getByRole('button', { name: /save address/i }))
+    expect(screen.getByText('Enter a valid phone number')).toBeInTheDocument()
+  })
+
+  it('accepts nine digits under the default plan', () => {
+    renderModal()
+    fireEvent.change(screen.getByLabelText(/phone/i), { target: { value: '712345678' } })
+    fireEvent.click(screen.getByRole('button', { name: /save address/i }))
+    expect(screen.queryByText('Enter a valid phone number')).not.toBeInTheDocument()
   })
 })

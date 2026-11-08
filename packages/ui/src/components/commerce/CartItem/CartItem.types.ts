@@ -1,7 +1,7 @@
 import type { SxProps, Theme } from '@mui/material/styles'
 import type { HeadingLevel } from '../../../types/semantic'
 
-export interface CartItemProps {
+interface CartItemBaseProps {
   /** Technical ID of the item. */
   id: string
   /** URL of the item's image. */
@@ -13,8 +13,6 @@ export interface CartItemProps {
   /** Availability status (e.g., IN STOCK). */
   status?: string
   
-  /** Current price in Kenyan Shillings. */
-  priceKes: number
   /** Selected size metadata. */
   size?: string
   /** Available sizes for the dropdown. If not provided, size shows as text only. */
@@ -40,3 +38,22 @@ export interface CartItemProps {
    */
   titleLevel?: HeadingLevel
 }
+
+/**
+ * Props for CartItem. Pass `price` (whole major units, shown in the `MitumbaFormatProvider`
+ * currency). `priceKes` is the deprecated name for the same value; when both are set, `price` wins.
+ */
+export type CartItemProps = CartItemBaseProps &
+  (
+    | {
+        /** Current price in whole major units of the formatting currency. */
+        price: number
+        /** @deprecated Use `price`. */
+        priceKes?: number
+      }
+    | {
+        price?: number
+        /** @deprecated Use `price`. */
+        priceKes: number
+      }
+  )
