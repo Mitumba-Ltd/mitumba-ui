@@ -16,6 +16,7 @@ import { colors, spacing, typography, radius } from '@mitumba/tokens';
 import { SemanticTitle } from '../../../internal/SemanticTitle';
 import type { HeadingLevel } from '../../../types/semantic';
 import type { SearchFilterSheetProps, FilterState } from './SearchFilterSheet.types';
+import { formatMoney, useMitumbaFormat } from '../../../format';
 
 const CATEGORIES = ['Tops', 'Bottoms', 'Dresses', 'Outerwear', 'Shoes', 'Bags', 'Accessories', 'Kids'];
 const CONDITIONS = ['New', 'Like New', 'Good', 'Fair'];
@@ -92,6 +93,7 @@ export function SearchFilterSheet({
   titleLevel,
   sectionTitleLevel,
 }: SearchFilterSheetProps): React.ReactElement {
+  const { money } = useMitumbaFormat();
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
   const baseId = React.useId();
@@ -187,7 +189,7 @@ export function SearchFilterSheet({
           sx={{ color: colors.green }}
         />
         <Typography variant="body2" sx={{ color: colors.textSecondary }}>
-          KES {priceValue[0].toLocaleString()} – KES {priceValue[1].toLocaleString()}
+          {formatMoney(priceValue[0], money)} – {formatMoney(priceValue[1], money)}
         </Typography>
       </Box>
 
