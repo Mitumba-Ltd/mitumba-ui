@@ -205,4 +205,19 @@ describe('SearchFilterSheet', () => {
     );
     expect(screen.getByText('UGX 1,000 – UGX 50,000')).toBeInTheDocument();
   });
+
+  it('keeps the default city list with All last', () => {
+    render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} /></MitumbaThemeProvider>);
+    ['Nairobi', 'Mombasa', 'Kisumu', 'Eldoret', 'Nakuru', 'Kisii', 'All'].forEach((city) => {
+      expect(screen.getByText(city)).toBeInTheDocument();
+    });
+  });
+
+  it('offers the cities it is given, plus All', () => {
+    render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} cities={['Kampala', 'Gulu']} /></MitumbaThemeProvider>);
+    expect(screen.getByText('Kampala')).toBeInTheDocument();
+    expect(screen.getByText('Gulu')).toBeInTheDocument();
+    expect(screen.getByText('All')).toBeInTheDocument();
+    expect(screen.queryByText('Nairobi')).not.toBeInTheDocument();
+  });
 });

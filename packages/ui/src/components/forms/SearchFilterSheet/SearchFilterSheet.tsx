@@ -20,7 +20,7 @@ import { formatMoney, useMitumbaFormat } from '../../../format';
 
 const CATEGORIES = ['Tops', 'Bottoms', 'Dresses', 'Outerwear', 'Shoes', 'Bags', 'Accessories', 'Kids'];
 const CONDITIONS = ['New', 'Like New', 'Good', 'Fair'];
-const CITIES = ['Nairobi', 'Mombasa', 'Kisumu', 'Eldoret', 'Nakuru', 'Kisii', 'All'];
+const DEFAULT_CITIES = ['Nairobi', 'Mombasa', 'Kisumu', 'Eldoret', 'Nakuru', 'Kisii'];
 const SORT_OPTIONS = [
   { value: 'relevant', label: 'Relevant' },
   { value: 'newest', label: 'Newest' },
@@ -92,8 +92,10 @@ export function SearchFilterSheet({
   title,
   titleLevel,
   sectionTitleLevel,
+  cities,
 }: SearchFilterSheetProps): React.ReactElement {
   const { money } = useMitumbaFormat();
+  const cityOptions = [...(cities ?? DEFAULT_CITIES), 'All'];
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
   const baseId = React.useId();
@@ -197,7 +199,7 @@ export function SearchFilterSheet({
       <Box role="group" aria-labelledby={locationId}>
         <SectionHeader id={locationId} titleLevel={sectionTitleLevel}>Location</SectionHeader>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: `${String(spacing.sm)}px` }}>
-          {CITIES.map(function renderCity(city) {
+          {cityOptions.map(function renderCity(city) {
             const isSelected = city === 'All' ? filters.city === null : filters.city === city;
             return (
               <Chip
