@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { axe, toHaveNoViolations } from 'jest-axe'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme'
+import { MitumbaFormatProvider } from '../../../format'
 import { CartItem } from './CartItem'
 import type { CartItemProps } from './CartItem.types'
 import type { HeadingLevel } from '../../../types/semantic'
@@ -34,7 +35,7 @@ function renderCartItem(props: Partial<CartItemProps> = {}) {
         title={merged.title}
         subtitle={merged.subtitle}
         status={merged.status}
-        priceKes={merged.priceKes}
+        price={merged.price ?? merged.priceKes ?? 0}
         size={merged.size}
         quantity={merged.quantity}
         onRemove={merged.onRemove}
@@ -115,5 +116,36 @@ describe('CartItem', () => {
     )
     const results = await axe(container)
     expect(results).toHaveNoViolations()
+  })
+
+  it('still accepts the deprecated priceKes prop', () => {
+    render(
+      <MitumbaThemeProvider>
+        <CartItem id="1" imageUrl="/i.jpg" title="ARTICLE 42453" priceKes={45000} />
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('KES 45,000')).toBeInTheDocument()
+  })
+
+  it('prefers price over priceKes', () => {
+    render(
+      <MitumbaThemeProvider>
+        <CartItem id="1" imageUrl="/i.jpg" title="ARTICLE 42453" price={50000} priceKes={45000} />
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('KES 50,000')).toBeInTheDocument()
+  })
+
+  it('formats and labels the price in the provider currency', () => {
+    render(
+      <MitumbaThemeProvider>
+        <MitumbaFormatProvider money={{ currencyCode: 'UGX', locale: 'en-UG' }}>
+          <CartItem id="1" imageUrl="/i.jpg" title="ARTICLE 42453" price={5000} />
+        </MitumbaFormatProvider>
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('UGX 5,000')).toBeInTheDocument()
+    expect(screen.getByLabelText('Price: UGX 5,000')).toBeInTheDocument()
+    expect(screen.queryByText(/KES/)).not.toBeInTheDocument()
   })
 })
