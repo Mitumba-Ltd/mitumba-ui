@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { axe, toHaveNoViolations } from 'jest-axe'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme'
+import { MitumbaFormatProvider } from '../../../format'
 import { OrderMessageAttachment } from './OrderMessageAttachment'
 import type { OrderMessageAttachmentProps } from './OrderMessageAttachment.types'
 
@@ -90,5 +91,25 @@ describe('OrderMessageAttachment', () => {
     const { container } = renderAttachment()
     const results = await axe(container)
     expect(results).toHaveNoViolations()
+  })
+
+  it('formats the amount in the provider currency', () => {
+    render(
+      <MitumbaThemeProvider>
+        <MitumbaFormatProvider money={{ currencyCode: 'UGX', locale: 'en-UG' }}>
+          <OrderMessageAttachment
+            orderId={props.orderId}
+            orderShortId={props.orderShortId}
+            listingTitle={props.listingTitle}
+            listingImageUrl={props.listingImageUrl}
+            amount={5000}
+            status={props.status}
+            createdAt={props.createdAt}
+          />
+        </MitumbaFormatProvider>
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText(/UGX 5,000/)).toBeInTheDocument()
+    expect(screen.queryByText(/KES/)).not.toBeInTheDocument()
   })
 })

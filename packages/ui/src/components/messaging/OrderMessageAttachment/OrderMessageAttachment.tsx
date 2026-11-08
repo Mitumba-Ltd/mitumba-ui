@@ -3,6 +3,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { tokens } from '@mitumba/tokens'
 import type { OrderMessageAttachmentProps } from './OrderMessageAttachment.types'
+import { formatMoney, useMitumbaFormat } from '../../../format'
 
 /**
  * Compact order context card for chat messages.
@@ -15,6 +16,7 @@ export function OrderMessageAttachment({
   amount,
   status,
 }: OrderMessageAttachmentProps) {
+  const { money } = useMitumbaFormat()
   return (
     <Box
       sx={{
@@ -72,7 +74,7 @@ export function OrderMessageAttachment({
             color: tokens.colors.textSecondary,
           }}
         >
-          KES {amount.toLocaleString()} · {status}
+          {formatMoney(amount, money)} · {status}
         </Typography>
       </Box>
     </Box>
