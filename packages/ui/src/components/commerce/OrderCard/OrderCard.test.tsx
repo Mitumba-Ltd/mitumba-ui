@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { axe, toHaveNoViolations } from 'jest-axe'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme'
+import { MitumbaFormatProvider } from '../../../format'
 import { OrderCard } from './OrderCard'
 import type { HeadingLevel } from '../../../types/semantic'
 
@@ -151,5 +152,47 @@ describe('OrderCard', () => {
     )
     const results = await axe(container)
     expect(results).toHaveNoViolations()
+  })
+
+  it('accepts the neutral total and deliveryFee props', () => {
+    render(
+      <MitumbaThemeProvider>
+        <OrderCard orderShortId="a9331769" title="Levi's 501" total={2500} deliveryFee={200} status="shipped" createdAt="Jun 15, 2024" />
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('KES 2,500')).toBeInTheDocument()
+    expect(screen.getByText('+KES 200 delivery')).toBeInTheDocument()
+  })
+
+  it('prefers the neutral names when both are set', () => {
+    render(
+      <MitumbaThemeProvider>
+        <OrderCard orderShortId="a9331769" title="Levi's 501" total={3000} totalKes={2500} deliveryFee={300} deliveryFeeKes={200} status="shipped" createdAt="Jun 15, 2024" />
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('KES 3,000')).toBeInTheDocument()
+    expect(screen.getByText('+KES 300 delivery')).toBeInTheDocument()
+  })
+
+  it('formats the total and delivery fee in the provider currency', () => {
+    render(
+      <MitumbaThemeProvider>
+        <MitumbaFormatProvider money={{ currencyCode: 'UGX', locale: 'en-UG' }}>
+          <OrderCard orderShortId="a9331769" title="Levi's 501" total={5000} deliveryFee={1000} status="shipped" createdAt="Jun 15, 2024" />
+        </MitumbaFormatProvider>
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.getByText('UGX 5,000')).toBeInTheDocument()
+    expect(screen.getByText('+UGX 1,000 delivery')).toBeInTheDocument()
+    expect(screen.queryByText(/KES/)).not.toBeInTheDocument()
+  })
+
+  it('omits the delivery line when no fee is given', () => {
+    render(
+      <MitumbaThemeProvider>
+        <OrderCard orderShortId="a9331769" title="Levi's 501" total={2500} status="shipped" createdAt="Jun 15, 2024" />
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.queryByText(/delivery$/)).not.toBeInTheDocument()
   })
 })

@@ -9,6 +9,7 @@ import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton'
 import { SemanticSurface } from '../../../internal/SemanticSurface'
 import { SemanticTitle } from '../../../internal/SemanticTitle'
 import type { OrderCardProps, OrderCardStatus } from './OrderCard.types'
+import { formatMoney, useMitumbaFormat } from '../../../format'
 
 const STATUS_CONFIG: Record<OrderCardStatus, { label: string; chipStatus: ChipStatus }> = {
   pending: { label: 'Pending', chipStatus: 'incomplete' },
@@ -29,7 +30,9 @@ export function OrderCard({
   orderShortId,
   title,
   imageUrl,
+  total,
   totalKes,
+  deliveryFee,
   deliveryFeeKes,
   status,
   createdAt,
@@ -40,6 +43,8 @@ export function OrderCard({
   href,
   linkComponent,
 }: OrderCardProps) {
+  const { money } = useMitumbaFormat()
+  const fee = deliveryFee ?? deliveryFeeKes
   const config = STATUS_CONFIG[status]
   const [imageLoaded, setImageLoaded] = React.useState(false)
   const isInteractive = Boolean(href) || Boolean(onClick)
@@ -210,17 +215,17 @@ export function OrderCard({
               color: tokens.colors.textPrimary,
             }}
           >
-            KES {totalKes.toLocaleString()}
+            {formatMoney(total ?? totalKes ?? 0, money)}
           </Typography>
 
-          {deliveryFeeKes != null && (
+          {fee != null && (
             <Typography
               sx={{
                 fontSize: tokens.typography.fontSizes.xs,
                 color: tokens.colors.textSecondary,
               }}
             >
-              +KES {deliveryFeeKes.toLocaleString()} delivery
+              +{formatMoney(fee, money)} delivery
             </Typography>
           )}
 

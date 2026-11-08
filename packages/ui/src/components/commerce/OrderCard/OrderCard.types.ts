@@ -11,16 +11,16 @@ export type OrderCardStatus =
   | 'cancelled'
   | 'disputed'
 
-export interface OrderCardProps extends SemanticDestinationProps {
+export interface OrderCardBaseProps extends SemanticDestinationProps {
   /** Order short ID (e.g. first 8 chars) */
   orderShortId: string
   /** Listing/item title */
   title: string
   /** Item image URL */
   imageUrl?: string
-  /** Total order amount in KES */
-  totalKes: number
-  /** Delivery fee in KES */
+  /** Delivery fee in whole major units of the formatting currency. */
+  deliveryFee?: number
+  /** @deprecated Use `deliveryFee`. */
   deliveryFeeKes?: number
   /** Current order status */
   status: OrderCardStatus
@@ -43,3 +43,22 @@ export interface OrderCardProps extends SemanticDestinationProps {
    */
   titleLevel?: HeadingLevel
 }
+
+/**
+ * Props for OrderCard. Pass `total` (whole major units, shown in the `MitumbaFormatProvider`
+ * currency). `totalKes` is the deprecated name; when both are set, `total` wins.
+ */
+export type OrderCardProps = OrderCardBaseProps &
+  (
+    | {
+        /** Total order amount in whole major units. */
+        total: number
+        /** @deprecated Use `total`. */
+        totalKes?: number
+      }
+    | {
+        total?: number
+        /** @deprecated Use `total`. */
+        totalKes: number
+      }
+  )
