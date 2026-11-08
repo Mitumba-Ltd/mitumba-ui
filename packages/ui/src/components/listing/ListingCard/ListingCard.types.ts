@@ -5,7 +5,7 @@ export interface ListingCardProps extends SemanticDestinationProps {
   id: string;
   /** Listing title — truncated to 2 lines */
   title: string;
-  /** Price in KES */
+  /** Price in whole major units, shown in the `MitumbaFormatProvider` currency. */
   price: number;
   /** Media URLs — first is shown by default, swipeable. Supports images and video (mp4) */
   media: string[];
