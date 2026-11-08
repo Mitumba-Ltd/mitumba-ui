@@ -1,4 +1,5 @@
 import type { HeadingLevel } from '../../../types/semantic'
+import type { PhoneFormat, RegionFormat } from '../../../format'
 
 export interface AddressFormData {
   /** Label like "Home", "Office" */
@@ -13,7 +14,7 @@ export interface AddressFormData {
   line2: string
   /** City or town */
   city: string
-  /** Kenya county */
+  /** First-level region (e.g. county), one of the region options shown in the form. */
   county: string
   /** Whether this is the default address */
   isDefault: boolean
@@ -38,4 +39,14 @@ export interface AddAddressModalProps {
    * weight are unaffected.
    */
   titleLevel?: HeadingLevel
+  /**
+   * Region label and options for the region field. Defaults to the nearest
+   * `MitumbaFormatProvider` region format (County and the built-in list when none is set).
+   */
+  region?: RegionFormat
+  /**
+   * Numbering plan used to validate the phone field. Defaults to the nearest
+   * `MitumbaFormatProvider` phone format (9 national digits when none is set).
+   */
+  phone?: PhoneFormat
 }
