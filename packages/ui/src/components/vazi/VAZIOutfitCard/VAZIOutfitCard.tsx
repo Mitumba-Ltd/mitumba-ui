@@ -11,6 +11,7 @@ import { VAZIBadge } from '../VAZIBadge'
 import { SemanticSurface } from '../../../internal/SemanticSurface'
 import { SemanticTitle } from '../../../internal/SemanticTitle'
 import type { VAZIOutfitCardProps } from './VAZIOutfitCard.types'
+import { formatMoney, useMitumbaFormat } from '../../../format'
 
 /**
  * Extraordinary "Pinterest-Level" VAZI Outfit Card.
@@ -19,6 +20,7 @@ import type { VAZIOutfitCardProps } from './VAZIOutfitCard.types'
 export function VAZIOutfitCard({
   outfitName,
   items,
+  totalPrice,
   totalPriceKes,
   sellersCount,
   isMultiCity = false,
@@ -28,8 +30,10 @@ export function VAZIOutfitCard({
   href,
   linkComponent,
 }: VAZIOutfitCardProps) {
+  const { money } = useMitumbaFormat()
+  const formattedTotal = formatMoney(totalPrice ?? totalPriceKes ?? 0, money)
   const isInteractive = Boolean(href) || Boolean(onTap)
-  const accessibleName = `${outfitName}, KES ${totalPriceKes.toLocaleString()}`
+  const accessibleName = `${outfitName}, ${formattedTotal}`
   const priceLabelId = React.useId()
 
   return (
@@ -245,7 +249,7 @@ export function VAZIOutfitCard({
                aria-labelledby={priceLabelId}
                sx={{ fontSize: tokens.typography.fontSizes.xl, fontWeight: 900, color: tokens.colors.textPrimary }}
              >
-               KES {totalPriceKes.toLocaleString()}
+               {formattedTotal}
              </Typography>
           </Box>
 
