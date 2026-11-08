@@ -6,6 +6,7 @@ import { afterEach, describe, it, expect, vi } from 'vitest';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme';
+import { MitumbaFormatProvider } from '../../../format';
 import { SellerOnboardingPage } from './SellerOnboardingPage';
 import type { HeadingLevel } from '../../../types/semantic';
 
@@ -130,5 +131,26 @@ describe('SellerOnboardingPage', () => {
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
+  });
+
+  it('keeps the default price range wording on the what-you-sell step', () => {
+    render(<MitumbaThemeProvider><SellerOnboardingPage currentStep={3} /></MitumbaThemeProvider>);
+    expect(screen.getAllByText('Typical price range (KES) — optional').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('KES 200').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('KES 5,000').length).toBeGreaterThan(0);
+  });
+
+  it('shows the price range in the provider currency', () => {
+    render(
+      <MitumbaThemeProvider>
+        <MitumbaFormatProvider money={{ currencyCode: 'UGX', locale: 'en-UG' }}>
+          <SellerOnboardingPage currentStep={3} />
+        </MitumbaFormatProvider>
+      </MitumbaThemeProvider>,
+    );
+    expect(screen.getAllByText('Typical price range (UGX) — optional').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('UGX 200').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('UGX 5,000').length).toBeGreaterThan(0);
+    expect(screen.queryAllByText(/KES/)).toHaveLength(0);
   });
 });

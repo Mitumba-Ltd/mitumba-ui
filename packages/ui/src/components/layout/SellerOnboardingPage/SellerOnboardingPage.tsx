@@ -13,6 +13,7 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { tokens } from '@mitumba/tokens';
 import { MitumbaPrimaryButton } from '../../foundation/MitumbaPrimaryButton';
 import type { SellerOnboardingPageProps, SellerOnboardingData } from './SellerOnboardingPage.types';
+import { formatMoney, useMitumbaFormat } from '../../../format';
 
 const TOTAL_STEPS = 5;
 
@@ -231,6 +232,7 @@ export function SellerOnboardingPage({
   stepTitleLevel,
   sectionTitleLevel,
 }: SellerOnboardingPageProps): React.ReactElement {
+  const { money } = useMitumbaFormat();
   const isDark = theme === 'mitumba-dark';
   const countyLabelId = React.useId();
   // When a heading level is supplied we emit hN; otherwise we fall back to the
@@ -507,11 +509,11 @@ export function SellerOnboardingPage({
                   </RadioGroup>
                 </Box>
                 <Box>
-                  <Typography variant="body2" component={sectionHeadingComponent} fontWeight={600} color={textColor} sx={{ mb: `${tokens.spacing.md}px` }}>Typical price range (KES) — optional</Typography>
-                  <Slider value={[data.priceRangeMin ?? 200, data.priceRangeMax ?? 5000]} onChange={(_, val) => { const [min, max] = val as number[]; set({ priceRangeMin: min, priceRangeMax: max }); }} min={0} max={50000} step={100} valueLabelDisplay="auto" valueLabelFormat={(v) => `KES ${v.toLocaleString()}`} sx={{ color: tokens.colors.green }} />
+                  <Typography variant="body2" component={sectionHeadingComponent} fontWeight={600} color={textColor} sx={{ mb: `${tokens.spacing.md}px` }}>Typical price range ({money.currencyCode}) — optional</Typography>
+                  <Slider value={[data.priceRangeMin ?? 200, data.priceRangeMax ?? 5000]} onChange={(_, val) => { const [min, max] = val as number[]; set({ priceRangeMin: min, priceRangeMax: max }); }} min={0} max={50000} step={100} valueLabelDisplay="auto" valueLabelFormat={(v) => formatMoney(v, money)} sx={{ color: tokens.colors.green }} />
                   <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Typography variant="caption" color={subtitleColor}>KES {(data.priceRangeMin ?? 200).toLocaleString()}</Typography>
-                    <Typography variant="caption" color={subtitleColor}>KES {(data.priceRangeMax ?? 5000).toLocaleString()}</Typography>
+                    <Typography variant="caption" color={subtitleColor}>{formatMoney(data.priceRangeMin ?? 200, money)}</Typography>
+                    <Typography variant="caption" color={subtitleColor}>{formatMoney(data.priceRangeMax ?? 5000, money)}</Typography>
                   </Box>
                 </Box>
               </Box>
