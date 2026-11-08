@@ -1,20 +1,32 @@
 import type { SxProps, Theme } from '@mui/material/styles'
 import type { HeadingLevel } from '../../../types/semantic'
 
-export interface OrderSummaryLineItem {
+/**
+ * One row of the summary. Pass `amount` (whole major units, shown in the `MitumbaFormatProvider`
+ * currency). `amountKes` is the deprecated name; when both are set, `amount` wins.
+ */
+export type OrderSummaryLineItem = {
   /** Label (e.g. "Subtotal", "Delivery", "Discount") */
   label: string
-  /** Amount in KES */
-  amountKes: number
   /** Whether this is a discount/deduction (renders in green/negative) */
   isDiscount?: boolean
-}
+} & (
+  | {
+      /** Amount in whole major units. */
+      amount: number
+      /** @deprecated Use `amount`. */
+      amountKes?: number
+    }
+  | {
+      amount?: number
+      /** @deprecated Use `amount`. */
+      amountKes: number
+    }
+)
 
-export interface OrderSummaryCardProps {
+export interface OrderSummaryCardBaseProps {
   /** Line items (subtotal, delivery, discounts, etc.) */
   items: OrderSummaryLineItem[]
-  /** Grand total in KES */
-  totalKes: number
   /** Primary action button label. @default "Checkout" */
   actionLabel?: string
   /** Called when the action button is clicked */
@@ -34,3 +46,23 @@ export interface OrderSummaryCardProps {
    */
   titleLevel?: HeadingLevel
 }
+
+/**
+ * Props for OrderSummaryCard. Pass `total` (whole major units, shown in the
+ * `MitumbaFormatProvider` currency). `totalKes` is the deprecated name; when both are set,
+ * `total` wins.
+ */
+export type OrderSummaryCardProps = OrderSummaryCardBaseProps &
+  (
+    | {
+        /** Grand total in whole major units. */
+        total: number
+        /** @deprecated Use `total`. */
+        totalKes?: number
+      }
+    | {
+        total?: number
+        /** @deprecated Use `total`. */
+        totalKes: number
+      }
+  )
