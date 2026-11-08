@@ -1,24 +1,26 @@
 import { useState, useCallback } from 'react'
 import Box from '@mui/material/Box'
 import { tokens } from '@mitumba/tokens'
+import { groupNationalDigits, maxNationalDigits, nationalPlaceholder, useMitumbaFormat } from '../../../format'
 import type { PhoneInputProps } from './PhoneInput.types'
 
-const PREFIX = '+254'
-const MAX_DIGITS = 9
-
 /**
- * Kenya-specific phone number input with +254 prefix.
- * Formats as +254 7XX XXX XXX on blur.
+ * Phone number input with the calling code as a fixed prefix.
+ * The numbering plan (calling code, length, placeholder) comes from the `phone` prop or the
+ * nearest `MitumbaFormatProvider`; the default is +254 with 9 digits, shown as 7XX XXX XXX.
  */
-export function PhoneInput({ value, onChange, error, disabled = false }: PhoneInputProps) {
+export function PhoneInput({ value, onChange, error, disabled = false, phone }: PhoneInputProps) {
+  const context = useMitumbaFormat()
+  const plan = phone ?? context.phone
+  const maxDigits = maxNationalDigits(plan)
   const [isFocused, setIsFocused] = useState(false)
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const raw = e.target.value.replace(/\D/g, '').slice(0, MAX_DIGITS)
+      const raw = e.target.value.replace(/\D/g, '').slice(0, maxDigits)
       onChange(raw)
     },
-    [onChange]
+    [onChange, maxDigits]
   )
 
   const handleBlur = useCallback(() => {
@@ -29,14 +31,7 @@ export function PhoneInput({ value, onChange, error, disabled = false }: PhoneIn
     setIsFocused(true)
   }, [])
 
-  const formatDisplay = useCallback((val: string) => {
-    if (!val) return ''
-    const groups = val.match(/(\d{3})(\d{3})?(\d{3})?/)
-    if (!groups) return val
-    return [groups[1], groups[2], groups[3]].filter(Boolean).join(' ')
-  }, [])
-
-  const displayValue = isFocused ? value : formatDisplay(value)
+  const displayValue = isFocused ? value : groupNationalDigits(value)
 
   // Derived styles for lint compliance
   const baseBorderColor = isFocused ? tokens.colors.green : tokens.colors.border
@@ -79,7 +74,7 @@ export function PhoneInput({ value, onChange, error, disabled = false }: PhoneIn
             marginRight: '2px',
           }}
         >
-          {PREFIX}
+          {plan.callingCode}
         </Box>
         <Box
           component="input"
@@ -89,7 +84,7 @@ export function PhoneInput({ value, onChange, error, disabled = false }: PhoneIn
           onFocus={handleFocus}
           onBlur={handleBlur}
           disabled={disabled}
-          placeholder="7XX XXX XXX"
+          placeholder={nationalPlaceholder(plan)}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? 'phone-error' : undefined}
           sx={{
