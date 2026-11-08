@@ -153,4 +153,21 @@ describe('SellerOnboardingPage', () => {
     expect(screen.getAllByText('UGX 5,000').length).toBeGreaterThan(0);
     expect(screen.queryAllByText(/KES/)).toHaveLength(0);
   });
+
+  it('uses the provider region label on the identity step', () => {
+    render(
+      <MitumbaThemeProvider>
+        <MitumbaFormatProvider region={{ label: 'District', options: ['Kampala', 'Wakiso'] }}>
+          <SellerOnboardingPage currentStep={1} />
+        </MitumbaFormatProvider>
+      </MitumbaThemeProvider>,
+    );
+    expect(screen.getAllByText('District').length).toBeGreaterThan(0);
+    expect(screen.queryAllByText('County')).toHaveLength(0);
+  });
+
+  it('keeps the default County label on the identity step', () => {
+    render(<MitumbaThemeProvider><SellerOnboardingPage currentStep={1} /></MitumbaThemeProvider>);
+    expect(screen.getAllByText('County').length).toBeGreaterThan(0);
+  });
 });

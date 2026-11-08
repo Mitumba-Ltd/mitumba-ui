@@ -17,15 +17,6 @@ import { formatMoney, useMitumbaFormat } from '../../../format';
 
 const TOTAL_STEPS = 5;
 
-const COUNTIES = [
-  'Baringo','Bomet','Bungoma','Busia','Elgeyo-Marakwet','Embu','Garissa',
-  'Homa Bay','Isiolo','Kajiado','Kakamega','Kericho','Kiambu','Kilifi',
-  'Kirinyaga','Kisii','Kisumu','Kitui','Kwale','Laikipia','Lamu','Machakos',
-  'Makueni','Mandera','Marsabit','Meru','Migori','Mombasa',"Murang'a",
-  'Nairobi','Nakuru','Nandi','Narok','Nyamira','Nyandarua','Nyeri',
-  'Samburu','Siaya','Taita-Taveta','Tana River','Tharaka-Nithi','Trans Nzoia',
-  'Turkana','Uasin Gishu','Vihiga','Wajir','West Pokot',
-];
 
 const CATEGORIES = [
   "Women's Wear", "Men's Wear", "Kids & Baby", 'Shoes', 'Bags & Accessories',
@@ -231,8 +222,10 @@ export function SellerOnboardingPage({
   titleLevel,
   stepTitleLevel,
   sectionTitleLevel,
+  region,
 }: SellerOnboardingPageProps): React.ReactElement {
-  const { money } = useMitumbaFormat();
+  const { money, region: contextRegion } = useMitumbaFormat();
+  const regionFormat = region ?? contextRegion;
   const isDark = theme === 'mitumba-dark';
   const countyLabelId = React.useId();
   // When a heading level is supplied we emit hN; otherwise we fall back to the
@@ -441,9 +434,9 @@ export function SellerOnboardingPage({
                 <TextField sx={tfSx} fullWidth label="Phone number (M-Pesa)" type="tel" value={data.phone ?? ''} onChange={(e) => set({ phone: e.target.value })} required placeholder="e.g. 0712 345 678" />
                 <TextField sx={tfSx} fullWidth label="National ID / Passport number" value={data.idNumber ?? ''} onChange={(e) => set({ idNumber: e.target.value })} required />
                 <FormControl fullWidth required>
-                  <InputLabel id={countyLabelId}>County</InputLabel>
-                  <Select sx={tfSx} labelId={countyLabelId} value={data.county ?? ''} label="County" onChange={(e) => set({ county: e.target.value })}>
-                    {COUNTIES.map((c) => <MenuItem key={c} value={c}>{c}</MenuItem>)}
+                  <InputLabel id={countyLabelId}>{regionFormat.label}</InputLabel>
+                  <Select sx={tfSx} labelId={countyLabelId} value={data.county ?? ''} label={regionFormat.label} onChange={(e) => set({ county: e.target.value })}>
+                    {regionFormat.options.map((c) => <MenuItem key={c} value={c}>{c}</MenuItem>)}
                   </Select>
                 </FormControl>
                 <TextField sx={tfSx} fullWidth label="Town / area" value={data.town ?? ''} onChange={(e) => set({ town: e.target.value })} placeholder="e.g. Westlands, Kisumu CBD" />
