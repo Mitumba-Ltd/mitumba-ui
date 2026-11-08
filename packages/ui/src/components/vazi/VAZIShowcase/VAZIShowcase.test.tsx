@@ -6,6 +6,7 @@ import { afterEach, describe, it, expect, vi } from 'vitest';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme';
+import { MitumbaFormatProvider } from '../../../format';
 import { VAZIShowcase } from './VAZIShowcase';
 import type { VAZIShowcaseOutfit } from './VAZIShowcase.types';
 
@@ -30,6 +31,18 @@ describe('VAZIShowcase', () => {
   it('shows total price', () => {
     render(<MitumbaThemeProvider><VAZIShowcase outfits={outfits} /></MitumbaThemeProvider>);
     expect(screen.getAllByText('KES 4,000')[0]).toBeInTheDocument();
+  });
+
+  it('formats totals and item prices in the provider currency', () => {
+    render(
+      <MitumbaThemeProvider>
+        <MitumbaFormatProvider money={{ currencyCode: 'UGX', locale: 'en-UG' }}>
+          <VAZIShowcase outfits={outfits} />
+        </MitumbaFormatProvider>
+      </MitumbaThemeProvider>,
+    );
+    expect(screen.getAllByText('UGX 4,000')[0]).toBeInTheDocument();
+    expect(screen.queryByText(/KES/)).not.toBeInTheDocument();
   });
 
   it('shows VAZI branding', () => {

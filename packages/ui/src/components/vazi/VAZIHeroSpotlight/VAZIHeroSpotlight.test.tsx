@@ -6,6 +6,7 @@ import { afterEach, describe, it, expect, vi } from 'vitest';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme';
+import { MitumbaFormatProvider } from '../../../format';
 import { VAZIHeroSpotlight } from './VAZIHeroSpotlight';
 import type { VAZIHeroOutfit } from './VAZIHeroSpotlight.types';
 
@@ -37,6 +38,19 @@ describe('VAZIHeroSpotlight', () => {
     fireEvent.click(screen.getByAltText('Model 1'));
     expect(screen.getByText('Test Look')).toBeInTheDocument();
     expect(screen.getByText('KES 3,000')).toBeInTheDocument();
+  });
+
+  it('formats the popover total in the provider currency', () => {
+    render(
+      <MitumbaThemeProvider>
+        <MitumbaFormatProvider money={{ currencyCode: 'UGX', locale: 'en-UG' }}>
+          <VAZIHeroSpotlight outfits={outfits} />
+        </MitumbaFormatProvider>
+      </MitumbaThemeProvider>,
+    );
+    fireEvent.click(screen.getByAltText('Model 1'));
+    expect(screen.getByText('UGX 3,000')).toBeInTheDocument();
+    expect(screen.queryByText(/KES/)).not.toBeInTheDocument();
   });
 
   it('calls onShopLook when Shop is clicked in popover', () => {

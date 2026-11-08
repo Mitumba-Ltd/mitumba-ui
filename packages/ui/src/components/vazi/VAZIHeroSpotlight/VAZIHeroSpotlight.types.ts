@@ -14,7 +14,7 @@ export interface VAZIHeroOutfit {
   name: string;
   /** Items in this outfit */
   items: VAZIShowcaseItem[];
-  /** Total price KES */
+  /** Total price, whole major units of the `MitumbaFormatProvider` currency */
   totalPrice: number;
 }
 
