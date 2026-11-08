@@ -9,6 +9,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import { tokens } from '@mitumba/tokens'
 import { MitumbaTextField } from '../../foundation/MitumbaTextField/MitumbaTextField'
 import type { MitumbaDatePickerProps } from './MitumbaDatePicker.types'
+import { useMitumbaFormat } from '../../../format'
 
 /**
  * Premium "Living" DatePicker primitive with custom calendar atoms.
@@ -23,6 +24,7 @@ export function MitumbaDatePicker({
   size = 'medium',
   sx,
 }: MitumbaDatePickerProps) {
+  const { money } = useMitumbaFormat()
   const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
   const [currentMonth, setCurrentMonth] = useState(new Date())
 
@@ -63,7 +65,7 @@ export function MitumbaDatePicker({
 
   const isSelected = (day: number) => value && day === value.getDate() && currentMonth.getMonth() === value.getMonth() && currentMonth.getFullYear() === value.getFullYear()
 
-  const formattedValue = useMemo(() => value ? value.toLocaleDateString('en-KE', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '', [value])
+  const formattedValue = useMemo(() => value ? value.toLocaleDateString(money.locale, { day: '2-digit', month: '2-digit', year: 'numeric' }) : '', [value, money.locale])
 
   const emptyCells = useMemo(() => {
     const count = (firstDayOfMonth(currentMonth) + 6) % 7
