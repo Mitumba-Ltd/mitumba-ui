@@ -1,11 +1,12 @@
 import type { HeadingLevel } from '../../../types/semantic';
+import type { PhoneFormat, RegionFormat } from '../../../format';
 
 export interface BuyerOnboardingData {
   /** Buyer's display name */
   display_name: string;
-  /** Selected county */
+  /** Selected region (e.g. county) */
   county: string;
-  /** Phone number in +254 format */
+  /** Phone number as entered (national digits) */
   phone: string;
 }
 
@@ -30,8 +31,20 @@ export interface BuyerOnboardingPageProps {
   error?: string;
   /** Hero photo URL for the side panel gradient overlay (desktop) */
   heroImageUrl?: string;
-  /** List of selectable counties — defaults to all 47 Kenya counties if not provided */
+  /**
+   * Selectable regions. Overrides `region.options`; kept for existing callers. Defaults to the
+   * nearest `MitumbaFormatProvider` region list.
+   */
   counties?: string[];
+  /**
+   * Region label and options. Defaults to the nearest `MitumbaFormatProvider` region format.
+   */
+  region?: RegionFormat;
+  /**
+   * Numbering plan for the phone field (prefix, placeholder, minimum length). Defaults to the
+   * nearest `MitumbaFormatProvider` phone format.
+   */
+  phone?: PhoneFormat;
   /** Pre-filled data for resuming */
   initialData?: Partial<BuyerOnboardingData>;
 }

@@ -6,6 +6,7 @@ import { afterEach, describe, it, expect, vi } from 'vitest';
 import { axe, toHaveNoViolations } from 'jest-axe';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { MitumbaThemeProvider, mitumbaTheme } from '../../../theme';
+import { MitumbaFormatProvider } from '../../../format';
 import { BuyerOnboardingPage } from './BuyerOnboardingPage';
 import type { HeadingLevel } from '../../../types/semantic';
 
@@ -106,5 +107,41 @@ describe('BuyerOnboardingPage', () => {
     );
     const results = await axe(container);
     expect(results).toHaveNoViolations();
+  });
+
+  it('keeps the default +254 prefix and placeholder', () => {
+    render(<MitumbaThemeProvider><BuyerOnboardingPage onComplete={vi.fn()} /></MitumbaThemeProvider>);
+    expect(screen.getByText('+254')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('712 345 678')).toBeInTheDocument();
+  });
+
+  it('uses the provider region label and phone plan', () => {
+    render(
+      <MitumbaThemeProvider>
+        <MitumbaFormatProvider
+          region={{ label: 'District', options: ['Kampala', 'Wakiso'] }}
+          phone={{ callingCode: '+256', nationalLength: [9], example: '+256712345678' }}
+        >
+          <BuyerOnboardingPage onComplete={vi.fn()} />
+        </MitumbaFormatProvider>
+      </MitumbaThemeProvider>,
+    );
+    expect(screen.getByText('District')).toBeInTheDocument();
+    expect(screen.queryByText('County')).not.toBeInTheDocument();
+    expect(screen.getByText('+256')).toBeInTheDocument();
+    expect(screen.queryByText('+254')).not.toBeInTheDocument();
+  });
+
+  it('lets the legacy counties prop override the provider list', () => {
+    render(
+      <MitumbaThemeProvider>
+        <MitumbaFormatProvider region={{ label: 'District', options: ['Kampala'] }}>
+          <BuyerOnboardingPage onComplete={vi.fn()} counties={['Nairobi']} />
+        </MitumbaFormatProvider>
+      </MitumbaThemeProvider>,
+    );
+    fireEvent.mouseDown(screen.getByRole('combobox'));
+    expect(screen.getByRole('option', { name: 'Nairobi' })).toBeInTheDocument();
+    expect(screen.queryByRole('option', { name: 'Kampala' })).not.toBeInTheDocument();
   });
 });
