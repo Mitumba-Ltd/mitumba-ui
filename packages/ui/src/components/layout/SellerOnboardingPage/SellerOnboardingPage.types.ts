@@ -33,9 +33,9 @@ export interface SellerOnboardingData {
   conditionGrades: ('A' | 'B' | 'C')[];
   /** How the seller handles delivery */
   deliveryMethod: 'self' | 'mitumba-logistics';
-  /** Typical listing price range lower bound (KES) */
+  /** Typical listing price range lower bound, whole major units of the provider currency */
   priceRangeMin?: number;
-  /** Typical listing price range upper bound (KES) */
+  /** Typical listing price range upper bound, whole major units of the provider currency */
   priceRangeMax?: number;
 
   // Step 5 — Store setup
