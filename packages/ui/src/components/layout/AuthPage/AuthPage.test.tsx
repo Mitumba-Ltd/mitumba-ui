@@ -115,3 +115,49 @@ describe('AuthPage', () => {
     expect(results).toHaveNoViolations();
   });
 });
+
+/** Every CSS rule emotion emitted for the element's generated classes, as one string (spaces removed). */
+function emittedCss(el: HTMLElement): string {
+  const classes = Array.from(el.classList).filter((c) => c.startsWith('css-'));
+  const sheet = Array.from(document.querySelectorAll('style')).map((node) => node.textContent ?? '').join('');
+  return classes
+    .flatMap((c) => sheet.split('}').filter((rule) => rule.includes(`.${  c  }{`) || rule.includes(`.${  c  } `)))
+    .join('}')
+    .replace(/\s+/g, '');
+}
+
+
+describe('AuthPage layout', () => {
+  // The card used to be a fixed 600px / 100vh box with overflow-y: auto panels, so any view taller
+  // than that (a footerActions block, social buttons) grew an inner scrollbar. It must grow instead.
+  const tall = (
+    <div>
+      {Array.from({ length: 12 }, (_, i) => <a key={i} href={`#row-${  i}`}>Extra action {i}</a>)}
+    </div>
+  );
+
+  it.each([
+    ['signin', 'Sign In'],
+    ['signup', 'Sign Up'],
+    ['forgot', 'Forgot Password'],
+    ['reset', 'Reset Password'],
+  ] as const)('lets the %s view grow with its content instead of scrolling inside the card', (view, heading) => {
+    render(<MitumbaThemeProvider><AuthPage view={view} footerActions={tall} /></MitumbaThemeProvider>);
+
+    const panel = screen.getByRole('heading', { name: heading }).parentElement as HTMLElement;
+    const card = panel.parentElement as HTMLElement;
+
+    // No inner scrolling, and the panel is in flow so it can size the card.
+    expect(getComputedStyle(panel).overflowY).not.toBe('auto');
+    expect(getComputedStyle(panel).overflowY).not.toBe('scroll');
+    expect(getComputedStyle(panel).position).toBe('relative');
+    expect(getComputedStyle(panel).height).toBe('');
+
+    // The card has a minimum height only, never a fixed one. jsdom does not evaluate the @media rules
+    // MUI emits for { xs, md } values, so read the emitted CSS rather than the computed style.
+    const css = emittedCss(card);
+    expect(css).toMatch(/min-height:100vh/);
+    expect(css).toMatch(/min-height:600px/);
+    expect(css).not.toMatch(/(^|[;{}])height:/);
+  });
+});

@@ -104,3 +104,21 @@ export const DesktopSignInWithHeading: Story = {
   },
   parameters: { viewport: { defaultViewport: 'desktop' } },
 };
+
+/**
+ * A view with far more content than fits in 600px. The card grows with it, so there is no inner
+ * scrollbar at 375px or 1280px. Regression guard for the old fixed-height card.
+ */
+export const TallContent: Story = {
+  args: {
+    view: 'signin',
+    theme: 'mitumba-light',
+    footerActions: (
+      <div>
+        {['Sign in with your phone instead', 'Choose an account on this device', 'Use a passkey', 'Recover your account', 'Help and support', 'Privacy', 'Terms'].map((label) => (
+          <p key={label}><a href="#tall">{label}</a></p>
+        ))}
+      </div>
+    ),
+  },
+};
