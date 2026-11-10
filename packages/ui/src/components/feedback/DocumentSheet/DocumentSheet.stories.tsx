@@ -47,7 +47,7 @@ export const MobileViewport: Story = {
 /** A long subtitle stays on one line and is cut with an ellipsis; the actions keep their place. */
 export const LongSubtitle: Story = {
   args: {
-    subtitle: 'RCT-20261110-C0FFEE00 · Kamau Thrift, Wanjiru Vintage and three more shops',
+    subtitle: 'RCT-20261110-C0FFEE00, Kamau Thrift, Wanjiru Vintage and three more shops',
     src: SAMPLE_PDF,
     filename: 'Mitumba-Receipt-RCT-20261110-C0FFEE00.pdf',
   },
