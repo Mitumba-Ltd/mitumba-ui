@@ -42,6 +42,10 @@ export type { MitumbaCheckboxProps, MitumbaRadioProps, MitumbaSwitchProps, Mitum
 export { MitumbaBanner, MitumbaSkeleton, MitumbaToast, MitumbaModal, EmptyState, ErrorState, OfflineBanner, UnauthenticatedState, DestructiveConfirmDialog, DocumentSheet } from './components'
 export type { MitumbaBannerProps, BannerSeverity, MitumbaSkeletonProps, MitumbaToastProps, MitumbaModalProps, EmptyStateProps, ErrorStateProps, OfflineBannerProps, UnauthenticatedStateProps, DestructiveConfirmDialogProps, DocumentSheetProps } from './components'
 
+// Notifications
+export { NotificationItem, NotificationBell } from './components'
+export type { NotificationItemProps, NotificationLink, NotificationAction, NotificationCategory, NotificationBellProps } from './components'
+
 // Messaging
 export { ConversationList, ConversationActorLabel, ConversationListV2, ThreadSubjectHeader, ConversationThreadList, MessagingWorkspaceLayout, MessageBubbleV2, ChatThreadV2, MessageBubble, ChatThread, InboxLayout, OrderMessageAttachment, FloatingChatDock } from './components'
 export type { ConversationListProps, Conversation, ConversationActorLabelProps, ConversationListV2Props, ThreadSubjectHeaderProps, ConversationThreadListProps, MessagingWorkspaceLayoutProps, MessageBubbleV2Props, ChatThreadV2Props, ChatThreadV2SendInput, MessageBubbleProps, MessageAttachment, ChatThreadProps, ChatThreadDraftAttachment, InboxLayoutProps, OrderMessageAttachmentProps, FloatingChatDockProps } from './components'
