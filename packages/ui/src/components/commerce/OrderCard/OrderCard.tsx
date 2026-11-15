@@ -25,7 +25,7 @@ const STATUS_CONFIG: Record<OrderCardStatus, { label: string; chipStatus: ChipSt
 /** The most photos a card stacks. */
 const MAX_STACK = 4
 /** How far each photo behind the top one peeks out, in px. */
-const STACK_OFFSET = 6
+const STACK_OFFSET = tokens.spacing.sm
 /** Tilt of each photo behind the top one, in degrees. */
 const STACK_TILT = [0, 4, -3, 6]
 
@@ -46,7 +46,7 @@ function StackPhoto({ src, alt, index, count }: { src: string; alt: string; inde
         borderRadius: `${tokens.radius.md}px`,
         overflow: 'hidden',
         bgcolor: tokens.colors.background,
-        border: count > 1 ? `2px solid ${tokens.colors.surface}` : 'none',
+        border: count > 1 ? `${tokens.spacing.xxs}px solid ${tokens.colors.surface}` : 'none',
         boxShadow: count > 1 ? tokens.shadows.card : 'none',
       }}
     >
