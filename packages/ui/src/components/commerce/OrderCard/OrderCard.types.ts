@@ -16,8 +16,18 @@ export interface OrderCardBaseProps extends SemanticDestinationProps {
   orderShortId: string
   /** Listing/item title */
   title: string
-  /** Item image URL */
+  /** Item image URL. Used when `images` is not given. */
   imageUrl?: string
+  /**
+   * Photos of the order's items, first item first. Up to four are drawn as a stack, the first on
+   * top. When given, it replaces `imageUrl`.
+   */
+  images?: readonly string[]
+  /**
+   * Units in the order. When more than one, the card says how many ("3 items") and the stack shows
+   * how many are not pictured.
+   */
+  itemCount?: number
   /** Delivery fee in whole major units of the formatting currency. */
   deliveryFee?: number
   /** @deprecated Use `deliveryFee`. */
@@ -30,8 +40,9 @@ export interface OrderCardBaseProps extends SemanticDestinationProps {
   onClick?: () => void
   /**
    * Called when the Track action is activated. Fires independently of the card
-   * surface (activation is isolated via stopPropagation). The Track action only
-   * renders when the card is interactive (href or onClick present).
+   * surface (activation is isolated via stopPropagation). The Track action renders
+   * only when this is set, the card is interactive (href or onClick present), and
+   * the order is `shipped`: there is no package to track before that.
    */
   onTrack?: () => void
   /** Optional sx override */
