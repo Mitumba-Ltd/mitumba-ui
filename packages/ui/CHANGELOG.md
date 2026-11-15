@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.40.0
+
+### Minor Changes
+
+- 32b4387: OrderCard: new `images` prop stacks up to four item photos (the first on top), and `itemCount` shows "N items" for multi-item orders. The Track action now renders only when `onTrack` is set and the status is `shipped`.
+
 ## 0.39.0
 
 ### Minor Changes
