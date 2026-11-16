@@ -28,6 +28,17 @@ interface CartItemBaseProps {
   onQuantityChange?: (newQuantity: number) => void
   /** Called when the size is updated. */
   onSizeChange?: (newSize: string) => void
+
+  /**
+   * Whether the item is picked for the order. Shown only when `onSelectedChange` is set.
+   * @default true
+   */
+  selected?: boolean
+  /**
+   * Called when the buyer picks or unpicks the item. When set, a selection circle shows on the card's
+   * left: filled and checked when picked, an empty ring when not. An unpicked card is dimmed.
+   */
+  onSelectedChange?: (selected: boolean) => void
   
   /** Optional style overrides. */
   sx?: SxProps<Theme>
