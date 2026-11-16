@@ -111,3 +111,43 @@ export const Desktop: Story = {
   },
   parameters: { viewport: { defaultViewport: 'desktop' } },
 }
+
+/** Picking which items to order: a circle on each card's left, filled when picked. */
+function SelectableCart({ width }: { width: number }) {
+  const [picked, setPicked] = React.useState<Record<string, boolean>>({ '1': true, '2': false })
+  return (
+    <Stack spacing={2} sx={{ width }}>
+      <CartItem
+        id="1"
+        imageUrl={sampleItem.imageUrl}
+        title={sampleItem.title}
+        subtitle={sampleItem.subtitle}
+        priceKes={sampleItem.priceKes}
+        size={sampleItem.size}
+        quantity={1}
+        selected={picked['1']}
+        onSelectedChange={(selected) => setPicked((p) => ({ ...p, '1': selected }))}
+      />
+      <CartItem
+        id="2"
+        title="ARTICLE 54789"
+        subtitle="COLOR BLACK"
+        priceKes={35000}
+        size="L"
+        quantity={1}
+        imageUrl="https://images.unsplash.com/photo-1544022613-e87974f37b39?auto=format&fit=crop&w=800&q=80"
+        selected={picked['2']}
+        onSelectedChange={(selected) => setPicked((p) => ({ ...p, '2': selected }))}
+      />
+    </Stack>
+  )
+}
+
+export const Selectable: Story = {
+  render: () => <SelectableCart width={800} />,
+}
+
+export const SelectableMobile: Story = {
+  render: () => <SelectableCart width={360} />,
+  parameters: { viewport: { defaultViewport: 'mobile' } },
+}

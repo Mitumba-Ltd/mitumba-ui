@@ -148,4 +148,46 @@ describe('CartItem', () => {
     expect(screen.getByLabelText('Price: UGX 5,000')).toBeInTheDocument()
     expect(screen.queryByText(/KES/)).not.toBeInTheDocument()
   })
+
+  it('shows no selection circle unless onSelectedChange is set', () => {
+    render(
+      <MitumbaThemeProvider>
+        <CartItem id="1" imageUrl="/i.jpg" title="Denim jacket" price={1200} />
+      </MitumbaThemeProvider>,
+    )
+    expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()
+  })
+
+  it('is picked by default, and unpicks and picks the item from its circle', () => {
+    const onSelectedChange = vi.fn()
+    const { rerender } = render(
+      <MitumbaThemeProvider>
+        <CartItem id="1" imageUrl="/i.jpg" title="Denim jacket" price={1200} onSelectedChange={onSelectedChange} />
+      </MitumbaThemeProvider>,
+    )
+    const circle = screen.getByRole('checkbox', { name: 'Include Denim jacket in this order' })
+    expect(circle).toHaveAttribute('aria-checked', 'true')
+    expect(screen.getByAltText('Denim jacket').parentElement).toHaveStyle({ opacity: '1' })
+    fireEvent.click(circle)
+    expect(onSelectedChange).toHaveBeenLastCalledWith(false)
+
+    rerender(
+      <MitumbaThemeProvider>
+        <CartItem id="1" imageUrl="/i.jpg" title="Denim jacket" price={1200} selected={false} onSelectedChange={onSelectedChange} />
+      </MitumbaThemeProvider>,
+    )
+    expect(circle).toHaveAttribute('aria-checked', 'false')
+    expect(screen.getByAltText('Denim jacket').parentElement).toHaveStyle({ opacity: '0.45' })
+    fireEvent.click(circle)
+    expect(onSelectedChange).toHaveBeenLastCalledWith(true)
+  })
+
+  it('has no axe violations with its selection circle', async () => {
+    const { container } = render(
+      <MitumbaThemeProvider>
+        <CartItem id="1" imageUrl="/i.jpg" title="Denim jacket" price={1200} selected={false} onSelectedChange={vi.fn()} />
+      </MitumbaThemeProvider>,
+    )
+    expect(await axe(container)).toHaveNoViolations()
+  })
 })
