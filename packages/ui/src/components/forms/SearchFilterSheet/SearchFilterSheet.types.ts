@@ -49,4 +49,10 @@ export interface SearchFilterSheetProps {
    * Defaults to Nairobi, Mombasa, Kisumu, Eldoret, Nakuru and Kisii.
    */
   cities?: string[];
+  /**
+   * Categories offered in the Categories section, in display order. `filters.categories` holds the
+   * selected entries from this list. Defaults to Tops, Bottoms, Dresses, Outerwear, Shoes, Bags,
+   * Accessories and Kids.
+   */
+  categories?: string[];
 }
