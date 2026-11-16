@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.42.0
+
+### Minor Changes
+
+- 9778569: `SearchFilterSheet` takes an optional `categories` prop: the category chips to offer, in display order. Without it the sheet keeps its eight default categories.
+
 ## 0.41.1
 
 ### Patch Changes
