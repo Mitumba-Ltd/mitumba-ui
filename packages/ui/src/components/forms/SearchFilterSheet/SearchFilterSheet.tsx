@@ -18,7 +18,7 @@ import type { HeadingLevel } from '../../../types/semantic';
 import type { SearchFilterSheetProps, FilterState } from './SearchFilterSheet.types';
 import { formatMoney, useMitumbaFormat } from '../../../format';
 
-const CATEGORIES = ['Tops', 'Bottoms', 'Dresses', 'Outerwear', 'Shoes', 'Bags', 'Accessories', 'Kids'];
+const DEFAULT_CATEGORIES = ['Tops', 'Bottoms', 'Dresses', 'Outerwear', 'Shoes', 'Bags', 'Accessories', 'Kids'];
 const CONDITIONS = ['New', 'Like New', 'Good', 'Fair'];
 const DEFAULT_CITIES = ['Nairobi', 'Mombasa', 'Kisumu', 'Eldoret', 'Nakuru', 'Kisii'];
 const SORT_OPTIONS = [
@@ -93,9 +93,11 @@ export function SearchFilterSheet({
   titleLevel,
   sectionTitleLevel,
   cities,
+  categories,
 }: SearchFilterSheetProps): React.ReactElement {
   const { money } = useMitumbaFormat();
   const cityOptions = [...(cities ?? DEFAULT_CITIES), 'All'];
+  const categoryOptions = categories ?? DEFAULT_CATEGORIES;
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
   const baseId = React.useId();
@@ -161,7 +163,7 @@ export function SearchFilterSheet({
       <Box role="group" aria-labelledby={categoriesId}>
         <SectionHeader id={categoriesId} titleLevel={sectionTitleLevel}>Categories</SectionHeader>
         <ChipGroup
-          options={CATEGORIES}
+          options={categoryOptions}
           selected={filters.categories}
           onToggle={(v) => handleChipToggle('categories', v)}
         />

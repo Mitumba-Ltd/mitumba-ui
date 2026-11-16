@@ -86,3 +86,10 @@ export const WithHeadingMobile: Story = {
     chromatic: { viewports: [375] },
   },
 };
+
+export const CustomCategories: Story = {
+  args: {
+    ...Default.args,
+    categories: ['Tops', 'Bottoms', 'Dresses', 'Curtains', 'Bedding', 'Towels', 'Rugs', 'Fabric'],
+  },
+};

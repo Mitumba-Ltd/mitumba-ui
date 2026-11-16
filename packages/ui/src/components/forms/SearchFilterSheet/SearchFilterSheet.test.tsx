@@ -220,4 +220,12 @@ describe('SearchFilterSheet', () => {
     expect(screen.getByText('All')).toBeInTheDocument();
     expect(screen.queryByText('Nairobi')).not.toBeInTheDocument();
   });
+
+  it('offers the categories it is given instead of the defaults', () => {
+    render(<MitumbaThemeProvider><SearchFilterSheet {...baseProps} categories={['Tops', 'Curtains']} /></MitumbaThemeProvider>);
+    expect(screen.getByText('Curtains')).toBeInTheDocument();
+    expect(screen.queryByText('Dresses')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByText('Curtains'));
+    expect(baseProps.onFiltersChange).toHaveBeenCalledWith({ ...defaultFilters, categories: ['Curtains'] });
+  });
 });
