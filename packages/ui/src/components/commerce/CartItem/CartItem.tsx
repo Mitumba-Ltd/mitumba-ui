@@ -43,11 +43,16 @@ export function CartItem({
         {
           display: 'flex',
           alignItems: 'flex-start',
+          boxSizing: 'border-box',
           width: '100%',
+          maxWidth: '100%',
+          minWidth: 0,
           overflow: 'hidden',
           backgroundColor: tokens.colors.surface,
           borderRadius: `${tokens.radius.lg}px`,
-          p: `${tokens.spacing.lg}px`,
+          p: selectable
+            ? { xs: `${tokens.spacing.base}px`, sm: `${tokens.spacing.lg}px` }
+            : `${tokens.spacing.lg}px`,
           boxShadow: tokens.shadows.card,
           position: 'relative',
           border: `1px solid ${selectable && selected ? tokens.colors.green : tokens.colors.divider}`,
@@ -76,7 +81,7 @@ export function CartItem({
             placeItems: 'center',
             width: tokens.spacing.xxl,
             height: tokens.spacing.xxl,
-            mr: `${tokens.spacing.base}px`,
+            mr: { xs: `${tokens.spacing.sm}px`, sm: `${tokens.spacing.base}px` },
             p: 0,
             borderRadius: '50%',
             border: `${tokens.spacing.xxs}px solid ${selected ? tokens.colors.green : tokens.colors.textDisabled}`,
@@ -94,8 +99,8 @@ export function CartItem({
       {/* Image */}
       <Box
         sx={{
-          width: { xs: 80, sm: 120, md: 140 },
-          height: { xs: 80, sm: 120, md: 140 },
+          width: { xs: selectable ? 64 : 80, sm: 120, md: 140 },
+          height: { xs: selectable ? 64 : 80, sm: 120, md: 140 },
           borderRadius: `${tokens.radius.md}px`,
           overflow: 'hidden',
           bgcolor: tokens.colors.background,
@@ -162,7 +167,7 @@ export function CartItem({
           sx={{
             display: 'flex',
             alignItems: 'center',
-            gap: `${tokens.spacing.lg}px`,
+            gap: { xs: `${tokens.spacing.base}px`, sm: `${tokens.spacing.lg}px` },
             flexWrap: 'wrap',
             mt: `${tokens.spacing.base}px`,
           }}
