@@ -47,7 +47,7 @@ export const PremiumCart: Story = {
          priceKes={35000} 
          size="L" 
          quantity={1}
-         imageUrl="https://images.unsplash.com/photo-1544022613-e87974f37b39?auto=format&fit=crop&w=800&q=80"
+         imageUrl="https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=800&q=80"
        />
     </Stack>
   )
@@ -116,7 +116,7 @@ export const Desktop: Story = {
 function SelectableCart({ width }: { width: number }) {
   const [picked, setPicked] = React.useState<Record<string, boolean>>({ '1': true, '2': false })
   return (
-    <Stack spacing={2} sx={{ width }}>
+    <Stack spacing={2} sx={{ width: '100%', maxWidth: width }}>
       <CartItem
         id="1"
         imageUrl={sampleItem.imageUrl}
@@ -135,7 +135,7 @@ function SelectableCart({ width }: { width: number }) {
         priceKes={35000}
         size="L"
         quantity={1}
-        imageUrl="https://images.unsplash.com/photo-1544022613-e87974f37b39?auto=format&fit=crop&w=800&q=80"
+        imageUrl="https://images.unsplash.com/photo-1576995853123-5a10305d93c0?auto=format&fit=crop&w=800&q=80"
         selected={picked['2']}
         onSelectedChange={(selected) => setPicked((p) => ({ ...p, '2': selected }))}
       />
@@ -145,9 +145,10 @@ function SelectableCart({ width }: { width: number }) {
 
 export const Selectable: Story = {
   render: () => <SelectableCart width={800} />,
+  parameters: { layout: 'padded' },
 }
 
 export const SelectableMobile: Story = {
-  render: () => <SelectableCart width={360} />,
-  parameters: { viewport: { defaultViewport: 'mobile' } },
+  render: () => <SelectableCart width={375} />,
+  parameters: { layout: 'padded', viewport: { defaultViewport: 'mobile' } },
 }
