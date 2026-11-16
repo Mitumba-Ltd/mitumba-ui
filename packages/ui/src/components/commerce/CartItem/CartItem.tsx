@@ -3,6 +3,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
+import CheckIcon from '@mui/icons-material/Check'
 import { tokens } from '@mitumba/tokens'
 import { formatMoney, useMitumbaFormat } from '../../../format'
 import type { CartItemProps } from './CartItem.types'
@@ -27,16 +28,21 @@ export function CartItem({
   onRemove,
   onQuantityChange,
   onSizeChange,
+  selected = true,
+  onSelectedChange,
   sx,
   titleLevel,
 }: CartItemProps) {
   const { money } = useMitumbaFormat()
   const formattedPrice = formatMoney(price ?? priceKes ?? 0, money)
+  const selectable = onSelectedChange !== undefined
+  const dimmed = selectable && !selected
   return (
     <Box
       sx={[
         {
           display: 'flex',
+          alignItems: 'flex-start',
           width: '100%',
           overflow: 'hidden',
           backgroundColor: tokens.colors.surface,
@@ -44,7 +50,7 @@ export function CartItem({
           p: `${tokens.spacing.lg}px`,
           boxShadow: tokens.shadows.card,
           position: 'relative',
-          border: `1px solid ${tokens.colors.divider}`,
+          border: `1px solid ${selectable && selected ? tokens.colors.green : tokens.colors.divider}`,
           transition: tokens.motion.transitions.interaction,
           '&:hover': {
             transform: 'translateY(-2px)',
@@ -54,6 +60,37 @@ export function CartItem({
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
+      {/* Selection — a circle on the left, outside the image */}
+      {selectable && (
+        <Box
+          component="button"
+          type="button"
+          role="checkbox"
+          aria-checked={selected}
+          aria-label={`Include ${title} in this order`}
+          onClick={() => onSelectedChange(!selected)}
+          sx={{
+            alignSelf: 'center',
+            flexShrink: 0,
+            display: 'grid',
+            placeItems: 'center',
+            width: tokens.spacing.xxl,
+            height: tokens.spacing.xxl,
+            mr: `${tokens.spacing.base}px`,
+            p: 0,
+            borderRadius: '50%',
+            border: `${tokens.spacing.xxs}px solid ${selected ? tokens.colors.green : tokens.colors.textDisabled}`,
+            bgcolor: selected ? tokens.colors.green : 'transparent',
+            color: tokens.colors.surface,
+            cursor: 'pointer',
+            transition: tokens.motion.transitions.interaction,
+            '&:focus-visible': { outline: `${tokens.spacing.xxs}px solid ${tokens.colors.green}`, outlineOffset: `${tokens.spacing.xxs}px` },
+          }}
+        >
+          {selected && <CheckIcon sx={{ fontSize: tokens.spacing.lg }} />}
+        </Box>
+      )}
+
       {/* Image */}
       <Box
         sx={{
@@ -63,6 +100,8 @@ export function CartItem({
           overflow: 'hidden',
           bgcolor: tokens.colors.background,
           flexShrink: 0,
+          opacity: dimmed ? 0.45 : 1,
+          transition: tokens.motion.transitions.interaction,
         }}
       >
         <Box
