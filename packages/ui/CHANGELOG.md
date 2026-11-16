@@ -1,5 +1,11 @@
 # @mitumba/ui
 
+## 0.41.1
+
+### Patch Changes
+
+- 4b06149: CartItem no longer widens its container on narrow screens: the card sizes its border-box to the container, and a selectable card uses tighter padding, spacing and a 64px photo on phones.
+
 ## 0.41.0
 
 ### Minor Changes
