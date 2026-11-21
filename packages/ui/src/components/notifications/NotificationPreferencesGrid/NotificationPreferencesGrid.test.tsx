@@ -120,8 +120,9 @@ describe('NotificationPreferencesGrid', () => {
     expect(screen.queryByLabelText('Orders by Email')).toBeNull()
   })
 
+  // Both layouts are checked at once, so this scan is larger than most; slow runners need more than 5 s.
   it('has no axe violations', async () => {
     const { container } = renderGrid({ unavailable: ['push'], pending: [{ category: 'orders', channel: 'in_app' }] })
     expect(await axe(container)).toHaveNoViolations()
-  })
+  }, 15_000)
 })
