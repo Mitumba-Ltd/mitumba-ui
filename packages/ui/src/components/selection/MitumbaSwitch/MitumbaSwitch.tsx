@@ -12,6 +12,7 @@ export function MitumbaSwitch({
   on,
   onChange,
   label,
+  ariaLabel,
   disabled = false,
   sx,
 }: MitumbaSwitchProps) {
@@ -25,6 +26,7 @@ export function MitumbaSwitch({
       checked={on}
       disabled={disabled}
       onChange={(e) => handleToggle(e.target.checked)}
+      slotProps={!label && ariaLabel ? { input: { 'aria-label': ariaLabel } } : undefined}
       disableRipple
       sx={[
         {

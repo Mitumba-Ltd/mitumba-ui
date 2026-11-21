@@ -13,6 +13,7 @@ function renderSwitch(props: MitumbaSwitchProps) {
         on={props.on}
         onChange={props.onChange}
         label={props.label}
+        ariaLabel={props.ariaLabel}
         disabled={props.disabled}
         sx={props.sx}
       />
@@ -52,5 +53,20 @@ describe('MitumbaSwitch', () => {
     
     fireEvent.click(toggle)
     expect(onChange).not.toHaveBeenCalled()
+  })
+
+  it('names a switch with no visible label by ariaLabel', () => {
+    const onChange = vi.fn()
+    renderSwitch({ ariaLabel: 'Orders by Email', on: true, onChange })
+    const toggle = screen.getByLabelText('Orders by Email')
+    expect(toggle).toBeChecked()
+    fireEvent.click(toggle)
+    expect(onChange).toHaveBeenCalledWith(false)
+  })
+
+  it('prefers the visible label over ariaLabel', () => {
+    renderSwitch({ label: 'Wifi', ariaLabel: 'Ignored', on: false, onChange: () => {} })
+    expect(screen.getByLabelText('Wifi')).toBeInTheDocument()
+    expect(screen.queryByLabelText('Ignored')).toBeNull()
   })
 })
