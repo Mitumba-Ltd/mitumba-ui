@@ -3,3 +3,6 @@ export type { NotificationItemProps, NotificationLink, NotificationAction, Notif
 
 export { NotificationBell } from './NotificationBell'
 export type { NotificationBellProps } from './NotificationBell'
+
+export { NotificationPreferencesGrid, DEFAULT_NOTIFICATION_COLUMNS } from './NotificationPreferencesGrid'
+export type { NotificationPreferencesGridProps, NotificationPreferenceRow, NotificationPreferenceChange, NotificationChannel } from './NotificationPreferencesGrid'

@@ -43,8 +43,8 @@ export { MitumbaBanner, MitumbaSkeleton, MitumbaToast, MitumbaModal, EmptyState,
 export type { MitumbaBannerProps, BannerSeverity, MitumbaSkeletonProps, MitumbaToastProps, MitumbaModalProps, EmptyStateProps, ErrorStateProps, OfflineBannerProps, UnauthenticatedStateProps, DestructiveConfirmDialogProps, DocumentSheetProps } from './components'
 
 // Notifications
-export { NotificationItem, NotificationBell } from './components'
-export type { NotificationItemProps, NotificationLink, NotificationAction, NotificationCategory, NotificationBellProps } from './components'
+export { NotificationItem, NotificationBell, NotificationPreferencesGrid, DEFAULT_NOTIFICATION_COLUMNS } from './components'
+export type { NotificationItemProps, NotificationLink, NotificationAction, NotificationCategory, NotificationBellProps, NotificationPreferencesGridProps, NotificationPreferenceRow, NotificationPreferenceChange, NotificationChannel } from './components'
 
 // Messaging
 export { ConversationList, ConversationActorLabel, ConversationListV2, ThreadSubjectHeader, ConversationThreadList, MessagingWorkspaceLayout, MessageBubbleV2, ChatThreadV2, MessageBubble, ChatThread, InboxLayout, OrderMessageAttachment, FloatingChatDock } from './components'
