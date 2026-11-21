@@ -1,5 +1,13 @@
 # @mitumba/ui
 
+## 0.43.0
+
+### Minor Changes
+
+- 7c884fa: `MitumbaSwitch` takes an optional `ariaLabel`, the accessible name for a switch shown without a visible `label` (for example a table cell). Ignored when `label` is set.
+- 7c884fa: New `NotificationPreferencesGrid`: notification settings as a category × channel grid. One switch per channel a category uses, a lock and hint on required categories, unavailable channels disabled with their value kept, a spinner on cells being saved, and skeleton rows while loading. Cards on phones; a table with sticky channel headers from 600px. Also exports `DEFAULT_NOTIFICATION_COLUMNS` and the types `NotificationPreferencesGridProps`, `NotificationPreferenceRow`, `NotificationPreferenceChange` and `NotificationChannel`.
+- 7c884fa: New `QuietHoursField`: an on/off switch with "From" and "To" 24-hour times. Times are disabled while quiet hours are off, incomplete times are not reported, and an end earlier than the start is labelled as an overnight window. Optional description and time-zone line. Also exports `isOvernight` and the types `QuietHoursFieldProps` and `QuietHoursValue`.
+
 ## 0.42.0
 
 ### Minor Changes
